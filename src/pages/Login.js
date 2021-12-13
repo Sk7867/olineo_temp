@@ -26,7 +26,7 @@ const Login = () => {
 
   const pageSwitch = (e) => {
     e.preventDefault();
-    nav('/signup')
+    nav('/')
   }
 
   // console.log(phone);

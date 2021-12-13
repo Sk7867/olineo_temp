@@ -18,11 +18,11 @@ function App() {
   return (
     <div className="App">
       {
-        loc.pathname === '/signup' ? (
+        loc.pathname === '/' ? (
           <HeaderBar alternateWay={'Login'} alternateLink={'/login'} />
         )
           : loc.pathname === '/login' ? (
-            <HeaderBar alternateWay={'Sign up'} alternateLink={'/signup'} />
+            <HeaderBar alternateWay={'Sign up'} alternateLink={'/'} />
           )
             : (
               <HeaderBar />
