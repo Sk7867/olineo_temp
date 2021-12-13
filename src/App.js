@@ -1,23 +1,38 @@
-import logo from './logo.svg';
+//Dependencies
 import './App.css';
+import { useState } from 'react';
+import { useLocation, Routes, Route } from 'react-router-dom'
+
+
+//Components
+import Signup from './pages/Signup';
+import HeaderBar from './components/HeaderBar/HeaderBar';
+import Login from './pages/Login';
+import OtpValid from './pages/OtpValid';
 
 function App() {
+  // const [headerText, setHeaderText] = useState('')
+  const loc = useLocation()
+
+  // console.log(loc);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {
+        loc.pathname === '/signup' ? (
+          <HeaderBar alternateWay={'Login'} alternateLink={'/login'} />
+        )
+          : loc.pathname === '/login' ? (
+            <HeaderBar alternateWay={'Sign up'} alternateLink={'/signup'} />
+          )
+            : (
+              <HeaderBar />
+            )
+      }
+      <Routes>
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/otp' element={<OtpValid />} />
+      </Routes>
     </div>
   );
 }

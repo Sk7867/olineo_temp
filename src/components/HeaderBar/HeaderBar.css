@@ -1,0 +1,33 @@
+.headerContainer{
+  background: #1B325E;
+  width: 100%;
+  height: 4rem;
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  padding: 8px 0;
+}
+
+.headerWrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.logo{
+  font-weight: 700;
+  color: white;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.alternate-way{
+  font-size: 14px;
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  color: white;
+}

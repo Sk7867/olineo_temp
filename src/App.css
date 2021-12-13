@@ -1,38 +1,127 @@
-.App {
-  text-align: center;
+*, *::before, *::after{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
+.pageWrapper{
+  padding: 8.5rem 1rem 11.438rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  gap: 24px;
+}
+
+.page-heading{
+  font-size: 20px;
+  line-height: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #1B325E;
+}
+
+.page-desc{
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #3D5176;
+}
+
+.input-field{
+  padding: 16px;
+  border: 1px solid #EFEFEF;
+  border-radius: 4px;
+  background: white;
+  width: 100%;
+}
+
+.input-field::placeholder{
+color: #8D9091;
+}
+
+.submit-button{
+  border-radius: 4px;
+  background: #1B325E;
+  padding: 16px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  width: 100%;
+  outline: none;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  cursor: pointer;
+}
+
+.extra-btn{
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  color: #1B325E;
+  cursor: pointer;
+}
+
+button:disabled{
+  opacity: 0.5;
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.signup-header{
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 2px;
 }
 
-.App-link {
-  color: #61dafb;
+.signup-form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+}
+.inputfield-Container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.inputField{
+  position: relative;
+}
+
+.button-Container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.tc-Footer{
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  margin-bottom: 12px;
+}
+
+.footer-Text{
+  text-align: center;
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #828EA6;
+}
+
+.footer-Text span{
+  font-weight: 600;
+  color: #1B325E;
+  cursor: pointer;
 }
