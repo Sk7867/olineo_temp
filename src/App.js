@@ -1,6 +1,6 @@
 //Dependencies
 import './App.css';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { useLocation, Routes, Route } from 'react-router-dom'
 
 
@@ -29,7 +29,7 @@ function App() {
             )
       }
       <Routes>
-        <Route path='/signup' element={<Signup />} />
+        <Route path='/' element={<Signup />} />
         <Route path='/login' element={<Login />} />
         <Route path='/otp' element={<OtpValid />} />
       </Routes>
