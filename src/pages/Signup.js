@@ -45,8 +45,8 @@ const Signup = () => {
         </div>
         <form action="" className={'signup-form'} onSubmit={formSubmit} onChange={validateForm}>
           <div className="inputfield-Container">
-            <input type="text" name="Name" id="name" className='input-field' placeholder='Name' value={name} onChange={(e) => { setName(e.target.value) }} />
-            <input type='number' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} />
+            <input type="text" name="Name" id="name" className='input-field' placeholder='Name' value={name} onChange={(e) => { setName(e.target.value) }} required />
+            <input type='tel' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' pattern="[0-9]{10}" onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} required />
           </div>
           <div className={'button-Container'}>
             <button type='submit' className='submit-button' disabled={btnDisable}>Continue</button>

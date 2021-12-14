@@ -40,9 +40,7 @@ const Login = () => {
         </div>
         <form action="" className={'signup-form'} onSubmit={formSubmit} onChange={validateForm}>
           <div className="inputfield-Container">
-
             <input type='number' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} />
-
           </div>
           <div className={'button-Container'}>
             <button type='submit' className='submit-button' disabled={btnDisable}>Continue</button>

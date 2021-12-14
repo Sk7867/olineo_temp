@@ -55,6 +55,7 @@ color: #8D9091;
   font-weight: 500;
   letter-spacing: -0.5px;
   cursor: pointer;
+  border: none;
 }
 
 .extra-btn{
@@ -125,3 +126,12 @@ button:disabled{
   color: #1B325E;
   cursor: pointer;
 }
+
+/* input[type='date']::before{
+  color: lightgray;
+  content: attr(placeholder) !important;
+}
+
+input[type='date']:focus::before{
+  content: '' !important;
+} */

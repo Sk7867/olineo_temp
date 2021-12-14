@@ -9,6 +9,7 @@ import Signup from './pages/Signup';
 import HeaderBar from './components/HeaderBar/HeaderBar';
 import Login from './pages/Login';
 import OtpValid from './pages/OtpValid';
+import AddUser from './pages/addUser';
 
 function App() {
   // const [headerText, setHeaderText] = useState('')
@@ -32,6 +33,7 @@ function App() {
         <Route path='/' element={<Signup />} />
         <Route path='/login' element={<Login />} />
         <Route path='/otp' element={<OtpValid />} />
+        <Route path='/adduser' element={<AddUser />} />
       </Routes>
     </div>
   );
