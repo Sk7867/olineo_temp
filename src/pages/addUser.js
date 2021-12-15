@@ -16,7 +16,7 @@ const AddUser = () => {
       setValidLength(false)
     }
   }
-  console.log(name, email, DOB, pinCode, phone);
+  // console.log(name, email, DOB, pinCode, phone);
 
   const validateForm = () => (
     (name !== '') && (email !== '') && (pinCode !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)

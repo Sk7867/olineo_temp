@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const OtpValid = () => {
+const OtpValid = ({ userLoggedIn }) => {
   const [otp, setOtp] = useState('')
   const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
+  const [seconds, setSeconds] = useState(60)
+  const [resend, setResend] = useState(true)
   const nav = useNavigate()
 
   const handleLength = (length) => {
@@ -14,6 +16,19 @@ const OtpValid = () => {
       setValidLength(false)
     }
   }
+
+  useEffect(() => {
+    let timer
+    if (seconds > 0) {
+      timer = setTimeout(() => setSeconds(seconds - 1), 1000);
+    } else {
+      setSeconds(0);
+      setResend(false)
+    }
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [seconds])
 
   const formSubmit = (e) => {
     e.preventDefault();
@@ -35,10 +50,15 @@ const OtpValid = () => {
             <div className="inputField">
               <input type='text' name="Code" id="code" className='input-field' value={otp} placeholder='Confirmation code' onChange={(e) => { setOtp(e.target.value); handleLength(e.target.value.length) }} />
             </div>
+            <p className='resend-btn' disabled={resend} onClick={() => { console.log('Resend OTP') }} >{seconds === 0 ? 'Resend Code' : seconds}</p>
           </div>
           <div className={'button-Container'}>
             <button className='submit-button' disabled={btnDisable}>Continue</button>
-            <p className='extra-btn'>New to Olineo? Join here</p>
+            {
+              userLoggedIn ? (
+                <p className='extra-btn'>Resend code via email</p>
+              ) : ('')
+            }
           </div>
         </form>
       </div>

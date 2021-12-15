@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const Login = () => {
+const Login = ({ setUserLoggedIn }) => {
   const [phone, setPhone] = useState('')
   const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
@@ -21,6 +21,7 @@ const Login = () => {
 
   const formSubmit = (e) => {
     e.preventDefault();
+    setUserLoggedIn(true)
     nav('/otp')
   }
 

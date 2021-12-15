@@ -135,3 +135,17 @@ button:disabled{
 input[type='date']:focus::before{
   content: '' !important;
 } */
+
+.resend-btn{
+  color: #1B325E;
+  letter-spacing: -0.5px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: right;
+  background: transparent;
+  border: none;
+  outline: none;
+  opacity: 1 !important;
+}

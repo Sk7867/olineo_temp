@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 // import './Signup.css'
 
 
-const Signup = () => {
+const Signup = ({ setUserLoggedIn }) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [validLength, setValidLength] = useState(false)
@@ -25,6 +25,7 @@ const Signup = () => {
 
   const formSubmit = (e) => {
     e.preventDefault();
+    setUserLoggedIn(false)
     nav('/otp')
   }
 

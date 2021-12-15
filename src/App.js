@@ -1,6 +1,6 @@
 //Dependencies
 import './App.css';
-// import { useState } from 'react';
+import { useState } from 'react';
 import { useLocation, Routes, Route } from 'react-router-dom'
 
 
@@ -12,10 +12,10 @@ import OtpValid from './pages/OtpValid';
 import AddUser from './pages/addUser';
 
 function App() {
+  const [userLoggedIn, setUserLoggedIn] = useState(true)
   // const [headerText, setHeaderText] = useState('')
   const loc = useLocation()
 
-  // console.log(loc);
   return (
     <div className="App">
       {
@@ -30,9 +30,9 @@ function App() {
             )
       }
       <Routes>
-        <Route path='/' element={<Signup />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/otp' element={<OtpValid />} />
+        <Route path='/' element={<Signup setUserLoggedIn={setUserLoggedIn} />} />
+        <Route path='/login' element={<Login setUserLoggedIn={setUserLoggedIn} />} />
+        <Route path='/otp' element={<OtpValid userLoggedIn={userLoggedIn} />} />
         <Route path='/adduser' element={<AddUser />} />
       </Routes>
     </div>
