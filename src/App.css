@@ -154,4 +154,10 @@ input[type='date']:focus::before{
   border: none;
   outline: none;
   opacity: 1 !important;
+  width: fit-content;
+  align-self: flex-end;
+}
+
+.btn-disable{
+  pointer-events: none !important;
 }

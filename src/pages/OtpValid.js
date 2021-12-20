@@ -6,7 +6,7 @@ const OtpValid = ({ userLoggedIn }) => {
   const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
   const [seconds, setSeconds] = useState(60)
-  const [resend, setResend] = useState(true)
+  // const [resend, setResend] = useState(true)
   const nav = useNavigate()
 
   const handleLength = (length) => {
@@ -23,7 +23,7 @@ const OtpValid = ({ userLoggedIn }) => {
       timer = setTimeout(() => setSeconds(seconds - 1), 1000);
     } else {
       setSeconds(0);
-      setResend(false)
+      // setResend(false)
     }
     return () => {
       clearTimeout(timer)
@@ -50,10 +50,10 @@ const OtpValid = ({ userLoggedIn }) => {
             <div className="inputField">
               <input type='text' name="Code" id="code" className='input-field' value={otp} placeholder='Confirmation code' onChange={(e) => { setOtp(e.target.value); handleLength(e.target.value.length) }} />
             </div>
-            <p className='resend-btn' disabled={resend} onClick={() => { console.log('Resend OTP') }} >{seconds === 0 ? 'Resend Code' : seconds}</p>
+            <p className={`resend-btn ${seconds === 0 ? '' : 'btn-disable'}`} type='resend'>{seconds === 0 ? 'Resend Code' : seconds}</p>
           </div>
           <div className={'button-Container'}>
-            <button className='submit-button' disabled={btnDisable}><p>Continue</p></button>
+            <button className='submit-button' type='submit' disabled={btnDisable}><p>Continue</p></button>
             {
               userLoggedIn ? (
                 <p className='extra-btn'>Resend code via email</p>
