@@ -50,7 +50,7 @@ const Signup = ({ setUserLoggedIn }) => {
             <input type='tel' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' pattern="[0-9]{10}" onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} required />
           </div>
           <div className={'button-Container'}>
-            <button type='submit' className='submit-button' disabled={btnDisable}>Continue</button>
+            <button type='submit' className='submit-button' disabled={btnDisable}><p>Continue</p></button>
             <p className='extra-btn' onClick={pageSwitch}>Already a customer?</p>
           </div>
         </form>

@@ -38,7 +38,7 @@ const AddUser = () => {
 
           </div>
           <div className={'button-Container'}>
-            <button className='submit-button' disabled={btnDisable}>Continue</button>
+            <button className='submit-button' disabled={btnDisable}><p>Continue</p></button>
           </div>
         </form>
       </div>

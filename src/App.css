@@ -56,6 +56,12 @@ color: #8D9091;
   letter-spacing: -0.5px;
   cursor: pointer;
   border: none;
+  transform: skew(-20deg);
+}
+
+.submit-button p{
+  display: inline-block;
+  transform: skew(20deg);
 }
 
 .extra-btn{

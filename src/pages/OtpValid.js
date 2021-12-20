@@ -53,7 +53,7 @@ const OtpValid = ({ userLoggedIn }) => {
             <p className='resend-btn' disabled={resend} onClick={() => { console.log('Resend OTP') }} >{seconds === 0 ? 'Resend Code' : seconds}</p>
           </div>
           <div className={'button-Container'}>
-            <button className='submit-button' disabled={btnDisable}>Continue</button>
+            <button className='submit-button' disabled={btnDisable}><p>Continue</p></button>
             {
               userLoggedIn ? (
                 <p className='extra-btn'>Resend code via email</p>
