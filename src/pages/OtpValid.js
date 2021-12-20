@@ -48,7 +48,7 @@ const OtpValid = ({ userLoggedIn }) => {
         <form action="" className={'signup-form'} onSubmit={formSubmit} onChange={validateForm}>
           <div className="inputfield-Container">
             <div className="inputField">
-              <input type='text' name="Code" id="code" className='input-field' value={otp} placeholder='Confirmation code' onChange={(e) => { setOtp(e.target.value); handleLength(e.target.value.length) }} />
+              <input type='text' name="Code" id="code" className='input-field' value={otp} autoComplete='off' placeholder='Confirmation code' maxLength={6} onChange={(e) => { setOtp(e.target.value); handleLength(e.target.value.length) }} />
             </div>
             <p className={`resend-btn ${seconds === 0 ? '' : 'btn-disable'}`} type='resend'>{seconds === 0 ? 'Resend Code' : seconds}</p>
           </div>

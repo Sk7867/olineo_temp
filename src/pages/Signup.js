@@ -7,20 +7,20 @@ import { useNavigate } from 'react-router-dom'
 const Signup = ({ setUserLoggedIn }) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
-  const [validLength, setValidLength] = useState(false)
+  // const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
   const nav = useNavigate()
 
-  const handleLength = (length) => {
-    if (length === 9) {
-      setValidLength(true)
-    } else {
-      setValidLength(false)
-    }
-  }
+  // const handleLength = (length) => {
+  //   if (length >= 9) {
+  //     setValidLength(true)
+  //   } else {
+  //     setValidLength(false)
+  //   }
+  // }
 
   const validateForm = () => (
-    (name !== '') && (phone !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)
+    (name !== '') && (phone !== '') ? setBtnDisable(false) : setBtnDisable(true)
   )
 
   const formSubmit = (e) => {
@@ -47,7 +47,7 @@ const Signup = ({ setUserLoggedIn }) => {
         <form action="" className={'signup-form'} onSubmit={formSubmit} onChange={validateForm}>
           <div className="inputfield-Container">
             <input type="text" name="Name" id="name" className='input-field' placeholder='Name' value={name} onChange={(e) => { setName(e.target.value) }} required />
-            <input type='tel' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' pattern="[0-9]{10}" onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} required />
+            <input type='tel' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' maxLength={10} onChange={(e) => { setPhone(e.target.value); }} required />
           </div>
           <div className={'button-Container'}>
             <button type='submit' className='submit-button' disabled={btnDisable}><p>Continue</p></button>

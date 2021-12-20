@@ -6,20 +6,20 @@ const AddUser = () => {
   const [DOB, setDOB] = useState('')
   const [pinCode, setPinCode] = useState('')
   const [phone, setPhone] = useState('')
-  const [validLength, setValidLength] = useState(false)
+  // const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
 
-  const handleLength = (length) => {
-    if (length === 9) {
-      setValidLength(true)
-    } else {
-      setValidLength(false)
-    }
-  }
+  // const handleLength = (length) => {
+  //   if (length === 9) {
+  //     setValidLength(true)
+  //   } else {
+  //     setValidLength(false)
+  //   }
+  // }
   // console.log(name, email, DOB, pinCode, phone);
 
   const validateForm = () => (
-    (name !== '') && (email !== '') && (pinCode !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)
+    (name !== '') && (email !== '') && (pinCode !== '') ? setBtnDisable(false) : setBtnDisable(true)
   )
   return (
     <>
@@ -34,7 +34,7 @@ const AddUser = () => {
             <input type="email" name="Email" id="email" className='input-field' placeholder='Email' value={email} onChange={(e) => { setEmail(e.target.value) }} />
             <input type="date" onFocus={(e) => (e.currentTarget.type = "date")} onBlur={(e) => (e.currentTarget.type = "text")} name="Date-of-Birth" id="DOB" className='input-field' placeholder='Date of birth' value={DOB} onChange={(e) => { setDOB(e.target.value) }} />
             <input type="text" name="Pincode" id="pincode" className='input-field' placeholder='Pin code' value={pinCode} onChange={(e) => { setPinCode(e.target.value) }} />
-            <input type='tel' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} />
+            <input type='tel' name="Phone" id="phone" maxLength={10} className='input-field' value={phone} placeholder='Phone' onChange={(e) => { setPhone(e.target.value); }} />
 
           </div>
           <div className={'button-Container'}>
