@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 //Images
 import navbarLogo from '../../assets/vector/navbar_logo.svg'
+import navbarLogoDesk from '../../assets/vector/navbar_logo_desk.svg'
 
 const HeaderBar = ({ alternateWay, alternateLink }) => {
   const nav = useNavigate()
@@ -16,7 +17,8 @@ const HeaderBar = ({ alternateWay, alternateLink }) => {
     <div className={'headerContainer'}>
       <div className={'headerWrapper'}>
         <div className={'logo'}>
-          <img src={navbarLogo} alt="" />
+          <img src={navbarLogo} alt="" className='logo_mob' />
+          <img src={navbarLogoDesk} alt="" className='logo_desk' />
         </div>
         <p className={'alternate-way'} onClick={pageSwitch}>
           {alternateWay}

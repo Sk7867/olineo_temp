@@ -34,7 +34,7 @@ const Login = ({ setUserLoggedIn }) => {
 
   return (
     <>
-      <div className='pageWrapper'>
+      <div className='signup-wrapper'>
         <div className='signup-header'>
           <h1 className='page-heading'>Welcome Back!</h1>
           <p className={'page-desc'}>Login here</p>
@@ -48,9 +48,9 @@ const Login = ({ setUserLoggedIn }) => {
             <p className='extra-btn' onClick={pageSwitch}>New to Olineo? Join here</p>
           </div>
         </form>
-      </div>
-      <div className='tc-Footer'>
-        <p className='footer-Text'>By Signing In, I agree to <span>terms & conditions</span></p>
+        <div className='tc-Footer'>
+          <p className='footer-Text'>By Signing In, I agree to <span>terms & conditions</span></p>
+        </div>
       </div>
     </>
   )

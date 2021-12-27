@@ -23,7 +23,7 @@ const AddUser = () => {
   )
   return (
     <>
-      <div className='pageWrapper'>
+      <div className='signup-wrapper'>
         <div className='signup-header'>
           <h1 className='page-heading'>Complete your profile</h1>
           <p className={'page-desc'}>And you’re good to go</p>

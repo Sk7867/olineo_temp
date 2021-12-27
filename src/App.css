@@ -4,13 +4,23 @@
   box-sizing: border-box;
 }
 
-.pageWrapper{
-  padding: 8.5rem 1rem 11.438rem;
+.App{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup-wrapper{
+  margin: 128px 0 0;
+  padding: 48px 1rem 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   /* align-items: center; */
   gap: 24px;
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 .page-heading{
@@ -114,9 +124,10 @@ button:disabled{
 
 .tc-Footer{
   width: 100%;
-  position: fixed;
-  bottom: 0;
-  margin-bottom: 12px;
+  /* position: fixed;
+  bottom: 0; */
+  /* margin-bottom: 12px; */
+  margin: 96px 0 0;
 }
 
 .footer-Text{
@@ -160,4 +171,12 @@ input[type='date']:focus::before{
 
 .btn-disable{
   pointer-events: none !important;
+}
+
+@media screen and (min-width:1024px) {
+  .signup-wrapper{
+    max-width: 360px;
+    height: fit-content;
+    box-shadow: 0px 4px 20px rgba(27, 50, 94, 0.1);
+  }
 }

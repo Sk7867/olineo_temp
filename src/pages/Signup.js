@@ -39,7 +39,7 @@ const Signup = ({ setUserLoggedIn }) => {
   return (
     <>
       {/* <HeaderBar /> */}
-      <div className='pageWrapper'>
+      <div className='signup-wrapper'>
         <div className='signup-header'>
           <h1 className='page-heading'>Welcome to Olineo</h1>
           <p className={'page-desc'}>Create an account</p>
@@ -54,9 +54,9 @@ const Signup = ({ setUserLoggedIn }) => {
             <p className='extra-btn' onClick={pageSwitch}>Already a customer?</p>
           </div>
         </form>
-      </div>
-      <div className='tc-Footer'>
-        <p className='footer-Text'>By Signing In, I agree to <span>terms & conditions</span></p>
+        <div className='tc-Footer'>
+          <p className='footer-Text'>By Signing In, I agree to <span>terms & conditions</span></p>
+        </div>
       </div>
     </>
   )

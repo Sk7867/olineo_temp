@@ -40,7 +40,7 @@ const OtpValid = ({ userLoggedIn }) => {
   )
   return (
     <>
-      <div className='pageWrapper'>
+      <div className='signup-wrapper'>
         <div className='signup-header'>
           <h1 className='page-heading'>Confirmation code</h1>
           <p className={'page-desc'}>Please check you phone for 6-digit confimation code.</p>
