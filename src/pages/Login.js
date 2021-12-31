@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import HeaderBar from '../components/HeaderBar/HeaderBar'
 
 const Login = ({ setUserLoggedIn }) => {
   const [phone, setPhone] = useState('')
@@ -34,6 +35,7 @@ const Login = ({ setUserLoggedIn }) => {
 
   return (
     <>
+      <HeaderBar alternateWay={'Sign up'} alternateLink={'/signup'} />
       <div className='signup-wrapper'>
         <div className='signup-header'>
           <h1 className='page-heading'>Welcome Back!</h1>

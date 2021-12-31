@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import HeaderBar from '../components/HeaderBar/HeaderBar'
 //CSS
 // import './Signup.css'
 
@@ -38,7 +39,7 @@ const Signup = ({ setUserLoggedIn }) => {
 
   return (
     <>
-      {/* <HeaderBar /> */}
+      <HeaderBar alternateWay={'Login'} alternateLink={'/login'} />
       <div className='signup-wrapper'>
         <div className='signup-header'>
           <h1 className='page-heading'>Welcome to Olineo</h1>

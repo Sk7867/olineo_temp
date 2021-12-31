@@ -1,0 +1,56 @@
+.carousel-control-prev, .carousel-control-next{
+  display: none !important;
+}
+
+.carousel-indicators{
+  margin-bottom: 0 !important;
+}
+
+.carousel-indicators [data-bs-target]{
+  /* max-width: 12px !important;
+  max-height: 12px !important; */
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background-color: #DDE0E7 !important;
+  opacity: 1 !important;
+  margin-right: 8px !important;
+  margin-left: 8px !important;
+}
+
+.carousel-indicators .active{
+  background-color: #1B325E !important;
+}
+
+@media screen and (min-width: 1024px) {
+  .carousel-control-prev, .carousel-control-next{
+    display: flex !important;
+    max-width: 48px !important;
+    max-height: 96px !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: #FFFFFF !important;
+    border-radius: 8px !important;
+    opacity: 1 !important;
+    top: 50% !important;
+    transform: translateY(-50%);
+  }
+  .carousel-control-prev-icon, .carousel-control-next-icon{
+    max-width: 48px !important;
+    max-height: 48px !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  .carousel-control-prev-icon{
+    background-image: url('../../assets/vector/arrow_left_black.svg') !important;
+}
+.carousel-control-next-icon{
+  background-image: url('../../assets/vector/arrow_right_black.svg') !important;
+}
+.carousel-indicators [data-bs-target]{
+  width: 12px !important;
+  height: 12px !important;
+}
+
+}

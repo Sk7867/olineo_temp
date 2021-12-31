@@ -16,10 +16,10 @@ const HeaderBar = ({ alternateWay, alternateLink }) => {
   return (
     <div className={'headerContainer'}>
       <div className={'headerWrapper'}>
-        <div className={'logo'}>
+        <a href='/' className={'logo'}>
           <img src={navbarLogo} alt="" className='logo_mob' />
           <img src={navbarLogoDesk} alt="" className='logo_desk' />
-        </div>
+        </a>
         <p className={'alternate-way'} onClick={pageSwitch}>
           {alternateWay}
         </p>

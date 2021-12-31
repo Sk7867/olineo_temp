@@ -30,6 +30,10 @@
   display: none;
 }
 
+.logo_tab{
+  display: none;
+}
+
 .alternate-way{
   font-size: 14px;
   line-height: 1rem;
@@ -37,6 +41,17 @@
   letter-spacing: -0.5px;
   color: white;
   cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+
+  .logo_mob{
+    display: none;
+  }
+  
+  .logo_tab{
+    display: block;
+  }
 }
 
 @media screen and (min-width: 1024px) {
@@ -50,7 +65,7 @@
     max-height: 44px;
   }
 
-  .logo_mob{
+  .logo_tab{
     display: none;
   }
 
