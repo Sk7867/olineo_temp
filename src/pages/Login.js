@@ -23,12 +23,12 @@ const Login = ({ setUserLoggedIn }) => {
   const formSubmit = (e) => {
     e.preventDefault();
     setUserLoggedIn(true)
-    nav('/otp')
+    nav('/')
   }
 
   const pageSwitch = (e) => {
     e.preventDefault();
-    nav('/')
+    nav('/signup')
   }
 
   // console.log(phone);

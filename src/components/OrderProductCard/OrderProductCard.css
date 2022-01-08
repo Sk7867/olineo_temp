@@ -1,0 +1,76 @@
+.product_Container{
+  padding: 1rem 0.75rem 0.875rem;
+  background: #FFFFFF;
+}
+
+.product_Wrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.25rem;
+}
+
+.product_Details{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content:center;
+  gap: 0.5rem;
+  max-width: 190px;
+  width: 100%;
+}
+
+.product_Name{
+  letter-spacing: -0.01em;
+  color: #08090A;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  margin: 0;
+}
+
+.product_Status{
+  letter-spacing: 0.004em;
+  color: #6D747A;
+  font-weight: 500;
+  line-height: 1.125rem;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.product_Arriving{
+  color: #3F8F00;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.product_ImageContainer{
+  max-width: 70px;
+  max-height: 70px;
+  width: 100%;
+  height: 100%;
+}
+
+.product_ImageContainer img{
+  width: 100%;
+  height: 100%;
+}
+
+.product_Tracker{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0 0;
+  margin: 1rem 0.25rem -0.25rem;
+  border-top: 1px solid #EBEDF0;
+}
+
+.product_TrackText{
+  letter-spacing: -0.5px;
+  color: #1B325E;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1rem;
+  margin: 0;
+}

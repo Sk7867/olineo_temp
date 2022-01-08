@@ -1,0 +1,100 @@
+.product_Contianer{
+  padding: 1rem 1rem 0.125rem;
+  background: #FFFFFF;
+}
+
+.product_Wrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product_Name{
+  line-height: 20px;
+  color: #08090A;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.product_Color{
+  letter-spacing: 0.004em;
+  color: #6D747A;
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+.product_Price_Section{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.product_Discount_Price{
+  letter-spacing: -0.01em;
+  color: #08090A;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.product_Original_Price{
+  color: #6D747A;
+  text-decoration-line: line-through;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.product_Discount{
+  letter-spacing: -0.01em;
+  color: #3F8F00;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.product_Offers{
+  letter-spacing: 0.004em;
+  color: #3F8F00;
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+.product_Delivery_Estimate{
+  letter-spacing: 0.004em;
+  color: #08090A;
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+.product_Delivery_Charge{
+  color: #08090A;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.product_Availability{
+  letter-spacing: 0.004em;
+  color: #3F8F00;
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+.product_Image_Container{
+  max-width: 122px;
+  max-height: 122px;
+  width: 100%;
+  height: 100%;
+}
+
+.product_Image_Container img{
+  width: 100%;
+  height: 100%;
+}

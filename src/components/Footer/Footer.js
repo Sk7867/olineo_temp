@@ -74,9 +74,17 @@ const Footer = () => {
         <div className="footer_terms_container">
           <p className="footer_last_heading">Useful Links</p>
           <div className="footer_terms_wrapper">
-            <p className="footer_terms">Terms & conditions</p>
-            <p className="footer_terms">Privacy policy</p>
-            <p className="footer_terms">FAQs</p>
+            <div className='footer_terms_column1'>
+              <p className="footer_terms">Deals of the day</p>
+              <p className="footer_terms">O-Line-O Wallet</p>
+              <p className="footer_terms">Wish List</p>
+              <p className="footer_terms">Recently Viewed Products</p>
+            </div>
+            <div className="footer_terms_column2">
+              <p className="footer_terms">Customer Service</p>
+              <p className="footer_terms">Terms & conditions</p>
+              <p className="footer_terms">Privacy policy</p>
+            </div>
           </div>
         </div>
         <div className="last_contact_details">
