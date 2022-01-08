@@ -4,6 +4,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  margin: 0.75rem 0 0;
   /* bottom: 0;
     position: absolute; */
   /* align-items: center;
@@ -16,16 +17,17 @@
   align-items: center;
   /* justify-content: center; */
   gap: 4px;
-  padding: 40px 1rem;
+  padding: 2.5rem 1rem;
 }
 
 .footer_details{
   font-weight: 600;
   letter-spacing: 0.004em;
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
   color: #FFFFFF;
   text-align: center;
+  margin: 0;
 }
 
 .contact_details{
@@ -61,11 +63,19 @@
   height: 100%;
 }
 
+.contact_link_text{
+  margin: 0;
+  color: #000000;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
 .footer_last{
-  padding: 40px 44px 32px;
+  padding: 2.5rem 1rem;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 2.5rem;
 }
 
 .footer_last_heading{
@@ -89,18 +99,24 @@
 
 .footer_terms_wrapper{
   display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.footer_terms_column1, .footer_terms_column2{
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
+  gap: 1.125rem;
 }
 
 .footer_terms{
   letter-spacing: -0.01em;
   color: #EBEDF0;
   font-weight: 600;
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  cursor: pointer;
+  margin: 0;
 }
 
 .last_contact_details{
@@ -112,6 +128,7 @@
   gap: 4px;
   align-items: center;
   justify-content: center;
+  margin: 0 0 2rem;
 }
 
 .footer_copyright p{
@@ -120,6 +137,7 @@
   font-weight: 500;
   font-size: 10px;
   line-height: 16px;
+  margin: 0;
 }
 
 @media screen and (min-width: 768px) {
@@ -169,12 +187,14 @@
   
   .last_contact p{
     color: #EBEDF0;
+    font-size: 1rem;
+    line-height: 1.5rem;
   }
   
   .footer_last{
     padding: 0 24px 0;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
   }
 
@@ -197,6 +217,13 @@
     font-size: 1rem;
     line-height: 24px;
   }
+
+  .footer_terms{
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+    letter-spacing: 0.004em;
+  }
 }
 
 @media screen and (min-width: 1024px) {
@@ -211,6 +238,6 @@
   }
 
   .footer_copyright{
-    margin: 80px 0 24px;
+    margin: 80px 0 32px;
   }
 }

@@ -3,7 +3,7 @@ import React from 'react'
 import './ProductBox.css'
 
 const ProductBox = ({ product_img, card_heading, product_price, product_name, classes }) => {
-  console.log(classes);
+  // console.log(classes);
   return (
     <div className={'productbox_Container ' + (classes ? classes.boxClass : '')}>
       <img src={product_img} alt="" />

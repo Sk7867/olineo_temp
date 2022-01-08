@@ -1,5 +1,6 @@
 .section4_container{
   padding: 12px 16px;
+  background-color: #FFFFFF;
 }
 
 .section4_header{
@@ -36,16 +37,16 @@
 
 @media screen and (min-width: 768px) {
   .section4_container{
-    padding: 18px 24px;
+    padding: 1.125rem 1.5rem 2.375rem;
   }
 
   .section4_heading{
-    font-size: 24px;
-    line-height: 36px;
+    font-size: 1.5rem;
+    line-height: 2.25rem;
   }
 
   .section4_card_container{
-    grid-template-columns: repeat(4, 180px);
+    grid-template-columns: repeat(4, 1fr);
     grid-template-rows: 230px;
     grid-column-gap: 24px;
     grid-row-gap: 0px;
@@ -58,7 +59,7 @@
     padding: 20px 32px;
   }
   .section4_card_container{
-  grid-template-columns: repeat(4, 222px);
+  grid-template-columns: repeat(4, 1fr);
   grid-template-rows: 356px;
   grid-column-gap: 24px;
   grid-row-gap: 0px;
@@ -77,7 +78,7 @@
   }
 
   .section4_card_container{
-    grid-template-columns: repeat(4, 332px);
+    grid-template-columns: repeat(4, 1fr);
     margin: 24px 0;
   }
 }

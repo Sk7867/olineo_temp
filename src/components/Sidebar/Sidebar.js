@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 //CSS
 import './Sidebar.css'
 
@@ -11,47 +12,92 @@ import cartBlueIcon from '../../assets/vector/cart_outline_blue.svg'
 import userIcon from '../../assets/vector/user_group_blue.svg'
 import callIcon from '../../assets/vector/call_blue.svg'
 import supportIcon from '../../assets/vector/support_blue.svg'
-import { Link } from 'react-router-dom'
+import profileIconBlue from '../../assets/vector/account_circle_blue.svg'
+import storeBlue from '../../assets/vector/store_outline_bue.svg'
+import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
+import arrowLeftBlack from '../../assets/vector/arrow_left_black.svg'
+import cameraBlue from '../../assets/vector/camera_outline_blue.svg'
 
 const Sidebar = ({ sidebar, setSidebar }) => {
 
+  const [categoryMenu, setCategoryMenu] = useState(false)
+
   const sidebarNav = [
     {
-      image: walletIcon,
-      text: 'My wallet'
+      image: profileIconBlue,
+      text: 'My profile',
+      link: '/orders',
     },
     {
-      image: layoutIcon,
-      text: 'All categories'
-    },
-    {
-      image: globeIcon,
-      text: 'Choose language'
+      image: storeBlue,
+      text: 'Store finder',
+      link: '/orders',
     },
     {
       image: truckIcon,
-      text: 'My orders'
+      text: 'My orders',
+      link: '/orders',
     },
     {
       image: cartBlueIcon,
-      text: 'My cart'
+      text: 'My cart',
+      link: '/mycart',
+    },
+    {
+      image: walletIcon,
+      text: 'My wallet',
+      link: '/orders',
+    },
+    {
+      image: globeIcon,
+      text: 'Choose language',
+      link: '/orders',
     },
   ]
 
   const sideNavContact = [
     {
       image: userIcon,
-      text: 'About Us'
+      text: 'About Us',
+      link: '/orders',
     },
     {
       image: callIcon,
-      text: 'Contact Us'
+      text: 'Contact Us',
+      link: '/orders',
     },
     {
       image: supportIcon,
-      text: 'Customer Support'
+      text: 'Customer Support',
+      link: '/orders',
     },
   ]
+
+  const categoryData = [
+    {
+      image: cameraBlue,
+      text: 'Category 1',
+      link: '/',
+    },
+    {
+      image: cameraBlue,
+      text: 'Category 2',
+      link: '/',
+    },
+    {
+      image: cameraBlue,
+      text: 'Category 3',
+      link: '/',
+    },
+    {
+      image: cameraBlue,
+      text: 'Category 4',
+      link: '/',
+    },
+  ]
+
+
+  // console.log(categoryMenu);
   return (
     <>
       <div className={`sidebar_container ${sidebar ? '' : 'inactive'}`}>
@@ -63,28 +109,57 @@ const Sidebar = ({ sidebar, setSidebar }) => {
             <Link to={'/login'}>Login</Link> | <Link to={'/signup'}>Create account</Link>
           </p>
         </div>
-        <div className="sidebar_nav">
-          {
-            sidebarNav.map((item, index) => (
-              <div className="sidebar_navlink" key={index} onClick={() => setSidebar(false)}>
-                <img src={item.image} alt="" />
-                <p>{item.text}</p>
+        <div className="side_Nav_Container">
+          <div className={`side_Nav_Wrapper ${categoryMenu ? 'menu_Slide' : ''}`}>
+            <div className='categories_toggle' onClick={() => setCategoryMenu(true)} >
+              <div>
+                <img src={layoutIcon} alt="" />
+                <p>All categories</p>
               </div>
-            ))
-          }
-        </div>
-        <div className="sidebar_contact">
-          {
-            sideNavContact.map((item, index) => (
-              <div className="sidebar_contactlink" key={index} onClick={() => setSidebar(false)}>
-                <img src={item.image} alt="" />
-                <p>{item.text}</p>
+              <img src={arrowRightBlue} alt="" />
+            </div>
+            <div className="sidebar_nav">
+              {
+                sidebarNav.map((item, index) => (
+                  <Link to={item.link} className="sidebar_navlink" key={index} onClick={() => setSidebar(false)}>
+                    <img src={item.image} alt="" />
+                    <p>{item.text}</p>
+                  </Link>
+                ))
+              }
+            </div>
+            <div className="sidebar_contact">
+              {
+                sideNavContact.map((item, index) => (
+                  <Link to={item.link} className="sidebar_contactlink" key={index} onClick={() => setSidebar(false)}>
+                    <img src={item.image} alt="" />
+                    <p>{item.text}</p>
+                  </Link>
+                ))
+              }
+            </div>
+          </div>
+          <div className={`category_Menu_Wrapper ${categoryMenu ? 'category_Menu_Visible' : ''}`}>
+            <div className='categories_toggle' onClick={() => setCategoryMenu(false)} >
+              <div>
+                <img src={arrowLeftBlack} alt="" />
+                <p>Main menu</p>
               </div>
-            ))
-          }
+            </div>
+            <div className="category_Menu">
+              {
+                categoryData.map((item, index) => (
+                  <Link to={item.link} className="sidebar_contactlink" key={index} onClick={() => { setSidebar(false); setCategoryMenu(false) }}>
+                    <img src={item.image} alt="" />
+                    <p>{item.text}</p>
+                  </Link>
+                ))
+              }
+            </div>
+          </div>
         </div>
       </div>
-      <div className={`sidebar_backdrop ${sidebar ? 'backdrop_active' : ''}`} onClick={() => setSidebar(false)}></div>
+      <div className={`sidebar_backdrop ${sidebar ? 'backdrop_active' : ''}`} onClick={() => { setSidebar(false); setCategoryMenu(false) }}></div>
     </>
   )
 }

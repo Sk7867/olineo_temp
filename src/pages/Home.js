@@ -259,12 +259,13 @@ const Home = ({ sidebar, setSidebar }) => {
         />
         <Section2
           id={'section2'}
-          heading='Keep Shopping for'
+          heading='Normal products'
           productData={sec2Data}
         />
         <Section3
           id={'section3'}
-          heading={'Coming soon Product/Sale'}
+          heading={'Pre-order product'}
+          cardButton={true}
         />
         <Section4
           id={'section4'}
@@ -282,11 +283,12 @@ const Home = ({ sidebar, setSidebar }) => {
         />
         <Section3
           id={'section6'}
-          heading={'New Product/Sale'}
+          heading={'Out-of-stock product'}
+          cardButton={false}
         />
         <Section4
           id={'section7'}
-          heading={'Upto 50% off'}
+          heading={'Deals of the day'}
           productData={sec7Data}
           link={{
             text: 'See more',
