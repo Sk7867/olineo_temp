@@ -1,0 +1,23 @@
+.page_Wrapper{
+  background-color: #E5E5E5;
+}
+
+.order_Text{
+  padding: 0 1rem;
+  color: #6D747A;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin: 0;
+}
+
+.order_arriving_section, .order_delivered_section{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0 0;
+}
+
+.order_delivered_section{
+  margin: 0 0 1rem;
+}

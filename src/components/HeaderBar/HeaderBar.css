@@ -41,9 +41,14 @@
   letter-spacing: -0.5px;
   color: white;
   cursor: pointer;
+  margin: 0;
 }
 
 @media screen and (min-width: 768px) {
+  .headerContainer{
+    height: 4.5rem;
+    padding: 16px 60px;
+  }
 
   .logo_mob{
     display: none;
@@ -56,7 +61,6 @@
 
 @media screen and (min-width: 1024px) {
   .headerContainer{
-    height: 4.5rem;
     padding: 16px 175px;
   }
 

@@ -52,13 +52,14 @@ color: #8D9091;
 }
 
 .submit-button{
-  border-radius: 4px;
+  border-radius: 0 0 0 1rem;
   background: #1B325E;
   padding: 16px 0;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
+  max-width: 328px;
   width: 100%;
   outline: none;
   font-size: 14px;
@@ -68,6 +69,7 @@ color: #8D9091;
   cursor: pointer;
   border: none;
   transform: skew(-20deg);
+  box-shadow: 0px 4px 4px 0px #00000040;
 }
 
 .submit-button p{
@@ -178,6 +180,45 @@ input[type='date']:focus::before{
 .homepage_wrapper{
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #F8F9FA;
+}
+
+.page_Wrapper{
+  margin-top: 56px;
+  min-width: 100vw;
+  /* min-height: 100vh; */
+  height: 100%;
+  width: 100%;
+}
+
+.empty_order_sec{
+  width: 100%;
+  height: 100%;
+  background: #E5E5E5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 80px 0;
+}
+
+.empty_order_text{
+  margin: 0;
+  color: #000000;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+
+@media screen and (min-width: 768px) {
+  .submit-button{
+    max-width: 552px;
+  }
 }
 
 @media screen and (min-width:1024px) {

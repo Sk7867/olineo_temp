@@ -1,6 +1,6 @@
-import './HeaderBar.css'
 import { useNavigate } from 'react-router-dom'
-
+//CSS
+import './HeaderBar.css'
 //Images
 import navbarLogo from '../../assets/vector/navbar_logo.svg'
 import navbarLogoDesk from '../../assets/vector/navbar_logo_desk.svg'
@@ -18,7 +18,7 @@ const HeaderBar = ({ alternateWay, alternateLink }) => {
       <div className={'headerWrapper'}>
         <a href='/' className={'logo'}>
           <img src={navbarLogo} alt="" className='logo_mob' />
-          <img src={navbarLogoDesk} alt="" className='logo_desk' />
+          <img src={navbarLogoDesk} alt="" className='logo_tab' />
         </a>
         <p className={'alternate-way'} onClick={pageSwitch}>
           {alternateWay}
