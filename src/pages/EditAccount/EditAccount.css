@@ -1,0 +1,50 @@
+.profile_edit_form{
+  background: #FFFFFF;
+  padding: 1.5rem 0.938rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 0 0 1rem;
+}
+
+.edit_input_container{
+  position: relative;
+  width: 100%;
+}
+
+.edit_input_container input{
+  width: 100%;
+  border: 1px solid #DDE0E7;
+  background: #FFFFFF;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  color: #08090A;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.edit_input_label{
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  color: #08090A;
+  background: #FFFFFF;
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  padding: 0 2px;
+}
+
+.edit_input_update{
+  letter-spacing: 0.004em;
+  color: #1B325E;
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  position: absolute;
+  top: 50%;
+  right: 13px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}

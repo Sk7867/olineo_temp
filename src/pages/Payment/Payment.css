@@ -1,0 +1,140 @@
+.payment_Header{
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #FFFFFF;
+}
+
+.payment_Header p{
+  margin: 0;
+  letter-spacing: -0.01em;
+  color: #08090A;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+/* Payment Methods */
+.payment_Methods{
+  padding: 1rem 0.75rem;
+  background-color: #FFFFFF;
+}
+
+.payment_Methods_Header{
+  padding: 0 0.25rem 0.75rem;
+  border-bottom: 0.063rem solid #EBEDF0;
+}
+
+.payment_Methods_Body{
+  padding: 0.75rem 0 0;
+}
+
+.payment_Methods_Body div{
+  padding: 0.75rem 0.25rem;
+  border-bottom: 0.063rem solid #EBEDF0;
+}
+
+.payment_Methods_Body div:first-child{
+  padding-top: 0;
+}
+
+.payment_Methods_Body div:last-child{
+  padding-bottom: 0;
+  border: none;
+}
+
+/* Add Gift Card */
+
+.gift_card{
+  background: #FFFFFF;
+  margin: 1rem 0 7rem;
+}
+
+.gift_Card_Details{
+  padding: 1rem 0.75rem 0.125rem;
+}
+
+.gift_Card_Header{
+  border-bottom: 0.063rem solid #EBEDF0;
+  padding: 0 0 0.75rem;
+  letter-spacing: -0.01em;
+  color: #08090A;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.gift_Card_Body{
+  padding: 1.5rem 0 1rem;
+  border-bottom: 0.063rem solid #EBEDF0;
+}
+
+.gift_Card_Body input{
+  padding: 1rem;
+  width: 100%;
+  border: 0.063rem solid #EFEFEF;
+  border-radius: 0.25rem;
+}
+
+.gift_Card_Body input::placeholder{
+  color: #8D9091;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+}
+
+.gift_Card_Footer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.125rem 0 0;
+}
+
+.gift_Card_Footer div{
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 0;
+}
+
+.gift_Card_Footer div p{
+  margin: 0;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.gift_Card_Footer div:first-child p{
+  color: #6D747A;
+}
+
+.gift_Card_Footer div:last-child p{
+  color: #3D5176;
+}
+
+.gift_Card_Footer div:first-child{
+  border-right: 0.063rem solid #EBEDF0;
+}
+
+.add_Gift_Card{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem;
+}
+
+.add_Gift_Card img{
+  max-width: 18px;
+  max-height: 18px;
+  width: 100%;
+  height: 100%;
+}
+
+.add_Gift_Card p{
+  margin: 0;
+  color: #3D5176;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
