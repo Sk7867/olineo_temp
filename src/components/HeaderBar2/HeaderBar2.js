@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+
 //CSS
 import './HeaderBar2.css'
 
@@ -14,18 +15,20 @@ import logo_tab from '../../assets/vector/navbar_logo_tab.svg'
 import storeWhite from '../../assets/vector/store_outline_white.svg'
 import cartWhite from '../../assets/vector/cart_outline_white.svg'
 import locationWhite from '../../assets/vector/location_white.svg'
-import accountCircle from '../../assets/vector/account_circle_outline.svg'
+import accountCircleWhite from '../../assets/vector/account_circle_outline.svg'
 import userDp from '../../assets/png/user_dp.png'
 import layoutDotted from '../../assets/vector/layout_yellow_dotted.svg'
 import mobileGreenDotted from '../../assets/vector/mobile_green_dotted.svg'
 import mobilePinkDotted from '../../assets/vector/mobile_pink_dotted.svg'
 import mobileBlueDotted from '../../assets/vector/mobile_blue_dotted.svg'
+import arrowLeftWhite from '../../assets/vector/arrow_left_white.svg'
 // import Sidebar from '../Sidebar/Sidebar'
 
 
-const HeaderBar2 = ({ setSidebar, userLoggedIn }) => {
+const HeaderBar2 = ({ setSidebar, userLoggedIn, header3, headerText, categoriesPart }) => {
   const [modalShow, setModalShow] = useState(false)
   const [useDP, setUseDP] = useState(true)
+  const nav = useNavigate()
 
   const handleModalShow = () => {
     setModalShow(true)
@@ -191,7 +194,7 @@ const HeaderBar2 = ({ setSidebar, userLoggedIn }) => {
 
   return (
     <>
-      <header className='headerbarContainer'>
+      <header className={`headerbarContainer ${header3 ? ('header2_tab') : ''}`}>
         <div className="headerbarWrapper">
           <div className="headerbarLeft">
             <div className="hamburger" onClick={() => setSidebar(true)}>
@@ -228,7 +231,7 @@ const HeaderBar2 = ({ setSidebar, userLoggedIn }) => {
                     useDP ? (
                       <img src={userDp} alt="" />
                     ) : (
-                      <img src={accountCircle} alt="" />
+                      <img src={accountCircleWhite} alt="" />
                     )
                   }
                 </div>
@@ -252,19 +255,34 @@ const HeaderBar2 = ({ setSidebar, userLoggedIn }) => {
           <img src={locationWhite} alt="" />
           <p>Select location to see product availability</p>
         </div>
-        <div className="categories_Container">
-          <div className="categories_Wrapper">
-            {
-              categoriesList.map((item, index) => (
-                <div className="category" key={index}>
-                  <img src={item.categoryImage} alt="" />
-                  <p>{item.categoryName}</p>
-                </div>
-              ))
-            }
-          </div>
-        </div>
+        {
+          categoriesPart && (
+            <div className="categories_Container">
+              <div className="categories_Wrapper">
+                {
+                  categoriesList.map((item, index) => (
+                    <div className="category" key={index}>
+                      <img src={item.categoryImage} alt="" />
+                      <p>{item.categoryName}</p>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+          )
+        }
       </header>
+      {
+        header3 && (
+          <header className='headerbar3_container'>
+            <div className="headerbar3_Wrapper">
+              <img src={arrowLeftWhite} alt="" onClick={() => nav(-1)} className='back_Btn' />
+              <img src={logo_mob} alt="" className='nav_Logo' onClick={() => nav('/')} />
+              <p>{headerText}</p>
+            </div>
+          </header>
+        )
+      }
       {/* <Sidebar sidebar={sidebar} setSidebar={setSidebar} /> */}
       <ModalComp modalShow={modalShow} setModalShow={setModalShow} />
     </>

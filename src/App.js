@@ -3,6 +3,9 @@ import './App.css';
 import { useState } from 'react';
 import { useLocation, Routes, Route } from 'react-router-dom'
 
+//Image 
+import product3 from './assets/png/product_3.png'
+import product1 from './assets/png/product_1.png'
 
 //Components
 import Signup from './pages/Signup';
@@ -14,15 +17,17 @@ import Home from './pages/Home';
 import Footer from './components/Footer/Footer';
 import MyOrders from './pages/MyOrders/MyOrders';
 import MyCart from './pages/MyCart/MyCart';
+import Address from './pages/Address/Address';
+import Payment from './pages/Payment/Payment';
+import Profile from './pages/profile/Profile';
+import EditAccont from './pages/EditAccount/EditAccont';
+import WriteToUS from './pages/CustomerSupport/WriteToUs';
 
-//Image 
-import product3 from './assets/png/product_3.png'
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState(false)
   const [sidebar, setSidebar] = useState(false)
-  const [orders, setOrders] = useState(0)
-  const [cart, setCart] = useState(0)
+  const [cart, setCart] = useState(1)
   // const [headerText, setHeaderText] = useState('')
   const loc = useLocation()
 
@@ -49,7 +54,7 @@ function App() {
 
   const cartData = [
     {
-      productImage: product3,
+      productImage: product1,
       productName: 'JBL C100SI In Ear Wired Earphones with Mic',
       productColor: 'Black',
       productOriginalPrice: '₹1000',
@@ -61,7 +66,7 @@ function App() {
       productAvailabilty: 'In stock',
     },
     {
-      productImage: product3,
+      productImage: product1,
       productName: 'JBL C100SI In Ear Wired Earphones with Mic',
       productColor: 'Black',
       productOriginalPrice: '₹1000',
@@ -87,8 +92,13 @@ function App() {
         <Route path='/otp' element={<OtpValid userLoggedIn={userLoggedIn} />} />
         <Route path='/adduser' element={<AddUser />} />
         <Route path='/' element={<Home sidebar={sidebar} setSidebar={setSidebar} />} />
-        <Route path='/orders' element={<MyOrders orders={orders} ordersList={ordersData} />} />
+        <Route path='/orders' element={<MyOrders ordersList={ordersData} />} />
         <Route path='/mycart' element={<MyCart cart={cart} cartData={cartData} />} />
+        <Route path='/myaddress' element={<Address />} />
+        <Route path='/payment' element={<Payment />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/edit-account' element={<EditAccont />} />
+        <Route path='/write-to-us' element={<WriteToUS />} />
       </Routes>
       {
         loc.pathname === '/' ? (
