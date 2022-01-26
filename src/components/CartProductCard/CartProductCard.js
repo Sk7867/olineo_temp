@@ -2,6 +2,12 @@ import React from 'react'
 //CSS
 import './CartProductCard.css'
 
+//images
+import addIcon from '../../assets/vector/add_outline_blue.svg'
+import deleteIconBlack from '../../assets/vector/delete_outline_black.svg'
+import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
+import saveLaterIcon from '../../assets/vector/save_later_outline.svg'
+
 const CartProductCard = ({
   productImage,
   productName,
@@ -15,36 +21,57 @@ const CartProductCard = ({
   productAvailabilty,
 }) => {
   return (
-    <div className='product_Contianer'>
-      <div className="product_Wrapper">
+    <div className='cart_Product_Contianer'>
+      <div className="cart_Product_Wrapper">
         <div className="product_Details">
-          <h4 className='product_Name'>
+          <h4 className='cart_Product_Name'>
             {productName}
           </h4>
-          <p className="product_Color">
+          <p className="cart_Product_Color">
             Color : {productColor}
           </p>
-          <div className="product_Price_Section">
-            <p className="product_Discount_Price">
+          <div className="cart_Product_Price_Section">
+            <p className="cart_Product_Discount_Price">
               {productDiscountPrice}
             </p>
-            <p className="product_Original_Price">
+            <p className="cart_Product_Original_Price">
               {productOriginalPrice}
             </p>
-            <p className='product_Discount'>
+            <p className='cart_Product_Discount'>
               {productDiscount} off
             </p>
           </div>
-          <p className="product_Offers">
+          <p className="cart_Product_Offers">
             {productOffersAvailable}
           </p>
-          <div className="product_Delivery_Info">
-            <p className="product_Delivery_Estimate">{productDeliveryExpected}</p> | <p className="product_Delivery_Charge">{productDeliveryCharge}</p>
+          <div className="cart_Product_Delivery_Info">
+            <p className="cart_Product_Delivery_Estimate">{productDeliveryExpected}</p> | <p className="cart_Product_Delivery_Charge">{productDeliveryCharge}</p>
           </div>
-          <p className="product_Availability">{productAvailabilty}</p>
+          <p className="cart_Product_Availability">{productAvailabilty}</p>
         </div>
-        <div className="product_Image_Container">
-          <img src={productImage} alt="" />
+        <div className="cart_Product_Card_Right">
+          <div className="cart_Product_Image_Container">
+            <img src={productImage} alt="" />
+          </div>
+          <div className="cart_Product_Counter_Container">
+            <div className='counter_Icon_Container'>
+              <img src={deleteIconBlack} alt="Delete" />
+            </div>
+            <p className='cart_Product_Counter'>1</p>
+            <div className='counter_Icon_Container'>
+              <img src={addIcon} alt="Add" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className='cart_Card_Buttons'>
+        <div className="cart_button_save">
+          <img src={saveLaterIcon} alt="Save For Later" />
+          <p>Save for Later</p>
+        </div>
+        <div className="cart_button_remove">
+          <img src={deleteIcon} alt="Save For Later" />
+          <p>Remove</p>
         </div>
       </div>
     </div>

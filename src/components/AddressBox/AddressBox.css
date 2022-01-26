@@ -1,0 +1,56 @@
+.address{
+  background-color: #FFFFFF;
+}
+
+.address_Box{
+  padding: 1rem 0.75rem 0.75rem;
+  background-color: #FFFFFF;
+}
+
+.address_Box_Wrapper{
+  padding: 0 0 1rem;
+  border-bottom: 1px solid #EBEDF0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0.25rem;
+}
+
+.address_Box_Wrapper p{
+  margin: 0;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #08090A;
+}
+
+.address_Box_Name{
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.address_Box_Footer{
+  margin: 0 0.25rem;
+  padding: 0.75rem 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.address_Box_Footer img{
+  max-width: 18px;
+  max-height: 18px;
+  height: 100%;
+  width: 100%;
+}
+
+.address_Box_Footer p{
+  margin: 0;
+  color: #3D5176;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}

@@ -15,18 +15,28 @@ const Home = ({ sidebar, setSidebar }) => {
   const sec1Data = [
     {
       carousel_image: bannerImage,
+      carousel_name: 'First Product',
+      carousel_link: 'First Product Link',
     },
     {
       carousel_image: bannerImage,
+      carousel_name: 'Second Product',
+      carousel_link: 'Second Product Link',
     },
     {
       carousel_image: bannerImage,
+      carousel_name: 'Third Product',
+      carousel_link: 'Third Product Link',
     },
     {
       carousel_image: bannerImage,
+      carousel_name: 'Fourth Product',
+      carousel_link: 'Fourth Product Link',
     },
     {
       carousel_image: bannerImage,
+      carousel_name: 'Fifth Product',
+      carousel_link: 'Fifth Product Link',
     },
   ]
 
