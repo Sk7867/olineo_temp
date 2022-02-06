@@ -1,19 +1,27 @@
 //
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 //CSS
 import './Payment.css'
 
 //Components
 import PriceDetailsBox from "../../components/PriceDetailsBox/PriceDetailsBox"
-import HeaderBar2 from '../../components/HeaderBar2/HeaderBar2'
-
+import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 
 //Images
 import addIcon from '../../assets/vector/add_outline_blue.svg'
+import dashGreyIcon from '../../assets/vector/dash_grey.svg'
 
-const Payment = () => {
+const Payment = ({ setHeaderText, setHeader3Cond }) => {
   const [giftCard, setGiftCard] = useState(false)
+  const [disable, setDisable] = useState(true);
+  const [paymentMethodSelected, setPaymentMethodSelected] = useState('');
+
+  useEffect(() => {
+    setHeaderText('Payment')
+    setHeader3Cond(true)
+  }, []);
 
   const paymentMethods = [
     'UPI',
@@ -22,64 +30,96 @@ const Payment = () => {
     'Cash on Delivery'
   ]
 
+  const breadCrumbsData = [
+    {
+      text: 'Home',
+      url: '/'
+    },
+    {
+      text: 'My Cart',
+      url: '/mycart'
+    },
+    {
+      text: 'Payment',
+      url: ''
+    },
+  ]
+  // console.log(paymentMethodSelected);
+
   return (
     <>
-      <HeaderBar2 header3={true} headerText={'Payment'} />
       <div className="page_Wrapper">
-        <div className="payment_Header">
-          <p>Subtotal ₹{`1,280`}</p>
-        </div>
+        <BreadCrumbs data={breadCrumbsData} />
+        <div className='desk_Page_Wrapper'>
+          <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
+            <PriceDetailsBox HideDetails={false} />
+          </aside>
+          <div className='order_Page_Right'>
+            <div className="payment_Header">
+              <p>Subtotal ₹{`1,280`}</p>
+              <p>Payment Methods</p>
+            </div>
 
-        {/* cart price detials */}
-        <PriceDetailsBox HideDetails={true} />
+            {/* cart price detials */}
+            <div className='tab_None'>
+              <PriceDetailsBox HideDetails={true} />
+            </div>
 
-        <div className='payment_Methods'>
-          <div className="payment_Methods_Header">
-            Payment Methods
-          </div>
-          <div className="payment_Methods_Body">
-            {
-              paymentMethods.map((item, index) => (
-                <div>
-                  <label htmlFor={item} className="radiobtn-label" key={index}>
-                    <input type="radio" name='payment' id={item} value={item} />
-                    <span className="radio-custom"></span>{item}
-                  </label>
-                </div>
-              ))
-            }
-          </div>
-        </div>
-
-        <div className="gift_card">
-          {
-            giftCard ? (
-              <div className="gift_Card_Details">
-                <div className="gift_Card_Header">
-                  Gift Card
-                </div>
-                <div className="gift_Card_Body">
-                  <input type="text" placeholder='Coupon code' />
-                </div>
-                <div className="gift_Card_Footer">
-                  <div onClick={() => setGiftCard(false)}><p>Cancel</p></div>
-                  <div><p>Apply</p></div>
-                </div>
+            <div className='payment_Methods'>
+              <div className="payment_Methods_Header">
+                Payment Methods
               </div>
-            ) : (
-              <div className='add_Gift_Card' onClick={() => setGiftCard(true)}>
-                <img src={addIcon} alt="" />
-                <p>Add Gift Card </p>
+              <div className="payment_Methods_Body">
+                {
+                  paymentMethods.map((item, index) => (
+                    <div key={index}>
+                      <label htmlFor={item} className={`radiobtn-label payment_Methods_Labels ${paymentMethodSelected === index ? ('payment_Methods_Selected') : ('')}`} onClick={() => { setPaymentMethodSelected(index); setDisable(false) }}>
+                        <input type="radio" name='payment' id={item} value={item} />
+                        <span className="radio-custom"></span>{item}
+                      </label>
+                    </div>
+                  ))
+                }
               </div>
-            )
-          }
-        </div>
+            </div>
 
-        <div className="address_Footer">
-          <button type='submit' className='submit-button'><p>Continue</p></button>
+            <div className="gift_card">
+              {
+                giftCard ? (
+                  <div className="gift_Card_Details">
+                    <div className="gift_Card_Header tab_None">
+                      Gift Card
+                    </div>
+                    <div className="gift_Card_Header mobile_None tab_Display_Flex" onClick={() => setGiftCard(false)}>
+                      <span><img src={dashGreyIcon} alt="" /></span>
+                      Gift Card
+                    </div>
+                    <div className="gift_Card_Body">
+                      <input type="text" placeholder='Coupon code' />
+                      <div className='gift_Card_Submit mobile_None tab_Display_Flex'>
+                        <button type='submit' className='submit-button'><p>Apply</p></button>
+                      </div>
+                    </div>
+                    <div className="gift_Card_Footer">
+                      <div onClick={() => setGiftCard(false)}><p>Cancel</p></div>
+                      <div><p>Apply</p></div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className='add_Gift_Card' onClick={() => setGiftCard(true)}>
+                    <img src={addIcon} alt="" />
+                    <p>Add Gift Card </p>
+                  </div>
+                )
+              }
+            </div>
+
+            <div className="address_Footer tab_None">
+              <button type='submit' className='submit-button' disabled={disable}><p>Continue</p></button>
+            </div>
+          </div>
         </div>
       </div>
-
     </>
   )
 }

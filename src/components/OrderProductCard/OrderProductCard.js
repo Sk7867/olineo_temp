@@ -9,12 +9,27 @@ const OrderProductCard = ({ productName, productArrival, productImage, productDe
     <div className={`product_Container`}>
       <div className={`product_Wrapper`}>
         <div className={`product_Details`}>
-          <h4 className={`product_Name`}>
-            {productName}
-          </h4>
-          <p className={`product_Status ${productDeliveryStatues === 'Arriving' ? 'product_Arriving' : ''}`}>
-            {productArrival}
-          </p>
+          <div className="order_Product_Left">
+            <h4 className={`product_Name`}>
+              {productName}
+            </h4>
+            <p className="order_Product_Color">
+              Color: <span>Black</span>
+            </p>
+          </div>
+          <div className="order_Product_Center">
+            <p className="order_Product_Price">
+              ₹600
+            </p>
+          </div>
+          <div className="order_Product_Right">
+            <p className={`product_Status ${productDeliveryStatues === 'Arriving' ? 'product_Arriving' : ''}`}>
+              {productArrival}
+            </p>
+            <p className="order_Product_Status">
+              Your order is been placed.
+            </p>
+          </div>
         </div>
         <div className={`product_ImageContainer`}>
           <img src={productImage} alt="product Name" />

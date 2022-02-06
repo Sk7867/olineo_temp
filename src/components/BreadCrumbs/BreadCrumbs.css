@@ -1,0 +1,33 @@
+.page_Breadcrumb{
+  display: none;
+  padding: 1rem 0 0;
+}
+
+.page_Breadcrumb p, .page_Breadcrumb a{
+  color: #6D747A;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin: 0;
+  text-decoration: none;
+}
+
+.page_Breadcrumb img{
+  max-width: 20px;
+  max-height: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .page_Breadcrumb{
+    display: flex;
+  }
+
+  .page_Breadcrumb_Wrapper{
+    display: flex;
+    gap: 0.125rem;
+    align-items: center;
+  }
+  
+}

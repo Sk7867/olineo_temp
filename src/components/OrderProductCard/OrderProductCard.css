@@ -29,6 +29,26 @@
   margin: 0;
 }
 
+.order_Product_Color, .order_Product_Status{
+  color: #6D747A;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  display: none;
+  margin: 0;
+}
+
+.order_Product_Center{
+  display: none;
+}
+
+.order_Product_Price{
+  color: #08090A;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 .product_Status{
   letter-spacing: 0.004em;
   color: #6D747A;
@@ -73,4 +93,54 @@
   font-size: 0.875rem;
   line-height: 1rem;
   margin: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .product_Container{
+    padding: 0.875rem 1rem 0.375rem;
+  }
+
+  .product_Wrapper{
+    padding: 0;
+  }
+
+  .product_Details{
+    flex-direction: row;
+    max-width: 100%;
+    justify-content: space-between;
+  }
+
+  .order_Product_Left{
+    width: 25%;
+  }
+
+  .order_Product_Center{
+    display: block;
+    width: 20%;
+  }
+
+  .order_Product_Right{
+    width: 40%;
+  }
+
+  .order_Product_Color, .order_Product_Status{
+    display: block;
+  }
+
+  .product_Arriving{
+    color: #08090A;
+  }
+
+  .product_Tracker{
+    justify-content: center;
+    margin: 0.875rem 0 0;
+  }
+  
+  .product_TrackText{
+    line-height: 1.5rem;
+  }
+
+  .product_Tracker img{
+    display: none;
+  }
 }

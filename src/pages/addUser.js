@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const AddUser = () => {
+const AddUser = ({ setUserLoggedIn }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [DOB, setDOB] = useState('')
@@ -8,6 +9,7 @@ const AddUser = () => {
   const [phone, setPhone] = useState('')
   // const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
+  const nav = useNavigate()
 
   // const handleLength = (length) => {
   //   if (length === 9) {
@@ -21,6 +23,13 @@ const AddUser = () => {
   const validateForm = () => (
     (name !== '') && (email !== '') && (pinCode !== '') ? setBtnDisable(false) : setBtnDisable(true)
   )
+
+  const formSubmit = (e) => {
+    e.preventDefault();
+    setUserLoggedIn(true)
+    nav('/')
+  }
+
   return (
     <>
       <div className='signup-wrapper'>
@@ -28,7 +37,7 @@ const AddUser = () => {
           <h1 className='page-heading'>Complete your profile</h1>
           <p className={'page-desc'}>And you’re good to go</p>
         </div>
-        <form action="" className={'signup-form'} onChange={validateForm}>
+        <form action="" className={'signup-form'} onChange={validateForm} onSubmit={formSubmit}>
           <div className="inputfield-Container">
             <input type="text" name="Name" id="name" className='input-field' placeholder='Name' value={name} onChange={(e) => { setName(e.target.value) }} />
             <input type="email" name="Email" id="email" className='input-field' placeholder='Email' value={email} onChange={(e) => { setEmail(e.target.value) }} />

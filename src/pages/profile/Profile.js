@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 //CSS
 import './Profile.css'
 
@@ -15,10 +15,15 @@ import logoutIconRed from '../../assets/vector/logout_icon_red.svg'
 import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
 
 //Compoents
-import Footer from '../../components/Footer/Footer';
-import HeaderBar2 from '../../components/HeaderBar2/HeaderBar2';
 
-const Profile = () => {
+
+const Profile = ({ setHeaderText, setHeader3Cond }) => {
+
+  useEffect(() => {
+    setHeaderText('Profile')
+    setHeader3Cond(true)
+  }, []);
+
   const userProfile = {
     userImage: userImage,
     userName: 'Rohan khamkar',
@@ -66,8 +71,27 @@ const Profile = () => {
 
   return (
     <>
-      <HeaderBar2 header3={true} headerText={'Profile'} />
-      <div className='page_Wrapper'>
+
+      <div className='page_Wrapper profile_Page_Wrapper'>
+        <aside className="side_Section section_Wrapper">
+          <div className='profile_User_Details'>
+            <div className='user_Profile_Pic'>
+              <img src={userProfile.userImage} alt="" />
+              <div className='user_Camera_Icon'>
+                <img src={cameraIcon} alt="" />
+              </div>
+            </div>
+            <p className="user_Name">
+              {userProfile.userName}
+            </p>
+            <p className="user_Phone">
+              {userProfile.userPhone}
+            </p>
+            <p className="user_Mail">
+              {userProfile.userMail}
+            </p>
+          </div>
+        </aside>
         <div className='profile_User_Details'>
           <div className='user_Profile_Pic'>
             <img src={userProfile.userImage} alt="" />
@@ -99,7 +123,7 @@ const Profile = () => {
           }
         </div>
       </div>
-      <Footer />
+
     </>
   )
 };
