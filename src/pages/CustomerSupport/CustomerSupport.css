@@ -1,7 +1,23 @@
 .customer_Support_Container{
   background: #FFFFFF;
   padding: 1rem 0.75rem 1.5rem;
-  margin: 1rem 0;
+  margin: 0;
+}
+
+.options_Container{
+  margin: 1rem 0 1rem;
+  background: #FFFFFF;
+  padding: 1.5rem 0.75rem;
+  position: relative;
+  width: 100%;
+  height: fit-content;
+  overflow: hidden;
+}
+
+.support_Options{
+  margin: 0;
+  padding: 0;
+  transition: all 0.3s ease-in-out;
 }
 
 .support_Form_Heading{
@@ -37,10 +53,142 @@
   justify-content: center;
 }
 
+.support_Extra_Option{
+  padding: 1rem;
+  background: #EBEDF0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  margin: 0 0 1rem;
+}
+
+.support_Extra_Option div{
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.support_Extra_Option p{
+  margin: 0;
+  color: #1B325E;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.support_Extra_Option img{
+  max-width: 24px;
+  max-height: 24px;
+  width: 100%;
+  height: 100%;
+}
+
+.support_Query_Answer{
+  padding: 1rem 0.75rem;
+  background: #FFFFFF;
+  margin: 1rem 0 1rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(100vw);
+  transition: all 0.25s ease-in-out;
+}
+
+.support_Query_Heading{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.25rem 0.75rem;
+  border-bottom: 1px solid #DDE0E7;
+  margin: 0 0 0.75rem;
+}
+
+.support_Query_Heading p{
+  color: #08090A;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  margin: 0;
+}
+
+.support_Query_Heading img{
+  max-width: 24px;
+  max-height: 24px;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.support_Query_Desc{
+  color: #6D747A;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding: 0 0.25rem;
+}
+
+.option_Slide{
+  transform: translateX(-100vw);
+}
+
+.query_Active{
+  transform: translateX(0);
+}
+
+.support_Page_Temp{
+  height: fit-content;
+  width: 100%;
+  background: #FFFFFF;
+  position: relative;
+}
+
+.options_Header{
+  display: none;
+}
+
+.contact_Phone_Container{
+  margin: 2rem 1rem 1.5rem;
+  padding: 0.375rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 0.125rem 0.125rem rgba(0, 0, 0, 0.02);
+border-radius: 0.25rem;
+background: #F8F9FA;
+}
+
+.contact_Phone_Details p{
+  margin: 0;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #1B325E;
+}
+
+.contact_Phone_Details p:last-child{
+  color: #546586;
+  margin: 0.25rem 0 0;
+}
+
+.contact_Phone_Icon{
+  padding: 0.625rem;
+  background: #DDE0E7;
+  border-radius: 50%;
+}
+
+
 @media screen and (min-width: 768px) {
   .support_Page_Wrapper{
     margin: 0;
     padding: 0;
+  }
+
+  .options_Container, .support_Extra_Option{
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.02);
+    border-radius: 4px;
+    border: 1px solid #DDE0E7;
   }
 
   .customer_Support_Container{
@@ -77,5 +225,89 @@
 
   .form_Input_Area{
     padding: 0 3.5rem;
+  }
+
+  .options_Header{
+    display: block;
+    padding: 0rem 0.75rem 0.75rem;
+    margin: 0 0 1.5rem;
+    border-bottom: 0.063rem solid #DDE0E7;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .options_Header p{
+    margin: 0;
+    letter-spacing: -0.01em;
+    color: #1B325E;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .support_Options .profile_Option{
+    padding: 0 0.75rem 1rem;
+    margin: 0 0 1rem;
+    border: none;
+  }
+
+  .support_Options .profile_Option p{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .support_Options .profile_Option:last-child{
+    padding: 0 0.75rem 0.5rem;
+    margin: 0;
+  }
+
+  .support_Extra_Option{
+    background: #EBEDF0;
+    padding: 1.875rem 1.5rem;
+    margin: 0 0 3rem;
+  }
+
+  .support_Extra_Option p{
+    color: #3D5176;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .contact_Phone_Container{
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+
+  .options_Container{
+    max-width: 650px;
+    margin: 3.75rem auto 2rem;
+  }
+
+  .customer_Support_Container{
+    padding: 0;
+    margin: 3.75rem auto;
+    max-width: 650px;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.02);
+    border-radius: 0.25rem;
+  }
+
+  .customer_Support_Form{
+    padding: 1.5rem 0.75rem 2rem;
+  }
+
+  .support_Form_Heading{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    margin: 0 0 2rem;
+  }
+
+  .support_Form_Input{
+    margin: 0 0 2rem;
+  }
+
+  .support_Extra_Option{
+    max-width: 650px;
+    margin: 0 auto 3.75rem;
   }
 }

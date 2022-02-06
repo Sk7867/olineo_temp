@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Section2 from '../components/Section2/Section2'
 import Sidebar from '../components/Sidebar/Sidebar'
 import Section3 from '../components/Section3/Section3'
@@ -10,7 +10,12 @@ import product1 from '../assets/png/product_1.png'
 import product2 from '../assets/png/product_2.png'
 import bannerImage from '../assets/png/hero_banner.png'
 
-const Home = ({ sidebar, setSidebar }) => {
+const Home = ({ setHeader3Cond }) => {
+
+  useEffect(() => {
+    setHeader3Cond(false)
+  }, []);
+
 
   const sec1Data = [
     {
@@ -306,7 +311,7 @@ const Home = ({ sidebar, setSidebar }) => {
           }}
         />
       </div>
-      <Sidebar sidebar={sidebar} setSidebar={setSidebar} />
+
     </>
   )
 }

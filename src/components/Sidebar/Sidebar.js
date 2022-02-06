@@ -26,7 +26,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
     {
       image: profileIconBlue,
       text: 'My profile',
-      link: '/orders',
+      link: '/profile',
     },
     {
       image: storeBlue,
@@ -69,7 +69,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
     {
       image: supportIcon,
       text: 'Customer Support',
-      link: '/orders',
+      link: '/customer-support',
     },
   ]
 
@@ -160,6 +160,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
         </div>
       </div>
       <div className={`sidebar_backdrop ${sidebar ? 'backdrop_active' : ''}`} onClick={() => { setSidebar(false); setCategoryMenu(false) }}></div>
+
     </>
   )
 }

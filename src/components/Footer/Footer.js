@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 //CSS
 import './Footer.css'
 
@@ -15,6 +16,7 @@ import facebookIcon from '../../assets/vector/facebook_white.svg'
 import copyrightWhite from '../../assets/vector/copyright_white.svg'
 
 const Footer = () => {
+  const nav = useNavigate()
 
   const contactDetails = [
     {
@@ -81,7 +83,7 @@ const Footer = () => {
               <p className="footer_terms">Recently Viewed Products</p>
             </div>
             <div className="footer_terms_column2">
-              <p className="footer_terms">Customer Service</p>
+              <p className="footer_terms" onClick={() => nav('/customer-support')}>Customer Service</p>
               <p className="footer_terms">Terms & conditions</p>
               <p className="footer_terms">Privacy policy</p>
             </div>

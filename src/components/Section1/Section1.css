@@ -22,6 +22,10 @@
   background-color: #1B325E !important;
 }
 
+.carousel_image{
+  cursor: pointer;
+}
+
 .carousel-caption{
   left: 50% !important;
   top: 50% !important;

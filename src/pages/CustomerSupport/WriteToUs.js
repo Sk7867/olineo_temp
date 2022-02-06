@@ -1,21 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 //CSS
 import './CustomerSupport.css'
 
 //Components
-import Footer from '../../components/Footer/Footer';
-import HeaderBar2 from '../../components/HeaderBar2/HeaderBar2';
 
 //Images
 import arrowLeftBlack from '../../assets/vector/arrow_left_black.svg'
+import phoneIconBlue from '../../assets/vector/phone_outline_blue.svg'
 
-const WriteToUS = () => {
+const WriteToUS = ({ setHeaderText, setHeader3Cond }) => {
+  const nav = useNavigate()
+
+  useEffect(() => {
+    setHeaderText('Customer Support')
+    setHeader3Cond(true)
+  }, []);
+
   return <>
-    <HeaderBar2 header3={true} headerText={'Customer Support'} categoriesPart={false} />
     <div className='page_Wrapper support_Page_Wrapper'>
       <div className="customer_Support_Container">
+        <div className="contact_Phone_Container tab_None">
+          <div className="contact_Phone_Details">
+            <p>Call our customer executive</p>
+            <p>6390063900</p>
+          </div>
+          <a href="tel:+91-63900-63900" className="contact_Phone_Icon">
+            <img src={phoneIconBlue} alt="" />
+          </a>
+        </div>
         <form action="" className="customer_Support_Form">
-          <p className="support_Form_Heading"><span><img src={arrowLeftBlack} alt="" /></span> Write to us</p>
+          <p className="support_Form_Heading"><span><img src={arrowLeftBlack} alt="" onClick={() => nav('/customer-support')} /></span> Write to us</p>
           <div className='form_Input_Area'>
             <input type="text" name="Name" id="Name" placeholder='Your Name' className='support_Form_Input' />
             <input type="text" name='Email' id='Email' placeholder='Your Email' className='support_Form_Input' />
@@ -27,7 +42,6 @@ const WriteToUS = () => {
         </form>
       </div>
     </div>
-    <Footer />
   </>;
 };
 

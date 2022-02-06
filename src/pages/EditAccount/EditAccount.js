@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 //CSS
 import './EditAccount.css'
@@ -14,7 +14,12 @@ import lockIconBlue from '../../assets/vector/lock_outline_blue.svg'
 import locationIconBlue from '../../assets/vector/location_blue.svg'
 import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
 
-const EditAccont = () => {
+const EditAccont = ({ setHeaderText, setHeader3Cond }) => {
+
+  useEffect(() => {
+    setHeaderText('Edit My Account Details')
+    setHeader3Cond(true)
+  }, []);
 
   const [userDetails, setUserDetails] = useState({});
   const [fullName, setFullName] = useState('Rohan khamkar');
@@ -43,7 +48,6 @@ const EditAccont = () => {
     },
   ]
   return <>
-    <HeaderBar2 header3={true} headerText={'Edit My Account Details'} />
     <div className='page_Wrapper' style={{ padding: '0 0 7rem' }}>
       <div className='profile_User_Details'>
         <div className='user_Profile_Pic'>

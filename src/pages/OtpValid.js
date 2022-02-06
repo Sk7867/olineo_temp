@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const OtpValid = ({ userLoggedIn }) => {
+const OtpValid = ({ setUserLoggedIn, loginRedirect }) => {
   const [otp, setOtp] = useState('')
   const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
@@ -32,7 +32,12 @@ const OtpValid = ({ userLoggedIn }) => {
 
   const formSubmit = (e) => {
     e.preventDefault();
-    nav('/adduser')
+    if (loginRedirect) {
+      nav('/')
+      setUserLoggedIn(true)
+    } else {
+      nav('/adduser')
+    }
   }
 
   const validateForm = () => (
@@ -55,7 +60,7 @@ const OtpValid = ({ userLoggedIn }) => {
           <div className={'button-Container'}>
             <button className='submit-button' type='submit' disabled={btnDisable}><p>Continue</p></button>
             {
-              userLoggedIn ? (
+              loginRedirect ? (
                 <p className='extra-btn'>Resend code via email</p>
               ) : ('')
             }

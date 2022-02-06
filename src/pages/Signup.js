@@ -5,7 +5,7 @@ import HeaderBar from '../components/HeaderBar/HeaderBar'
 // import './Signup.css'
 
 
-const Signup = ({ setUserLoggedIn }) => {
+const Signup = ({ setLoginRedirect }) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   // const [validLength, setValidLength] = useState(false)
@@ -26,7 +26,7 @@ const Signup = ({ setUserLoggedIn }) => {
 
   const formSubmit = (e) => {
     e.preventDefault();
-    setUserLoggedIn(false)
+    setLoginRedirect(false)
     nav('/otp')
   }
 

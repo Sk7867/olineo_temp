@@ -1,6 +1,7 @@
 .desk_Page_Wrapper{
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   padding: 1rem 0 0;
   gap: 1.5rem;
 }
@@ -28,9 +29,10 @@
   margin: 0 0 1rem;
 }
 
-.filter_section{
+.side_Section{
   display: none;
 }
+
 
 @media screen and (min-width: 768px) {
 
@@ -42,24 +44,33 @@
     padding: 0.875rem 1rem;
   }
 
-  .filter_section{
+  .side_Section{
     display: flex;
     flex-direction: column;
     padding: 1rem;
     min-width: 210px;
-    max-width: 210px;
-    max-height: 150px;
-    width: 100%;
+    max-width: 320px;
+    max-height: fit-content;
+    width: 30vw;
     height: 100%;
   }
 
-  .filter_Section_Heading{
+  .side_Section_Heading{
     padding: 0 0 1rem;
     border-bottom: 1px solid #EBEDF0;
     margin: 0 0 1rem;
+    color: #08090A;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
   }
 
-  .filter_Section_Checkbox:first-of-type{
+  .side_Section_Checkbox:first-of-type{
     margin-bottom: 0.75rem;
+  }
+
+  .order_Page_Right{
+    width: 68vw;
   }
 }

@@ -23,31 +23,34 @@ const CartProductCard = ({
   return (
     <div className='cart_Product_Contianer'>
       <div className="cart_Product_Wrapper">
-        <div className="product_Details">
-          <h4 className='cart_Product_Name'>
-            {productName}
-          </h4>
-          <p className="cart_Product_Color">
-            Color : {productColor}
-          </p>
-          <div className="cart_Product_Price_Section">
-            <p className="cart_Product_Discount_Price">
-              {productDiscountPrice}
+        <div className="product_Details cart_product_card">
+          <div className="cart_Product_Left">
+            <h4 className='cart_Product_Name'>
+              {productName}
+            </h4>
+            <p className="cart_Product_Color">
+              Color : {productColor}
             </p>
-            <p className="cart_Product_Original_Price">
-              {productOriginalPrice}
+            <div className="cart_Product_Price_Section">
+              <p className="cart_Product_Discount_Price">
+                {productDiscountPrice}
+              </p>
+              <p className="cart_Product_Original_Price">
+                {productOriginalPrice}
+              </p>
+              <p className='cart_Product_Discount'>
+                {productDiscount} off
+              </p>
+            </div>
+            <p className="cart_Product_Offers">
+              {productOffersAvailable}
             </p>
-            <p className='cart_Product_Discount'>
-              {productDiscount} off
-            </p>
+            <p className="cart_Product_Availability">{productAvailabilty}</p>
           </div>
-          <p className="cart_Product_Offers">
-            {productOffersAvailable}
-          </p>
           <div className="cart_Product_Delivery_Info">
             <p className="cart_Product_Delivery_Estimate">{productDeliveryExpected}</p> | <p className="cart_Product_Delivery_Charge">{productDeliveryCharge}</p>
           </div>
-          <p className="cart_Product_Availability">{productAvailabilty}</p>
+          <p className="cart_Product_Availability tab_None">{productAvailabilty}</p>
         </div>
         <div className="cart_Product_Card_Right">
           <div className="cart_Product_Image_Container">
