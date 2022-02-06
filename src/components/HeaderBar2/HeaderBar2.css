@@ -37,6 +37,10 @@
   height: 100%;
 }
 
+.navLogo{
+  cursor: pointer;
+}
+
 .left_location{
   display: none;
 }

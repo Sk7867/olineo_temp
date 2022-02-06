@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
 
-const Login = ({ setUserLoggedIn }) => {
+const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
   const [phone, setPhone] = useState('')
   // const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
@@ -22,8 +22,8 @@ const Login = ({ setUserLoggedIn }) => {
 
   const formSubmit = (e) => {
     e.preventDefault();
-    setUserLoggedIn(true)
-    nav('/')
+    setLoginRedirect(true)
+    nav('/otp')
   }
 
   const pageSwitch = (e) => {

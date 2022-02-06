@@ -1,3 +1,7 @@
+.cart_Text{
+  display: none;
+}
+
 .cards_Container{
   display: flex;
   flex-direction: column;
@@ -111,4 +115,78 @@
 
 .cart_Footer_Right{
   width: 50%;
+}
+
+.cart_Subtotal_Section{
+  display: none;
+}
+
+.delivery_Options{
+  margin: 1rem 0 23.5rem;
+}
+
+@media screen and (min-width: 768px) {
+  .cart_Text{
+    display: block;
+    color: #08090A;
+    padding: 0.875rem 1rem;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1rem;
+  }
+
+  .cart_Subtotal_Section{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 0.75rem;
+    padding: 0.375rem 1.75rem 0.375rem 1rem;
+  }
+
+  .cart_Subtotal_Section p, .cart_Subtotal_Section span{
+    margin: 0;
+    color: #08090A;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    width: 70%;
+  }
+
+  .cart_Subtotal_Section span{
+    font-weight: 600;
+  }
+
+  .save_Later_Header{
+    padding: 0.875rem 1rem;
+  }
+
+  .save_Later_Header p{
+    letter-spacing: -0.01em;
+    color: #08090A;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+  }
+
+  .cart_Footer{
+    display: none;
+  }
+
+  .cart_Footer_Right{
+    max-width: 160px;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .cart_Text{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .cart_Subtotal_Section{
+    padding: 1rem 2rem 1rem 1.5rem;
+  }
 }

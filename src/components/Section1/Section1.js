@@ -17,7 +17,7 @@ const Section1 = ({ id, carouselData }) => {
                 src={item.carousel_image}
                 alt={`${index}`}
               />
-              <Carousel.Caption>
+              {/* <Carousel.Caption>
                 <div className='img_caption'>
                   <p className="img_caption_text">
                     {item.carousel_name}
@@ -26,7 +26,7 @@ const Section1 = ({ id, carouselData }) => {
                     {item.carousel_link}
                   </span>
                 </div>
-              </Carousel.Caption>
+              </Carousel.Caption> */}
             </Carousel.Item>
           ))
         }

@@ -22,10 +22,11 @@ import mobileGreenDotted from '../../assets/vector/mobile_green_dotted.svg'
 import mobilePinkDotted from '../../assets/vector/mobile_pink_dotted.svg'
 import mobileBlueDotted from '../../assets/vector/mobile_blue_dotted.svg'
 import arrowLeftWhite from '../../assets/vector/arrow_left_white.svg'
+import Sidebar from '../Sidebar/Sidebar'
 // import Sidebar from '../Sidebar/Sidebar'
 
 
-const HeaderBar2 = ({ setSidebar, userLoggedIn, header3, headerText, categoriesPart }) => {
+const HeaderBar2 = ({ sidebar, setSidebar, userLoggedIn, header3, headerText, categoriesPart }) => {
   const [modalShow, setModalShow] = useState(false)
   const [useDP, setUseDP] = useState(true)
   const nav = useNavigate()
@@ -200,11 +201,11 @@ const HeaderBar2 = ({ setSidebar, userLoggedIn, header3, headerText, categoriesP
             <div className="hamburger" onClick={() => setSidebar(true)}>
               <img src={hamburger} alt="" />
             </div>
-            <a href='/' className="navLogo">
+            <div className="navLogo" onClick={() => nav('/')}>
               <img src={logo_mob} alt="" className='logo_mob' />
               <img src={logo_desk} alt="" className='logo_desk' />
               <img src={logo_tab} alt="" className='logo_tab' />
-            </a>
+            </div>
             <div className="left_location" onClick={() => handleModalShow()}>
               <img src={locationWhite} alt="" />
               <p>Select location</p>
@@ -219,13 +220,13 @@ const HeaderBar2 = ({ setSidebar, userLoggedIn, header3, headerText, categoriesP
               <p>Find Store</p>
               <img src={storeWhite} alt="" />
             </div>
-            <div className='cartIcon'>
+            <div className='cartIcon' onClick={() => nav('/mycart')}>
               <img src={cartWhite} alt="" />
               <p>Cart</p>
             </div>
             {
               userLoggedIn ? (
-                <div className="user_profile">
+                <div className="user_profile" onClick={() => nav('/profile')}>
                   <p>My Profile</p>
                   {
                     useDP ? (
@@ -285,6 +286,7 @@ const HeaderBar2 = ({ setSidebar, userLoggedIn, header3, headerText, categoriesP
       }
       {/* <Sidebar sidebar={sidebar} setSidebar={setSidebar} /> */}
       <ModalComp modalShow={modalShow} setModalShow={setModalShow} />
+      <Sidebar sidebar={sidebar} setSidebar={setSidebar} />
     </>
   )
 }
