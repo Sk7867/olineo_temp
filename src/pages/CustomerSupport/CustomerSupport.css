@@ -32,6 +32,7 @@
 
 .support_Form_Heading span{
   display: none;
+  cursor: pointer;
 }
 
 .support_Form_Input{
