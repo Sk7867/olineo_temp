@@ -258,7 +258,7 @@ input::placeholder, textarea::placeholder{
   }
 
   .tab_None{
-    display: none;
+    display: none !important;
   }
 
   .tab_Display_Flex{

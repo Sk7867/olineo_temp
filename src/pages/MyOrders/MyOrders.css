@@ -71,6 +71,12 @@
   }
 
   .order_Page_Right{
-    width: 68vw;
+    width: 65vw;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .order_Page_Right{
+    width: 69vw;
   }
 }

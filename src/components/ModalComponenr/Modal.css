@@ -74,9 +74,14 @@
   .modal-header .btn-close{
     margin: -2rem -.5rem -.5rem auto !important;
   }
+
   .btn-close{
     display: block;
     opacity: 1 !important;
+  }
+
+  .update_Heading .btn-close{
+    opacity: 0.5 !important;
   }
 
   .modal-header{
@@ -113,5 +118,11 @@
   .modal_footer_link p{
     font-size: 16px;
     line-height: 24px;
+  }
+
+  .update_Heading{
+    padding: 1.5rem 0.75rem 0.75rem !important;
+    border-bottom: 1px solid #DDE0E7 !important;
+    margin: 0 0.75rem;
   }
 }

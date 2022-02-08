@@ -1,0 +1,67 @@
+.address_Form_Container{
+  background: #FFFFFF;
+  margin: 1rem 0 7rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1.5rem 1rem;
+}
+
+.address_Form_Container div{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.address_Form_Container input{
+  width: 100%;
+  padding: 1rem;
+  border: 0.063rem solid #DDE0E7;
+  box-sizing: border-box;
+  border-radius: 0.25rem;
+}
+
+.address_Form_Header{
+  display: none;
+}
+
+.address_Form_Submit{
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  .address_Form_Container{
+    margin: 0 0 7rem;
+    border: 1px solid #CED4DA;
+    max-width: 96%;
+    padding: 1.5rem 0.75rem;
+  }
+
+  .address_Form_Header{
+    display: block;
+    padding: 0 0.75rem 1rem;
+    margin: 0;
+    border-bottom: 1px solid #DDE0E7;
+    letter-spacing: -0.01em;
+    color: #000000;
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .address_Form_Container input, .address_Form_Container div, .address_Form_Container button{
+    max-width: 420px;
+    margin: 0 0.75rem;
+  }
+
+  .address_Form_Submit{
+    display: block;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .address_Form_Container{
+    max-width: 100%;
+  }
+}
