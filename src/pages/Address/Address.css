@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-top: 1rem;
+  margin: 1rem 0 0.75rem;
 }
 
 .add_New_Address{
@@ -12,6 +12,9 @@
   align-items: center;
   gap: 0.25rem;
   background-color: #FFFFFF;
+  margin: 1rem 0 0;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .add_New_Address img{
@@ -37,4 +40,29 @@
   background-color: #FFFFFF;
   padding: 0.5rem 1rem;
   width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .add_New_Address, .address_List{
+    max-width: 63%;
+  }
+  
+  .add_New_Address{
+    border-radius: 4px;
+    border: 1px solid #DDE0E7;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.02); 
+    padding: 1rem 0;
+  }
+
+  .add_New_Address p{
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .add_New_Address, .address_List{
+    max-width: 69%;
+  }
 }

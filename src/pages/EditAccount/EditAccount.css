@@ -1,3 +1,6 @@
+.edit_Page_Wrapper{
+  padding: 0 0 7rem;
+}
 .profile_edit_form{
   background: #FFFFFF;
   padding: 1.5rem 0.938rem;
@@ -47,4 +50,113 @@
   right: 13px;
   transform: translateY(-50%);
   cursor: pointer;
+  text-decoration: none;
+}
+
+.update_Container{
+  background: #FFFFFF;
+  margin: 1rem 0 9rem;
+}
+
+.update_Wrapper{
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.update_Info_Details{
+  color: #000000;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin: 0 0 1rem;
+}
+
+.otp_Alternate{
+  color: #1B325E;
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 1.5rem;
+  margin: 0.25rem 0 0;
+  float: right;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  .edit_Page_Wrapper{
+    background: #FFFFFF;
+    border-radius: 0.25rem;
+    margin: 1rem 0 0;
+    height: fit-content;
+  }
+
+  .update_Page_Wrapper{
+    padding: 0;
+    min-width: fit-content;
+  }
+
+  .update_Container{
+    margin: 0.5rem 0 0;
+    padding: 0 0 1.5rem;
+  }
+
+  .profile_edit_form, .edit_Extra_Options{
+    max-width: 63%;
+    border-radius: 0.25rem;
+  }
+  
+  .profile_edit_form{
+    border: 1px solid #DDE0E7;
+    padding: 2rem 1.5rem;
+  }
+
+  .edit_Extra_Options{
+    background: #FFFFFF;
+    padding: 0;
+    gap: 1rem;
+    border: none;
+  }
+
+  .edit_Extra_Options .edit_Profile_Option{
+    border: 1px solid #DDE0E7;
+    padding: 1.125rem 2rem 1.125rem 1.5rem;
+    box-shadow: 0px 0.125rem 0.125rem rgba(0, 0, 0, 0.02);
+    background: #FFFFFF;
+    margin: 0;
+  }
+
+  .edit_Profile_Option:first-child{
+    display: none;
+  }
+
+  .profile_edit_form .edit_input_container, .profile_Submit_Button{
+    max-width: 420px;
+    margin: 0;
+  }
+
+  .update_Footer{
+    position: relative;
+  }
+
+  .otp_Alternate{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    margin: 0.5rem 0 0;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .profile_edit_form .edit_input_container, .profile_Submit_Button {
+    max-width: 500px;
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .profile_edit_form, .edit_Extra_Options{
+    max-width: 69%;
+  }  
 }
