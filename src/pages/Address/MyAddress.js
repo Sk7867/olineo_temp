@@ -8,7 +8,7 @@ import addIcon from '../../assets/vector/add_outline_blue.svg'
 //Components
 import AddressBox from '../../components/AddressBox/AddressBox';
 
-const MyAddress = ({ addressList, setEditID, setProfileState }) => {
+const MyAddress = ({ addressList, setEditID, setProfileState, border }) => {
   const matches = useMediaQuery("(min-width:768px)")
 
   return (
@@ -33,16 +33,9 @@ const MyAddress = ({ addressList, setEditID, setProfileState }) => {
               <AddressBox
                 key={index}
                 address={address}
-                add_Id={address.id}
-                user_Full_Name={address.user_Full_Name}
-                user_ph_Number={address.user_ph_Number}
-                user_Pincode={address.user_Pincode}
-                user_State={address.user_State}
-                user_City={address.user_City}
-                user_Address={address.user_Address}
-                user_Landmark={address.user_Landmark}
                 setEditID={setEditID}
                 setProfileState={setProfileState}
+                border={border}
               />
             ))
           }

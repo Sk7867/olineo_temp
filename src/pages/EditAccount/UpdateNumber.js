@@ -3,12 +3,15 @@ import { useLocation } from 'react-router-dom';
 import Update from './Update';
 
 const UpdateNumber = (props) => {
-  const { setHeaderText, setHeader3Cond, modalDataMobile } = props
+  const { setHeaderData, modalDataMobile } = props
   const loc = useLocation()
   console.log(modalDataMobile);
   useEffect(() => {
-    setHeaderText('Update Phone Number')
-    setHeader3Cond(true)
+    setHeaderData({
+      header3Cond: true,
+      headerText: 'Update Phone Number',
+      categoriesCond: false,
+    })
   }, []);
   return (
     <>

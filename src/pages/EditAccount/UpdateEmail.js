@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Update from './Update';
 
 const UpdateEmail = (props) => {
-  const { setHeaderText, setHeader3Cond, modalDataMobile } = props
+  const { setHeaderData, modalDataMobile } = props
   useEffect(() => {
-    setHeaderText('Update Email Address')
-    setHeader3Cond(true)
+    setHeaderData({
+      header3Cond: true,
+      headerText: 'Update Email Address',
+      categoriesCond: false,
+    })
   }, []);
   return (
     <>

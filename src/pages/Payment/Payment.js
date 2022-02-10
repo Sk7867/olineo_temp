@@ -1,6 +1,7 @@
 //
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 //CSS
 import './Payment.css'
@@ -13,14 +14,18 @@ import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 import addIcon from '../../assets/vector/add_outline_blue.svg'
 import dashGreyIcon from '../../assets/vector/dash_grey.svg'
 
-const Payment = ({ setHeaderText, setHeader3Cond }) => {
+const Payment = ({ setHeaderData }) => {
   const [giftCard, setGiftCard] = useState(false)
   const [disable, setDisable] = useState(true);
   const [paymentMethodSelected, setPaymentMethodSelected] = useState('');
+  const matches = useMediaQuery("(min-width:768px)")
 
   useEffect(() => {
-    setHeaderText('Payment')
-    setHeader3Cond(true)
+    setHeaderData({
+      header3Cond: true,
+      headerText: 'Payment',
+      categoriesCond: false,
+    })
   }, []);
 
   const paymentMethods = [
@@ -48,7 +53,7 @@ const Payment = ({ setHeaderText, setHeader3Cond }) => {
 
   return (
     <>
-      <div className="page_Wrapper">
+      <div className="page_Wrapper page_Margin_Top_Secondary">
         <BreadCrumbs data={breadCrumbsData} />
         <div className='desk_Page_Wrapper'>
           <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
@@ -114,9 +119,21 @@ const Payment = ({ setHeaderText, setHeader3Cond }) => {
               }
             </div>
 
-            <div className="address_Footer tab_None">
-              <button type='submit' className='submit-button' disabled={disable}><p>Continue</p></button>
-            </div>
+            {
+              matches && (
+                <div className='home_Delivery_Submit'>
+                  <button type='submit' className='submit-button ' disabled={disable}><p>Continue to pay</p></button>
+                </div>
+              )
+            }
+
+            {
+              !matches && (
+                <div className="address_Footer">
+                  <button type='submit' className='submit-button' disabled={disable}><p>Continue</p></button>
+                </div>
+              )
+            }
           </div>
         </div>
       </div>

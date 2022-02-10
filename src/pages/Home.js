@@ -10,10 +10,13 @@ import product1 from '../assets/png/product_1.png'
 import product2 from '../assets/png/product_2.png'
 import bannerImage from '../assets/png/hero_banner.png'
 
-const Home = ({ setHeader3Cond }) => {
+const Home = ({ setHeaderData }) => {
 
   useEffect(() => {
-    setHeader3Cond(false)
+    setHeaderData({
+      header3Cond: false,
+      categoriesCond: true
+    })
   }, []);
 
 
@@ -267,7 +270,7 @@ const Home = ({ setHeader3Cond }) => {
 
   return (
     <>
-      <div className='homepage_wrapper'>
+      <div className='homepage_wrapper page_Margin_Top'>
         <Section1
           id={'homepage_hero'}
           carouselData={sec1Data}

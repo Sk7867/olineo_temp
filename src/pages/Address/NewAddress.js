@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
 import AddressForm from '../../components/AddressForm/AddressForm';
 
-const NewAddress = ({ setHeaderText, setHeader3Cond }) => {
+const NewAddress = ({ setHeaderData }) => {
   useEffect(() => {
-    setHeaderText('New Address')
-    setHeader3Cond(true)
+    setHeaderData({
+      header3Cond: true,
+      headerText: 'New Address',
+      categoriesCond: false,
+    })
   }, []);
   return (
     <>

@@ -14,16 +14,18 @@ import OrderProductCard from '../../components/OrderProductCard/OrderProductCard
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 
 
-const MyOrders = ({ ordersList, setHeaderText, setHeader3Cond }) => {
+const MyOrders = ({ ordersList, setHeaderData }) => {
 
   const nav = useNavigate()
-  const loc = useLocation()
 
-  console.log(loc);
+  // console.log(loc);
 
   useEffect(() => {
-    setHeaderText('My Orders')
-    setHeader3Cond(true)
+    setHeaderData({
+      header3Cond: true,
+      headerText: 'My Orders',
+      categoriesCond: true,
+    })
   }, []);
 
   // console.log(ordersList);
@@ -124,7 +126,7 @@ const MyOrders = ({ ordersList, setHeaderText, setHeader3Cond }) => {
   return (
     <>
       {/* <HeaderBar2 header3={true} headerText={'My Orders'} /> */}
-      <div className='page_Wrapper'>
+      <div className='page_Wrapper page_Margin_Top'>
         <BreadCrumbs data={breadCrumbsData} />
         {
           ordersNumber === 0 ? (

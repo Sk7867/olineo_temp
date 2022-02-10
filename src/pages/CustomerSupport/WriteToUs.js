@@ -9,16 +9,19 @@ import './CustomerSupport.css'
 import arrowLeftBlack from '../../assets/vector/arrow_left_black.svg'
 import phoneIconBlue from '../../assets/vector/phone_outline_blue.svg'
 
-const WriteToUS = ({ setHeaderText, setHeader3Cond }) => {
+const WriteToUS = ({ setHeaderData }) => {
   const nav = useNavigate()
 
   useEffect(() => {
-    setHeaderText('Customer Support')
-    setHeader3Cond(true)
+    setHeaderData({
+      header3Cond: true,
+      headerText: 'Customer Support',
+      categoriesCond: false,
+    })
   }, []);
 
   return <>
-    <div className='page_Wrapper support_Page_Wrapper'>
+    <div className='page_Wrapper support_Page_Wrapper page_Margin_Top_Secondary'>
       <div className="customer_Support_Container">
         <div className="contact_Phone_Container tab_None">
           <div className="contact_Phone_Details">

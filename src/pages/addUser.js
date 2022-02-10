@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import HeaderBar from '../components/HeaderBar/HeaderBar'
 
 const AddUser = ({ setUserLoggedIn }) => {
   const [name, setName] = useState('')
@@ -32,6 +33,7 @@ const AddUser = ({ setUserLoggedIn }) => {
 
   return (
     <>
+      <HeaderBar />
       <div className='signup-wrapper'>
         <div className='signup-header'>
           <h1 className='page-heading'>Complete your profile</h1>
