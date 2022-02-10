@@ -1,4 +1,5 @@
 import React from 'react'
+import useMediaQuery from '@mui/material/useMediaQuery'
 //CSS
 import './CartProductCard.css'
 
@@ -9,52 +10,52 @@ import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
 import saveLaterIcon from '../../assets/vector/save_later_outline.svg'
 
 const CartProductCard = ({
-  productImage,
-  productName,
-  productColor,
-  productOriginalPrice,
-  productDiscount,
-  productDiscountPrice,
-  productOffersAvailable,
-  productDeliveryExpected,
-  productDeliveryCharge,
-  productAvailabilty,
+  product,
 }) => {
+  const matches = useMediaQuery("(min-width:768px)")
   return (
     <div className='cart_Product_Contianer'>
       <div className="cart_Product_Wrapper">
         <div className="product_Details cart_product_card">
           <div className="cart_Product_Left">
             <h4 className='cart_Product_Name'>
-              {productName}
+              {product.productName}
             </h4>
             <p className="cart_Product_Color">
-              Color : {productColor}
+              Color : {product.productColor}
             </p>
             <div className="cart_Product_Price_Section">
               <p className="cart_Product_Discount_Price">
-                {productDiscountPrice}
+                {product.productDiscountPrice}
               </p>
               <p className="cart_Product_Original_Price">
-                {productOriginalPrice}
+                {product.productOriginalPrice}
               </p>
               <p className='cart_Product_Discount'>
-                {productDiscount} off
+                {product.productDiscount} off
               </p>
             </div>
             <p className="cart_Product_Offers">
-              {productOffersAvailable}
+              {product.productOffersAvailable}
             </p>
-            <p className="cart_Product_Availability">{productAvailabilty}</p>
+            {
+              matches && (
+                <p className={`cart_Product_Availability ${product.productQuantityAvailable <= 10 ? ('color_Red') : ('')} `}>{product.productAvailabilty}</p>
+              )
+            }
           </div>
           <div className="cart_Product_Delivery_Info">
-            <p className="cart_Product_Delivery_Estimate">{productDeliveryExpected}</p> | <p className="cart_Product_Delivery_Charge">{productDeliveryCharge}</p>
+            <p className="cart_Product_Delivery_Estimate">{product.productDeliveryExpected}</p> | <p className="cart_Product_Delivery_Charge">{product.productDeliveryCharge}</p>
           </div>
-          <p className="cart_Product_Availability tab_None">{productAvailabilty}</p>
+          {
+            !matches && (
+              <p className={`cart_Product_Availability ${product.productQuantityAvailable <= 1 ? ('color_Red') : ('')}`}>{product.productAvailabilty}</p>
+            )
+          }
         </div>
         <div className="cart_Product_Card_Right">
           <div className="cart_Product_Image_Container">
-            <img src={productImage} alt="" />
+            <img src={product.productImage} alt="" />
           </div>
           <div className="cart_Product_Counter_Container">
             <div className='counter_Icon_Container'>
