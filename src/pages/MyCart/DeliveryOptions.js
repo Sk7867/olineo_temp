@@ -22,7 +22,7 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
   const deliveryOptions = [
     {
       text: 'Pickup from store',
-      link: '/'
+      link: '/store-pickup'
     },
     {
       text: 'Deliver to a location',
@@ -82,7 +82,7 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
           {
             matches && (
               <div className='delivery_Option_Submit_Button'>
-                <button type='submit' className='submit-button ' disabled={disable} onClick={() => handlePageSwitch(selected)} ><p>SAVE DETAILS</p></button>
+                <button type='submit' className='submit-button ' disabled={disable} onClick={() => handlePageSwitch(selected)} ><p>Continue</p></button>
               </div>
             )
           }
