@@ -8,10 +8,13 @@ import MyAddress from './MyAddress'
 //Images
 
 
-const Address = ({ setHeaderText, setHeader3Cond, userDetails, setEditID }) => {
+const Address = ({ userDetails, setEditID, setHeaderData }) => {
   useEffect(() => {
-    setHeaderText('My Address')
-    setHeader3Cond(true)
+    setHeaderData({
+      header3Cond: true,
+      headerText: 'Delivery option',
+      categoriesCond: false,
+    })
   }, []);
 
   return (

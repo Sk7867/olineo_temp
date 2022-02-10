@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AddressForm from '../../components/AddressForm/AddressForm';
 
-const EditAddress = ({ setHeaderText, setHeader3Cond, editID, userDetails }) => {
+const EditAddress = ({ setHeaderData, editID, userDetails }) => {
   const loc = useLocation()
   const [editAddress, setEditAddress] = useState({});
   useEffect(() => {
-    setHeaderText('Edit Address')
-    setHeader3Cond(true)
+    setHeaderData({
+      header3Cond: true,
+      headerText: 'Edit Address',
+      categoriesCond: false,
+    })
 
     userDetails.delivery_Address.forEach((address) => {
       if (address.id === editID) {

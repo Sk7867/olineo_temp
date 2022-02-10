@@ -42,6 +42,31 @@
   width: 100%;
 }
 
+.home_Delivery_Options{
+  margin: 1rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.home_Delivery_Option{
+  background: #FFFFFF;
+  height: fit-content;
+}
+
+.home_Delivery_Label{
+  height: fit-content;
+}
+
+.home_Delivery_Label .radio-custom{
+  top: 20px;
+  left: 16px;
+}
+
+.home_Delivery_New_Address{
+  margin: 0.75rem 0 15.5rem;
+}
+
 @media screen and (min-width: 768px) {
   .add_New_Address, .address_List{
     max-width: 63%;
@@ -59,10 +84,23 @@
     font-size: 1rem;
     line-height: 1.5rem;
   }
+
+  .home_Delivery_Label .radio-custom{
+    top: 22px;
+  }
+
+  .home_Delivery_New_Address{
+    max-width: 100%;
+    margin: 1.5rem 0 13.375rem;
+  }
 }
 
 @media screen and (min-width: 1200px) {
   .add_New_Address, .address_List{
     max-width: 69%;
+  }
+
+  .home_Delivery_New_Address{
+    max-width: 100%;
   }
 }

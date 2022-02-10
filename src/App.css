@@ -189,6 +189,10 @@ input[type='date']:focus::before{
   background: #F8F9FA;
 }
 
+.page_Margin_Top{
+  margin: 14.125rem 0 0;
+}
+
 .page_Wrapper{
   margin-top: 56px;
   min-width: 100vw;
@@ -262,7 +266,15 @@ input::placeholder, textarea::placeholder{
   }
 
   .tab_Display_Flex{
-    display: flex;
+    display: flex !important;
+  }
+
+  .page_Margin_Top{
+    margin: 8.125rem 0 0;
+  }
+
+  .page_Margin_Top_Secondary{
+    margin: 4rem 0 0;
   }
 }
 

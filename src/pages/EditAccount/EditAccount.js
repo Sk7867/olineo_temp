@@ -8,11 +8,15 @@ import HeaderBar2 from '../../components/HeaderBar2/HeaderBar2';
 import EditDetails from './EditDetails';
 
 
-const EditAccont = ({ setHeaderText, setHeader3Cond, userDetails, setModalDataMobile }) => {
+const EditAccont = ({ setHeaderData, userDetails, setModalDataMobile }) => {
 
   useEffect(() => {
-    setHeaderText('Edit My Account Details')
-    setHeader3Cond(true)
+
+    setHeaderData({
+      header3Cond: true,
+      headerText: 'Edit My Account Details',
+      categoriesCond: false,
+    })
   }, []);
 
   return <>

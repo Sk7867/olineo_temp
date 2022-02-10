@@ -14,13 +14,16 @@ import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
 import arrowLeftBlack from '../../assets/vector/arrow_left_black.svg'
 
 
-const CustomerSupport = ({ setHeaderText, setHeader3Cond }) => {
+const CustomerSupport = ({ setHeaderData }) => {
   const [option, setOption] = useState(0);
   const nav = useNavigate()
 
   useEffect(() => {
-    setHeaderText('Customer Support')
-    setHeader3Cond(true)
+    setHeaderData({
+      header3Cond: true,
+      headerText: 'Customer Support',
+      categoriesCond: false,
+    })
   }, []);
 
   const supportOptions = [
@@ -91,7 +94,7 @@ const CustomerSupport = ({ setHeaderText, setHeader3Cond }) => {
   }
 
   return <>
-    <div className='page_Wrapper'>
+    <div className='page_Wrapper page_Margin_Top_Secondary'>
 
       <div className="options_Container">
         <div className={`options_Header ${option !== 0 ? 'option_Slide' : ''}`}>

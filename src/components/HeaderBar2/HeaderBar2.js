@@ -26,10 +26,13 @@ import Sidebar from '../Sidebar/Sidebar'
 // import Sidebar from '../Sidebar/Sidebar'
 
 
-const HeaderBar2 = ({ sidebar, setSidebar, userLoggedIn, header3, headerText, categoriesPart }) => {
+const HeaderBar2 = ({ userLoggedIn, headerData }) => {
   const [modalShow, setModalShow] = useState(false)
+  const [sidebar, setSidebar] = useState(false)
   const [useDP, setUseDP] = useState(true)
   const nav = useNavigate()
+  const { header3Cond, headerText, categoriesCond } = headerData
+  // console.log(headerData);
 
   const handleModalShow = () => {
     setModalShow(true)
@@ -195,7 +198,7 @@ const HeaderBar2 = ({ sidebar, setSidebar, userLoggedIn, header3, headerText, ca
 
   return (
     <>
-      <header className={`headerbarContainer ${header3 ? ('header2_tab') : ''}`}>
+      <header className={`headerbarContainer ${header3Cond ? ('header2_tab') : ''}`}>
         <div className="headerbarWrapper">
           <div className="headerbarLeft">
             <div className="hamburger" onClick={() => setSidebar(true)}>
@@ -257,7 +260,7 @@ const HeaderBar2 = ({ sidebar, setSidebar, userLoggedIn, header3, headerText, ca
           <p>Select location to see product availability</p>
         </div>
         {
-          categoriesPart && (
+          categoriesCond && (
             <div className="categories_Container">
               <div className="categories_Wrapper">
                 {
@@ -274,7 +277,7 @@ const HeaderBar2 = ({ sidebar, setSidebar, userLoggedIn, header3, headerText, ca
         }
       </header>
       {
-        header3 && (
+        header3Cond && (
           <header className='headerbar3_container'>
             <div className="headerbar3_Wrapper">
               <img src={arrowLeftWhite} alt="" onClick={() => nav(-1)} className='back_Btn' />

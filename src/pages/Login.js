@@ -4,20 +4,22 @@ import HeaderBar from '../components/HeaderBar/HeaderBar'
 
 const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
   const [phone, setPhone] = useState('')
-  // const [validLength, setValidLength] = useState(false)
+  const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
+
   const nav = useNavigate()
 
-  // const handleLength = (length) => {
-  //   if (length === 9) {
-  //     setValidLength(true)
-  //   } else {
-  //     setValidLength(false)
-  //   }
-  // }
+  const handleLength = (length) => {
+    if (length === 9) {
+      setValidLength(true)
+    } else {
+      setValidLength(false)
+    }
+  }
+
 
   const validateForm = () => (
-    (phone !== '') ? setBtnDisable(false) : setBtnDisable(true)
+    (phone !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)
   )
 
   const formSubmit = (e) => {
@@ -31,7 +33,7 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
     nav('/signup')
   }
 
-  // console.log(phone);
+  // console.log(validLength);
 
   return (
     <>
@@ -43,7 +45,7 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
         </div>
         <form action="" className={'signup-form'} onSubmit={formSubmit} onChange={validateForm}>
           <div className="inputfield-Container">
-            <input type='number' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' onChange={(e) => { setPhone(e.target.value); }} />
+            <input type='number' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} />
           </div>
           <div className={'button-Container'}>
             <button type='submit' className='submit-button' disabled={btnDisable}><p>Continue</p></button>

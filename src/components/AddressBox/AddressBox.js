@@ -7,30 +7,36 @@ import editIcon from '../../assets/vector/edit_outline_blue.svg'
 import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
 import { Link } from 'react-router-dom'
 
-const AddressBox = ({ add_Id, address, user_Full_Name, user_ph_Number, user_Pincode, user_State, user_City, user_Address, user_Landmark, setEditID, setProfileState }) => {
+const AddressBox = ({ address, setEditID, setProfileState, deleteOption = true, border }) => {
   const matches = useMediaQuery("(min-width:768px)")
+  // console.log(border);
 
+  // console.log(address);
   return (
-    <div className='address'>
+    <div className={`address ${!border ? ('border-0') : ('')}`}>
       <div className='address_Box'>
         <div className="address_Box_Wrapper">
-          <p className="address_Box_Name">{user_Full_Name}</p>
-          <p>{user_Address}, {user_City}, {user_State} - {user_Pincode}</p>
-          <p>{user_ph_Number}</p>
+          <p className="address_Box_Name">{address.user_Full_Name}</p>
+          <p>{address.user_Address}, {address.user_City}, {address.user_State} - {address.user_Pincode}</p>
+          <p>{address.user_ph_Number}</p>
         </div>
         <div className="address_Box_Footer">
-          <div className='address_Footer_Delete'>
-            <img src={deleteIcon} alt="" />
-            <p>Delete address</p>
-          </div>
+          {
+            deleteOption && (
+              <div className='address_Footer_Delete'>
+                <img src={deleteIcon} alt="" />
+                <p>Delete address</p>
+              </div>
+            )
+          }
           {
             matches ? (
-              <Link to={'/profile'} state={address} className="address_Footer_Edit" onClick={() => { setEditID(add_Id); setProfileState(11) }}>
+              <Link to={'/profile'} state={address} className="address_Footer_Edit" onClick={() => { setEditID(address.id); setProfileState(11) }}>
                 <img src={editIcon} alt="" />
                 <p>Edit address</p>
               </Link>
             ) : (
-              <Link to={'/editaddress'} state={address} className="address_Footer_Edit" onClick={() => setEditID(add_Id)}>
+              <Link to={'/editaddress'} state={address} className="address_Footer_Edit" onClick={() => setEditID(address.id)}>
                 <img src={editIcon} alt="" />
                 <p>Edit address</p>
               </Link>

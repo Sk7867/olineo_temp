@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import HeaderBar from '../components/HeaderBar/HeaderBar'
 
 const OtpValid = ({ setUserLoggedIn, loginRedirect }) => {
   const [otp, setOtp] = useState('')
@@ -45,6 +46,7 @@ const OtpValid = ({ setUserLoggedIn, loginRedirect }) => {
   )
   return (
     <>
+      <HeaderBar />
       <div className='signup-wrapper'>
         <div className='signup-header'>
           <h1 className='page-heading'>Confirmation code</h1>

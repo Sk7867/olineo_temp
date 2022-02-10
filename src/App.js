@@ -32,25 +32,28 @@ import UpdateEmail from './pages/EditAccount/UpdateEmail';
 import MyAddress from './pages/Address/MyAddress';
 import NewAddress from './pages/Address/NewAddress';
 import EditAddress from './pages/Address/EditAddress';
+import HomeDelivery from './pages/Address/HomeDelivery';
 
 
 function App() {
   const [loginRedirect, setLoginRedirect] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false)
-  const [sidebar, setSidebar] = useState(false)
-  const [cart, setCart] = useState(1)
-  const [headerText, setHeaderText] = useState('')
-  const [header3Cond, setHeader3Cond] = useState(false);
   const [deliveryOptionSelected, setDeliveryOptionSelected] = useState('');
   const [editID, setEditID] = useState(0);
+  const [addressSelected, setAddressSelected] = useState(0);
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,
     oldData: '',
     newData: '',
   });
+  const [headerData, setHeaderData] = useState({
+    header3Cond: false,
+    headerText: '',
+    categoriesCond: false
+  });
   const loc = useLocation()
 
-  // console.log(editID);
+  // console.log(loc);
 
   const userDetails = {
     user_Profile_Pic: userImage,
@@ -136,26 +139,31 @@ function App() {
     <>
       <ScrollToTop />
       <div className="App">
-        <HeaderBar2 sidebar={sidebar} header3={header3Cond} setSidebar={setSidebar} userLoggedIn={userLoggedIn} headerText={headerText} />
+        {
+          loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' ? ('') : (
+            <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />
+          )
+        }
         <Routes>
           <Route path='/signup' element={<Signup setLoginRedirect={setLoginRedirect} />} />
           <Route path='/login' element={<Login setLoginRedirect={setLoginRedirect} />} />
           <Route path='/otp' element={<OtpValid setUserLoggedIn={setUserLoggedIn} loginRedirect={loginRedirect} />} />
           <Route path='/adduser' element={<AddUser setUserLoggedIn={setUserLoggedIn} />} />
-          <Route path='/' element={<Home setHeader3Cond={setHeader3Cond} />} />
-          <Route path='/orders' element={<MyOrders ordersList={ordersData} setHeaderText={setHeaderText} setHeader3Cond={setHeader3Cond} />} />
-          <Route path='/mycart' element={<MyCart cart={cart} cartData={cartData} setHeaderText={setHeaderText} setHeader3Cond={setHeader3Cond} />} />
-          <Route path='/myaddress' element={<Address setHeaderText={setHeaderText} setHeader3Cond={setHeader3Cond} userDetails={userDetails} setEditID={setEditID} />} />
-          <Route path='/newaddress' element={<NewAddress setHeaderText={setHeaderText} setHeader3Cond={setHeader3Cond} />} />
-          <Route path='/editaddress' element={<EditAddress setHeaderText={setHeaderText} setHeader3Cond={setHeader3Cond} userDetails={userDetails} editID={editID} />} />
-          <Route path='/payment' element={<Payment setHeaderText={setHeaderText} setHeader3Cond={setHeader3Cond} />} />
-          <Route path='/profile' element={<Profile setHeaderText={setHeaderText} setHeader3Cond={setHeader3Cond} setEditID={setEditID} editID={editID} userDetails={userDetails} />} />
-          <Route path='/edit-account' element={<EditAccont setHeaderText={setHeaderText} setHeader3Cond={setHeader3Cond} userDetails={userDetails} setModalDataMobile={setModalDataMobile} />} />
-          <Route path='/update-details/number' element={<UpdateNumber setHeaderText={setHeaderText} setHeader3Cond={setHeader3Cond} modalDataMobile={modalDataMobile} />} />
-          <Route path='/update-details/email' element={<UpdateEmail setHeaderText={setHeaderText} setHeader3Cond={setHeader3Cond} modalDataMobile={modalDataMobile} />} />
-          <Route path='/customer-support' element={<CustomerSupport setHeaderText={setHeaderText} setHeader3Cond={setHeader3Cond} />} />
-          <Route path='/write-to-us' element={<WriteToUS setHeaderText={setHeaderText} setHeader3Cond={setHeader3Cond} />} />
-          <Route path='/delivery-option' element={<DeliveryOptions setHeaderText={setHeaderText} setHeader3Cond={setHeader3Cond} setDeliveryOptionSelected={setDeliveryOptionSelected} />} />
+          <Route path='/' element={<Home setHeaderData={setHeaderData} />} />
+          <Route path='/orders' element={<MyOrders ordersList={ordersData} setHeaderData={setHeaderData} />} />
+          <Route path='/mycart' element={<MyCart cartData={cartData} setHeaderData={setHeaderData} />} />
+          <Route path='/myaddress' element={<Address setHeaderData={setHeaderData} userDetails={userDetails} setEditID={setEditID} />} />
+          <Route path='/newaddress' element={<NewAddress setHeaderData={setHeaderData} />} />
+          <Route path='/editaddress' element={<EditAddress setHeaderData={setHeaderData} userDetails={userDetails} editID={editID} />} />
+          <Route path='/payment' element={<Payment setHeaderData={setHeaderData} />} />
+          <Route path='/profile' element={<Profile setEditID={setEditID} editID={editID} userDetails={userDetails} setHeaderData={setHeaderData} />} />
+          <Route path='/edit-account' element={<EditAccont setHeaderData={setHeaderData} userDetails={userDetails} setModalDataMobile={setModalDataMobile} />} />
+          <Route path='/update-details/number' element={<UpdateNumber setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
+          <Route path='/update-details/email' element={<UpdateEmail setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
+          <Route path='/customer-support' element={<CustomerSupport setHeaderData={setHeaderData} />} />
+          <Route path='/write-to-us' element={<WriteToUS setHeaderData={setHeaderData} />} />
+          <Route path='/delivery-option' element={<DeliveryOptions setDeliveryOptionSelected={setDeliveryOptionSelected} setHeaderData={setHeaderData} />} />
+          <Route path='/home-delivery' element={<HomeDelivery userDetails={userDetails} setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />} />
         </Routes>
         <Footer />
       </div>
