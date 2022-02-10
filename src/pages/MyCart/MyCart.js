@@ -120,7 +120,7 @@ const MyCart = ({ cart, cartData, setHeaderData }) => {
     },
   ]
 
-  // console.log(cartItemsNumber);
+  console.log(cartData);
 
   return (
     <>
@@ -152,16 +152,7 @@ const MyCart = ({ cart, cartData, setHeaderData }) => {
                       cartData.map((item, index) => (
                         <CartProductCard
                           key={index}
-                          productImage={item.productImage}
-                          productName={item.productName}
-                          productColor={item.productColor}
-                          productOriginalPrice={item.productOriginalPrice}
-                          productDiscount={item.productDiscount}
-                          productDiscountPrice={item.productDiscountPrice}
-                          productOffersAvailable={item.productOffersAvailable}
-                          productDeliveryExpected={item.productDeliveryExpected}
-                          productDeliveryCharge={item.productDeliveryCharge}
-                          productAvailabilty={item.productAvailabilty}
+                          product={item}
                         />
                       ))
                     }
@@ -206,16 +197,7 @@ const MyCart = ({ cart, cartData, setHeaderData }) => {
                         cartData.map((item, index) => (
                           <CartProductCard
                             key={index}
-                            productImage={item.productImage}
-                            productName={item.productName}
-                            productColor={item.productColor}
-                            productOriginalPrice={item.productOriginalPrice}
-                            productDiscount={item.productDiscount}
-                            productDiscountPrice={item.productDiscountPrice}
-                            productOffersAvailable={item.productOffersAvailable}
-                            productDeliveryExpected={item.productDeliveryExpected}
-                            productDeliveryCharge={item.productDeliveryCharge}
-                            productAvailabilty={item.productAvailabilty}
+                            product={item}
                           />
                         ))
                       }

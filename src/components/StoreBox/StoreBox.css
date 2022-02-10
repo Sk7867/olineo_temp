@@ -1,0 +1,54 @@
+.storebox_Container{
+  padding: 1rem;
+}
+
+.storebox_Wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.store_Name, .store_Address, .store_Timing p, .store_Contact p, .store_Distance p, .store_Status p{
+  margin: 0;
+  color: #08090A;
+}
+
+.store_Name{
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.store_Address, .store_Timing p, .store_Contact p, .store_Distance p{
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #08090A;
+}
+
+.store_Contact p{
+  color: #3D5176;
+}
+
+.store_Timing, .store_Contact, .store_Distance{
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.store_Status{
+  padding: 0.125rem 0.375rem;
+  border: 1px solid #3F8F00;
+  border-radius: 0.25rem;
+}
+
+.store_Status p{
+  color: #3F8F00;
+  letter-spacing: 0.004em;
+  font-weight: 600;
+  font-size: 0.63rem;
+  line-height: 0.875rem;
+  text-transform: uppercase;
+}

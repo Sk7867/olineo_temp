@@ -40,7 +40,7 @@ const Footer = () => {
   return (
     <footer className='footerContainer'>
       <div className="footer_company_detail">
-        <div className="footer_logo">
+        <div className="footer_logo" onClick={() => nav('/')}>
           <img src={footerLogo} alt="" />
         </div>
         <p className="footer_details">

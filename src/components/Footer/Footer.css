@@ -20,6 +20,10 @@
   padding: 2.5rem 1rem;
 }
 
+.footer_logo{
+  cursor: pointer;
+}
+
 .footer_details{
   font-weight: 600;
   letter-spacing: 0.004em;

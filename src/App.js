@@ -33,6 +33,8 @@ import MyAddress from './pages/Address/MyAddress';
 import NewAddress from './pages/Address/NewAddress';
 import EditAddress from './pages/Address/EditAddress';
 import HomeDelivery from './pages/Address/HomeDelivery';
+import StorePickUp from './pages/Pickup/StorePickUp';
+import StoreNear from './pages/Pickup/StoreNear';
 
 
 function App() {
@@ -41,6 +43,7 @@ function App() {
   const [deliveryOptionSelected, setDeliveryOptionSelected] = useState('');
   const [editID, setEditID] = useState(0);
   const [addressSelected, setAddressSelected] = useState(0);
+  const [storeSelected, setStoreSelected] = useState(0)
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,
     oldData: '',
@@ -120,6 +123,7 @@ function App() {
       productDeliveryExpected: 'Delivery in 6 - 7 days',
       productDeliveryCharge: '₹40',
       productAvailabilty: 'In stock',
+      productQuantityAvailable: '400',
     },
     {
       productImage: product1,
@@ -132,6 +136,7 @@ function App() {
       productDeliveryExpected: 'Delivery in 6 - 7 days',
       productDeliveryCharge: '₹40',
       productAvailabilty: 'Only 1 left',
+      productQuantityAvailable: '1',
     },
   ]
 
@@ -164,6 +169,8 @@ function App() {
           <Route path='/write-to-us' element={<WriteToUS setHeaderData={setHeaderData} />} />
           <Route path='/delivery-option' element={<DeliveryOptions setDeliveryOptionSelected={setDeliveryOptionSelected} setHeaderData={setHeaderData} />} />
           <Route path='/home-delivery' element={<HomeDelivery userDetails={userDetails} setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />} />
+          <Route path='/store-pickup' element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
+          <Route path='/store-near-me' element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
         </Routes>
         <Footer />
       </div>
