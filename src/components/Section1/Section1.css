@@ -87,6 +87,14 @@
     font-size: 0.75rem;
     line-height: 1.25rem;
   }
+
+  .carousel-inner{
+    max-height: 400px;
+  }
+
+  .carousel_image{
+    max-height: 400px;
+  }
 }
 
 @media screen and (min-width: 1024px) {

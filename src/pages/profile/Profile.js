@@ -24,15 +24,18 @@ import MyAddress from '../Address/MyAddress';
 import AddressForm from '../../components/AddressForm/AddressForm';
 
 
-const Profile = ({ setHeaderText, setHeader3Cond, setEditID, editID, userDetails }) => {
+const Profile = ({ setEditID, editID, userDetails, setHeaderData }) => {
   const [profileState, setProfileState] = useState(1);
   const matches = useMediaQuery("(min-width:768px)")
   const [editAddress, setEditAddress] = useState({});
   const loc = useLocation()
 
   useEffect(() => {
-    setHeaderText('Profile')
-    setHeader3Cond(true)
+    setHeaderData({
+      header3Cond: true,
+      headerText: 'Profile',
+      categoriesCond: false,
+    })
 
     userDetails.delivery_Address.forEach((address) => {
       if (address.id === editID) {
@@ -81,7 +84,7 @@ const Profile = ({ setHeaderText, setHeader3Cond, setEditID, editID, userDetails
 
   return (
     <>
-      <div className='page_Wrapper profile_Page_Wrapper'>
+      <div className='page_Wrapper profile_Page_Wrapper page_Margin_Top_Secondary'>
 
         {
           !matches && (
@@ -163,7 +166,7 @@ const Profile = ({ setHeaderText, setHeader3Cond, setEditID, editID, userDetails
                     <EditDetails profilePic={false} userDetails={userDetails} />
                   ) : (
                     profileState === 5 ? (
-                      <MyAddress addressList={userDetails.delivery_Address} setEditID={setEditID} setProfileState={setProfileState} />
+                      <MyAddress addressList={userDetails.delivery_Address} setEditID={setEditID} setProfileState={setProfileState} border={true} />
                     ) : (
                       profileState === 10 ? (
                         <AddressForm />

@@ -15,12 +15,15 @@ import Section2 from '../../components/Section2/Section2'
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 
-const MyCart = ({ cart, cartData, setHeaderText, setHeader3Cond }) => {
+const MyCart = ({ cart, cartData, setHeaderData }) => {
 
   const nav = useNavigate()
   useEffect(() => {
-    setHeaderText('My Cart')
-    setHeader3Cond(true)
+    setHeaderData({
+      header3Cond: true,
+      headerText: 'My Cart',
+      categoriesCond: true,
+    })
   }, []);
 
   const sec5Data = [
@@ -121,7 +124,7 @@ const MyCart = ({ cart, cartData, setHeaderText, setHeader3Cond }) => {
 
   return (
     <>
-      <div className='page_Wrapper'>
+      <div className='page_Wrapper page_Margin_Top'>
         <BreadCrumbs data={breadCrumbsData} />
         {
           cartItemsNumber === 0 ? (
