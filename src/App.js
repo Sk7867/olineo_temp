@@ -289,86 +289,35 @@ function App() {
     <>
       <ScrollToTop />
       <div className="App">
-        <UserDataContext.Provider value={{
-          userContext,
-          setUserContext,
-          userAddress,
-          setUserAddress,
-          userCart,
-          setUserCart,
-          allProducts,
-          setAllProducts,
-          userLocation,
-          setUserLocation,
-          cartArray,
-          setCartArray,
-          seachedProduct,
-          setSeachedProduct,
-          orderInit,
-          setOrderInit,
-          priceBoxDetails,
-          setPriceBoxDetails,
-          userOrderData,
-          setUserOrderData,
-          orderTypes,
-          setOrderTypes,
-          searchedProduct,
-          setSearchedProduct,
-          storeLocations,
-          setStoreLocations
-        }}>
-          {
-            loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' || loc.pathname === '/admin' || loc.pathname === '/admin/page1' || loc.pathname === '/admin/page2' || loc.pathname === '/admin/page3' ? ('') : (
-              <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />
-            )
-          }
-          <Routes>
-            <Route path='/signup' exact element={<Signup setLoginRedirect={setLoginRedirect} />} />
-            <Route path='/login' exact element={<Login setLoginRedirect={setLoginRedirect} />} />
-            <Route path='/otp' exact element={<OtpValid loginRedirect={loginRedirect} />} />
-            <Route path='/adduser' exact element={<AddUser />} />
-            <Route path='/' exact element={<Home setHeaderData={setHeaderData} allProducts={allProducts} />} />
-            <Route path='/orders' exact element={<MyOrders ordersList={ordersData} setHeaderData={setHeaderData} featureProducts={allProducts} />} />
-            <Route path='/mycart' exact element={<MyCart setHeaderData={setHeaderData} />} />
-            <Route path='/myaddress' exact element={<Address setHeaderData={setHeaderData} setEditID={setEditID} />} />
-            <Route path='/newaddress' exact element={<NewAddress setHeaderData={setHeaderData} />} />
-            <Route path='/editaddress' exact element={<EditAddress setHeaderData={setHeaderData} editID={editID} />} />
-            <Route path='/payment' exact element={<Payment setHeaderData={setHeaderData} />} />
-            <Route path='/profile' exact element={<Profile setEditID={setEditID} editID={editID} setHeaderData={setHeaderData} ordersData={ordersData} />} />
-            <Route path='/edit-account' exact element={<EditAccont setHeaderData={setHeaderData} setModalDataMobile={setModalDataMobile} />} />
-            <Route path='/update-details/number' exact element={<UpdateNumber setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
-            <Route path='/update-details/email' exact element={<UpdateEmail setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
-            <Route path='/customer-support' exact element={<CustomerSupport setHeaderData={setHeaderData} />} />
-            <Route path='/write-to-us' exact element={<WriteToUS setHeaderData={setHeaderData} />} />
-            <Route path='/delivery-option' exact element={<DeliveryOptions setDeliveryOptionSelected={setDeliveryOptionSelected} setHeaderData={setHeaderData} />} />
-            <Route path='/home-delivery' exact element={<HomeDelivery setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />} />
-            <Route path='/store-pickup' exact element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
-            <Route path='/store-near-me' exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
-            <Route path='/product/:id' exact element={<ProductPage setHeaderData={setHeaderData} />} />
-            <Route path='/:category' exact element={<ProductCategory setHeaderData={setHeaderData} />} />
-            <Route path='/:category/filter' exact element={<Filter setHeaderData={setHeaderData} />} />
-            <Route path='/:store/:category' exact element={<OfflineProductCategory setHeaderData={setHeaderData} />} />
-            <Route path='/bank-offer' exact element={<BankOffer setHeaderData={setHeaderData} />} />
-            <Route path='/store-finder' exact element={<StoreFinder setHeaderData={setHeaderData} />} />
-            <Route path='/order-details' exact element={<OrderDetails setHeaderData={setHeaderData} />} />
-            <Route path='/order-cancel' exact element={<OrderCancel setHeaderData={setHeaderData} />} />
-            <Route path='/catelogue-page' exact element={<CataloguePage setHeaderData={setHeaderData} />} />
-            <Route path='/catelogue-page/add-product' exact element={<AddProduct setHeaderData={setHeaderData} />} />
-            <Route path='/catelogue-page/bulk-upload' exact element={<BulkUpload setHeaderData={setHeaderData} />} />
-            <Route path='/catelogue-page/add-offers' exact element={<AddOffers setHeaderData={setHeaderData} />} />
-            <Route path='/about-us' exact element={<AboutUs setHeaderData={setHeaderData} />} />
-            <Route path="admin/*" element={<Dashboard />}>
-              <Route path="page1" element={<Page1 />} />
-              <Route path="page2" element={<Page2 />} />
-              <Route path="page3" element={<Page3 />} />
-            </Route>
-          </Routes>
-          {
-            loc.pathname === '/admin' || loc.pathname === '/admin/page1' || loc.pathname === '/admin/page2' || loc.pathname === '/admin/page3' ? ('') : (
-              <Footer />
-            )
-          }
-        </UserDataContext.Provider>
+        {
+          loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' ? ('') : (
+            <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />
+          )
+        }
+        <Routes>
+          <Route path='/signup' exact element={<Signup setLoginRedirect={setLoginRedirect} />} />
+          <Route path='/login' exact element={<Login setLoginRedirect={setLoginRedirect} />} />
+          <Route path='/otp' exact element={<OtpValid setUserLoggedIn={setUserLoggedIn} loginRedirect={loginRedirect} />} />
+          <Route path='/adduser' exact element={<AddUser setUserLoggedIn={setUserLoggedIn} />} />
+          <Route path='/' exact element={<Home setHeaderData={setHeaderData} />} />
+          <Route path='/orders' exact element={<MyOrders ordersList={ordersData} setHeaderData={setHeaderData} />} />
+          <Route path='/mycart' exact element={<MyCart cartData={cartData} setHeaderData={setHeaderData} />} />
+          <Route path='/myaddress' exact element={<Address setHeaderData={setHeaderData} userDetails={userDetails} setEditID={setEditID} />} />
+          <Route path='/newaddress' exact element={<NewAddress setHeaderData={setHeaderData} />} />
+          <Route path='/editaddress' exact element={<EditAddress setHeaderData={setHeaderData} userDetails={userDetails} editID={editID} />} />
+          <Route path='/payment' exact element={<Payment setHeaderData={setHeaderData} />} />
+          <Route path='/profile' exact element={<Profile setEditID={setEditID} editID={editID} userDetails={userDetails} setHeaderData={setHeaderData} />} />
+          <Route path='/edit-account' exact element={<EditAccont setHeaderData={setHeaderData} userDetails={userDetails} setModalDataMobile={setModalDataMobile} />} />
+          <Route path='/update-details/number' exact element={<UpdateNumber setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
+          <Route path='/update-details/email' exact element={<UpdateEmail setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
+          <Route path='/customer-support' exact element={<CustomerSupport setHeaderData={setHeaderData} />} />
+          <Route path='/write-to-us' exact element={<WriteToUS setHeaderData={setHeaderData} />} />
+          <Route path='/delivery-option' exact element={<DeliveryOptions setDeliveryOptionSelected={setDeliveryOptionSelected} setHeaderData={setHeaderData} />} />
+          <Route path='/home-delivery' exact element={<HomeDelivery userDetails={userDetails} setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />} />
+          <Route path='/store-pickup' exact element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
+          <Route path='/store-near-me' exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
+        </Routes>
+        <Footer />
       </div>
     </>
   );
