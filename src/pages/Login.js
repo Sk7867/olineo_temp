@@ -1,10 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
-import { userLogin, userLoginEmail } from '../api/Auth'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import { UserDataContext } from '../Contexts/UserContext'
-import { Slide, toast, ToastContainer } from 'react-toastify'
+import { userLogin } from '../api/Auth'
 
 toast.configure()
 const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
@@ -52,27 +49,10 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
 
   const formSubmit = (e) => {
     e.preventDefault();
-    if (emailLogin) {
-      userLoginEmail(email)
-        .then(res => res ? (
-          setLoginRedirect(true),
-          nav('/otp'),
-          setUserContext(prev => ({
-            ...prev,
-            id: res.userId
-          }))
-        ) : toast.error('Email Not Registered'))
-    } else {
-      userLogin(phone)
-        .then(res => res ? (
-          setLoginRedirect(true),
-          nav('/otp'),
-          setUserContext(prev => ({
-            ...prev,
-            id: res.userId
-          }))
-        ) : toast.error('Mobile Number Not Registered'))
-    }
+    userLogin(phone)
+      .then(res => res ? (setLoginRedirect(true), nav('/otp')) : alert("Check your number again"))
+
+
   }
 
   const pageSwitch = (e) => {
