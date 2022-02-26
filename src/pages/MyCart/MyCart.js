@@ -80,6 +80,30 @@ const MyCart = ({ setHeaderData }) => {
     nav('/')
   }
 
+  //Get Price from cart Items
+  var cartItemsPrice = 0
+  cartData.forEach(item => {
+    cartItemsPrice += parseInt(item.productOriginalPrice)
+  });
+
+  //Get Discounted Price
+  var totalDiscount = 0
+  cartData.forEach(item => {
+    var itemDiscount
+    itemDiscount = parseInt(item.productOriginalPrice) - parseInt(item.productDiscountPrice)
+    totalDiscount += itemDiscount
+  });
+
+  //Get Delivery Charges
+  var totalDeliveryCharge = 0
+  cartData.forEach(item => {
+    totalDeliveryCharge += parseInt(item.productDeliveryCharge)
+  });
+
+
+  //Get Total Amount
+  var totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
+
   const breadCrumbsData = [
     {
       text: 'Home',
@@ -112,8 +136,8 @@ const MyCart = ({ setHeaderData }) => {
           ) : (
             <>
               <div className='desk_Page_Wrapper'>
-                <aside className="side_Section" style={{ padding: '0', background: 'none' }}>
-                  <PriceDetailsBox HideDetails={false} classes={{ containerClass: '' }} />
+                <aside className="side_Section section_Wrapper" style={{ padding: '0', background: 'none' }}>
+                  <PriceDetailsBox HideDetails={false} cartData={cartData} classes={{ containerClass: '' }} />
                   <div className="cart_Add_Items section_Wrapper">
                     <div className="add_Items_Wrapper">
                       <p>Add items worth ₹{`600`} to qualify for FREE Delivery</p>
@@ -123,12 +147,77 @@ const MyCart = ({ setHeaderData }) => {
                     </div>
                   </div>
                 </aside>
-                <CartSection featureProducts={allProducts} />
-                {/* <Section2
-                  id={'Top-sellers-sec'}
-                  heading='Top Sellers'
-                  productData={allProducts}
-                /> */}
+                <div className='order_Page_Right'>
+                  <p className="cart_Text section_Wrapper">My Cart</p>
+                  <div className="cards_Container">
+                    {
+                      cartData.map((item, index) => (
+                        <CartProductCard
+                          key={index}
+                          product={item}
+                        />
+                      ))
+                    }
+                  </div>
+
+                  <div className='cart_Subtotal_Section section_Wrapper'>
+                    <p>Subtotal ({cartItemsNumber} items): <span> ₹{totalAmount}</span></p>
+                    <div className="cart_Footer_Right">
+                      <button type='submit' className='submit-button' onClick={() => nav('/delivery-option')}><p>Checkout</p></button>
+                    </div>
+                  </div>
+
+                  {/* <div className="cart_Add_Items">
+                    <div className="add_Items_Wrapper">
+                      <p>Add items worth ₹{`600`} to qualify for FREE Delivery</p>
+                    </div>
+                    <div className="cart_More_Items">
+                      <button type='submit' className='submit-button'><p>Add more items</p></button>
+                    </div>
+                  </div> */}
+
+                  {/* cart price detials */}
+                  <div className={'tab_None'}>
+                    <PriceDetailsBox HideDetails={false} cartData={cartData} />
+                  </div>
+
+                  {/* cart carousel section */}
+                  <Section2
+                    id={'Top-sellers-sec'}
+                    heading='Top Sellers'
+                    productData={sec5Data}
+                  />
+
+                  {/* cart saved for later */}
+                  <div className="cart_Save_Later">
+                    <div className="save_Later_Header section_Wrapper">
+                      <p className=''>Saved for Later</p>
+                    </div>
+                    <div className="cards_Container">
+                      {
+                        cartData.map((item, index) => (
+                          <CartProductCard
+                            key={index}
+                            product={item}
+                          />
+                        ))
+                      }
+                    </div>
+                  </div>
+
+                  {/* cart floating Footer */}
+                  <div className="cart_Footer ">
+                    <div className="cart_Footer_Left">
+                      <p className="footer_Price">
+                        ₹{`1,280`}
+                      </p>
+                      <p className='footer_Left_Text'>View price details</p>
+                    </div>
+                    <div className="cart_Footer_Right">
+                      <button type='submit' className='submit-button' onClick={() => nav('/delivery-option')}><p>Checkout</p></button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </>
           )

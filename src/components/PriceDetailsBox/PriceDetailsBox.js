@@ -1,25 +1,40 @@
-import { useState, useEffect, useContext, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import './PriceDetailsBox.css'
 import { UserDataContext } from '../../Contexts/UserContext'
 
-const PriceDetailsBox = ({ HideDetails, classes }) => {
+const PriceDetailsBox = ({ HideDetails, cartData, classes }) => {
   const [showDetails, setShowDetails] = useState(true);
-  const { userCart, setUserCart, cartArray, priceBoxDetails } = useContext(UserDataContext)
+  //Get Number of cart Items
+  let cartItemsNumber = cartData.length
 
-  //     //Get Delivery Charges
-  //     userCart.forEach((item, index) => {
-  //       totalDeliveryCharge += (index + 1) * 80
-  //     });
+  //Get Price from cart Items
+  var cartItemsPrice = 0
+  cartData.forEach(item => {
+    cartItemsPrice += parseInt(item.productOriginalPrice)
+  });
 
-  //     //Get Total Amount
-  //     totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
-  //   }
-  // }, [cartArray])
+  //Get Discounted Price
+  var totalDiscount = 0
+  cartData.forEach(item => {
+    var itemDiscount
+    itemDiscount = parseInt(item.productOriginalPrice) - parseInt(item.productDiscountPrice)
+    totalDiscount += itemDiscount
+  });
+
+  //Get Delivery Charges
+  var totalDeliveryCharge = 0
+  cartData.forEach(item => {
+    totalDeliveryCharge += parseInt(item.productDeliveryCharge)
+  });
 
 
-  // console.log(cartItemsPrice);
+  //Get Total Amount
+  var totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
+
+
+  console.log(classes);
   return (
-    <div className={"cart_Price_details section_Wrapper " + (classes ? classes.containerClass : '')}>
+    <div className={"cart_Price_details " + (classes ? classes.containerClass : '')}>
       <div className="cart_Details_Header">
         <p>Price Details</p>
       </div>
@@ -27,23 +42,23 @@ const PriceDetailsBox = ({ HideDetails, classes }) => {
         showDetails && (
           <div className="cart_Details_Body">
             <div className="cart_Details_Price">
-              <p>Price ({priceBoxDetails.cartItemsNumber} items) </p>
-              <p>₹{priceBoxDetails.cartItemsPrice}</p>
+              <p>Price ({cartItemsNumber} items) </p>
+              <p>₹{cartItemsPrice}</p>
             </div>
             <div className="cart_Details_Discount">
               <p>Discount</p>
-              <p>-₹{priceBoxDetails.totalDiscount}</p>
+              <p>-₹{totalDiscount}</p>
             </div>
             <div className="cart_Details_Delivery">
               <p>Delivery Charges</p>
-              <p>₹{priceBoxDetails.totalDeliveryCharge}</p>
+              <p>₹{totalDeliveryCharge}</p>
             </div>
           </div>
         )
       }
       <div className="cart_Details_Footer">
         <p>Total Amount</p>
-        <p>₹{priceBoxDetails.totalAmount}</p>
+        <p>₹{totalAmount}</p>
       </div>
       {
         HideDetails && (

@@ -15,8 +15,7 @@ import { completeOrder, initOrder } from '../../api/OrdersApi';
 import { Slide, toast, ToastContainer } from 'react-toastify'
 import { getCartData, removeFromCart } from '../../api/Cart';
 
-toast.configure()
-const HomeDelivery = ({ setEditID, setHeaderData }) => {
+const HomeDelivery = ({ userDetails, setEditID, addressSelected, setAddressSelected, setHeaderData, cartData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [disable, setDisable] = useState(true)
   const [addressSelected, setAddressSelected] = useState('')
@@ -124,8 +123,8 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
       <div className="page_Wrapper page_Margin_Top_Secondary">
         <BreadCrumbs data={breadCrumbsData} />
         <div className='desk_Page_Wrapper'>
-          <aside className="side_Section" style={{ padding: '0' }}>
-            <PriceDetailsBox HideDetails={false} />
+          <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
+            <PriceDetailsBox HideDetails={false} cartData={cartData} />
           </aside>
           <div className='order_Page_Right'>
             <p className="cart_Text section_Wrapper">Select Address</p>

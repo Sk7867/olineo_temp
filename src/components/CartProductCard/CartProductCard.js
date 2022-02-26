@@ -32,13 +32,13 @@ const CartProductCard = ({
             </p>
             <div className="cart_Product_Price_Section">
               <p className="cart_Product_Discount_Price">
-                ₹{product.price.mop}
+                ₹{product.productDiscountPrice}
               </p>
               <p className="cart_Product_Original_Price">
-                ₹{product.price.mrp}
+                ₹{product.productOriginalPrice}
               </p>
               <p className='cart_Product_Discount'>
-                {discount}% off
+                {product.productDiscount}% off
               </p>
             </div>
             <p className="cart_Product_Offers">
