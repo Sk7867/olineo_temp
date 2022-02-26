@@ -4,7 +4,7 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox';
 
-const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
+const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData, cartData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [selected, setSelected] = useState(null);
   const [disable, setDisable] = useState(true);
@@ -61,7 +61,7 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
       <BreadCrumbs data={breadCrumbsData} />
       <div className='desk_Page_Wrapper'>
         <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
-          <PriceDetailsBox HideDetails={false} />
+          <PriceDetailsBox HideDetails={false} cartData={cartData} />
         </aside>
         <div className='order_Page_Right'>
           <p className="cart_Text section_Wrapper">Select delivery option</p>

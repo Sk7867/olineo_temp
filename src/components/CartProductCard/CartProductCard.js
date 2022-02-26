@@ -26,13 +26,13 @@ const CartProductCard = ({
             </p>
             <div className="cart_Product_Price_Section">
               <p className="cart_Product_Discount_Price">
-                {product.productDiscountPrice}
+                ₹{product.productDiscountPrice}
               </p>
               <p className="cart_Product_Original_Price">
-                {product.productOriginalPrice}
+                ₹{product.productOriginalPrice}
               </p>
               <p className='cart_Product_Discount'>
-                {product.productDiscount} off
+                {product.productDiscount}% off
               </p>
             </div>
             <p className="cart_Product_Offers">
@@ -45,7 +45,7 @@ const CartProductCard = ({
             }
           </div>
           <div className="cart_Product_Delivery_Info">
-            <p className="cart_Product_Delivery_Estimate">{product.productDeliveryExpected}</p> | <p className="cart_Product_Delivery_Charge">{product.productDeliveryCharge}</p>
+            <p className="cart_Product_Delivery_Estimate">{product.productDeliveryExpected}</p> | <p className="cart_Product_Delivery_Charge">₹{product.productDeliveryCharge}</p>
           </div>
           {
             !matches && (

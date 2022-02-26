@@ -84,6 +84,7 @@
   padding: 0.5rem 0 0;
   margin: 1rem 0.25rem -0.25rem;
   border-top: 1px solid #EBEDF0;
+  cursor: pointer;
 }
 
 .product_TrackText{
@@ -142,5 +143,33 @@
 
   .product_Tracker img{
     display: none;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .product_Container{
+    padding: 1rem 1.5rem;
+  }
+
+  .product_Name, .order_Product_Price, .product_Arriving{
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+  }
+
+  .order_Product_Color, .order_Product_Status{
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin: 0.25rem 0 0;
+  }
+
+  .product_Delivered{
+    max-width: 144px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .product_Name, .order_Product_Price, .product_Arriving{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 }

@@ -10,7 +10,7 @@ import AddressBox from '../../components/AddressBox/AddressBox';
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox';
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 
-const HomeDelivery = ({ userDetails, setEditID, addressSelected, setAddressSelected, setHeaderData }) => {
+const HomeDelivery = ({ userDetails, setEditID, addressSelected, setAddressSelected, setHeaderData, cartData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [disable, setDisable] = useState(true)
 
@@ -46,7 +46,7 @@ const HomeDelivery = ({ userDetails, setEditID, addressSelected, setAddressSelec
         <BreadCrumbs data={breadCrumbsData} />
         <div className='desk_Page_Wrapper'>
           <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
-            <PriceDetailsBox HideDetails={false} />
+            <PriceDetailsBox HideDetails={false} cartData={cartData} />
           </aside>
           <div className='order_Page_Right'>
             <p className="cart_Text section_Wrapper">Select Address</p>
