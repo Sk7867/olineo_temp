@@ -95,17 +95,20 @@ function App() {
       productName: 'JBL C100SI',
       productArrival: 'Arriving Dec 31 - Jan 04',
       productDeliveryStatues: 'Arriving',
+      productPrice: '600',
       productImage: product3,
     },
     {
       productName: 'JBL C100SI',
       productArrival: 'Delivered on Sun, Dec 26th ‘21',
+      productPrice: '600',
       productImage: product3,
       productDeliveryStatues: 'Delivered',
     },
     {
       productName: 'JBL C100SI',
       productArrival: 'Delivered on Sun, Dec 26th ‘21',
+      productPrice: '600',
       productImage: product3,
       productDeliveryStatues: 'Delivered',
     },
@@ -116,12 +119,12 @@ function App() {
       productImage: product1,
       productName: 'JBL C100SI In Ear Wired Earphones with Mic',
       productColor: 'Black',
-      productOriginalPrice: '₹1000',
-      productDiscount: '40%',
-      productDiscountPrice: '₹600',
+      productOriginalPrice: '1000',
+      productDiscount: '40',
+      productDiscountPrice: '600',
       productOffersAvailable: '2 offers available',
       productDeliveryExpected: 'Delivery in 6 - 7 days',
-      productDeliveryCharge: '₹40',
+      productDeliveryCharge: '40',
       productAvailabilty: 'In stock',
       productQuantityAvailable: '400',
     },
@@ -129,15 +132,17 @@ function App() {
       productImage: product1,
       productName: 'JBL C100SI In Ear Wired Earphones with Mic',
       productColor: 'Black',
-      productOriginalPrice: '₹1000',
-      productDiscount: '40%',
-      productDiscountPrice: '₹600',
+      productOriginalPrice: '1000',
+      productDiscount: '40',
+      productDiscountPrice: '600',
       productOffersAvailable: '2 offers available',
       productDeliveryExpected: 'Delivery in 6 - 7 days',
-      productDeliveryCharge: '₹40',
+      productDeliveryCharge: '40',
       productAvailabilty: 'Only 1 left',
       productQuantityAvailable: '1',
     },
+
+
   ]
 
   return (
@@ -160,17 +165,17 @@ function App() {
           <Route path='/myaddress' exact element={<Address setHeaderData={setHeaderData} userDetails={userDetails} setEditID={setEditID} />} />
           <Route path='/newaddress' exact element={<NewAddress setHeaderData={setHeaderData} />} />
           <Route path='/editaddress' exact element={<EditAddress setHeaderData={setHeaderData} userDetails={userDetails} editID={editID} />} />
-          <Route path='/payment' exact element={<Payment setHeaderData={setHeaderData} />} />
+          <Route path='/payment' exact element={<Payment setHeaderData={setHeaderData} cartData={cartData} />} />
           <Route path='/profile' exact element={<Profile setEditID={setEditID} editID={editID} userDetails={userDetails} setHeaderData={setHeaderData} />} />
           <Route path='/edit-account' exact element={<EditAccont setHeaderData={setHeaderData} userDetails={userDetails} setModalDataMobile={setModalDataMobile} />} />
           <Route path='/update-details/number' exact element={<UpdateNumber setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
           <Route path='/update-details/email' exact element={<UpdateEmail setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
           <Route path='/customer-support' exact element={<CustomerSupport setHeaderData={setHeaderData} />} />
           <Route path='/write-to-us' exact element={<WriteToUS setHeaderData={setHeaderData} />} />
-          <Route path='/delivery-option' exact element={<DeliveryOptions setDeliveryOptionSelected={setDeliveryOptionSelected} setHeaderData={setHeaderData} />} />
-          <Route path='/home-delivery' exact element={<HomeDelivery userDetails={userDetails} setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />} />
-          <Route path='/store-pickup' exact element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
-          <Route path='/store-near-me' exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
+          <Route path='/delivery-option' exact element={<DeliveryOptions setDeliveryOptionSelected={setDeliveryOptionSelected} setHeaderData={setHeaderData} cartData={cartData} />} />
+          <Route path='/home-delivery' exact element={<HomeDelivery userDetails={userDetails} setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} cartData={cartData} />} />
+          <Route path='/store-pickup' exact element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} cartData={cartData} />} />
+          <Route path='/store-near-me' exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} cartData={cartData} />} />
         </Routes>
         <Footer />
       </div>

@@ -13,7 +13,7 @@ import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import StoreBox from '../../components/StoreBox/StoreBox'
 
-const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
+const StorePickUp = ({ setHeaderData, setStoreSelected, cartData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [nearStore, setNearStore] = useState(false)
   const nav = useNavigate()
@@ -49,7 +49,7 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
         <BreadCrumbs data={breadCrumbsData} />
         <div className='desk_Page_Wrapper'>
           <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
-            <PriceDetailsBox HideDetails={false} />
+            <PriceDetailsBox HideDetails={false} cartData={cartData} />
           </aside>
           <div className='order_Page_Right'>
             <div className="pickup_Search_Bar_Container">

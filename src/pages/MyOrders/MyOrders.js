@@ -15,10 +15,13 @@ import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 
 
 const MyOrders = ({ ordersList, setHeaderData }) => {
+  const [checked, setChecked] = useState(true)
+  const [onTheWay, setOnTheWay] = useState(true)
+  const [delivered, setDelivered] = useState(true)
 
   const nav = useNavigate()
 
-  // console.log(loc);
+  console.log(onTheWay);
 
   useEffect(() => {
     setHeaderData({
@@ -148,62 +151,72 @@ const MyOrders = ({ ordersList, setHeaderData }) => {
                   <p className="side_Section_Heading">
                     Filters
                   </p>
-                  <label htmlFor={`On the way`} className="checkbox-label checkbox-item d-flex align-items-center side_Section_Checkbox">
-                    <input type="checkbox" name="On the way" id={`On the way`} />
+                  <label htmlFor={`On the way`} className="checkbox-label checkbox-item d-flex align-items-center side_Section_Checkbox" onClick={() => { setOnTheWay(!onTheWay); setChecked(!checked) }}>
+                    <input type="checkbox" name="On the way" id={`On the way`} defaultChecked={checked} />
                     <span className="custom-checkmark"></span>
                     On the way
                   </label>
-                  <label htmlFor={`Delivered`} className="checkbox-label checkbox-item d-flex align-items-center side_Section_Checkbox">
-                    <input type="checkbox" name="Delivered" id={`Delivered`} />
+                  <label htmlFor={`Delivered`} className="checkbox-label checkbox-item d-flex align-items-center side_Section_Checkbox" onClick={() => { setDelivered(!delivered); setChecked(!checked) }} >
+                    <input type="checkbox" name="Delivered" id={`Delivered`} defaultChecked={checked} />
                     <span className="custom-checkmark"></span>
                     Delivered
                   </label>
                 </aside>
                 <div className='order_Page_Right'>
-                  <div className='order_arriving_section'>
-                    <p className="order_Text section_Wrapper">Orders on the way</p>
-                    {
-                      ordersList.map((order, index) => (
-                        order.productDeliveryStatues === 'Arriving' ?
-                          (
-                            <OrderProductCard
-                              key={index}
-                              productName={order.productName}
-                              productArrival={order.productArrival}
-                              productDeliveryStatues={order.productDeliveryStatues}
-                              productImage={order.productImage}
-                            />
-                          ) : ('')
-                      ))
-                    }
-                    <Section2
-                      id={'Top-sellers-sec'}
-                      heading='Suggested products'
-                      productData={sec5Data}
-                    />
-                  </div>
-                  <div className="order_delivered_section">
-                    <p className="order_Text section_Wrapper">Orders delivered</p>
-                    {
-                      ordersList.map((order, index) => (
-                        order.productDeliveryStatues !== 'Arriving' ?
-                          (
-                            <OrderProductCard
-                              key={index}
-                              productName={order.productName}
-                              productArrival={order.productArrival}
-                              productDeliveryStatues={order.productDeliveryStatues}
-                              productImage={order.productImage}
-                            />
-                          ) : ('')
-                      ))
-                    }
-                  </div>
-                  <Section2
-                    id={'Top-sellers-sec'}
-                    heading='Suggested products'
-                    productData={sec5Data}
-                  />
+                  {
+                    onTheWay && (
+                      <div className='order_arriving_section'>
+                        <p className="order_Text section_Wrapper">Orders on the way</p>
+                        {
+                          ordersList.map((order, index) => (
+                            order.productDeliveryStatues === 'Arriving' ?
+                              (
+                                <OrderProductCard
+                                  key={index}
+                                  productName={order.productName}
+                                  productArrival={order.productArrival}
+                                  productDeliveryStatues={order.productDeliveryStatues}
+                                  productImage={order.productImage}
+                                  productPrice={order.productPrice}
+                                />
+                              ) : ('')
+                          ))
+                        }
+                        <Section2
+                          id={'Top-sellers-sec'}
+                          heading='Suggested products'
+                          productData={sec5Data}
+                        />
+                      </div>
+                    )
+                  }
+                  {
+                    delivered && (
+                      <div className="order_delivered_section">
+                        <p className="order_Text section_Wrapper">Orders delivered</p>
+                        {
+                          ordersList.map((order, index) => (
+                            order.productDeliveryStatues !== 'Arriving' ?
+                              (
+                                <OrderProductCard
+                                  key={index}
+                                  productName={order.productName}
+                                  productArrival={order.productArrival}
+                                  productDeliveryStatues={order.productDeliveryStatues}
+                                  productImage={order.productImage}
+                                  productPrice={order.productPrice}
+                                />
+                              ) : ('')
+                          ))
+                        }
+                        <Section2
+                          id={'Top-sellers-sec'}
+                          heading='Suggested products'
+                          productData={sec5Data}
+                        />
+                      </div>
+                    )
+                  }
                 </div>
               </div>
             </>

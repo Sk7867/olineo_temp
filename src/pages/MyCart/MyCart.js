@@ -103,11 +103,35 @@ const MyCart = ({ cart, cartData, setHeaderData }) => {
 
   const pageSwitch = (e) => {
     e.preventDefault();
-    console.log(e);
+    // console.log(e);
     nav('/')
   }
 
   let cartItemsNumber = cartData.length
+
+  //Get Price from cart Items
+  var cartItemsPrice = 0
+  cartData.forEach(item => {
+    cartItemsPrice += parseInt(item.productOriginalPrice)
+  });
+
+  //Get Discounted Price
+  var totalDiscount = 0
+  cartData.forEach(item => {
+    var itemDiscount
+    itemDiscount = parseInt(item.productOriginalPrice) - parseInt(item.productDiscountPrice)
+    totalDiscount += itemDiscount
+  });
+
+  //Get Delivery Charges
+  var totalDeliveryCharge = 0
+  cartData.forEach(item => {
+    totalDeliveryCharge += parseInt(item.productDeliveryCharge)
+  });
+
+
+  //Get Total Amount
+  var totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
 
   const breadCrumbsData = [
     {
@@ -120,7 +144,7 @@ const MyCart = ({ cart, cartData, setHeaderData }) => {
     },
   ]
 
-  console.log(cartData);
+  // console.log(cartData);
 
   return (
     <>
@@ -142,8 +166,16 @@ const MyCart = ({ cart, cartData, setHeaderData }) => {
           ) : (
             <>
               <div className='desk_Page_Wrapper'>
-                <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
-                  <PriceDetailsBox HideDetails={false} />
+                <aside className="side_Section section_Wrapper" style={{ padding: '0', background: 'none' }}>
+                  <PriceDetailsBox HideDetails={false} cartData={cartData} classes={{ containerClass: '' }} />
+                  <div className="cart_Add_Items section_Wrapper">
+                    <div className="add_Items_Wrapper">
+                      <p>Add items worth ₹{`600`} to qualify for FREE Delivery</p>
+                    </div>
+                    <div className="cart_More_Items">
+                      <button type='submit' className='submit-button'><p>Add more items</p></button>
+                    </div>
+                  </div>
                 </aside>
                 <div className='order_Page_Right'>
                   <p className="cart_Text section_Wrapper">My Cart</p>
@@ -159,13 +191,13 @@ const MyCart = ({ cart, cartData, setHeaderData }) => {
                   </div>
 
                   <div className='cart_Subtotal_Section section_Wrapper'>
-                    <p>Subtotal (2 items): <span> ₹1,280</span></p>
+                    <p>Subtotal ({cartItemsNumber} items): <span> ₹{totalAmount}</span></p>
                     <div className="cart_Footer_Right">
                       <button type='submit' className='submit-button' onClick={() => nav('/delivery-option')}><p>Checkout</p></button>
                     </div>
                   </div>
 
-                  <div className="cart_Add_Items">
+                  {/* <div className="cart_Add_Items">
                     <div className="add_Items_Wrapper">
                       <p>Add items worth ₹{`600`} to qualify for FREE Delivery</p>
                     </div>
@@ -173,11 +205,11 @@ const MyCart = ({ cart, cartData, setHeaderData }) => {
                       <p>Add more items</p>
                       <img src={arrowRight} alt="" />
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* cart price detials */}
                   <div className={'tab_None'}>
-                    <PriceDetailsBox HideDetails={false} />
+                    <PriceDetailsBox HideDetails={false} cartData={cartData} />
                   </div>
 
                   {/* cart carousel section */}
