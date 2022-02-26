@@ -6,7 +6,7 @@ import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox';
 import { UserDataContext } from '../../Contexts/UserContext'
 import { getAddress } from '../../api/Address';
 
-const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
+const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData, cartData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [selected, setSelected] = useState(null);
   const [disable, setDisable] = useState(true);
