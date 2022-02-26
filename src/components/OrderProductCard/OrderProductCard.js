@@ -4,7 +4,7 @@ import './OrderProductCard.css'
 //Images
 import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
 
-const OrderProductCard = ({ productName, productArrival, productImage, productDeliveryStatues }) => {
+const OrderProductCard = ({ productName, productArrival, productImage, productDeliveryStatues, productPrice }) => {
   return (
     <div className={`product_Container`}>
       <div className={`product_Wrapper`}>
@@ -19,16 +19,20 @@ const OrderProductCard = ({ productName, productArrival, productImage, productDe
           </div>
           <div className="order_Product_Center">
             <p className="order_Product_Price">
-              ₹600
+              ₹{productPrice}
             </p>
           </div>
           <div className="order_Product_Right">
-            <p className={`product_Status ${productDeliveryStatues === 'Arriving' ? 'product_Arriving' : ''}`}>
+            <p className={`product_Status product_Arriving ${productDeliveryStatues === 'Delivered' ? 'product_Delivered' : ''}`}>
               {productArrival}
             </p>
-            <p className="order_Product_Status">
-              Your order is been placed.
-            </p>
+            {
+              productDeliveryStatues === 'Arriving' ? (
+                <p className="order_Product_Status ">
+                  Your order is been placed.
+                </p>
+              ) : ('')
+            }
           </div>
         </div>
         <div className={`product_ImageContainer`}>

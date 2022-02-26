@@ -14,7 +14,7 @@ import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 import addIcon from '../../assets/vector/add_outline_blue.svg'
 import dashGreyIcon from '../../assets/vector/dash_grey.svg'
 
-const Payment = ({ setHeaderData }) => {
+const Payment = ({ setHeaderData, cartData }) => {
   const [giftCard, setGiftCard] = useState(false)
   const [disable, setDisable] = useState(true);
   const [paymentMethodSelected, setPaymentMethodSelected] = useState('');
@@ -57,7 +57,7 @@ const Payment = ({ setHeaderData }) => {
         <BreadCrumbs data={breadCrumbsData} />
         <div className='desk_Page_Wrapper'>
           <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
-            <PriceDetailsBox HideDetails={false} />
+            <PriceDetailsBox HideDetails={false} cartData={cartData} />
           </aside>
           <div className='order_Page_Right'>
             <div className="payment_Header">
@@ -67,7 +67,7 @@ const Payment = ({ setHeaderData }) => {
 
             {/* cart price detials */}
             <div className='tab_None'>
-              <PriceDetailsBox HideDetails={true} />
+              <PriceDetailsBox HideDetails={true} cartData={cartData} />
             </div>
 
             <div className='payment_Methods'>

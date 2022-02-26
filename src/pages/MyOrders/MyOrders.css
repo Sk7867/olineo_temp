@@ -73,10 +73,29 @@
   .order_Page_Right{
     width: 65vw;
   }
+
+  .side_Section .cart_Add_Items{
+    margin: 1.5rem 0 0;
+    padding: 0 1rem;
+  }
+
+  .side_Section .cart_Add_Items .add_Items_Wrapper{
+    padding: 1rem 0;
+  }
+
+  .side_Section .cart_Add_Items .cart_More_Items{
+    padding: 0.875rem 0;
+  }
 }
 
 @media screen and (min-width: 1200px) {
   .order_Page_Right{
     width: 69vw;
+  }
+
+  .order_Text{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    color: #08090A;
   }
 }
