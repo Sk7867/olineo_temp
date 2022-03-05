@@ -35,6 +35,8 @@ var loginEmailRef
 // update()
 // console.log(userInfo);
 
+var userRef
+
 //User Login----------------
 export const userLogin = async (contact) => {
   const loginData = JSON.stringify({
