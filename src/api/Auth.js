@@ -16,6 +16,8 @@ var userInfo = {
   token: '',
 }
 
+var userRef
+
 //User Login----------------
 export const userLogin = async (contact) => {
   const loginData = JSON.stringify({
@@ -48,8 +50,9 @@ export const userSignUp = async (contact, name) => {
 
   await axios.post(`${baseURL}/user/signup`, signUpData, { headers })
     .then(res => {
-      console.log(res);
       signupResponse = res.data
+      userRef = res.data.userId
+      // console.log(userRef);
     })
     .catch(err => console.log('Error:', err))
 
@@ -57,14 +60,15 @@ export const userSignUp = async (contact, name) => {
 }
 
 //Verify OTP----------------
-export const verifyOtp = async (contact, otp) => {
+export const verifyOtp = async (otp) => {
   let otpResponse;
+  console.log(otp, typeof (otp));
 
   const otpData = JSON.stringify({
-    "otp": `${otp}`,
+    "otp": otp,
   })
 
-  await axios.put(`${baseURL}/user/verifyOtp/`, otpData, { headers })
+  await axios.put(`${baseURL}/user/verifyOtp/${userRef}`, otpData, { headers })
     .then(res => {
       console.log(res);
       otpResponse = res.data
