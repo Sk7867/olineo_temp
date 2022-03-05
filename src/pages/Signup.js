@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
+import { userSignUp } from '../api/Auth'
 //CSS
 // import './Signup.css'
 
@@ -26,8 +27,8 @@ const Signup = ({ setLoginRedirect }) => {
 
   const formSubmit = (e) => {
     e.preventDefault();
-    setLoginRedirect(false)
-    nav('/otp')
+    userSignUp(phone, name)
+      .then(res => res ? (setLoginRedirect(false), nav('/otp')) : alert("Check your number again"))
   }
 
   const pageSwitch = (e) => {

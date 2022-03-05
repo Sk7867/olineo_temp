@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const baseURL = "https://onlineo-backend.herokuapp.com/api"
+
 const headers = {
   "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with",
   'Content-Type': 'application/json',
@@ -17,14 +19,15 @@ var userInfo = {
 //User Login----------------
 export const userLogin = async (contact) => {
   const loginData = JSON.stringify({
-    mobileNumber: `${contact}`,
+    "mobileNumber": `${contact}`,
   })
 
   let loginResponse
 
-  await axios.post(`${process.env.REACT_APP_BASE_URL}/user/sendotp`, loginData, { headers })
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/user/login`, loginData, { headers })
     .then(res => {
       console.log(res);
+      loginResponse = res.data
     }
     )
     .catch(err => { console.log('Error:', err) })
@@ -34,16 +37,19 @@ export const userLogin = async (contact) => {
 
 //User Signup---------------
 export const userSignUp = async (contact, name) => {
-  const signUpData = JSON.stringify({
-    mobileNumber: `${contact}`,
-    fullName: `${name}`
-  })
+  const signUpData = JSON.stringify(
+    {
+      "mobileNumber": `${contact}`,
+      "fullName": `${name}`
+    }
+  )
 
   let signupResponse
 
-  await axios.post(`${process.env.REACT_APP_BASE_URL}`, signUpData, { headers })
+  await axios.post(`${baseURL}/user/signup`, signUpData, { headers })
     .then(res => {
       console.log(res);
+      signupResponse = res.data
     })
     .catch(err => console.log('Error:', err))
 
@@ -55,13 +61,13 @@ export const verifyOtp = async (contact, otp) => {
   let otpResponse;
 
   const otpData = JSON.stringify({
-    mobileNumber: `${contact}`,
-    otp: `${otp}`,
+    "otp": `${otp}`,
   })
 
-  await axios.post(`${process.env.REACT_APP_BASE_URL}`, otpData, { headers })
+  await axios.put(`${baseURL}/user/verifyOtp/`, otpData, { headers })
     .then(res => {
       console.log(res);
+      otpResponse = res.data
       // if(res) {
       //   otpResponse = res.data
       //   userInfo.token = otpResponse.token
@@ -74,6 +80,8 @@ export const verifyOtp = async (contact, otp) => {
       //   }
       // }
     })
+
+  return otpResponse
 }
 
 //SAVE USER-------------------------------
