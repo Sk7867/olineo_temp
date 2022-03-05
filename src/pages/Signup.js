@@ -2,10 +2,6 @@ import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
 import { userSignUp } from '../api/Auth'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import { Slide, toast, ToastContainer } from 'react-toastify'
-import { UserDataContext } from '../Contexts/UserContext'
-
 //CSS
 // import './Signup.css'
 
@@ -49,16 +45,7 @@ const Signup = ({ setLoginRedirect }) => {
   const formSubmit = (e) => {
     e.preventDefault();
     userSignUp(phone, name)
-      .then(res => res ? (
-        setLoginRedirect(false),
-        nav('/otp'),
-        setUserContext(prev => ({
-          ...prev,
-          id: res.userId,
-          fullName: name,
-          mobileNumber: phone,
-        }))
-      ) : toast.error('Mobile Number Already Registered'))
+      .then(res => res ? (setLoginRedirect(false), nav('/otp')) : alert("Check your number again"))
   }
 
   const pageSwitch = (e) => {

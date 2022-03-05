@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
-import { getUser, getUserPic, verifyOtp, verifyOtpLogin, verifyOtpSignup } from '../api/Auth'
-import { UserDataContext } from '../Contexts/UserContext'
-import { Slide, toast, ToastContainer } from 'react-toastify'
-import { getCartData } from '../api/Cart'
-import { getAllOrder } from '../api/OrdersApi'
+import { verifyOtp } from '../api/Auth'
 
 toast.configure()
 const OtpValid = ({ loginRedirect }) => {
@@ -42,69 +38,14 @@ const OtpValid = ({ loginRedirect }) => {
 
   const existingUserLogin = (e) => {
     e.preventDefault();
-    // let OTP = parseInt(otp)
-    verifyOtpLogin(otp)
-      .then(res => res ? (
-        nav('/'),
-        setUserContext(prev => ({
-          ...prev,
-          JWT: res.JWT
-        })),
-        getUser(res.JWT)
-          .then(res => {
-            if (res) {
-              let user = res
-              setUserContext(prev => ({
-                ...prev,
-                id: user._id,
-                fullName: user.fullName,
-                mobileNumber: user.mobileNumber,
-                email: user.email,
-                dob: user.dob
-              }))
-              setCartArray({
-                loaded: true,
-                cart: user.cart,
-                no_of_carts: user.cart.length
-              })
-            }
-          }),
-        getUserPic(res.JWT)
-          .then(res => {
-            if (res) {
-              setUserContext(prev => ({
-                ...prev,
-                profilePic: res
-              }))
-            }
-          }),
-        getAllOrder(res.JWT)
-          .then(res => {
-            if (res) {
-              // console.log(res);
-              setUserOrderData({
-                loaded: true,
-                no_of_orders: res.no_of_orders,
-                orders: res.orders
-              })
-            }
-          }),
-        getUserPic(res.JWT)
-          .then(res => {
-            if (res) {
-              setUserContext(prev => ({
-                ...prev,
-                profilePic: res
-              }))
-            }
-          })
-        // getCartData()
-        //   .then(res => {
-        //     if (res) {
-        //       setUserCart(res)
-        //     }
-        //   })
-      ) : toast.error('OTP Expired or invalid'))
+    verifyOtp(otp)
+      .then(res => res ? (nav('/'), setUserLoggedIn(true)) : alert("Invalid OTP"))
+  }
+
+  const newUserSignUp = (e) => {
+    e.preventDefault();
+    verifyOtp(otp)
+      .then(res => res ? nav('/adduser') : alert("Invalid OTP"))
   }
 
   const newUserSignUp = (e) => {
@@ -131,7 +72,7 @@ const OtpValid = ({ loginRedirect }) => {
           <h1 className='page-heading'>Confirmation code</h1>
           <p className={'page-desc'}>Please check you phone for 6-digit confimation code.</p>
         </div>
-        <form action="" className={'signup-form'} onSubmit={loginRedirect ? existingUserLogin : newUserSignUp}>
+        <form action="" className={'signup-form'} onSubmit={loginRedirect ? existingUserLogin : newUserSignUp} onChange={validateForm}>
           <div className="inputfield-Container">
             <div className="inputField">
               <input type='text' name="Code" id="code" className='input-field' value={otp} autoComplete='off' placeholder='Confirmation code' maxLength={6} onChange={(e) => { setOtp(e.target.value); handleLength(e.target.value.length) }} />
