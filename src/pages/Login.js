@@ -27,8 +27,6 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
     e.preventDefault();
     userLogin(phone)
       .then(res => res ? (setLoginRedirect(true), nav('/otp')) : alert("Check your number again"))
-
-
   }
 
   const pageSwitch = (e) => {
