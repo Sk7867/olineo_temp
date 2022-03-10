@@ -12,12 +12,15 @@ const Section2 = ({ id, heading, productData, classes }) => {
       {/* <SkeletonElement type={'productBannerSmall'} /> */}
       <div className="section2_card_container">
         <div className="section2_card_wrapper">
-          {(productData.no_of_products > 0) && productData.products.map((item, index) => (
-            (index < 9) ? (
+          {
+            productData.map((item, index) => (
               <ProductBox
                 key={index}
+                product_img={item.product_image}
                 card_heading={'STARTING AT'}
-                classes={classes}
+                product_price={item.product_price}
+                product_name={item.product_name}
+                classes={item.classes}
                 product={item}
               />
             ) : ('')

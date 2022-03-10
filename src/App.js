@@ -41,25 +41,6 @@ import HomeDelivery from './pages/Address/HomeDelivery';
 import StorePickUp from './pages/Pickup/StorePickUp';
 import StoreNear from './pages/Pickup/StoreNear';
 import ProductPage from './pages/ProductPage/ProductPage';
-import { UserDataContext } from './Contexts/UserContext'
-import { getAddress } from './api/Address';
-import ProductCategory from './pages/ProductCategory/ProductCategory';
-import OfflineProductCategory from './pages/ProductCategory/OfflineProductCategory';
-import BankOffer from './pages/BankOffer/BankOffer';
-import StoreFinder from './pages/StoreFinder/StoreFinder';
-import Filter from './pages/ProductCategory/Filter';
-import OrderDetails from './pages/OrderDetails/OrderDetails';
-import OrderCancel from './pages/OrderDetails/OrderCancel';
-import CataloguePage from './pages/CataloguePage/CataloguePage';
-import AddProduct from './pages/CataloguePage/AddProduct';
-import AboutUs from './pages/AboutContact/AboutUs'
-import BulkUpload from './pages/CataloguePage/BulkUpload';
-import AddOffers from './pages/CataloguePage/AddOffers';
-import { getAllOrder } from './api/OrdersApi';
-import Dashboard from './components/AdminComponent/Dashboard';
-import Page1 from './components/AdminComponent/pages/Page1/Page1';
-import Page2 from './components/AdminComponent/pages/Page2/Page2';
-import Page3 from './components/AdminComponent/pages/Page3/Page3';
 
 
 function App() {
@@ -316,6 +297,7 @@ function App() {
           <Route path='/home-delivery' exact element={<HomeDelivery userDetails={userDetails} setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} cartData={cartData} />} />
           <Route path='/store-pickup' exact element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} cartData={cartData} />} />
           <Route path='/store-near-me' exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} cartData={cartData} />} />
+          <Route path='/product/:id' exact element={<ProductPage />} />
         </Routes>
         <Footer />
       </div>
