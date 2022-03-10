@@ -50,6 +50,7 @@ const Home = ({ setHeaderData }) => {
 
   const sec2Data = [
     {
+      product_id: 1,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -58,6 +59,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 2,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -66,6 +68,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 3,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -74,6 +77,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 4,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -82,6 +86,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 5,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -90,6 +95,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 6,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -98,6 +104,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 7,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -106,6 +113,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 8,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -114,6 +122,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 9,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -125,6 +134,7 @@ const Home = ({ setHeaderData }) => {
 
   const sec4Data = [
     {
+      product_id: 1,
       product_image: product1,
       product_name: 'Item name',
       product_price: '40% OFF',
@@ -133,6 +143,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 2,
       product_image: product1,
       product_name: 'Item name',
       product_price: '40% OFF',
@@ -141,6 +152,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 3,
       product_image: product1,
       product_name: 'Item name',
       product_price: '40% OFF',
@@ -149,6 +161,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 4,
       product_image: product1,
       product_name: 'Item name',
       product_price: '40% OFF',
@@ -160,6 +173,7 @@ const Home = ({ setHeaderData }) => {
 
   const sec5Data = [
     {
+      product_id: 1,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -168,6 +182,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 2,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -176,6 +191,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 3,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -184,6 +200,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 4,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -192,6 +209,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 5,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -200,6 +218,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 6,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -208,6 +227,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 7,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -216,6 +236,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 8,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -224,6 +245,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 9,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
@@ -235,6 +257,7 @@ const Home = ({ setHeaderData }) => {
 
   const sec7Data = [
     {
+      product_id: 1,
       product_image: product1,
       product_name: 'Item name',
       product_price: '50% OFF',
@@ -243,6 +266,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 2,
       product_image: product1,
       product_name: 'Item name',
       product_price: '50% OFF',
@@ -251,6 +275,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 3,
       product_image: product1,
       product_name: 'Item name',
       product_price: '50% OFF',
@@ -259,6 +284,7 @@ const Home = ({ setHeaderData }) => {
       }
     },
     {
+      product_id: 4,
       product_image: product1,
       product_name: 'Item name',
       product_price: '50% OFF',

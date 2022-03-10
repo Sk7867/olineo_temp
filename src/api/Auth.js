@@ -13,7 +13,7 @@ var userInfo = {
   name: '',
   contact: '',
   email: '',
-  token: '',
+  JWT: '',
 }
 
 var userRef
@@ -30,6 +30,7 @@ export const userLogin = async (contact) => {
     .then(res => {
       console.log(res);
       loginResponse = res.data
+      userRef = loginResponse.userId
     }
     )
     .catch(err => { console.log('Error:', err) })
@@ -51,7 +52,7 @@ export const userSignUp = async (contact, name) => {
   await axios.post(`${baseURL}/user/signup`, signUpData, { headers })
     .then(res => {
       signupResponse = res.data
-      userRef = res.data.userId
+      userRef = signupResponse.userId
       // console.log(userRef);
     })
     .catch(err => console.log('Error:', err))
@@ -71,26 +72,28 @@ export const verifyOtp = async (otp) => {
   await axios.put(`${baseURL}/user/verifyOtp/${userRef}`, otpData, { headers })
     .then(res => {
       console.log(res);
-      otpResponse = res.data
-      // if(res) {
-      //   otpResponse = res.data
-      //   userInfo.token = otpResponse.token
-      //   window.sessionStorage.setItem("user", JSON.stringify(userInfo))
-      //   const saveUserData = {
-      //     id: userInfo.id,
-      //     name: userInfo.name,
-      //     contact: userInfo.contact,
-      //     email: userInfo.email,
-      //   }
-      // }
+      if (res) {
+        otpResponse = res.data
+        userInfo.JWT = otpResponse.JWT
+        window.sessionStorage.setItem("user", JSON.stringify(userInfo))
+        const saveUserData = {
+          id: userInfo.id,
+          name: userInfo.name,
+          contact: userInfo.contact,
+          email: userInfo.email,
+          JWT: userInfo.JWT
+        }
+      }
     })
 
+  console.log(userInfo);
   return otpResponse
 }
 
 //SAVE USER-------------------------------
 export const saveUser = async (userData) => {
-  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).token : ''
+  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
+  console.log(userData);
 
   const headers = {
     "Access-Control-Allow-origin": "*",
@@ -116,7 +119,7 @@ export const logoutUser = async () => {
   const headers = {
     "Access-Control-Allow-origin": "*",
     'Content-Type': 'application/json',
-    "Authorization": `Bearer ${user.token}`
+    "Authorization": `Bearer ${user.JWT}`
   }
 
   let response

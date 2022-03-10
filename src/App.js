@@ -35,6 +35,7 @@ import EditAddress from './pages/Address/EditAddress';
 import HomeDelivery from './pages/Address/HomeDelivery';
 import StorePickUp from './pages/Pickup/StorePickUp';
 import StoreNear from './pages/Pickup/StoreNear';
+import ProductPage from './pages/ProductPage/ProductPage';
 
 
 function App() {
@@ -176,6 +177,7 @@ function App() {
           <Route path='/home-delivery' exact element={<HomeDelivery userDetails={userDetails} setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} cartData={cartData} />} />
           <Route path='/store-pickup' exact element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} cartData={cartData} />} />
           <Route path='/store-near-me' exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} cartData={cartData} />} />
+          <Route path='/product/:id' exact element={<ProductPage />} />
         </Routes>
         <Footer />
       </div>

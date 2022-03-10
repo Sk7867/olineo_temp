@@ -1,16 +1,26 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
+import { saveUser } from '../api/Auth'
 
 const AddUser = ({ setUserLoggedIn }) => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [DOB, setDOB] = useState('')
-  const [pinCode, setPinCode] = useState('')
-  const [phone, setPhone] = useState('')
-  // const [validLength, setValidLength] = useState(false)
+  const [userData, setUserData] = useState({
+    user_Full_Name: '',
+    user_Email: '',
+    user_Birth_Date: '',
+    user_Pin_Code: '',
+    user_ph_Number: '',
+  })
+
   const [btnDisable, setBtnDisable] = useState(true)
   const nav = useNavigate()
+
+  const handleInput = (prop, e) => {
+    e.target
+      ? setUserData({ ...userData, [prop]: e.target.value })
+      : setUserData({ ...userData, [prop]: e.label })
+  }
+  // const [validLength, setValidLength] = useState(false)
 
   // const handleLength = (length) => {
   //   if (length === 9) {
@@ -22,13 +32,13 @@ const AddUser = ({ setUserLoggedIn }) => {
   // console.log(name, email, DOB, pinCode, phone);
 
   const validateForm = () => (
-    (name !== '') && (email !== '') && (pinCode !== '') ? setBtnDisable(false) : setBtnDisable(true)
+    (userData.user_Full_Name !== '') && (userData.user_Email !== '') && (userData.user_Pin_Code !== '') ? setBtnDisable(false) : setBtnDisable(true)
   )
 
   const formSubmit = (e) => {
     e.preventDefault();
-    setUserLoggedIn(true)
-    nav('/')
+    saveUser(userData)
+      .then(res => res ? (setUserLoggedIn(true), nav('/')) : alert("Incomplete Data"))
   }
 
   return (
@@ -41,11 +51,11 @@ const AddUser = ({ setUserLoggedIn }) => {
         </div>
         <form action="" className={'signup-form'} onChange={validateForm} onSubmit={formSubmit}>
           <div className="inputfield-Container">
-            <input type="text" name="Name" id="name" className='input-field' placeholder='Name' value={name} onChange={(e) => { setName(e.target.value) }} />
-            <input type="email" name="Email" id="email" className='input-field' placeholder='Email' value={email} onChange={(e) => { setEmail(e.target.value) }} />
-            <input type="date" onFocus={(e) => (e.currentTarget.type = "date")} onBlur={(e) => (e.currentTarget.type = "text")} name="Date-of-Birth" id="DOB" className='input-field' placeholder='Date of birth' value={DOB} onChange={(e) => { setDOB(e.target.value) }} />
-            <input type="text" name="Pincode" id="pincode" className='input-field' placeholder='Pin code' value={pinCode} onChange={(e) => { setPinCode(e.target.value) }} />
-            <input type='tel' name="Phone" id="phone" maxLength={10} className='input-field' value={phone} placeholder='Phone' onChange={(e) => { setPhone(e.target.value); }} />
+            <input type="text" name="Name" id="name" className='input-field' placeholder='Name' value={userData.user_Full_Name} onChange={(value) => handleInput("user_Full_Name", value)} />
+            <input type="email" name="Email" id="email" className='input-field' placeholder='Email' value={userData.user_Email} onChange={(value) => handleInput("user_Email", value)} />
+            <input type="date" onFocus={(e) => (e.currentTarget.type = "date")} onBlur={(e) => (e.currentTarget.type = "text")} name="Date-of-Birth" id="DOB" className='input-field' placeholder='Date of birth' value={userData.user_Birth_Date} onChange={(value) => handleInput("user_Birth_Date", value)} />
+            <input type="text" name="Pincode" id="pincode" className='input-field' placeholder='Pin code' value={userData.user_Pin_Code} onChange={(value) => handleInput("user_Pin_Code", value)} />
+            <input type='tel' name="Phone" id="phone" maxLength={10} className='input-field' value={userData.user_ph_Number} placeholder='Phone' onChange={(value) => handleInput("user_ph_Number", value)} />
 
           </div>
           <div className={'button-Container'}>
