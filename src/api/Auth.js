@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const baseURL = "https://onlineo-backend.herokuapp.com/api"
 
@@ -10,13 +11,21 @@ const headers = {
 
 var userInfo = {
   id: '',
-  name: '',
-  contact: '',
+  fullName: '',
+  mobileNumber: '',
   email: '',
   JWT: '',
 }
 
 var userRef
+
+function update(value) {
+  let prevData = JSON.parse(sessionStorage.getItem('user'));
+  Object.keys(value).forEach(function (val, key) {
+    prevData[val] = value[val];
+  })
+  sessionStorage.setItem('user', JSON.stringify(prevData));
+}
 
 //User Login----------------
 export const userLogin = async (contact) => {
@@ -53,6 +62,9 @@ export const userSignUp = async (contact, name) => {
     .then(res => {
       signupResponse = res.data
       userRef = signupResponse.userId
+      userInfo.fullName = name
+      userInfo.mobileNumber = contact
+      window.sessionStorage.setItem("user", JSON.stringify(userInfo))
       // console.log(userRef);
     })
     .catch(err => console.log('Error:', err))
@@ -63,7 +75,7 @@ export const userSignUp = async (contact, name) => {
 //Verify OTP----------------
 export const verifyOtp = async (otp) => {
   let otpResponse;
-  console.log(otp, typeof (otp));
+  // console.log(otp, typeof (otp));
 
   const otpData = JSON.stringify({
     "otp": otp,
@@ -71,29 +83,29 @@ export const verifyOtp = async (otp) => {
 
   await axios.put(`${baseURL}/user/verifyOtp/${userRef}`, otpData, { headers })
     .then(res => {
-      console.log(res);
       if (res) {
         otpResponse = res.data
         userInfo.JWT = otpResponse.JWT
         window.sessionStorage.setItem("user", JSON.stringify(userInfo))
-        const saveUserData = {
-          id: userInfo.id,
-          name: userInfo.name,
-          contact: userInfo.contact,
-          email: userInfo.email,
-          JWT: userInfo.JWT
-        }
+        getUser()
+        // const saveUserData = {
+        //   id: userInfo.id,
+        //   name: userInfo.fullName,
+        //   contact: userInfo.contact,
+        //   email: userInfo.email,
+        //   JWT: userInfo.JWT
+        // }
       }
     })
 
-  console.log(userInfo);
+  // console.log(userInfo);
   return otpResponse
 }
 
-//SAVE USER-------------------------------
-export const saveUser = async (userData) => {
+//GET USER DATA
+export const getUser = async () => {
+  let getUserResponse
   let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
-  console.log(userData);
 
   const headers = {
     "Access-Control-Allow-origin": "*",
@@ -101,11 +113,41 @@ export const saveUser = async (userData) => {
     "Authorization": `Bearer ${userToken}`
   }
 
+  await axios.get(`${baseURL}/user/myProfile`, { headers })
+    .then(res => {
+      if (res) {
+        getUserResponse = res.data.data.user
+        userInfo.id = getUserResponse._id
+        userInfo.fullName = getUserResponse.fullName
+        userInfo.mobileNumber = getUserResponse.mobileNumber
+        window.sessionStorage.setItem("user", JSON.stringify(userInfo))
+      }
+    })
+    .catch(err => console.log('Error:', err))
+  return getUserResponse
+
+}
+
+//SAVE USER-------------------------------
+export const saveUser = async (userData) => {
+  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
+  // console.log(userData);
+
+  const headers = {
+    "Access-Control-Allow-origin": "*",
+    'Content-Type': 'application/json',
+    "Authorization": `Bearer ${userToken}`
+  }
+  userInfo.fullName = userData.user_Full_Name
+  userInfo.mobileNumber = userData.user_ph_Number
+  userInfo.email = userData.user_Email
+
   let resUser;
 
-  await axios.post(`${process.env.REACT_APP_BASE_URL}`, JSON.stringify(userData), { headers })
+  await axios.put(`${process.env.REACT_APP_BASE_URL}/user/updateProfile`, JSON.stringify(userInfo), { headers })
     .then(res => {
       resUser = res.data
+      window.sessionStorage.setItem("user", JSON.stringify(userInfo))
     })
     .catch(err => console.log('Error:', err))
 
@@ -113,7 +155,8 @@ export const saveUser = async (userData) => {
 }
 
 //LOGOUT USER----------------------------
-export const logoutUser = async () => {
+export const logOutUser = async () => {
+
   let user = JSON.parse(sessionStorage.getItem('user'))
 
   const headers = {
@@ -124,10 +167,10 @@ export const logoutUser = async () => {
 
   let response
 
-  await axios.post(`${process.env.REACT_APP_BASE_URL}`, {}, { headers })
+  await axios.post(`${baseURL}/`, { headers })
     .then(res => {
       if (res) {
-        sessionStorage.clear()
+        window.sessionStorage.clear()
         window.location.href = '/'
       }
     })

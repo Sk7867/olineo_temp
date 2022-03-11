@@ -53,6 +53,7 @@ const EditDetails = ({ profilePic = true, userDetails, setModalDataMobile }) => 
       })
     }
   }, [userDetails]);
+  console.log(userDetails);
 
   const userProfile = {
     userImage: userImage,

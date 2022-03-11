@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Section2 from '../components/Section2/Section2'
 import Sidebar from '../components/Sidebar/Sidebar'
 import Section3 from '../components/Section3/Section3'
@@ -10,7 +10,13 @@ import product1 from '../assets/png/product_1.png'
 import product2 from '../assets/png/product_2.png'
 import bannerImage from '../assets/png/hero_banner.png'
 
-const Home = ({ setHeaderData }) => {
+const Home = ({ setHeaderData, allProducts }) => {
+  const [demoElement, setDemoElement] = useState({
+    product_id: '',
+    product_image: '',
+    product_name: '',
+    product_price: '',
+  })
 
   useEffect(() => {
     setHeaderData({
@@ -18,6 +24,27 @@ const Home = ({ setHeaderData }) => {
       categoriesCond: true
     })
   }, []);
+
+  useEffect(() => {
+    if (allProducts) {
+      allProducts.forEach(element => {
+        setDemoElement({
+          product_id: element.id,
+          product_image: element.imagePath,
+          product_name: element.name,
+          product_price: element.mrpRange.min
+        })
+      });
+    }
+  }, [allProducts])
+  console.log(allProducts);
+
+  let gridCardProducts = []
+
+  for (let index = 0; index < 4; index++) {
+    gridCardProducts.push(allProducts[index])
+  }
+
 
 
   const sec1Data = [
@@ -54,81 +81,55 @@ const Home = ({ setHeaderData }) => {
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 2,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
+
     },
     {
       product_id: 3,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 4,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 5,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 6,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 7,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 8,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 9,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
   ]
 
@@ -138,36 +139,24 @@ const Home = ({ setHeaderData }) => {
       product_image: product1,
       product_name: 'Item name',
       product_price: '40% OFF',
-      classes: {
-        boxClass: 'grid_card'
-      }
     },
     {
       product_id: 2,
       product_image: product1,
       product_name: 'Item name',
       product_price: '40% OFF',
-      classes: {
-        boxClass: 'grid_card'
-      }
     },
     {
       product_id: 3,
       product_image: product1,
       product_name: 'Item name',
       product_price: '40% OFF',
-      classes: {
-        boxClass: 'grid_card'
-      }
     },
     {
       product_id: 4,
       product_image: product1,
       product_name: 'Item name',
       product_price: '40% OFF',
-      classes: {
-        boxClass: 'grid_card'
-      }
     },
   ]
 
@@ -177,81 +166,54 @@ const Home = ({ setHeaderData }) => {
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 2,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 3,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 4,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 5,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 6,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 7,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 8,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 9,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
   ]
 
@@ -261,36 +223,24 @@ const Home = ({ setHeaderData }) => {
       product_image: product1,
       product_name: 'Item name',
       product_price: '50% OFF',
-      classes: {
-        boxClass: 'grid_card'
-      }
     },
     {
       product_id: 2,
       product_image: product1,
       product_name: 'Item name',
       product_price: '50% OFF',
-      classes: {
-        boxClass: 'grid_card'
-      }
     },
     {
       product_id: 3,
       product_image: product1,
       product_name: 'Item name',
       product_price: '50% OFF',
-      classes: {
-        boxClass: 'grid_card'
-      }
     },
     {
       product_id: 4,
       product_image: product1,
       product_name: 'Item name',
       product_price: '50% OFF',
-      classes: {
-        boxClass: 'grid_card'
-      }
     },
   ]
 
@@ -304,7 +254,10 @@ const Home = ({ setHeaderData }) => {
         <Section2
           id={'section2'}
           heading='Normal products'
-          productData={sec2Data}
+          productData={allProducts}
+          classes={{
+            boxClass: 'bg_pink carousel_card',
+          }}
         />
         <Section3
           id={'section3'}
@@ -314,16 +267,22 @@ const Home = ({ setHeaderData }) => {
         <Section4
           id={'section4'}
           heading={'Upto 40% off'}
-          productData={sec4Data}
+          productData={gridCardProducts}
           link={{
             text: 'See more',
             link: '/'
+          }}
+          classes={{
+            boxClass: 'grid_card',
           }}
         />
         <Section2
           id={'section5'}
           heading='Items for you'
-          productData={sec5Data}
+          productData={allProducts}
+          classes={{
+            boxClass: 'bg_blue carousel_card',
+          }}
         />
         <Section3
           id={'section6'}
@@ -333,10 +292,13 @@ const Home = ({ setHeaderData }) => {
         <Section4
           id={'section7'}
           heading={'Deals of the day'}
-          productData={sec7Data}
+          productData={gridCardProducts}
           link={{
             text: 'See more',
             link: '/'
+          }}
+          classes={{
+            boxClass: 'grid_card',
           }}
         />
       </div>

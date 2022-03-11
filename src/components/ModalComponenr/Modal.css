@@ -68,7 +68,7 @@
 
 @media screen and (min-width: 768px) {
   .modal.show .modal-dialog{
-    transform: translate(0px, 100px) !important;
+    transform: translate(0px, 75px) !important;
   }
 
   .modal-header .btn-close{

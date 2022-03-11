@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { logOutUser } from '../../api/Auth';
 
 //CSS
 import './Profile.css'
@@ -29,6 +30,7 @@ const Profile = ({ setEditID, editID, userDetails, setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [editAddress, setEditAddress] = useState({});
   const loc = useLocation()
+  const nav = useNavigate()
 
   useEffect(() => {
     setHeaderData({
@@ -43,6 +45,11 @@ const Profile = ({ setEditID, editID, userDetails, setHeaderData }) => {
       }
     })
   }, []);
+
+  const logOut = () => {
+    logOutUser()
+      .then(res => console.log('User Looged Out'))
+  }
 
   const profileOptions = [
     {
@@ -79,6 +86,7 @@ const Profile = ({ setEditID, editID, userDetails, setHeaderData }) => {
       image: logoutIconRed,
       title: 'Logout',
       link: '/',
+      logout: true,
     },
   ]
 
@@ -109,13 +117,23 @@ const Profile = ({ setEditID, editID, userDetails, setHeaderData }) => {
               <div className='profile_Options'>
                 {
                   profileOptions.map((option, index) => (
-                    <Link to={option.link} className={`profile_Option ${option.title === 'Logout' ? 'logout_Styles' : ''}`} key={index}>
-                      <div>
-                        <img src={option.image} alt="" />
-                        <p>{option.title}</p>
-                      </div>
-                      <img src={arrowRightBlue} alt="" className='profile_arrow' />
-                    </Link>
+                    (option.logout) ? (
+                      <Link to={option.link} className={`profile_Option ${option.title === 'Logout' ? 'logout_Styles' : ''}`} key={index} onClick={() => logOut()}>
+                        <div>
+                          <img src={option.image} alt="" />
+                          <p>{option.title}</p>
+                        </div>
+                        <img src={arrowRightBlue} alt="" className='profile_arrow' />
+                      </Link>
+                    ) : (
+                      <Link to={option.link} className={`profile_Option`} key={index}>
+                        <div>
+                          <img src={option.image} alt="" />
+                          <p>{option.title}</p>
+                        </div>
+                        <img src={arrowRightBlue} alt="" className='profile_arrow' />
+                      </Link>
+                    )
                   ))
                 }
               </div>
@@ -149,13 +167,23 @@ const Profile = ({ setEditID, editID, userDetails, setHeaderData }) => {
                 <div className='profile_Options profile_Options_Desk'>
                   {
                     profileOptions.map((option, index) => (
-                      <div className={`profile_Option ${option.title === 'Logout' ? 'logout_Styles' : ''}`} key={index} onClick={() => setProfileState(index + 1)}>
-                        <div>
-                          <img src={option.image} alt="" />
-                          <p>{option.title}</p>
+                      (option.logout) ? (
+                        <div className={`profile_Option ${option.title === 'Logout' ? 'logout_Styles' : ''}`} key={index} onClick={() => { logOut(); nav('/') }}>
+                          <div>
+                            <img src={option.image} alt="" />
+                            <p>{option.title}</p>
+                          </div>
+                          <img src={arrowRightBlue} alt="" className='profile_arrow' />
                         </div>
-                        <img src={arrowRightBlue} alt="" className='profile_arrow' />
-                      </div>
+                      ) : (
+                        <div className={`profile_Option `} key={index} onClick={() => setProfileState(index + 1)}>
+                          <div>
+                            <img src={option.image} alt="" />
+                            <p>{option.title}</p>
+                          </div>
+                          <img src={arrowRightBlue} alt="" className='profile_arrow' />
+                        </div>
+                      )
                     ))
                   }
                 </div>
