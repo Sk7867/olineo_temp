@@ -22,7 +22,7 @@ const MyOrders = ({ ordersList, setHeaderData }) => {
 
   const nav = useNavigate()
 
-  console.log(onTheWay);
+  // console.log(onTheWay);
 
   useEffect(() => {
     setHeaderData({

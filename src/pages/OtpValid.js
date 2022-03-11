@@ -40,7 +40,7 @@ const OtpValid = ({ loginRedirect }) => {
     e.preventDefault();
     // let OTP = parseInt(otp)
     verifyOtp(otp)
-      .then(res => res ? (nav('/'), setUserLoggedIn(true)) : alert("Invalid OTP"))
+      .then(res => res ? nav('/') : alert("Invalid OTP"))
   }
 
   const newUserSignUp = (e) => {

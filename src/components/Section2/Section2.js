@@ -16,11 +16,8 @@ const Section2 = ({ id, heading, productData, classes }) => {
             productData.map((item, index) => (
               <ProductBox
                 key={index}
-                product_img={item.product_image}
                 card_heading={'STARTING AT'}
-                product_price={item.product_price}
-                product_name={item.product_name}
-                classes={item.classes}
+                classes={classes}
                 product={item}
               />
             ) : ('')

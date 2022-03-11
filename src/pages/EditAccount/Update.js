@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { updateMobileNumber, verifyOtp, verifyOtpLogin, verifyOtpSignup } from '../../api/Auth';
-import { saveUser } from '../../api/Auth';
-import { Slide, toast, ToastContainer } from 'react-toastify'
-import { UserDataContext } from '../../Contexts/UserContext'
+import { verifyOtp } from '../../api/Auth';
 
 toast.configure()
 const Update = ({ number, oldInfo, newInfo, user_Full_Name, handleClose }) => {
@@ -25,45 +22,13 @@ const Update = ({ number, oldInfo, newInfo, user_Full_Name, handleClose }) => {
   }
 
 
-  useEffect(() => {
-  }, [])
-
-  useEffect(() => {
-    if (oldNumberVerify === newNumberVerify) {
-      setUserContext(prev => ({
-        ...prev,
-        mobileNumber: newInfo,
-        fullName: user_Full_Name
-      }))
-    }
-  }, [])
-
-  const handleSubmit = () => {
-    verifyOtpLogin(oldOTP)
-      .then(res => {
-        if (res) {
-          setOldNumberVerify(true)
-        }
-      })
-      .catch(err => console.log(err))
-
-    verifyOtpSignup(newOTP)
-      .then(res => {
-        if (res) {
-          setNewNumberVerify(true)
-        }
-      })
-      .catch(err => console.log(err))
-  }
-
-
 
   // console.log(number);
   return (
     <>
       <div className='page_Wrapper update_Page_Wrapper'>
         <div className="update_Container">
-          <form className="update_Wrapper" onChange={validateForm}>
+          <form className="update_Wrapper" onChange={validateForm} >
             <div className='update_New_Info'>
               <p className='update_Info_Details'>Enter OTP sent to {oldInfo} </p>
               <div className='edit_input_container'>

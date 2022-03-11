@@ -20,11 +20,8 @@ const Section4 = ({ id, heading, productData, link, classes }) => {
               card_heading={'Upto'}
               classes={classes}
               product={item}
-            />) : ('')
-        ))
-        }
-        {
-          (productData.no_of_products === 0) && [1, 2, 3, 4].map((n) => (<SkeletonElement type={'productBox'} key={n} />))
+            />
+          ))
         }
       </div>
       <a href={link.link} className="section4_link mob_link logo_mob">{link.text}</a>

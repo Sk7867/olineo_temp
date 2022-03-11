@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import Section2 from '../components/Section2/Section2'
 import Sidebar from '../components/Sidebar/Sidebar'
 import Section3 from '../components/Section3/Section3'
@@ -12,7 +11,6 @@ import product2 from '../assets/png/product_2.png'
 import bannerImage from '../assets/png/hero_banner.png'
 import ScartchCardComp from '../components/ScratchCard/ScartchCard'
 
-
 const Home = ({ setHeaderData, allProducts }) => {
   const [demoElement, setDemoElement] = useState({
     product_id: '',
@@ -20,8 +18,6 @@ const Home = ({ setHeaderData, allProducts }) => {
     product_name: '',
     product_price: '',
   })
-  const [modalShow, setModalShow] = useState(false)
-  // const [sec2Data, setSec2Data] = useState([])
 
   useEffect(() => {
     setHeaderData({
@@ -49,15 +45,27 @@ const Home = ({ setHeaderData, allProducts }) => {
   //   gridCardProducts.push(allProducts[index + 9])
   // }
 
-  // let sec5Data = []
-  // for (let index = 0; index < 9; index++) {
-  //   sec5Data.push(allProducts[index + 13])
-  // }
+  useEffect(() => {
+    if (allProducts) {
+      allProducts.forEach(element => {
+        setDemoElement({
+          product_id: element.id,
+          product_image: element.imagePath,
+          product_name: element.name,
+          product_price: element.mrpRange.min
+        })
+      });
+    }
+  }, [allProducts])
+  console.log(allProducts);
 
-  // let gridCardProducts2 = []
-  // for (let index = 0; index < 4; index++) {
-  //   gridCardProducts2.push(allProducts[index + 20])
-  // }
+  let gridCardProducts = []
+
+  for (let index = 0; index < 4; index++) {
+    gridCardProducts.push(allProducts[index])
+  }
+
+
 
   const sec1Data = [
     {
@@ -93,81 +101,55 @@ const Home = ({ setHeaderData, allProducts }) => {
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 2,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
+
     },
     {
       product_id: 3,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 4,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 5,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 6,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 7,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 8,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
     {
       product_id: 9,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_blue carousel_card',
-      }
     },
   ]
 
@@ -204,81 +186,54 @@ const Home = ({ setHeaderData, allProducts }) => {
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 2,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 3,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 4,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 5,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 6,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 7,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 8,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
     {
       product_id: 9,
       product_image: product2,
       product_name: 'Item name',
       product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
     },
   ]
 
@@ -334,10 +289,13 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section4
           id={'section4'}
           heading={'Upto 40% off'}
-          productData={allProducts}
+          productData={gridCardProducts}
           link={{
             text: 'See more',
             link: '/category1'
+          }}
+          classes={{
+            boxClass: 'grid_card',
           }}
           classes={{
             boxClass: 'grid_card',
@@ -363,10 +321,13 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section4
           id={'section7'}
           heading={'Deals of the day'}
-          productData={allProducts}
+          productData={gridCardProducts}
           link={{
             text: 'See more',
             link: '/category1'
+          }}
+          classes={{
+            boxClass: 'grid_card',
           }}
           classes={{
             boxClass: 'grid_card',

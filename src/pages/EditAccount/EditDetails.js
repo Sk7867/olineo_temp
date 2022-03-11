@@ -154,6 +154,15 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
       }
       reader.readAsDataURL(e.target.files[0])
     }
+  }, [userDetails]);
+  console.log(userDetails);
+
+  const userProfile = {
+    userImage: userImage,
+    userName: 'Rohan khamkar',
+    userPhone: '+91-3987760925',
+    userMail: 'rohankhamkar@gmail.com',
+    Birthdate: '22-06-1998'
   }
 
   // const userProfile = {

@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { logOutUser } from '../../api/Auth';
-import { getAddress } from '../../api/Address';
-import { UserDataContext } from '../../Contexts/UserContext'
 
 //CSS
 import './Profile.css'
@@ -41,77 +39,6 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
   const [editAddress, setEditAddress] = useState({});
   const loc = useLocation()
   const nav = useNavigate()
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, allProducts, cartArray, setCartArray } = useContext(UserDataContext)
-
-  // console.log(profilePic);
-
-  useEffect(() => {
-    if (userContext && userContext.profilePic) {
-      setProfilePic(userContext.profilePic)
-    } else if (newProfilePic !== null) {
-      setProfilePic(newProfilePic)
-    } else {
-      setProfilePic(defaultUserImage)
-    }
-  }, [userContext, newProfilePic])
-
-  useEffect(() => {
-    getAddress()
-      .then(res => {
-        // console.log(res);
-        if (res) {
-          setUserAddress({
-            loaded: true,
-            no_of_address: res.no_of_address,
-            address: res.address
-          })
-        }
-      })
-  }, [])
-
-  useEffect(() => {
-    getCartData()
-      .then(res => {
-        if (res) {
-          setCartArray({
-            loaded: true,
-            no_of_carts: res.no_of_carts,
-            cart: res.cart
-          })
-          // console.log(res);
-        }
-      })
-  }, [])
-
-  useEffect(() => {
-    cartArray.cart.map((product) => (
-      getIndiProduct(product)
-        .then(res => {
-          if (res) {
-            // console.log(res);
-            let ind = userCart.findIndex(obj => obj._id === res._id)
-            if (ind === -1) {
-              setUserCart([...userCart, res])
-            }
-          }
-        })
-    ))
-  }, [cartArray])
-
-  useEffect(() => {
-    cartArray.cart.map((product) => (
-      getIndiProduct(product)
-        .then(res => {
-          if (res) {
-            // console.log(res);
-            let ind = userCart.findIndex(obj => obj._id === res._id)
-            if (ind === -1) {
-              setUserCart([...userCart, res])
-            }
-          }
-        })
-    ))
-  }, [cartArray])
 
   useEffect(() => {
     setHeaderData({
@@ -124,44 +51,9 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
     })
   }, []);
 
-  // useEffect(() => {
-  //   userAddress.address.forEach((address) => {
-  //     if (address.id === editID) {
-  //       setEditAddress(address)
-  //     }
-  //   })
-  // }, [])
-
-
-
-
-
   const logOut = () => {
     logOutUser()
-      .then(res => {
-        // console.log('User Logged Out')
-        setUserContext({
-          profilePic: '',
-          id: '',
-          fullName: '',
-          mobileNumber: '',
-          email: '',
-          JWT: '',
-          dob: null,
-          pincode: ''
-        })
-        setUserAddress({
-          loaded: false,
-          no_of_address: 0,
-          address: []
-        })
-        setUserCart([])
-        setCartArray({
-          loaded: false,
-          cart: [],
-          no_of_carts: 0
-        })
-      })
+      .then(res => console.log('User Looged Out'))
   }
 
   const profileOptions = [

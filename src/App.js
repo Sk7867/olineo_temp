@@ -2,10 +2,8 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { useLocation, Routes, Route } from 'react-router-dom'
-import { getUser, getUserPic } from './api/Auth';
-import { getAllProducts, getIndiProduct } from './api/Product';
-import { getCartData } from './api/Cart';
-
+import { getUser } from './api/Auth';
+import { getAllProducts } from './api/Product';
 
 //Image 
 import product3 from './assets/png/product_3.png'
@@ -50,38 +48,17 @@ function App() {
   const [editID, setEditID] = useState(0);
   const [addressSelected, setAddressSelected] = useState(0);
   const [storeSelected, setStoreSelected] = useState(0)
-  const [allProducts, setAllProducts] = useState({
-    loaded: false,
-    no_of_products: 0,
-    products: []
+  const [userDetails, setUserDetails] = useState({
+    user_Profile_Pic: userImage,
+    user_ID: '',
+    user_Full_Name: '',
+    user_ph_Number: '',
+    user_Email: '',
+    user_Birth_Date: '',
+    delivery_Address: [],
+    cart_Details: []
   })
-  const [seachedProduct, setSeachedProduct] = useState({
-    loaded: false,
-  })
-  const [userLocation, setUserLocation] = useState('')
-  const [cartArray, setCartArray] = useState({
-    loaded: false,
-    cart: [],
-    no_of_carts: 0
-  })
-
-  const [userContext, setUserContext] = useState({
-    profilePic: defaultUserImage,
-    id: '',
-    fullName: '',
-    mobileNumber: '',
-    email: '',
-    JWT: '',
-    dob: null,
-    pincode: ''
-  })
-  const [userAddress, setUserAddress] = useState({
-    loaded: false,
-    no_of_address: 0,
-    address: []
-  })
-  const [userCart, setUserCart] = useState([])
-  // console.log(cartArray);
+  const [allProducts, setAllProducts] = useState([])
 
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,
@@ -195,21 +172,40 @@ function App() {
     }
   }, [userCart])
 
-  //Order Filtering Function=========================
-  let orders = [...userOrderData.orders]
-  let orderNumbers = userOrderData.no_of_orders
+  // console.log(loc);
+  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
   useEffect(() => {
-    if (userOrderData.no_of_orders > 0) {
-      let notcancelled = userOrderData.orders.filter((item) => (item.status === 'NOSTORETOSERVICE'))
-      let delivered = userOrderData.orders.filter(item => (item.status === 'DELIVERED'))
-      let cancelled = userOrderData.orders.filter(item => (item.status === 'CANCELLED'))
-      setOrderTypes({
-        onThewayOrders: notcancelled,
-        deliveredOrders: delivered,
-        cancelledOrders: cancelled
-      })
+    if (userToken) {
+      setUserLoggedIn(true)
+      getUser()
+        .then(res => {
+          if (res) {
+            let user = res
+            setUserDetails({
+              user_ID: user._id,
+              user_Full_Name: user.fullName,
+              user_ph_Number: user.mobileNumber,
+              user_Email: user.email,
+              delivery_Address: user.address,
+              cart_Details: user.cart
+            })
+          }
+        })
+    } else {
+      setUserLoggedIn(false)
     }
+  }, [userToken])
+
+  useEffect(() => {
+    getAllProducts()
+      .then(res => {
+        setAllProducts(res)
+      })
   }, [])
+
+  // console.log(allProducts);
+
+
 
   const ordersData = [
     {
@@ -235,36 +231,36 @@ function App() {
     },
   ]
 
-  const cartData = [
-    {
-      productImage: product1,
-      productName: 'JBL C100SI In Ear Wired Earphones with Mic',
-      productColor: 'Black',
-      productOriginalPrice: '1000',
-      productDiscount: '40',
-      productDiscountPrice: '600',
-      productOffersAvailable: '2 offers available',
-      productDeliveryExpected: 'Delivery in 6 - 7 days',
-      productDeliveryCharge: '40',
-      productAvailabilty: 'In stock',
-      productQuantityAvailable: '400',
-    },
-    {
-      productImage: product1,
-      productName: 'JBL C100SI In Ear Wired Earphones with Mic',
-      productColor: 'Black',
-      productOriginalPrice: '1000',
-      productDiscount: '40',
-      productDiscountPrice: '600',
-      productOffersAvailable: '2 offers available',
-      productDeliveryExpected: 'Delivery in 6 - 7 days',
-      productDeliveryCharge: '40',
-      productAvailabilty: 'Only 1 left',
-      productQuantityAvailable: '1',
-    },
+  // const cartData = [
+  //   {
+  //     productImage: product1,
+  //     productName: 'JBL C100SI In Ear Wired Earphones with Mic',
+  //     productColor: 'Black',
+  //     productOriginalPrice: '1000',
+  //     productDiscount: '40',
+  //     productDiscountPrice: '600',
+  //     productOffersAvailable: '2 offers available',
+  //     productDeliveryExpected: 'Delivery in 6 - 7 days',
+  //     productDeliveryCharge: '40',
+  //     productAvailabilty: 'In stock',
+  //     productQuantityAvailable: '400',
+  //   },
+  //   {
+  //     productImage: product1,
+  //     productName: 'JBL C100SI In Ear Wired Earphones with Mic',
+  //     productColor: 'Black',
+  //     productOriginalPrice: '1000',
+  //     productDiscount: '40',
+  //     productDiscountPrice: '600',
+  //     productOffersAvailable: '2 offers available',
+  //     productDeliveryExpected: 'Delivery in 6 - 7 days',
+  //     productDeliveryCharge: '40',
+  //     productAvailabilty: 'Only 1 left',
+  //     productQuantityAvailable: '1',
+  //   },
 
 
-  ]
+  // ]
 
   return (
     <>
@@ -280,24 +276,24 @@ function App() {
           <Route path='/login' exact element={<Login setLoginRedirect={setLoginRedirect} />} />
           <Route path='/otp' exact element={<OtpValid setUserLoggedIn={setUserLoggedIn} loginRedirect={loginRedirect} />} />
           <Route path='/adduser' exact element={<AddUser setUserLoggedIn={setUserLoggedIn} />} />
-          <Route path='/' exact element={<Home setHeaderData={setHeaderData} />} />
+          <Route path='/' exact element={<Home setHeaderData={setHeaderData} allProducts={allProducts} />} />
           <Route path='/orders' exact element={<MyOrders ordersList={ordersData} setHeaderData={setHeaderData} />} />
-          <Route path='/mycart' exact element={<MyCart cartData={cartData} setHeaderData={setHeaderData} />} />
+          <Route path='/mycart' exact element={<MyCart cartData={userDetails.cart_Details} setHeaderData={setHeaderData} />} />
           <Route path='/myaddress' exact element={<Address setHeaderData={setHeaderData} userDetails={userDetails} setEditID={setEditID} />} />
           <Route path='/newaddress' exact element={<NewAddress setHeaderData={setHeaderData} />} />
           <Route path='/editaddress' exact element={<EditAddress setHeaderData={setHeaderData} userDetails={userDetails} editID={editID} />} />
-          <Route path='/payment' exact element={<Payment setHeaderData={setHeaderData} cartData={cartData} />} />
+          <Route path='/payment' exact element={<Payment setHeaderData={setHeaderData} cartData={userDetails.cart_Details} />} />
           <Route path='/profile' exact element={<Profile setEditID={setEditID} editID={editID} userDetails={userDetails} setHeaderData={setHeaderData} />} />
           <Route path='/edit-account' exact element={<EditAccont setHeaderData={setHeaderData} userDetails={userDetails} setModalDataMobile={setModalDataMobile} />} />
           <Route path='/update-details/number' exact element={<UpdateNumber setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
           <Route path='/update-details/email' exact element={<UpdateEmail setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
           <Route path='/customer-support' exact element={<CustomerSupport setHeaderData={setHeaderData} />} />
           <Route path='/write-to-us' exact element={<WriteToUS setHeaderData={setHeaderData} />} />
-          <Route path='/delivery-option' exact element={<DeliveryOptions setDeliveryOptionSelected={setDeliveryOptionSelected} setHeaderData={setHeaderData} cartData={cartData} />} />
-          <Route path='/home-delivery' exact element={<HomeDelivery userDetails={userDetails} setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} cartData={cartData} />} />
-          <Route path='/store-pickup' exact element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} cartData={cartData} />} />
-          <Route path='/store-near-me' exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} cartData={cartData} />} />
-          <Route path='/product/:id' exact element={<ProductPage />} />
+          <Route path='/delivery-option' exact element={<DeliveryOptions setDeliveryOptionSelected={setDeliveryOptionSelected} setHeaderData={setHeaderData} cartData={userDetails.cart_Details} />} />
+          <Route path='/home-delivery' exact element={<HomeDelivery userDetails={userDetails} setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} cartData={userDetails.cart_Details} />} />
+          <Route path='/store-pickup' exact element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} cartData={userDetails.cart_Details} />} />
+          <Route path='/store-near-me' exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} cartData={userDetails.cart_Details} />} />
+          <Route path='/product/:id' exact element={<ProductPage setHeaderData={setHeaderData} />} />
         </Routes>
         <Footer />
       </div>
