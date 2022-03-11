@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { verifyOtp } from '../../api/Auth';
 
 const Update = ({ number, oldInfo, newInfo }) => {
   const [disabled, setDisabled] = useState(true);
@@ -9,15 +10,17 @@ const Update = ({ number, oldInfo, newInfo }) => {
   const matches = useMediaQuery("(min-width:768px)")
 
   const validateForm = () => {
-    (oldOTP !== '') && (newOTP !== '') && (password !== '') ? setDisabled(false) : setDisabled(true)
+    (oldOTP !== '') && (newOTP !== '') ? setDisabled(false) : setDisabled(true)
   }
+
+
 
   // console.log(number);
   return (
     <>
       <div className='page_Wrapper update_Page_Wrapper'>
         <div className="update_Container">
-          <form className="update_Wrapper" onChange={validateForm}>
+          <form className="update_Wrapper" onChange={validateForm} >
             <div className='update_New_Info'>
               <p className='update_Info_Details'>Enter OTP sent to {oldInfo} </p>
               <div className='edit_input_container'>
