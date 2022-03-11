@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
 import { saveUser } from '../api/Auth'
@@ -9,11 +9,21 @@ const AddUser = ({ setUserLoggedIn }) => {
     user_Email: '',
     user_Birth_Date: '',
     user_Pin_Code: '',
-    user_ph_Number: '',
   })
 
   const [btnDisable, setBtnDisable] = useState(true)
   const nav = useNavigate()
+
+  useEffect(() => {
+    let userDT = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')) : ''
+    if (userDT) {
+      setUserData({
+        user_Full_Name: userDT.fullName,
+      })
+    }
+
+  }, [])
+
 
   const handleInput = (prop, e) => {
     e.target
@@ -38,7 +48,7 @@ const AddUser = ({ setUserLoggedIn }) => {
   const formSubmit = (e) => {
     e.preventDefault();
     saveUser(userData)
-      .then(res => res ? (setUserLoggedIn(true), nav('/')) : alert("Incomplete Data"))
+      .then(res => res ? nav('/') : alert("Incomplete Data"))
   }
 
   return (
@@ -55,8 +65,6 @@ const AddUser = ({ setUserLoggedIn }) => {
             <input type="email" name="Email" id="email" className='input-field' placeholder='Email' value={userData.user_Email} onChange={(value) => handleInput("user_Email", value)} />
             <input type="date" onFocus={(e) => (e.currentTarget.type = "date")} onBlur={(e) => (e.currentTarget.type = "text")} name="Date-of-Birth" id="DOB" className='input-field' placeholder='Date of birth' value={userData.user_Birth_Date} onChange={(value) => handleInput("user_Birth_Date", value)} />
             <input type="text" name="Pincode" id="pincode" className='input-field' placeholder='Pin code' value={userData.user_Pin_Code} onChange={(value) => handleInput("user_Pin_Code", value)} />
-            <input type='tel' name="Phone" id="phone" maxLength={10} className='input-field' value={userData.user_ph_Number} placeholder='Phone' onChange={(value) => handleInput("user_ph_Number", value)} />
-
           </div>
           <div className={'button-Container'}>
             <button className='submit-button' disabled={btnDisable}><p>Continue</p></button>

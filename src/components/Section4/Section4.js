@@ -3,7 +3,7 @@ import ProductBox from '../ProductBox/ProductBox'
 //CSS
 import './Section4.css'
 
-const Section4 = ({ id, heading, productData, link }) => {
+const Section4 = ({ id, heading, productData, link, classes }) => {
   return (
     <div className='section4_container' id={id}>
       <div className="section4_header">
@@ -15,11 +15,9 @@ const Section4 = ({ id, heading, productData, link }) => {
           productData.map((item, index) => (
             <ProductBox
               key={index}
-              product_img={item.product_image}
               card_heading={'Upto'}
-              product_name={item.product_name}
-              product_price={item.product_price}
-              classes={item.classes}
+              classes={classes}
+              product={item}
             />
           ))
         }
