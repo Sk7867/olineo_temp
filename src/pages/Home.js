@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import Section2 from '../components/Section2/Section2'
 import Sidebar from '../components/Sidebar/Sidebar'
 import Section3 from '../components/Section3/Section3'
@@ -11,7 +10,6 @@ import product1 from '../assets/png/product_1.png'
 import product2 from '../assets/png/product_2.png'
 import bannerImage from '../assets/png/hero_banner.png'
 import ScartchCardComp from '../components/ScratchCard/ScartchCard'
-
 
 const Home = ({ setHeaderData, allProducts }) => {
   const [demoElement, setDemoElement] = useState({
@@ -289,6 +287,9 @@ const Home = ({ setHeaderData, allProducts }) => {
           classes={{
             boxClass: 'grid_card',
           }}
+          classes={{
+            boxClass: 'grid_card',
+          }}
         />
         <Section2
           id={'section5'}
@@ -311,6 +312,9 @@ const Home = ({ setHeaderData, allProducts }) => {
           link={{
             text: 'See more',
             link: '/category1'
+          }}
+          classes={{
+            boxClass: 'grid_card',
           }}
           classes={{
             boxClass: 'grid_card',

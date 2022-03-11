@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const baseURL = "https://onlineo-backend.herokuapp.com/api"
 
@@ -36,6 +37,14 @@ var loginEmailRef
 // console.log(userInfo);
 
 var userRef
+
+function update(value) {
+  let prevData = JSON.parse(sessionStorage.getItem('user'));
+  Object.keys(value).forEach(function (val, key) {
+    prevData[val] = value[val];
+  })
+  sessionStorage.setItem('user', JSON.stringify(prevData));
+}
 
 //User Login----------------
 export const userLogin = async (contact) => {
@@ -257,6 +266,9 @@ export const saveUser = async (userData) => {
     'Content-Type': 'application/json',
     "Authorization": `Bearer ${userToken}`
   }
+  userInfo.fullName = userData.user_Full_Name
+  userInfo.mobileNumber = userData.user_ph_Number
+  userInfo.email = userData.user_Email
 
   // userInfo.fullName = userData.user_Full_Name
   // userInfo.email = userData.user_Email

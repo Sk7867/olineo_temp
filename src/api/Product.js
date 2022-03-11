@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const baseURL = "https://onlineo-backend.herokuapp.com/api"
+
 const headers = {
   "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with",
   'Content-Type': 'application/json',
