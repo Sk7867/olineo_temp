@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import Section2 from '../components/Section2/Section2'
 import Sidebar from '../components/Sidebar/Sidebar'
 import Section3 from '../components/Section3/Section3'
@@ -265,7 +266,7 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section2
           id={'section2'}
           heading='Normal products'
-          productData={allProducts}
+          productData={sec2Data}
           classes={{
             boxClass: 'bg_pink carousel_card',
           }}
@@ -294,7 +295,7 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section2
           id={'section5'}
           heading='Items for you'
-          productData={allProducts}
+          productData={sec5Data}
           classes={{
             boxClass: 'bg_blue carousel_card',
           }}

@@ -62,7 +62,7 @@ const Payment = ({ setHeaderData, cartData }) => {
         <BreadCrumbs data={breadCrumbsData} />
         <div className='desk_Page_Wrapper'>
           <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
-            <PriceDetailsBox HideDetails={false} cartData={cartData} />
+            <PriceDetailsBox HideDetails={false} />
           </aside>
           <div className='order_Page_Right'>
             <div className="payment_Header">
@@ -72,7 +72,7 @@ const Payment = ({ setHeaderData, cartData }) => {
 
             {/* cart price detials */}
             <div className='tab_None'>
-              <PriceDetailsBox HideDetails={true} cartData={cartData} />
+              <PriceDetailsBox HideDetails={true} />
             </div>
 
             <div className='payment_Methods'>

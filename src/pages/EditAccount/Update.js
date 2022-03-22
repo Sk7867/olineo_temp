@@ -63,7 +63,7 @@ const Update = ({ number, oldInfo, newInfo, user_Full_Name, handleClose }) => {
     <>
       <div className='page_Wrapper update_Page_Wrapper'>
         <div className="update_Container">
-          <form className="update_Wrapper" onChange={validateForm} >
+          <form className="update_Wrapper" onChange={validateForm}>
             <div className='update_New_Info'>
               <p className='update_Info_Details'>Enter OTP sent to {oldInfo} </p>
               <div className='edit_input_container'>

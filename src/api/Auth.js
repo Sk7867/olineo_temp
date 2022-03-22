@@ -1,7 +1,10 @@
 import axios from 'axios'
+import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getAddress } from './Address'
 
 const baseURL = "https://onlineo-backend.herokuapp.com/api"
+
 
 const headers = {
   "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with",
@@ -266,9 +269,6 @@ export const saveUser = async (userData) => {
     'Content-Type': 'application/json',
     "Authorization": `Bearer ${userToken}`
   }
-  userInfo.fullName = userData.user_Full_Name
-  userInfo.mobileNumber = userData.user_ph_Number
-  userInfo.email = userData.user_Email
 
   // userInfo.fullName = userData.user_Full_Name
   // userInfo.email = userData.user_Email

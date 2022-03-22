@@ -6,26 +6,6 @@ const PriceDetailsBox = ({ HideDetails, classes }) => {
   const [showDetails, setShowDetails] = useState(true);
   const { userCart, setUserCart, cartArray, priceBoxDetails } = useContext(UserDataContext)
 
-  let cartItemsNumber = cartArray.no_of_carts
-  var cartItemsPrice = 0
-  var totalDiscount = 0
-  var totalDeliveryCharge = 0
-  var totalAmount = 0
-
-  // useEffect(() => {
-  //   if (cartArray.no_of_carts !== 0) {
-  //     //Get Price from cart Items
-  //     userCart.forEach(item => {
-  //       cartItemsPrice += parseInt(item.price) + 2000
-  //     });
-
-  //     //Get Discounted Price
-  //     userCart.forEach(item => {
-  //       var itemDiscount
-  //       itemDiscount = parseInt(item.price)
-  //       totalDiscount += itemDiscount
-  //     });
-
   //     //Get Delivery Charges
   //     userCart.forEach((item, index) => {
   //       totalDeliveryCharge += (index + 1) * 80

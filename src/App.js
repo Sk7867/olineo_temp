@@ -102,6 +102,20 @@ function App() {
   })
   // console.log(cartArray);
 
+  const [userContext, setUserContext] = useState({
+    profilePic: userImage,
+    id: '',
+    fullName: '',
+    mobileNumber: '',
+    email: '',
+    JWT: '',
+    dob: null,
+    pincode: ''
+  })
+  const [userAddress, setUserAddress] = useState({})
+  const [userCart, setUserCart] = useState({})
+  // console.log(userContext);
+
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,
     oldData: '',
