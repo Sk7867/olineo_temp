@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { UserDataContext } from '../../Contexts/UserContext'
 
 //Images
 import addIcon from '../../assets/vector/add_outline_blue.svg'
@@ -10,9 +11,10 @@ import AddressBox from '../../components/AddressBox/AddressBox';
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox';
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 
-const HomeDelivery = ({ userDetails, setEditID, addressSelected, setAddressSelected, setHeaderData, cartData }) => {
+const HomeDelivery = ({ setEditID, addressSelected, setAddressSelected, setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [disable, setDisable] = useState(true)
+  const { userAddress, setUserContext } = useContext(UserDataContext)
 
   const nav = useNavigate()
 
@@ -46,13 +48,13 @@ const HomeDelivery = ({ userDetails, setEditID, addressSelected, setAddressSelec
         <BreadCrumbs data={breadCrumbsData} />
         <div className='desk_Page_Wrapper'>
           <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
-            <PriceDetailsBox HideDetails={false} cartData={cartData} />
+            <PriceDetailsBox HideDetails={false} />
           </aside>
           <div className='order_Page_Right'>
             <p className="cart_Text section_Wrapper">Select Address</p>
             <div className="home_Delivery_Options">
               {
-                userDetails.delivery_Address.map((address, index) => (
+                userAddress.delivery_Address.map((address, index) => (
                   <div className="home_Delivery_Option" key={index}>
                     <label htmlFor={address.id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setAddressSelected(address.id); setDisable(false) }}>
                       <input type="radio" name='Delivery Address' id={address.id} value={address.id} />

@@ -8,7 +8,7 @@ import HeaderBar2 from '../../components/HeaderBar2/HeaderBar2';
 import EditDetails from './EditDetails';
 
 
-const EditAccont = ({ setHeaderData, userDetails, setModalDataMobile }) => {
+const EditAccont = ({ setHeaderData, setModalDataMobile }) => {
 
   useEffect(() => {
 
@@ -20,7 +20,7 @@ const EditAccont = ({ setHeaderData, userDetails, setModalDataMobile }) => {
   }, []);
 
   return <>
-    <EditDetails userDetails={userDetails} setModalDataMobile={setModalDataMobile} />
+    <EditDetails setModalDataMobile={setModalDataMobile} />
   </>;
 };
 

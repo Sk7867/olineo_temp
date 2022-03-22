@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
-import { verifyOtp } from '../api/Auth'
+import { getUser, verifyOtp, verifyOtpLogin, verifyOtpSignup } from '../api/Auth'
+import { UserDataContext } from '../Contexts/UserContext'
+import { Slide, toast, ToastContainer } from 'react-toastify'
 
-const OtpValid = ({ setUserLoggedIn, loginRedirect }) => {
+toast.configure()
+const OtpValid = ({ loginRedirect }) => {
   const [otp, setOtp] = useState('')
   const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
   const [seconds, setSeconds] = useState(60)
   // const [resend, setResend] = useState(true)
   const nav = useNavigate()
+  const { setUserContext } = useContext(UserDataContext)
 
   const handleLength = (length) => {
     if (length === 5) {
@@ -35,15 +39,41 @@ const OtpValid = ({ setUserLoggedIn, loginRedirect }) => {
   const existingUserLogin = (e) => {
     e.preventDefault();
     // let OTP = parseInt(otp)
-    verifyOtp(otp)
-      .then(res => res ? nav('/') : alert("Invalid OTP"))
+    verifyOtpLogin(otp)
+      .then(res => res ? (
+        nav('/'),
+        setUserContext(prev => ({
+          ...prev,
+          JWT: res.JWT
+        })),
+        getUser(res.JWT)
+          .then(res => {
+            if (res) {
+              let user = res
+              setUserContext(prev => ({
+                ...prev,
+                id: user._id,
+                fullName: user.fullName,
+                mobileNumber: user.mobileNumber,
+                email: user.email,
+                dob: user.dob
+              }))
+            }
+          })
+      ) : toast.error('OTP Expired or invalid'))
   }
 
   const newUserSignUp = (e) => {
     e.preventDefault();
     // let OTP = parseInt(otp)
-    verifyOtp(otp)
-      .then(res => res ? nav('/adduser') : alert("Invalid OTP"))
+    verifyOtpSignup(otp)
+      .then(res => res ? (
+        nav('/adduser'),
+        setUserContext(prev => ({
+          ...prev,
+          JWT: res
+        }))
+      ) : toast.error('OTP Expired or invalid'))
   }
 
   const validateForm = () => (
@@ -74,6 +104,18 @@ const OtpValid = ({ setUserLoggedIn, loginRedirect }) => {
           </div>
         </form>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
     </>
   )
 }

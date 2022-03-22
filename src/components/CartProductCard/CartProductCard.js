@@ -68,12 +68,12 @@ const CartProductCard = ({
           </div>
         </div>
       </div>
-      <div className='cart_Card_Buttons'>
-        <div className="cart_button_save">
+      <div className='combined_Button_Container'>
+        <div className="combined_Button_One">
           <img src={saveLaterIcon} alt="Save For Later" />
           <p>Save for Later</p>
         </div>
-        <div className="cart_button_remove">
+        <div className="combined_Button_Two">
           <img src={deleteIcon} alt="Save For Later" />
           <p>Remove</p>
         </div>

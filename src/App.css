@@ -224,13 +224,13 @@ input[type='date']:focus::before{
 }
 
 input, textarea{
-  border-radius: 0.25rem;
-  background: #FFFFFF;
-  border: 0.063rem solid #EFEFEF;
-  color: #000000;
-  font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 1.5rem;
+  border-radius: 0.25rem !important;
+  background: #FFFFFF !important;
+  border: 0.063rem solid #EFEFEF !important;
+  color: #000000 !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5rem !important;
   width: 100%;
 }
 
@@ -243,6 +243,16 @@ input::placeholder, textarea::placeholder{
 
 .mobile_None{
   display: none;
+}
+
+.DatePicker{
+  display: block !important;
+}
+
+.DatePicker input{
+  padding: 16px; 
+  width: 100%;
+  text-align: left;
 }
 
 @media screen and (min-width: 768px) {

@@ -12,7 +12,7 @@ import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox';
 import StoreBox from '../../components/StoreBox/StoreBox';
 
-const StoreNear = ({ setHeaderData, setStoreSelected, cartData }) => {
+const StoreNear = ({ setHeaderData, setStoreSelected }) => {
   const [disable, setDisable] = useState(true);
   const [userLocation, setUserLocation] = useState(false)
   const matches = useMediaQuery("(min-width:768px)")
@@ -70,7 +70,7 @@ const StoreNear = ({ setHeaderData, setStoreSelected, cartData }) => {
         <BreadCrumbs data={breadCrumbsData} />
         <div className='desk_Page_Wrapper'>
           <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
-            <PriceDetailsBox HideDetails={false} cartData={cartData} />
+            <PriceDetailsBox HideDetails={false} />
           </aside>
           <div className='order_Page_Right'>
             <p className="cart_Text section_Wrapper">Stores near me</p>

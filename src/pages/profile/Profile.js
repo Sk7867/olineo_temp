@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { logOutUser } from '../../api/Auth';
+import { getAddress } from '../../api/Address';
+import { UserDataContext } from '../../Contexts/UserContext'
 
 //CSS
 import './Profile.css'
@@ -23,14 +25,40 @@ import EditAccont from '../EditAccount/EditAccount';
 import EditDetails from '../EditAccount/EditDetails';
 import MyAddress from '../Address/MyAddress';
 import AddressForm from '../../components/AddressForm/AddressForm';
+import CartSection from '../MyCart/CartSection';
+import OrderSection from '../MyOrders/OrderSection';
+import { getCartData } from '../../api/Cart';
 
 
-const Profile = ({ setEditID, editID, userDetails, setHeaderData }) => {
+const Profile = ({ setEditID, editID, setHeaderData, featureProducts, ordersData }) => {
   const [profileState, setProfileState] = useState(1);
+  const [addressData, setAddressData] = useState([])
   const matches = useMediaQuery("(min-width:768px)")
   const [editAddress, setEditAddress] = useState({});
   const loc = useLocation()
   const nav = useNavigate()
+  const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart } = useContext(UserDataContext)
+
+  useEffect(() => {
+    getAddress()
+      .then(res => {
+        // console.log(res);
+        if (res) {
+          setUserAddress(res)
+        }
+      })
+  }, [])
+
+  useEffect(() => {
+    getCartData()
+      .then(res => {
+        if (res) {
+          setUserCart(res)
+        }
+      })
+  }, [])
+
+  // console.log(userCart);
 
   useEffect(() => {
     setHeaderData({
@@ -38,17 +66,37 @@ const Profile = ({ setEditID, editID, userDetails, setHeaderData }) => {
       headerText: 'Profile',
       categoriesCond: false,
     })
-
-    userDetails.delivery_Address.forEach((address) => {
-      if (address.id === editID) {
-        setEditAddress(address)
-      }
-    })
   }, []);
+
+  // useEffect(() => {
+  //   userAddress.address.forEach((address) => {
+  //     if (address.id === editID) {
+  //       setEditAddress(address)
+  //     }
+  //   })
+  // }, [])
+
+
+
+
 
   const logOut = () => {
     logOutUser()
-      .then(res => console.log('User Looged Out'))
+      .then(res => {
+        // console.log('User Logged Out')
+        setUserContext({
+          profilePic: userImage,
+          id: '',
+          fullName: '',
+          mobileNumber: '',
+          email: '',
+          JWT: '',
+          dob: null,
+          pincode: ''
+        })
+        setUserAddress({})
+        setUserCart({})
+      })
   }
 
   const profileOptions = [
@@ -61,11 +109,6 @@ const Profile = ({ setEditID, editID, userDetails, setHeaderData }) => {
       image: truckIconBlue,
       title: 'My Orders',
       link: '/orders',
-    },
-    {
-      image: bookmarkIconBlue,
-      title: 'My Wishlist',
-      link: '/',
     },
     {
       image: cartIconBlue,
@@ -90,6 +133,20 @@ const Profile = ({ setEditID, editID, userDetails, setHeaderData }) => {
     },
   ]
 
+  const profileStateSwitch = (profileState) => {
+    switch (profileState) {
+      case 1: return (<EditDetails profilePic={false} />)
+      case 2: return (<OrderSection ordersList={ordersData} featureProducts={featureProducts} onTheWay={true} delivered={true} />)
+      case 3: return (<CartSection featureProducts={featureProducts} />)
+      case 4: return (<MyAddress setEditID={setEditID} setProfileState={setProfileState} border={true} />)
+      case 5: return (<EditDetails profilePic={false} />)
+      case 10: return (<AddressForm setProfileState={setProfileState} />)
+      case 11: return (<AddressForm editID={editID} addressProp={loc.state} setProfileState={setProfileState} />)
+
+      default: return (<EditDetails profilePic={false} />)
+    }
+  }
+
   return (
     <>
       <div className='page_Wrapper profile_Page_Wrapper page_Margin_Top_Secondary'>
@@ -99,19 +156,19 @@ const Profile = ({ setEditID, editID, userDetails, setHeaderData }) => {
             <div>
               <div className='profile_User_Details'>
                 <div className='user_Profile_Pic'>
-                  <img src={userDetails.user_Profile_Pic} alt="" />
+                  <img src={userContext.profilePic} alt="" />
                   <div className='user_Camera_Icon'>
                     <img src={cameraIcon} alt="" />
                   </div>
                 </div>
                 <p className="user_Name">
-                  {userDetails.user_Full_Name}
+                  {userContext.fullName}
                 </p>
                 <p className="user_Phone">
-                  {userDetails.user_ph_Number}
+                  {userContext.mobileNumber}
                 </p>
                 <p className="user_Mail">
-                  {userDetails.user_Email}
+                  {userContext.email}
                 </p>
               </div>
               <div className='profile_Options'>
@@ -148,19 +205,19 @@ const Profile = ({ setEditID, editID, userDetails, setHeaderData }) => {
               <aside className="side_Section profile_Side_Section section_Wrapper">
                 <div className='profile_User_Details'>
                   <div className='user_Profile_Pic'>
-                    <img src={userDetails.user_Profile_Pic} alt="" />
+                    <img src={userContext.profilePic} alt="" />
                     <div className='user_Camera_Icon'>
                       <img src={cameraIcon} alt="" />
                     </div>
                   </div>
                   <p className="user_Name">
-                    {userDetails.user_Full_Name}
+                    {userContext.fullName}
                   </p>
                   <p className="user_Phone">
-                    {userDetails.user_ph_Number}
+                    {userContext.mobileNumber}
                   </p>
                   <p className="user_Mail">
-                    {userDetails.user_Email}
+                    {userContext.email}
                   </p>
                 </div>
 
@@ -190,23 +247,7 @@ const Profile = ({ setEditID, editID, userDetails, setHeaderData }) => {
               </aside>
               <div className='order_Page_Right'>
                 {
-                  profileState === 1 ? (
-                    <EditDetails profilePic={false} userDetails={userDetails} />
-                  ) : (
-                    profileState === 5 ? (
-                      <MyAddress addressList={userDetails.delivery_Address} setEditID={setEditID} setProfileState={setProfileState} border={true} />
-                    ) : (
-                      profileState === 10 ? (
-                        <AddressForm />
-                      ) : (
-                        profileState === 11 ? (
-                          <AddressForm editID={editID} address={editAddress} addressProp={loc.state} />
-                        ) : (
-                          <EditDetails profilePic={false} />
-                        )
-                      )
-                    )
-                  )
+                  profileStateSwitch(profileState)
                 }
               </div>
             </div>

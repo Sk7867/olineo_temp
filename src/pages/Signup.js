@@ -1,17 +1,24 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
 import { userSignUp } from '../api/Auth'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { Slide, toast, ToastContainer } from 'react-toastify'
+import { UserDataContext } from '../Contexts/UserContext'
+
 //CSS
 // import './Signup.css'
 
-
+toast.configure()
 const Signup = ({ setLoginRedirect }) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
+  const matches = useMediaQuery("(min-width:768px)")
   const nav = useNavigate()
+  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart } = useContext(UserDataContext)
+
 
   const handleLength = (length) => {
     if (length === 9) {
@@ -28,7 +35,16 @@ const Signup = ({ setLoginRedirect }) => {
   const formSubmit = (e) => {
     e.preventDefault();
     userSignUp(phone, name)
-      .then(res => res ? (setLoginRedirect(false), nav('/otp')) : alert("Check your number again"))
+      .then(res => res ? (
+        setLoginRedirect(false),
+        nav('/otp'),
+        setUserContext(prev => ({
+          ...prev,
+          id: res.userId,
+          fullName: name,
+          mobileNumber: phone,
+        }))
+      ) : toast.error('Mobile Number Already Registered'))
   }
 
   const pageSwitch = (e) => {
@@ -49,7 +65,13 @@ const Signup = ({ setLoginRedirect }) => {
         <form action="" className={'signup-form'} onSubmit={formSubmit} onChange={validateForm}>
           <div className="inputfield-Container">
             <input type="text" name="Name" id="name" className='input-field' placeholder='Name' value={name} onChange={(e) => { setName(e.target.value) }} required />
-            <input type='tel' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' maxLength={10} onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} required />
+            {
+              matches ? (
+                <input type='tel' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' maxLength={10} onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} required />
+              ) : (
+                <input type='number' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' maxLength={10} onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} required />
+              )
+            }
           </div>
           <div className={'button-Container'}>
             <button type='submit' className='submit-button' disabled={btnDisable}><p>Continue</p></button>
@@ -60,6 +82,18 @@ const Signup = ({ setLoginRedirect }) => {
           <p className='footer-Text'>By Signing In, I agree to <span>terms & conditions</span></p>
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
     </>
   )
 }
