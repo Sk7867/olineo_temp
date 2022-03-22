@@ -18,11 +18,11 @@ import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
 import arrowLeftBlack from '../../assets/vector/arrow_left_black.svg'
 import cameraBlue from '../../assets/vector/camera_outline_blue.svg'
 
-const Sidebar = ({ sidebar, setSidebar }) => {
+const Sidebar = ({ sidebar, setSidebar, userLoggedIn }) => {
 
   const [categoryMenu, setCategoryMenu] = useState(false)
 
-  const sidebarNav = [
+  const sidebarNav = userLoggedIn ? [
     {
       image: profileIconBlue,
       text: 'My profile',
@@ -46,6 +46,17 @@ const Sidebar = ({ sidebar, setSidebar }) => {
     {
       image: walletIcon,
       text: 'My wallet',
+      link: '/orders',
+    },
+    {
+      image: globeIcon,
+      text: 'Choose language',
+      link: '/orders',
+    },
+  ] : [
+    {
+      image: storeBlue,
+      text: 'Store finder',
       link: '/orders',
     },
     {
@@ -105,9 +116,13 @@ const Sidebar = ({ sidebar, setSidebar }) => {
           <p className="sidebar_heading">
             Welcome!
           </p>
-          <p className="sidebar_login">
-            <Link to={'/login'}>Login</Link> | <Link to={'/signup'}>Create account</Link>
-          </p>
+          {
+            userLoggedIn ? ('') : (
+              <p className="sidebar_login">
+                <Link to={'/login'}>Login</Link> | <Link to={'/signup'}>Create account</Link>
+              </p>
+            )
+          }
         </div>
         <div className="side_Nav_Container">
           <div className={`side_Nav_Wrapper ${categoryMenu ? 'menu_Slide' : ''}`}>

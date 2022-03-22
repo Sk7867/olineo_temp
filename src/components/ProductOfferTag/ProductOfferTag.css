@@ -1,0 +1,24 @@
+.offer_Tag{
+  background: #3F8F00;
+  border-radius: 0 0.5rem 0.5rem 0;
+  position: absolute;
+  top: 8px;
+  width: fit-content;
+  height: fit-content;
+  padding: 0.25rem 0.75rem 0.25rem 0.5rem;
+}
+
+.offer_Tag p{
+  letter-spacing: 0.004em;
+  color: #F8F9FA;
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  margin: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .offer_Tag{
+    top: 12px;
+  }
+}

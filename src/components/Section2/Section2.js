@@ -12,12 +12,14 @@ const Section2 = ({ id, heading, productData, classes }) => {
         <div className="section2_card_wrapper">
           {
             productData.map((item, index) => (
-              <ProductBox
-                key={index}
-                card_heading={'STARTING AT'}
-                classes={classes}
-                product={item}
-              />
+              (index < 9) ? (
+                <ProductBox
+                  key={index}
+                  card_heading={'STARTING AT'}
+                  classes={classes}
+                  product={item}
+                />
+              ) : ('')
             ))
           }
         </div>

@@ -1,3 +1,7 @@
+.modal-open{
+  overflow-y: auto !important;
+  padding-right: 0 !important;
+}
 .modal.show .modal-dialog{
     transform: translate(0px, 70px) !important;
   }
@@ -64,6 +68,10 @@
   font-size: 14px;
   line-height: 16px;
   margin: 0;
+}
+
+.modal{
+  z-index: 3000 !important;
 }
 
 @media screen and (min-width: 768px) {

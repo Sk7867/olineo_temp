@@ -223,7 +223,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
               <p>Find Store</p>
               <img src={storeWhite} alt="" />
             </div>
-            <div className='cartIcon' onClick={() => nav('/mycart')}>
+            <div className='cartIcon' onClick={() => { userLoggedIn ? nav('/mycart') : nav('/login') }}>
               <img src={cartWhite} alt="" />
               <p>Cart</p>
             </div>
@@ -289,7 +289,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
       }
       {/* <Sidebar sidebar={sidebar} setSidebar={setSidebar} /> */}
       <ModalComp modalShow={modalShow} setModalShow={setModalShow} />
-      <Sidebar sidebar={sidebar} setSidebar={setSidebar} />
+      <Sidebar sidebar={sidebar} setSidebar={setSidebar} userLoggedIn={userLoggedIn} />
     </>
   )
 }
