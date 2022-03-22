@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const baseURL = "https://onlineo-backend.herokuapp.com/api"
+
 var userInfo = {
   id: '',
   fullName: '',
@@ -30,16 +32,16 @@ export const saveAddress = async (addressData) => {
   }
 
   let saveAddressBody = {
-    "customerName": addressData.user_Full_Name,
-    "phone": addressData.user_ph_Number,
-    "address_line1": addressData.user_Address,
+    "fullName": addressData.user_Full_Name,
+    "mobileNumber": addressData.user_ph_Number,
+    "address": addressData.user_Address,
     "city": addressData.user_City,
     "state": addressData.user_State,
-    "zip": addressData.user_Pincode,
+    "pincode": addressData.user_Pincode,
     "landMark": addressData.user_Landmark
   }
 
-  await axios.post(`${process.env.REACT_APP_BASE_URL}/user/address/`, JSON.stringify(saveAddressBody), { headers })
+  await axios.post(`${baseURL}/user/address/`, JSON.stringify(saveAddressBody), { headers })
     .then(res => {
       // console.log(res);
       saveAddressResponse = res
@@ -59,7 +61,7 @@ export const getAddress = async () => {
     "Authorization": `Bearer ${userToken}`
   }
 
-  await axios.get(`${process.env.REACT_APP_BASE_URL}/user/address/`, { headers })
+  await axios.get(`${baseURL}/user/address/`, { headers })
     .then(res => {
       getAddressResponse = res.data.data
       // console.log(getAddressResponse);
@@ -80,7 +82,7 @@ export const deleteAddress = async (addressID) => {
     "Authorization": `Bearer ${userToken}`
   }
 
-  await axios.delete(`${process.env.REACT_APP_BASE_URL}/user/address/${addressID}`, { headers })
+  await axios.delete(`${baseURL}/user/address/${addressID}`, { headers })
     .then(res => {
       deleteAddressResponse = res
     })

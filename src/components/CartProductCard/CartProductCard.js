@@ -79,7 +79,7 @@ const CartProductCard = ({
           <img src={saveLaterIcon} alt="Save For Later" />
           <p>Save for Later</p>
         </div>
-        <div className="combined_Button_Two" onClick={() => handleRemoveFromCart(product._id)} >
+        <div className="combined_Button_Two">
           <img src={deleteIcon} alt="Save For Later" />
           <p>Remove</p>
         </div>

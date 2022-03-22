@@ -18,7 +18,7 @@ import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
 import arrowLeftBlack from '../../assets/vector/arrow_left_black.svg'
 import cameraBlue from '../../assets/vector/camera_outline_blue.svg'
 
-const Sidebar = ({ sidebar, setSidebar, userLoggedIn, handleCategorySearch }) => {
+const Sidebar = ({ sidebar, setSidebar, userLoggedIn }) => {
 
   const [categoryMenu, setCategoryMenu] = useState(false)
 
@@ -57,7 +57,7 @@ const Sidebar = ({ sidebar, setSidebar, userLoggedIn, handleCategorySearch }) =>
     {
       image: storeBlue,
       text: 'Store finder',
-      link: '/store-finder',
+      link: '/orders',
     },
     {
       image: globeIcon,

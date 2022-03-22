@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const baseURL = "https://onlineo-backend.herokuapp.com/api"
+
 const headers = {
   "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with",
   'Content-Type': 'application/json',
@@ -36,55 +38,15 @@ export const getCartData = async () => {
     "Authorization": `Bearer ${userToken}`
   }
 
-  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/cart/`, { headers })
+  await axios.get(`${baseURL}/product/cart/`, { headers })
     .then(res => {
       if (res) {
         cartDataResponse = res.data.data
+
+        // console.log(cartDataResponse);
       }
     })
     .catch(err => console.log('Error:', err))
 
   return cartDataResponse
 }
-
-export const addToCart = async (id) => {
-  let addToCartResponse
-
-  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
-  const headers = {
-    "Access-Control-Allow-origin": "*",
-    'Content-Type': 'application/json',
-    "Authorization": `Bearer ${userToken}`
-  }
-
-  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/cart/${id}`, {}, { headers })
-    .then(res => {
-      if (res) {
-        addToCartResponse = res
-      }
-    })
-    .catch(err => console.log('Error:', err))
-
-  return addToCartResponse
-}
-
-export const removeFromCart = async (id) => {
-  let removeFromCartResponse
-
-  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
-  const headers = {
-    "Access-Control-Allow-origin": "*",
-    'Content-Type': 'application/json',
-    "Authorization": `Bearer ${userToken}`
-  }
-  await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/cart/${id}`, { headers })
-    .then(res => {
-      if (res) {
-        removeFromCartResponse = res
-      }
-    })
-    .catch(err => console.log('Error:', err))
-
-  return removeFromCartResponse
-}
-

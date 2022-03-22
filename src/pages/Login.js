@@ -1,7 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import React, { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
 import { userLogin } from '../api/Auth'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { Slide, toast, ToastContainer } from 'react-toastify'
+import { UserDataContext } from '../Contexts/UserContext'
 
 toast.configure()
 const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
@@ -10,10 +13,7 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
   const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
   const matches = useMediaQuery("(min-width:768px)")
-  const [emailLogin, setEmailLogin] = useState(false)
   const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart } = useContext(UserDataContext)
-  const loc = useLocation()
-  // console.log(loc);
 
   const nav = useNavigate()
 
@@ -50,7 +50,14 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
   const formSubmit = (e) => {
     e.preventDefault();
     userLogin(phone)
-      .then(res => res ? (setLoginRedirect(true), nav('/otp')) : alert("Check your number again"))
+      .then(res => res ? (
+        setLoginRedirect(true),
+        nav('/otp'),
+        setUserContext(prev => ({
+          ...prev,
+          id: res.userId
+        }))
+      ) : toast.error('Mobile Number Not Registered'))
   }
 
   const pageSwitch = (e) => {
@@ -78,14 +85,10 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
         <form action="" className={'signup-form'} onSubmit={formSubmit}>
           <div className="inputfield-Container">
             {
-              emailLogin ? (
-                <input type='email' name="Email" id="email" className='input-field' value={email} placeholder='Email' onChange={(e) => setEmail(e.target.value)} />
+              matches ? (
+                <input type='tel' name="Phone" id="phone" maxLength={10} className='input-field' value={phone} placeholder='Phone' onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} />
               ) : (
-                matches ? (
-                  <input type='tel' name="Phone" id="phone" maxLength={10} className='input-field' value={phone} placeholder='Phone' onChange={(e) => { validateNumber(e); handleLength(e.target.value.length) }} />
-                ) : (
-                  <input type='number' name="Phone" id="phone" maxLength={10} className='input-field' value={phone} placeholder='Phone' onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} />
-                )
+                <input type='number' name="Phone" id="phone" maxLength={10} className='input-field' value={phone} placeholder='Phone' onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} />
               )
             }
           </div>

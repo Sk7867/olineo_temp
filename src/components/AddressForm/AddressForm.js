@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { deleteAddress, getAddress, saveAddress } from '../../api/Address';
-import { Link, useNavigate } from 'react-router-dom';
 import { UserDataContext } from '../../Contexts/UserContext'
 
 //CSS
 import './AddressForm.css'
 
-const AddressForm = ({ addressProp, setProfileState, fromProfile = false }) => {
-  const nav = useNavigate()
+const AddressForm = ({ addressProp, setProfileState }) => {
   const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext)
   const [address, setAddress] = useState({
     user_Full_Name: '',
@@ -60,11 +58,7 @@ const AddressForm = ({ addressProp, setProfileState, fromProfile = false }) => {
                 .then(res => {
                   // console.log(res);
                   if (res) {
-                    setUserAddress({
-                      loaded: true,
-                      no_of_address: res.no_of_address,
-                      address: res.address
-                    })
+                    setUserAddress(res)
                   }
                 })
 
@@ -75,22 +69,14 @@ const AddressForm = ({ addressProp, setProfileState, fromProfile = false }) => {
     } else {
       saveAddress(address)
         .then(res => {
+          setProfileState(4)
           getAddress()
             .then(res => {
               // console.log(res);
               if (res) {
-                setUserAddress({
-                  loaded: true,
-                  no_of_address: res.no_of_address,
-                  address: res.address
-                })
+                setUserAddress(res)
               }
             })
-          if (fromProfile) {
-            setProfileState(4)
-          } else {
-            nav(-1)
-          }
           //get address call
           //set address props
         })
@@ -122,15 +108,7 @@ const AddressForm = ({ addressProp, setProfileState, fromProfile = false }) => {
         <input type="text" name='Landmark' placeholder='Landmark (optional)' value={address.user_Landmark} onChange={(value) => handleInput("user_Landmark", value)} />
         <button type='submit' className='submit-button address_Form_Submit' disabled={disabled}><p>SAVE DETAILS</p></button>
         <div className="address_Footer tab_None">
-          {
-            fromProfile ? (
-              <button type='submit' className='submit-button' disabled={disabled} onClick={() => setProfileState(5)} ><p>SAVE DETAILS</p></button>
-            ) : (
-              <Link to={'home-delivery'} className='submit-button'>
-                <button type='submit' className='submit-button' disabled={disabled} ><p>SAVE DETAILS</p></button>
-              </Link>
-            )
-          }
+          <button type='submit' className='submit-button' disabled={disabled} onClick={() => setProfileState(5)} ><p>SAVE DETAILS</p></button>
         </div>
       </form>
     </>

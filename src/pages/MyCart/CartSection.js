@@ -1,191 +1,71 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { UserDataContext } from '../../Contexts/UserContext'
-import { Slide, toast, ToastContainer } from 'react-toastify'
 
 //Components
 import CartProductCard from '../../components/CartProductCard/CartProductCard'
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import Section2 from '../../components/Section2/Section2'
-import { initOrder } from '../../api/OrdersApi'
-import { getCartData, removeFromCart } from '../../api/Cart'
 
-toast.configure()
 const CartSection = ({ featureProducts }) => {
   const nav = useNavigate()
-  const [cartProducts, setCartProducts] = useState([])
+  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart } = useContext(UserDataContext)
 
+  let cartItemsNumber = userCart.no_of_carts
 
+  if (userCart.no_of_carts !== 0) {
+    //Get Price from cart Items
+    var cartItemsPrice = 0
+    userCart.cart.forEach(item => {
+      cartItemsPrice += parseInt(item.productOriginalPrice)
+    });
 
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, cartArray, setCartArray, orderInit, setOrderInit, priceBoxDetails } = useContext(UserDataContext)
+    //Get Discounted Price
+    var totalDiscount = 0
+    userCart.cart.forEach(item => {
+      var itemDiscount
+      itemDiscount = parseInt(item.productOriginalPrice) - parseInt(item.productDiscountPrice)
+      totalDiscount += itemDiscount
+    });
 
+    //Get Delivery Charges
+    var totalDeliveryCharge = 0
+    userCart.cart.forEach(item => {
+      totalDeliveryCharge += parseInt(item.productDeliveryCharge)
+    });
 
-
-  // useEffect(() => {
-  //   if (cartArray.no_of_carts !== 0) {
-  //     //Get Price from cart Items
-  //     userCart.forEach(item => {
-  //       cartItemsPrice += parseInt(item.price) + 2000
-  //     });
-
-  //     //Get Discounted Price
-  //     userCart.forEach(item => {
-  //       var itemDiscount
-  //       itemDiscount = parseInt(item.price)
-  //       totalDiscount += itemDiscount
-  //     });
-
-  //     //Get Delivery Charges
-  //     userCart.forEach((item, index) => {
-  //       totalDeliveryCharge += (index + 1) * 80
-  //     });
-
-  //     //Get Total Amount
-  //     totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
-  //   }
-  // }, [cartArray])
-
-  // useEffect(() => {
-  //   if (userCart.length > 0) {
-  //     let helperArray = userCart.map(obj => ({ ...obj, quantity: 1 }))
-  //     setCartProducts(helperArray)
-  //     // console.log(helperArray);
-  //   }
-  // }, [userCart])
-
-  // useEffect(() => {
-  //   setUserCart(cartProducts)
-  // }, [cartProducts])
-
-
-  // console.log(userCart);
-  // console.log(cartArray);
-  // console.log(cartProducts);
-
-  const handleQuantityInc = (id) => {
-    let tempState = [...userCart]
-    let index = userCart.findIndex(x => x._id === id)
-    let tempElement = { ...tempState[index] }
-    tempElement.quantity = tempElement.quantity + 1
-    tempState[index] = tempElement
-    setUserCart(tempState)
+    //Get Total Amount
+    var totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
   }
-
-  const handleQuantityDec = (id) => {
-    let tempState = [...userCart]
-    let index = userCart.findIndex(x => x._id === id)
-    let tempElement = { ...tempState[index] }
-    if (tempElement.quantity === 1) {
-      tempElement.quantity = 1
-    } else {
-      tempElement.quantity = tempElement.quantity - 1
-    }
-    tempState[index] = tempElement
-    setUserCart(tempState)
-  }
-
-  //ORDER INITIALIZATION CODE+++++++++++++++++++++++++++++++++++++++++
-
-  const sampleData = [
-    {
-      productID: 1,
-      productName: 'Test 1',
-      quantity: 2
-    },
-    {
-      productID: 2,
-      productName: 'Test 1',
-      quantity: 4
-    },
-    {
-      productID: 3,
-      productName: 'Test 1',
-      quantity: 6
-    },
-    {
-      productID: 9,
-      productName: 'Test 1',
-      quantity: 4
-    },
-  ]
-
-  const handleOrderInit = (e) => {
-    e.preventDefault();
-    let productId = []
-    let quantity = []
-    userCart.forEach(item =>
-      productId.push(item._id)
-    )
-    userCart.forEach((item) => (
-      quantity.push(parseInt(item.quantity))
-    ))
-    setOrderInit(prev => ({
-      ...prev,
-      productId: productId,
-      quantity: quantity
-    }))
-    nav('/delivery-option')
-    // console.log(data);
-  }
-
-  const handleRemoveFromCart = (id) => {
-    removeFromCart(id)
-      .then(res => res ? (
-        setUserCart([]),
-        toast.error('Product Removed from Cart'),
-        getCartData()
-          .then(res => res ? (
-            setCartArray({
-              loaded: true,
-              no_of_carts: res.no_of_carts,
-              cart: res.cart
-            })
-          ) : (
-            ''
-          )
-          )
-      ) : (''))
-  }
-
-  // console.log(userCart);
 
   return (
     <>
       {
-        cartArray.no_of_carts === 0 ? (
+        userCart.no_of_carts === 0 ? (
           <>
             <div className="empty_order_sec">
               <p className='empty_order_text'>Your cart is empty</p>
               <button type='submit' className='submit-button' onClick={() => nav('/')} ><p>Start Shopping</p></button>
             </div>
-            {/* <Section2
-              id={'Top-sellers-sec'}
-              heading='Top Sellers'
-              productData={featureProducts}
-            /> */}
           </>
         ) : (
           <div className='order_Page_Right'>
             <p className="cart_Text section_Wrapper">My Cart</p>
             <div className="cards_Container">
               {
-                (userCart.length > 0) && userCart ? (
-                  userCart.map((item, index) => (
-                    <CartProductCard
-                      key={index}
-                      product={item}
-                      handleRemoveFromCart={handleRemoveFromCart}
-                      handleQuantityInc={handleQuantityInc}
-                      handleQuantityDec={handleQuantityDec}
-                    />
-                  ))) : ('')
+                userCart.cart.map((item, index) => (
+                  <CartProductCard
+                    key={index}
+                    product={item}
+                  />
+                ))
               }
             </div>
 
             <div className='cart_Subtotal_Section section_Wrapper'>
-              <p>Subtotal ({priceBoxDetails.cartItemsNumber} items): <span> ₹{priceBoxDetails.totalAmount}</span></p>
+              <p>Subtotal ({cartItemsNumber} items): <span> ₹{totalAmount}</span></p>
               <div className="cart_Footer_Right">
-                <button type='submit' className='submit-button' onClick={handleOrderInit}><p>Checkout</p></button>
+                <button type='submit' className='submit-button' onClick={() => nav('/delivery-option')}><p>Checkout</p></button>
               </div>
             </div>
 
@@ -205,11 +85,11 @@ const CartSection = ({ featureProducts }) => {
             </div>
 
             {/* cart carousel section */}
-            <Section2
+            {/* <Section2
               id={'Top-sellers-sec'}
               heading='Top Sellers'
               productData={featureProducts}
-            />
+            /> */}
 
             {/* cart saved for later */}
             <div className="cart_Save_Later">
@@ -218,16 +98,12 @@ const CartSection = ({ featureProducts }) => {
               </div>
               <div className="cards_Container">
                 {
-                  (userCart.length > 0) && userCart ? (
-                    userCart.map((item, index) => (
-                      <CartProductCard
-                        key={index}
-                        product={item}
-                        handleQuantityInc={handleQuantityInc}
-                        handleQuantityDec={handleQuantityDec}
-                        handleRemoveFromCart={handleRemoveFromCart}
-                      />
-                    ))) : ('')
+                  userCart.cart.map((item, index) => (
+                    <CartProductCard
+                      key={index}
+                      product={item}
+                    />
+                  ))
                 }
               </div>
             </div>
@@ -236,34 +112,17 @@ const CartSection = ({ featureProducts }) => {
             <div className="cart_Footer ">
               <div className="cart_Footer_Left">
                 <p className="footer_Price">
-                  ₹{`${priceBoxDetails.totalAmount}`}
+                  ₹{`${totalAmount}`}
                 </p>
                 <p className='footer_Left_Text'>View price details</p>
               </div>
               <div className="cart_Footer_Right">
-                <button type='submit' className='submit-button' onClick={handleOrderInit}><p>Checkout</p></button>
+                <button type='submit' className='submit-button' onClick={() => nav('/delivery-option')}><p>Checkout</p></button>
               </div>
             </div>
-            <Section2
-              id={'Top-sellers-sec'}
-              heading='Top Sellers'
-              productData={featureProducts}
-            />
           </div>
         )
       }
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        transition={Slide}
-      />
     </>
 
   )

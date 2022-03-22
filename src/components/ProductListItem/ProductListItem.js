@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 //CSS
 import './ProductListItem.css'
@@ -9,35 +8,32 @@ import product1 from '../../assets/png/product_1.png'
 import ProductOfferTag from '../ProductOfferTag/ProductOfferTag'
 
 const ProductListItem = ({ product }) => {
-
   return (
     <>
-      <Link to={`/product/${product.name}`} state={{ product: product }} className='productListItem_Contaier'>
+      <div className='productListItem_Contaier'>
         <div className="productListItem_Wrapper">
           <div className="productListItem_Image_Wrapper">
-            {product.images.length > 0 && (
-              <img src={product.images[0]} alt="" />
-            )}
-            {/* <ProductOfferTag offer={product.discount.flatDiscount.value} /> */}
+            <img src={product.product_Image} alt="" />
+            <ProductOfferTag offer={product.product_Offer} />
           </div>
           <div className='productListItem_Content_Wrapper'>
             <p className='productListItem_Title'>
-              {product.name}
+              {product.product_Name}
             </p>
             <div className="productListItem_Price_Details">
               <p className='productListItem_Discounted_Price'>
-                ₹{product.price.discountPrice ? product.price.discountPrice : product.price.mop}
+                ₹{product.product_Discount_Price}
               </p>
               <p className='productListItem_Original_Price'>
-                ₹{product.price.mrp}
+                ₹{product.product_Original_Price}
               </p>
             </div>
-            {/* <p className='productListItem_Timer'>
+            <p className='productListItem_Timer'>
               Ends in {product.product_Discount_End}
-            </p> */}
+            </p>
           </div>
         </div>
-      </Link>
+      </div>
     </>
   )
 }

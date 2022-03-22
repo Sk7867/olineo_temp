@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const baseURL = "https://onlineo-backend.herokuapp.com/api"
+
 // const headers = {
 //   "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with",
 //   'Content-Type': 'application/json',
@@ -23,7 +25,7 @@ export const writeToUS = async (queryData) => {
     "query": queryData.query,
   })
 
-  await axios.post(`${process.env.REACT_APP_BASE_URL}/user/costomersupport`, queryBody, { headers })
+  await axios.post(`${baseURL}/user/costomersupport`, queryBody, { headers })
     .then(res => {
       writeToUSResponse = res
     })

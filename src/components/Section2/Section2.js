@@ -14,17 +14,15 @@ const Section2 = ({ id, heading, productData, classes }) => {
         <div className="section2_card_wrapper">
           {
             productData.map((item, index) => (
-              <ProductBox
-                key={index}
-                card_heading={'STARTING AT'}
-                classes={classes}
-                product={item}
-              />
-            ) : ('')
-          ))
-          }
-          {
-            (productData.no_of_products === 0) && [1, 2, 3, 4].map((n) => (<SkeletonElement type={'productBox'} key={n} />))
+              (index < 9) ? (
+                <ProductBox
+                  key={index}
+                  card_heading={'STARTING AT'}
+                  classes={classes}
+                  product={item}
+                />
+              ) : ('')
+            ))
           }
         </div>
       </div>

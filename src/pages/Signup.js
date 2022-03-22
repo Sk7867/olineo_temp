@@ -2,6 +2,10 @@ import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
 import { userSignUp } from '../api/Auth'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { Slide, toast, ToastContainer } from 'react-toastify'
+import { UserDataContext } from '../Contexts/UserContext'
+
 //CSS
 // import './Signup.css'
 
@@ -45,7 +49,16 @@ const Signup = ({ setLoginRedirect }) => {
   const formSubmit = (e) => {
     e.preventDefault();
     userSignUp(phone, name)
-      .then(res => res ? (setLoginRedirect(false), nav('/otp')) : alert("Check your number again"))
+      .then(res => res ? (
+        setLoginRedirect(false),
+        nav('/otp'),
+        setUserContext(prev => ({
+          ...prev,
+          id: res.userId,
+          fullName: name,
+          mobileNumber: phone,
+        }))
+      ) : toast.error('Mobile Number Already Registered'))
   }
 
   const pageSwitch = (e) => {
@@ -69,7 +82,7 @@ const Signup = ({ setLoginRedirect }) => {
             <input type="text" name="Name" id="name" className='input-field' placeholder='Name' value={name} onChange={(e) => { setName(e.target.value) }} required />
             {
               matches ? (
-                <input type='tel' onkeypress="return isNumberKey(event)" name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' maxLength={10} onChange={(e) => { validateNumber(e); handleLength(e.target.value.length); }} required />
+                <input type='tel' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' maxLength={10} onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} required />
               ) : (
                 <input type='number' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' maxLength={10} onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} required />
               )

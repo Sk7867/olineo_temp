@@ -19,14 +19,12 @@ const MyAddress = ({ setEditID, setProfileState, border }) => {
       .then(res => {
         // console.log(res);
         if (res) {
-          setUserAddress({
-            loaded: true,
-            no_of_address: res.no_of_address,
-            address: res.address
-          })
+          setUserAddress(res)
         }
       })
   }, [])
+
+  // console.log(userContext.addressList);
 
   return (
     <>
