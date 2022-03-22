@@ -1,15 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { UserDataContext } from '../../Contexts/UserContext'
 
 //Images
 import addIcon from '../../assets/vector/add_outline_blue.svg'
 
 //Components
 import AddressBox from '../../components/AddressBox/AddressBox';
+import { getAddress } from '../../api/Address';
 
-const MyAddress = ({ addressList, setEditID, setProfileState, border }) => {
+const MyAddress = ({ setEditID, setProfileState, border }) => {
   const matches = useMediaQuery("(min-width:768px)")
+  const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext)
+
+  useEffect(() => {
+    getAddress()
+      .then(res => {
+        // console.log(res);
+        if (res) {
+          setUserAddress(res)
+        }
+      })
+  }, [])
+
+  // console.log(userContext.addressList);
 
   return (
     <>
@@ -29,7 +44,7 @@ const MyAddress = ({ addressList, setEditID, setProfileState, border }) => {
         }
         <div className='address_List'>
           {
-            addressList.map((address, index) => (
+            userAddress.address.map((address, index) => (
               <AddressBox
                 key={index}
                 address={address}

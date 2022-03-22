@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import Section2 from '../components/Section2/Section2'
 import Sidebar from '../components/Sidebar/Sidebar'
 import Section3 from '../components/Section3/Section3'
@@ -17,6 +18,7 @@ const Home = ({ setHeaderData, allProducts }) => {
     product_name: '',
     product_price: '',
   })
+  // const [sec2Data, setSec2Data] = useState([])
 
   useEffect(() => {
     setHeaderData({
@@ -25,24 +27,32 @@ const Home = ({ setHeaderData, allProducts }) => {
     })
   }, []);
 
-  useEffect(() => {
-    if (allProducts) {
-      allProducts.forEach(element => {
-        setDemoElement({
-          product_id: element.id,
-          product_image: element.imagePath,
-          product_name: element.name,
-          product_price: element.mrpRange.min
-        })
-      });
-    }
-  }, [allProducts])
-  console.log(allProducts);
+  // useEffect(() => {
+  //   for (let index = 0; index < 9; index++) {
+  //     let newElem = allProducts[index]
+  //     setSec2Data(oldElem => [...oldElem, newElem])
+  //   }
+  // }, [allProducts])
+  // console.log(sec2Data);
+
+  let sec2Data = []
+  for (let index = 0; index < 9; index++) {
+    sec2Data.push(allProducts[index])
+  }
 
   let gridCardProducts = []
-
   for (let index = 0; index < 4; index++) {
-    gridCardProducts.push(allProducts[index])
+    gridCardProducts.push(allProducts[index + 9])
+  }
+
+  let sec5Data = []
+  for (let index = 0; index < 9; index++) {
+    sec5Data.push(allProducts[index + 13])
+  }
+
+  let gridCardProducts2 = []
+  for (let index = 0; index < 4; index++) {
+    gridCardProducts2.push(allProducts[index + 20])
   }
 
 
@@ -75,63 +85,63 @@ const Home = ({ setHeaderData, allProducts }) => {
     },
   ]
 
-  const sec2Data = [
-    {
-      product_id: 1,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 2,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
+  // const sec2Data = [
+  //   {
+  //     product_id: 1,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 2,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
 
-    },
-    {
-      product_id: 3,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 4,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 5,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 6,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 7,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 8,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 9,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-  ]
+  //   },
+  //   {
+  //     product_id: 3,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 4,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 5,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 6,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 7,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 8,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 9,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  // ]
 
   const sec4Data = [
     {
@@ -160,62 +170,62 @@ const Home = ({ setHeaderData, allProducts }) => {
     },
   ]
 
-  const sec5Data = [
-    {
-      product_id: 1,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 2,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 3,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 4,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 5,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 6,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 7,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 8,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-    {
-      product_id: 9,
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-    },
-  ]
+  // const sec5Data = [
+  //   {
+  //     product_id: 1,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 2,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 3,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 4,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 5,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 6,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 7,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 8,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  //   {
+  //     product_id: 9,
+  //     product_image: product2,
+  //     product_name: 'Item name',
+  //     product_price: '₹1000',
+  //   },
+  // ]
 
   const sec7Data = [
     {
@@ -254,7 +264,7 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section2
           id={'section2'}
           heading='Normal products'
-          productData={allProducts}
+          productData={sec2Data}
           classes={{
             boxClass: 'bg_pink carousel_card',
           }}
@@ -270,7 +280,7 @@ const Home = ({ setHeaderData, allProducts }) => {
           productData={gridCardProducts}
           link={{
             text: 'See more',
-            link: '/'
+            link: '/category1'
           }}
           classes={{
             boxClass: 'grid_card',
@@ -279,7 +289,7 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section2
           id={'section5'}
           heading='Items for you'
-          productData={allProducts}
+          productData={sec5Data}
           classes={{
             boxClass: 'bg_blue carousel_card',
           }}
@@ -292,7 +302,7 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section4
           id={'section7'}
           heading={'Deals of the day'}
-          productData={gridCardProducts}
+          productData={gridCardProducts2}
           link={{
             text: 'See more',
             link: '/'

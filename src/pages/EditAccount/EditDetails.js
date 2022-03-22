@@ -1,6 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { updateUser, userLogin } from '../../api/Auth';
+import { userSignUp } from '../../api/Auth';
+import moment from 'moment';
+import DatePicker from 'react-modern-calendar-datepicker';
+import { saveUser } from '../../api/Auth';
+import { Slide, toast, ToastContainer } from 'react-toastify'
+import { UserDataContext } from '../../Contexts/UserContext'
 
 //Images
 import userImage from '../../assets/png/userImage.png'
@@ -12,7 +19,13 @@ import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
 //Component
 import UpdateModal from '../../components/ModalComponenr/UpdateModal';
 
-const EditDetails = ({ profilePic = true, userDetails, setModalDataMobile }) => {
+toast.configure()
+const EditDetails = ({ profilePic = true, setModalDataMobile }) => {
+  const [disabled, setDisabled] = useState(true);
+  const matches = useMediaQuery("(min-width:768px)")
+  const [showModal, setShowModal] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(null);
+  const { userContext, setUserContext } = useContext(UserDataContext)
 
   const [displayInfo, setDisplayInfo] = useState({
     user_Full_Name: '',
@@ -28,32 +41,66 @@ const EditDetails = ({ profilePic = true, userDetails, setModalDataMobile }) => 
     user_Birth_Date: '',
   });
 
-  const [disabled, setDisabled] = useState(true);
-  const matches = useMediaQuery("(min-width:768px)")
-  const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState({
     number: null,
     oldData: '',
     newData: '',
+    userName: displayInfo.user_Full_Name,
   });
 
+
   useEffect(() => {
-    if (userDetails) {
+    if (userContext) {
       setDisplayInfo({
-        user_Full_Name: userDetails.user_Full_Name,
-        user_ph_Number: userDetails.user_ph_Number,
-        user_Email: userDetails.user_Email,
-        user_Birth_Date: userDetails.user_Birth_Date,
+        user_Full_Name: userContext.fullName,
+        user_ph_Number: userContext.mobileNumber,
+        user_Email: userContext.email,
       })
       setSecondaryData({
-        user_Full_Name: userDetails.user_Full_Name,
-        user_ph_Number: userDetails.user_ph_Number,
-        user_Email: userDetails.user_Email,
-        user_Birth_Date: userDetails.user_Birth_Date,
+        user_Full_Name: userContext.fullName,
+        user_ph_Number: userContext.mobileNumber,
+        user_Email: userContext.email,
       })
+      if (userContext.dob) {
+        setSelectedDay({
+          year: userContext.dob.year,
+          month: userContext.dob.month,
+          day: userContext.dob.day,
+        })
+      } else if (userContext.dob === null) {
+        setSelectedDay(null)
+      }
     }
-  }, [userDetails]);
-  console.log(userDetails);
+  }, [userContext]);
+
+  const handleUpdate = (prop) => {
+    if (prop === 'number') {
+      if (displayInfo.user_ph_Number !== secondaryData.user_ph_Number) {
+        userSignUp(displayInfo.user_ph_Number, displayInfo.user_Full_Name)
+          .then(res => {
+            if (res) {
+              setUserContext(prev => ({
+                ...prev,
+                id: res.userId,
+                fullName: displayInfo.fullName,
+                mobileNumber: displayInfo.user_ph_Number,
+              }))
+            }
+          })
+
+        userLogin(secondaryData.user_ph_Number)
+          .then(res => {
+            if (res) {
+              setUserContext(prev => ({
+                ...prev,
+                id: res.userId
+              }))
+            }
+          })
+          .catch(err => console.log(err))
+      }
+    }
+  }
 
   const userProfile = {
     userImage: userImage,
@@ -69,15 +116,10 @@ const EditDetails = ({ profilePic = true, userDetails, setModalDataMobile }) => 
       title: 'My Address',
       link: '/myaddress',
     },
-    {
-      image: lockIconBlue,
-      title: 'Change Password',
-      link: '/',
-    },
   ]
 
   const validateForm = () => {
-    (displayInfo.user_Full_Name !== '') && (displayInfo.user_ph_Number !== '') && (displayInfo.user_Email !== '') && (displayInfo.user_Birth_Date !== '') ? setDisabled(false) : setDisabled(true)
+    (displayInfo.user_Full_Name !== '') && (displayInfo.user_ph_Number !== '') && (displayInfo.user_Email !== '') && (selectedDay !== null) ? setDisabled(false) : setDisabled(true)
   }
 
   const handleModal = (prop) => {
@@ -103,6 +145,19 @@ const EditDetails = ({ profilePic = true, userDetails, setModalDataMobile }) => 
       : setDisplayInfo({ ...displayInfo, [prop]: e.label })
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setUserContext(prev => ({
+      ...prev,
+      fullName: displayInfo.user_Full_Name,
+      email: displayInfo.user_Email,
+      dob: selectedDay,
+      mobileNumber: displayInfo.user_ph_Number,
+    }))
+    updateUser(userContext)
+      .then(res => res ? toast.success('Details Updated Successfully') : toast.error('Incomplete Data'))
+  }
+
   return (
     <>
       <div className='page_Wrapper edit_Page_Wrapper'>
@@ -118,7 +173,7 @@ const EditDetails = ({ profilePic = true, userDetails, setModalDataMobile }) => 
             </div>
           )
         }
-        <form action="" className="profile_edit_form" onChange={validateForm}>
+        <form action="" className="profile_edit_form" onChange={validateForm} onSubmit={handleSubmit} >
           <div className='edit_input_container'>
             <label className='edit_input_label'>Name</label>
             <input type="text" placeholder='Text' value={displayInfo.user_Full_Name} onChange={(value) => handleInput("user_Full_Name", value)} />
@@ -128,7 +183,7 @@ const EditDetails = ({ profilePic = true, userDetails, setModalDataMobile }) => 
             <input type="text" placeholder='Text' value={displayInfo.user_ph_Number} onChange={(value) => handleInput("user_ph_Number", value)} />
             {
               matches ? (
-                <div className='edit_input_update' onClick={() => handleModal('number')} >Update</div>
+                <div className='edit_input_update' onClick={() => { handleUpdate('number'); handleModal('number') }} >Update</div>
               ) : (
                 <Link to={'/update-details/number'} className='edit_input_update' onClick={() => setModalDataMobile({
                   number: true,
@@ -143,7 +198,7 @@ const EditDetails = ({ profilePic = true, userDetails, setModalDataMobile }) => 
             <input type="text" placeholder='Text' value={displayInfo.user_Email} onChange={(value) => handleInput("user_Email", value)} />
             {
               matches ? (
-                <div className='edit_input_update' onClick={() => handleModal('email')} >Update</div>
+                <div className='edit_input_update' onClick={() => { handleUpdate('email'); handleModal('email') }} >Update</div>
               ) : (
                 <Link to={'/update-details/email'} className='edit_input_update' onClick={() => setModalDataMobile({
                   number: false,
@@ -155,7 +210,16 @@ const EditDetails = ({ profilePic = true, userDetails, setModalDataMobile }) => 
           </div>
           <div className='edit_input_container'>
             <label className='edit_input_label'>Birthday (dd/mm/yyyy)</label>
-            <input type="text" placeholder='Text' value={displayInfo.user_Birth_Date} onChange={(value) => handleInput("user_Birth_Date", value)} />
+            <div>
+              <DatePicker
+                value={selectedDay}
+                onChange={setSelectedDay}
+                inputPlaceholder="Date of Birth"
+                inputClassName='input-field'
+
+                shouldHighlightWeekends
+              />
+            </div>
           </div>
           {
             matches && (
@@ -179,7 +243,7 @@ const EditDetails = ({ profilePic = true, userDetails, setModalDataMobile }) => 
           }
         </div>
         <div className="address_Footer tab_None">
-          <button type='submit' className='submit-button' disabled={disabled}><p>SAVE DETAILS</p></button>
+          <button type='submit' className='submit-button' onClick={() => handleSubmit()} disabled={disabled}><p>SAVE DETAILS</p></button>
         </div>
       </div>
       {
@@ -187,6 +251,18 @@ const EditDetails = ({ profilePic = true, userDetails, setModalDataMobile }) => 
           <UpdateModal showModal={showModal} setShowModal={setShowModal} modalData={modalData} />
         )
       }
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
     </>
   )
 };
