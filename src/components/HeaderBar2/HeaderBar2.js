@@ -27,19 +27,18 @@ import mobilePinkDotted from '../../assets/vector/mobile_pink_dotted.svg'
 import mobileBlueDotted from '../../assets/vector/mobile_blue_dotted.svg'
 import arrowLeftWhite from '../../assets/vector/arrow_left_white.svg'
 import searchIconBlue from '../../assets/vector/search_blue.svg'
-import { getSearchedProduct } from '../../api/Product'
 
 
 const HeaderBar2 = ({ userLoggedIn, headerData }) => {
   const [modalShow, setModalShow] = useState(false)
   const [sidebar, setSidebar] = useState(false)
-  const [userDPPic, setUserDPPic] = useState({ locataion: '' })
+  const [useDP, setUseDP] = useState(true)
+  const [userDPPic, setUserDPPic] = useState('')
   const [filteredData, setFilteredData] = useState([])
   const [searchedQuery, setSearchedQuery] = useState('')
-  const [manualQuery, setManualQuery] = useState('')
   const nav = useNavigate()
   const { header3Cond, headerText, categoriesCond, header3Store, header3Cart, header3Profile } = headerData
-  const { userContext, allProducts, searchedProduct, setSearchedProduct } = useContext(UserDataContext)
+  const { userContext, allProducts } = useContext(UserDataContext)
   // console.log(headerData);
   // console.log(allProducts);
 
@@ -136,13 +135,8 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
 
   const handleFilter = (e) => {
     const searchWord = e.target.value
-    const newFilter = allProducts.products.filter((value) => {
-      if (
-        value.name.toLowerCase().includes(searchWord)
-        // || value.productInfo.brand.toLowerCase().includes(searchWord)
-      ) {
-        return value
-      }
+    const newFilter = allProducts.filter((value) => {
+      return value.name.toLowerCase().includes(searchWord)
     })
 
     if (searchWord === '') {
@@ -152,65 +146,8 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
       setFilteredData(newFilter)
       setSearchedQuery(searchWord)
     }
-  }
-  // console.log(filteredData);
 
-  const handleKeyDown = (e) => {
-    let value = e.target.value
-    if (e.code === 'Enter') {
-      let searchTerm = 'name=' + value
-      setSearchedQuery(value)
-      getSearchedProduct(searchTerm)
-        .then(res => {
-          if (res) {
-            // console.log(res);
-            setSearchedProduct({
-              loaded: true,
-              products: res,
-              no_of_products: res.length
-            })
-            nav(`/${searchTerm}`)
-          }
-        })
-    }
   }
-
-  const handleSearchClick = (value) => {
-    let searchKey = Object.keys(value)
-    let searchValue = Object.values(value)
-    let searchTerm = searchKey[0] + '=' + searchValue[0]
-    setFilteredData([])
-    setSearchedQuery('')
-    getSearchedProduct(searchTerm)
-      .then(res => {
-        if (res) {
-          // console.log(res);
-          setSearchedProduct({
-            loaded: true,
-            products: res,
-            no_of_products: res.length
-          })
-          nav(`/${value.name}`)
-        }
-      })
-  }
-
-  const handleCategorySearch = (value) => {
-    let searchTerm = 'hierarchyL2=' + value
-    getSearchedProduct(searchTerm)
-      .then(res => {
-        if (res) {
-          setSearchedProduct({
-            loaded: true,
-            products: res,
-            no_of_products: res.length
-          })
-          nav(`/${searchTerm}`)
-        }
-      })
-  }
-
-  // console.log(searchedProduct);
 
   return (
     <>
@@ -232,7 +169,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
           </div>
           <div className="headerbarCenter">
             <div className="searchbar_Container">
-              <input type="text" placeholder='Search...' value={searchedQuery} onKeyDown={handleKeyDown} className='searchbar' onChange={handleFilter} />
+              <input type="text" placeholder='Search...' className='searchbar' onChange={handleFilter} />
               <div className="seachbar_Icon">
                 <img src={searchIconBlue} alt="" />
               </div>
@@ -242,9 +179,9 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
                 {
                   filteredData.slice(0, 15).map((value, index) => {
                     return (
-                      <div onClick={() => handleSearchClick({ 'name': value.name })} className='search_Result_Item' key={index} >
+                      <Link to={`/product/${value.id}`} className='search_Result_Item' key={index} >
                         <p>{value.name}</p>
-                      </div>
+                      </Link>
                     )
                   })
                 }
@@ -256,39 +193,11 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
             <Link to={`/store-finder`} className='storeIcon'>
               <p>Find Store</p>
               <img src={storeWhite} alt="" />
-          </div>
-          <div className='cartIcon' onClick={() => { userLoggedIn ? nav('/mycart') : nav('/login') }}>
-            <img src={cartWhite} alt="" />
-            <p>Cart</p>
-          </div>
-          {
-            userLoggedIn ? (
-              <div className="user_profile" onClick={() => nav('/profile')}>
-                <p>My Profile</p>
-                <img src={userDPPic} alt="" />
-              </div>
-            ) : (
-              <>
-                <p className='right_login'>
-                  <Link to={'/login'}>Login</Link> | <Link to={'/signup'}>Create account</Link>
-                </p>
-                <p className='right_login login_tab_only'>
-                  <Link to={'/login'}>Login</Link>
-                </p>
-              </>
-            )
-          }
-        </div>
-      </div>
-      <div className="searchbarWrapper">
-        <div className="searchbar_Container">
-          <input type="text" placeholder='Search...' value={searchedQuery} onKeyDown={handleKeyDown} className='searchbar' onChange={handleFilter} />
-          <div className="seachbar_Icon">
-            <img src={searchIconBlue} alt="" />
-          </div>
-        </div>
-        {filteredData.length !== 0 && (
-          <div className="search_Results">
+            </Link>
+            <div className='cartIcon' onClick={() => { userLoggedIn ? nav('/mycart') : nav('/login') }}>
+              <img src={cartWhite} alt="" />
+              <p>Cart</p>
+            </div>
             {
               filteredData.slice(0, 15).map((value, index) => {
                 return (
@@ -300,80 +209,157 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
             }
           </div>
         )}
-      </div>
-      <div className='locationbarWrapper logo_mob' onClick={() => handleModalShow()}>
-        <img src={locationWhite} alt="" />
-        <p>Select location to see product availability</p>
-      </div>
-      {
-        categoriesCond && (
-          <div className="categories_Container">
-            <div className="categories_Wrapper">
-              {
-                categoriesList.map((item, index) => (
-                  <div className="category" key={index} onClick={() => handleCategorySearch(item.categoryLink)} >
-                    <img src={item.categoryImage} alt="" />
-                    <p>{item.categoryName}</p>
-                  </div>
-                ))
-              }
+        </div>
+        <div className='locationbarWrapper logo_mob' onClick={() => handleModalShow()}>
+          <img src={locationWhite} alt="" />
+          <p>Select location to see product availability</p>
+        </div>
+        {
+          categoriesCond && (
+            <div className="categories_Container">
+              <div className="categories_Wrapper">
+                {
+                  categoriesList.map((item, index) => (
+                    <div className="category" key={index} onClick={() => handleCategorySearch(item.categoryLink)} >
+                      <img src={item.categoryImage} alt="" />
+                      <p>{item.categoryName}</p>
+                    </div>
+                  ))
+                }
+              </div>
             </div>
-          </div>
+          )
+        }
+      </header>
+      {
+        header3Cond && (
+          <header className='headerbar3_container'>
+            <div className="headerbar3_Wrapper">
+              <div className="headerbarLeft">
+                <img src={arrowLeftWhite} alt="" onClick={() => nav(-1)} className='back_Btn' />
+                <img src={logo_mob} alt="" className='nav_Logo' onClick={() => nav('/')} />
+                <p>{headerText}</p>
+              </div>
+              <div className="headerbarRight">
+                {header3Store && (
+                  <Link to={`/store-finder`} className='storeIcon'>
+                    <img src={storeWhite} alt="" />
+                  </Link>
+                )}
+                {header3Cart ? (
+                  userLoggedIn ? (
+                    <div className="user_profile" onClick={() => nav('/profile')}>
+                      <p>My Profile</p>
+                      <img src={userDPPic} alt="" />
+                    </div>
+                  ) : (
+                    <>
+                      <p className='right_login'>
+                        <Link to={'/login'}>Login</Link> | <Link to={'/signup'}>Create account</Link>
+                      </p>
+                      <p className='right_login login_tab_only'>
+                        <Link to={'/login'}>Login</Link>
+                      </p>
+                    </>
+                  )
+                ) : ('')
+                }
+              </div>
+            </div>
+            <div className="searchbarWrapper">
+              <div className="searchbar_Container">
+                <input type="text" placeholder='Search...' className='searchbar' onChange={handleFilter} />
+                <div className="seachbar_Icon">
+                  <img src={searchIconBlue} alt="" />
+                </div>
+              </div>
+              {filteredData.length !== 0 && (
+                <div className="search_Results">
+                  {
+                    filteredData.slice(0, 15).map((value, index) => {
+                      return (
+                        <Link to={`/product/${value.id}`} className='search_Result_Item' key={index} >
+                          <p>{value.name}</p>
+                        </Link>
+                      )
+                    })
+                  }
+                </div>
+              )}
+            </div>
+            <div className='locationbarWrapper logo_mob' onClick={() => handleModalShow()}>
+              <img src={locationWhite} alt="" />
+              <p>Select location to see product availability</p>
+            </div>
+            {
+              categoriesCond && (
+                <div className="categories_Container">
+                  <div className="categories_Wrapper">
+                    {
+                      categoriesList.map((item, index) => (
+                        <div className="category" key={index}>
+                          <img src={item.categoryImage} alt="" />
+                          <p>{item.categoryName}</p>
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+              )
+            }
+          </header>
+      {
+        header3Cond && (
+          <header className='headerbar3_container'>
+            <div className="headerbar3_Wrapper">
+              <div className="headerbarLeft">
+                <img src={arrowLeftWhite} alt="" onClick={() => nav(-1)} className='back_Btn' />
+                <img src={logo_mob} alt="" className='nav_Logo' onClick={() => nav('/')} />
+                <p>{headerText}</p>
+              </div>
+              <div className="headerbarRight">
+                {header3Store && (
+                  <Link to={`/store-finder`} className='storeIcon'>
+                    <img src={storeWhite} alt="" />
+                  </Link>
+                )}
+                {header3Cart ? (
+                  userLoggedIn ? (
+                    <Link className='cartIcon' to={'/mycart'} >
+                      <img src={cartWhite} alt="" />
+                    </Link>
+                  ) : (
+                    <Link className='cartIcon' to={'/login'} >
+                      <img src={cartWhite} alt="" />
+                    </Link>
+                  )
+
+                ) : ('')
+                }
+                {header3Profile ? (
+                  userLoggedIn ? (
+                    <Link to={'/profile'} className="user_profile">
+                      <img src={userDPPic} alt="" />
+                    </Link>
+                  ) : (
+                    <>
+                      <p className='right_login'>
+                        <Link to={'/login'}>Login</Link> | <Link to={'/signup'}>Create account</Link>
+                      </p>
+                      <p className='right_login login_tab_only'>
+                        <Link to={'/login'}>Login</Link>
+                      </p>
+                    </>
+                  )
+                ) : ('')
+                }
+              </div>
+            </div>
+          </header>
         )
       }
-    </header>
-      {
-    header3Cond && (
-      <header className='headerbar3_container'>
-        <div className="headerbar3_Wrapper">
-          <div className="headerbarLeft">
-            <img src={arrowLeftWhite} alt="" onClick={() => nav(-1)} className='back_Btn' />
-            <img src={logo_mob} alt="" className='nav_Logo' onClick={() => nav('/')} />
-            <p>{headerText}</p>
-          </div>
-          <div className="headerbarRight">
-            {header3Store && (
-              <Link to={`/store-finder`} className='storeIcon'>
-                <img src={storeWhite} alt="" />
-              </Link>
-            )}
-            {header3Cart ? (
-              userLoggedIn ? (
-                <Link className='cartIcon' to={'/mycart'} >
-                  <img src={cartWhite} alt="" />
-                </Link>
-              ) : (
-                <Link className='cartIcon' to={'/login'} >
-                  <img src={cartWhite} alt="" />
-                </Link>
-              )
-
-            ) : ('')
-            }
-            {header3Profile ? (
-              userLoggedIn ? (
-                <Link to={'/profile'} className="user_profile">
-                  <img src={userDPPic} alt="" />
-                </Link>
-              ) : (
-                <>
-                  <p className='right_login'>
-                    <Link to={'/login'}>Login</Link> | <Link to={'/signup'}>Create account</Link>
-                  </p>
-                  <p className='right_login login_tab_only'>
-                    <Link to={'/login'}>Login</Link>
-                  </p>
-                </>
-              )
-            ) : ('')
-            }
-          </div>
-        </div>
-      </header>
-    )
-  }
-  {/* <Sidebar sidebar={sidebar} setSidebar={setSidebar} /> */ }
-      <ModalComp modalShow={modalShow} setModalShow={setModalShow} />
+      {/* <Sidebar sidebar={sidebar} setSidebar={setSidebar} /> */}
+      <ModalComp modalShow={modalShow} setModalShow={setModalShow} userLoggedIn={userLoggedIn} />
       <Sidebar sidebar={sidebar} setSidebar={setSidebar} userLoggedIn={userLoggedIn} />
     </>
   )

@@ -47,33 +47,15 @@ const Home = ({ setHeaderData, allProducts }) => {
   //   gridCardProducts.push(allProducts[index + 9])
   // }
 
-  // useEffect(() => {
-  //   for (let index = 0; index < 9; index++) {
-  //     let newElem = allProducts[index]
-  //     setSec2Data(oldElem => [...oldElem, newElem])
-  //   }
-  // }, [allProducts])
-  // console.log(sec2Data);
+  // let sec5Data = []
+  // for (let index = 0; index < 9; index++) {
+  //   sec5Data.push(allProducts[index + 13])
+  // }
 
-  let sec2Data = []
-  for (let index = 0; index < 9; index++) {
-    sec2Data.push(allProducts[index])
-  }
-
-  let gridCardProducts = []
-  for (let index = 0; index < 4; index++) {
-    gridCardProducts.push(allProducts[index + 9])
-  }
-
-  let sec5Data = []
-  for (let index = 0; index < 9; index++) {
-    sec5Data.push(allProducts[index + 13])
-  }
-
-  let gridCardProducts2 = []
-  for (let index = 0; index < 4; index++) {
-    gridCardProducts2.push(allProducts[index + 20])
-  }
+  // let gridCardProducts2 = []
+  // for (let index = 0; index < 4; index++) {
+  //   gridCardProducts2.push(allProducts[index + 20])
+  // }
 
 
 
@@ -285,7 +267,7 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section2
           id={'section2'}
           heading='Normal products'
-          productData={sec2Data}
+          productData={allProducts}
           classes={{
             boxClass: 'bg_pink carousel_card',
           }}
@@ -299,7 +281,7 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section4
           id={'section4'}
           heading={'Upto 40% off'}
-          productData={gridCardProducts}
+          productData={allProducts}
           link={{
             text: 'See more',
             link: '/category1'
@@ -311,7 +293,7 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section2
           id={'section5'}
           heading='Items for you'
-          productData={sec5Data}
+          productData={allProducts}
           classes={{
             boxClass: 'bg_blue carousel_card',
           }}
@@ -325,16 +307,10 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section4
           id={'section7'}
           heading={'Deals of the day'}
-          productData={gridCardProducts2}
+          productData={allProducts}
           link={{
             text: 'See more',
             link: '/category1'
-          }}
-          classes={{
-            boxClass: 'grid_card',
-          }}
-          classes={{
-            boxClass: 'grid_card',
           }}
           classes={{
             boxClass: 'grid_card',

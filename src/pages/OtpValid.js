@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
 import { getUser, verifyOtp, verifyOtpLogin, verifyOtpSignup } from '../api/Auth'
 import { UserDataContext } from '../Contexts/UserContext'

@@ -4,17 +4,17 @@ import { UserDataContext } from '../../Contexts/UserContext'
 
 const PriceDetailsBox = ({ HideDetails, classes }) => {
   const [showDetails, setShowDetails] = useState(true);
-  const { userContext, setUserContext } = useContext(UserDataContext)
+  const { userCart, setUserCart } = useContext(UserDataContext)
 
   //Get Price from cart Items
   var cartItemsPrice = 0
-  userContext.cartData.cart.forEach(item => {
+  userCart.cart.forEach(item => {
     cartItemsPrice += parseInt(item.productOriginalPrice)
   });
 
   //Get Discounted Price
   var totalDiscount = 0
-  userContext.cartData.cart.forEach(item => {
+  userCart.cartData.forEach(item => {
     var itemDiscount
     itemDiscount = parseInt(item.productOriginalPrice) - parseInt(item.productDiscountPrice)
     totalDiscount += itemDiscount
@@ -22,7 +22,7 @@ const PriceDetailsBox = ({ HideDetails, classes }) => {
 
   //Get Delivery Charges
   var totalDeliveryCharge = 0
-  userContext.cartData.cart.forEach(item => {
+  userCart.cart.forEach(item => {
     totalDeliveryCharge += parseInt(item.productDeliveryCharge)
   });
 
@@ -41,7 +41,7 @@ const PriceDetailsBox = ({ HideDetails, classes }) => {
         showDetails && (
           <div className="cart_Details_Body">
             <div className="cart_Details_Price">
-              <p>Price ({userContext.cartData.no_of_carts} items) </p>
+              <p>Price ({userCart.no_of_carts} items) </p>
               <p>₹{cartItemsPrice}</p>
             </div>
             <div className="cart_Details_Discount">

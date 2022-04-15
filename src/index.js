@@ -4,9 +4,6 @@ import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "react-datepicker/dist/react-datepicker.css";
-import "react-date-picker/dist/DatePicker.css"
-import "react-calendar/dist/Calendar.css";
 import 'react-modern-calendar-datepicker/lib/DatePicker.css'; //In use
 import 'react-toastify/dist/ReactToastify.css';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';

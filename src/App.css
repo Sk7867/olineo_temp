@@ -254,13 +254,13 @@ input[type='date']:focus::before{
 }
 
 input, textarea{
-  border-radius: 0.25rem !important;
-  background: #FFFFFF !important;
-  border: 0.063rem solid #EFEFEF !important;
-  color: #000000 !important;
-  font-weight: 500 !important;
-  font-size: 0.875rem !important;
-  line-height: 1.5rem !important;
+  border-radius: 0.25rem ;
+  background: #FFFFFF ;
+  border: 0.063rem solid #EFEFEF ;
+  color: #000000 ;
+  font-weight: 500 ;
+  font-size: 0.875rem ;
+  line-height: 1.5rem;
   width: 100%;
 }
 
@@ -283,6 +283,30 @@ input::placeholder, textarea::placeholder{
   padding: 16px; 
   width: 100%;
   text-align: left;
+}
+
+.floating_Footer{
+  height: 64px;
+  background: #FFFFFF;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.5rem 1rem;
+}
+
+.floating_Footer_Wrapper{
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.floating_Footer_Left, .floating_Footer_Right{
+  width: 45%;
+}
+
+.floating_Footer_Center{
+  width: 100%;
 }
 
 @media screen and (min-width: 768px) {

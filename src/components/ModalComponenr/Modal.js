@@ -13,13 +13,15 @@ import locationBlue from '../../assets/vector/location_blue.svg'
 import navigationBlue from '../../assets/vector/navigation_outline_blue.svg'
 import { UserDataContext } from '../../Contexts/UserContext';
 
-const ModalComp = ({ modalShow, setModalShow, userLoggedIn }) => {
+const ModalComp = ({ modalShow, setModalShow, userLoggedIn, children }) => {
   const [pincode, setPincode] = useState('')
   const matches = useMediaQuery("(min-width:768px)")
   const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
   const { location, locationFetch } = useGeolocation()
   const { userLocation, setUserLocation } = useContext(UserDataContext)
+
+
   const getLocation = () => {
     locationFetch()
   }

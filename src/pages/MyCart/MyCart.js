@@ -18,8 +18,8 @@ import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 import CartSection from './CartSection'
 import { getCartData } from '../../api/Cart'
 
-const MyCart = ({ setHeaderData, featureProducts }) => {
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart } = useContext(UserDataContext)
+const MyCart = ({ setHeaderData }) => {
+  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, allProducts } = useContext(UserDataContext)
   const nav = useNavigate()
   console.log(userCart);
 
@@ -75,7 +75,7 @@ const MyCart = ({ setHeaderData, featureProducts }) => {
               <Section2
                 id={'Top-sellers-sec'}
                 heading='Top Sellers'
-                productData={featureProducts}
+                productData={allProducts}
               />
             </>
           ) : (
@@ -92,11 +92,11 @@ const MyCart = ({ setHeaderData, featureProducts }) => {
                     </div>
                   </div>
                 </aside>
-                <CartSection featureProducts={featureProducts} />
+                <CartSection featureProducts={allProducts} />
                 <Section2
                   id={'Top-sellers-sec'}
                   heading='Top Sellers'
-                  productData={featureProducts}
+                  productData={allProducts}
                 />
               </div>
             </>

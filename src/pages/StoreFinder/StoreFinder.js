@@ -16,13 +16,12 @@ import categoryOutlineBlue from '../../assets/vector/category_outline_blue.svg'
 import locationBlue from '../../assets/vector/location_blue.svg'
 import locationWhite from '../../assets/vector/location_white.svg'
 import locationWarningYellowIcon from '../../assets/vector/location_warning_yellow.svg'
-import { storeLocation } from '../../api/StoreApi'
 
 const StoreFinder = ({ setHeaderData }) => {
   const [showStore, setShowStore] = useState(false)
   const [listOptionSelected, setListOptionSelected] = useState(true)
   const { location, locationFetch } = useGeolocation()
-  const { userLocation, setUserLocation, storeLocations, setStoreLocations } = useContext(UserDataContext)
+  const { userLocation, setUserLocation } = useContext(UserDataContext)
   // console.log(showStore);
 
   useEffect(() => {
@@ -36,7 +35,7 @@ const StoreFinder = ({ setHeaderData }) => {
     })
   }, []);
 
-  // console.log(userLocation);
+  console.log(location);
 
   const markerPostions = [
     { lat: 17, lng: 73 },
@@ -74,7 +73,7 @@ const StoreFinder = ({ setHeaderData }) => {
   ]
 
   const handleStoreSelectButton = () => {
-    locationFetch();
+    locationFetch()
   }
 
   useEffect(() => {
@@ -83,7 +82,6 @@ const StoreFinder = ({ setHeaderData }) => {
     } else if (location.loaded && location.coordinates) {
       setShowStore(true)
       setUserLocation(location)
-
     }
   }, [location])
 

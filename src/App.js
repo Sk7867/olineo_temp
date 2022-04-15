@@ -43,6 +43,14 @@ import ProductPage from './pages/ProductPage/ProductPage';
 import { UserDataContext } from './Contexts/UserContext'
 import { getAddress } from './api/Address';
 import ProductCategory from './pages/ProductCategory/ProductCategory';
+import OfflineProductCategory from './pages/ProductCategory/OfflineProductCategory';
+import BankOffer from './pages/BankOffer/BankOffer';
+import StoreFinder from './pages/StoreFinder/StoreFinder';
+import Filter from './pages/ProductCategory/Filter';
+import OrderDetails from './pages/OrderDetails/OrderDetails';
+import OrderCancel from './pages/OrderDetails/OrderCancel';
+import CataloguePage from './pages/CataloguePage/CataloguePage';
+import AddProduct from './pages/CataloguePage/AddProduct';
 
 
 
@@ -54,10 +62,14 @@ function App() {
   const [editID, setEditID] = useState(0);
   const [addressSelected, setAddressSelected] = useState(0);
   const [storeSelected, setStoreSelected] = useState(0)
-  const [allProducts, setAllProducts] = useState([])
+  const [allProducts, setAllProducts] = useState({
+    no_of_products: 0,
+    products: []
+  })
+  const [userLocation, setUserLocation] = useState('')
 
   const [userContext, setUserContext] = useState({
-    profilePic: userImage,
+    profilePic: defaultUserImage,
     id: '',
     fullName: '',
     mobileNumber: '',
@@ -68,7 +80,6 @@ function App() {
   })
   const [userAddress, setUserAddress] = useState({})
   const [userCart, setUserCart] = useState({})
-  // console.log(userContext);
 
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,
@@ -182,7 +193,7 @@ function App() {
     }
   }, [userCart])
 
-  // console.log(loc);
+  // console.log(allp);
 
   useEffect(() => {
     let user = JSON.parse(sessionStorage.getItem('user'))
@@ -224,9 +235,14 @@ function App() {
   useEffect(() => {
     getAllProducts()
       .then(res => {
-        setAllProducts(res)
+        setAllProducts({
+          no_of_products: res.no_of_products,
+          products: res.products
+        })
       })
   }, [])
+
+  // console.log(allProducts);
 
   const ordersData = [
     {
@@ -287,7 +303,7 @@ function App() {
     <>
       <ScrollToTop />
       <div className="App">
-        <UserDataContext.Provider value={{ userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart }}>
+        <UserDataContext.Provider value={{ userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts, userLocation, setUserLocation }}>
           {
             loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' ? ('') : (
               <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />
@@ -300,12 +316,12 @@ function App() {
             <Route path='/adduser' exact element={<AddUser />} />
             <Route path='/' exact element={<Home setHeaderData={setHeaderData} allProducts={allProducts} />} />
             <Route path='/orders' exact element={<MyOrders ordersList={ordersData} setHeaderData={setHeaderData} featureProducts={allProducts} />} />
-            <Route path='/mycart' exact element={<MyCart setHeaderData={setHeaderData} featureProducts={allProducts} />} />
+            <Route path='/mycart' exact element={<MyCart setHeaderData={setHeaderData} />} />
             <Route path='/myaddress' exact element={<Address setHeaderData={setHeaderData} setEditID={setEditID} />} />
             <Route path='/newaddress' exact element={<NewAddress setHeaderData={setHeaderData} />} />
             <Route path='/editaddress' exact element={<EditAddress setHeaderData={setHeaderData} editID={editID} />} />
             <Route path='/payment' exact element={<Payment setHeaderData={setHeaderData} />} />
-            <Route path='/profile' exact element={<Profile setEditID={setEditID} editID={editID} setHeaderData={setHeaderData} featureProducts={allProducts} ordersData={ordersData} />} />
+            <Route path='/profile' exact element={<Profile setEditID={setEditID} editID={editID} setHeaderData={setHeaderData} ordersData={ordersData} />} />
             <Route path='/edit-account' exact element={<EditAccont setHeaderData={setHeaderData} setModalDataMobile={setModalDataMobile} />} />
             <Route path='/update-details/number' exact element={<UpdateNumber setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
             <Route path='/update-details/email' exact element={<UpdateEmail setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
@@ -316,7 +332,15 @@ function App() {
             <Route path='/store-pickup' exact element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
             <Route path='/store-near-me' exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
             <Route path='/product/:id' exact element={<ProductPage setHeaderData={setHeaderData} />} />
-            <Route path='/:category/' exact element={<ProductCategory setHeaderData={setHeaderData} />} />
+            <Route path='/:category' exact element={<ProductCategory setHeaderData={setHeaderData} />} />
+            <Route path='/:category/filter' exact element={<Filter setHeaderData={setHeaderData} />} />
+            <Route path='/:store/:category' exact element={<OfflineProductCategory setHeaderData={setHeaderData} />} />
+            <Route path='/bank-offer' exact element={<BankOffer setHeaderData={setHeaderData} />} />
+            <Route path='/store-finder' exact element={<StoreFinder setHeaderData={setHeaderData} />} />
+            <Route path='/order-details' exact element={<OrderDetails setHeaderData={setHeaderData} />} />
+            <Route path='/order-cancel' exact element={<OrderCancel setHeaderData={setHeaderData} />} />
+            <Route path='/catelogue-page' exact element={<CataloguePage setHeaderData={setHeaderData} />} />
+            <Route path='/catelogue-page/add-product' exact element={<AddProduct setHeaderData={setHeaderData} />} />
           </Routes>
           <Footer />
         </UserDataContext.Provider>
