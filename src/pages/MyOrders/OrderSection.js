@@ -193,6 +193,7 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
           </>
         )
       }
+      {/* <BankOfferModal modalShow={modalShow} setModalShow={setModalShow} offerModalData={offerModalData} /> */}
     </>
   )
 }

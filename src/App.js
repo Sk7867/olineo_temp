@@ -78,6 +78,11 @@ function App() {
     loaded: false,
   })
   const [userLocation, setUserLocation] = useState('')
+  const [cartArray, setCartArray] = useState({
+    loaded: false,
+    cart: [],
+    no_of_carts: 0
+  })
 
   const [userContext, setUserContext] = useState({
     profilePic: defaultUserImage,
@@ -89,32 +94,8 @@ function App() {
     dob: null,
     pincode: ''
   })
-  const [userAddress, setUserAddress] = useState({
-    loaded: false,
-    no_of_address: 0,
-    address: []
-  })
-  const [userCart, setUserCart] = useState([])
-  const [cartArray, setCartArray] = useState({
-    loaded: false,
-    cart: [],
-    no_of_carts: 0
-  })
-  // console.log(cartArray);
-
-  const [userContext, setUserContext] = useState({
-    profilePic: userImage,
-    id: '',
-    fullName: '',
-    mobileNumber: '',
-    email: '',
-    JWT: '',
-    dob: null,
-    pincode: ''
-  })
   const [userAddress, setUserAddress] = useState({})
   const [userCart, setUserCart] = useState({})
-  // console.log(userContext);
 
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,

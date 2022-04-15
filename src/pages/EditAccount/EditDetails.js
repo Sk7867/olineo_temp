@@ -22,11 +22,11 @@ import UpdateModal from '../../components/ModalComponenr/UpdateModal';
 
 toast.configure()
 const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpdate }) => {
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const matches = useMediaQuery("(min-width:768px)")
   const [showModal, setShowModal] = useState(false);
   const [selectedDay, setSelectedDay] = useState(null);
-  const [profilePic, setProfilePic] = useState({ locataion: '' })
+  const [profilePic, setProfilePic] = useState(null)
   const [newProfilePic, setNewProfilePic] = useState(null)
   const { userContext, setUserContext } = useContext(UserDataContext)
 

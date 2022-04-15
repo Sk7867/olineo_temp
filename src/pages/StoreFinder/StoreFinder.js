@@ -83,7 +83,6 @@ const StoreFinder = ({ setHeaderData }) => {
     } else if (location.loaded && location.coordinates) {
       setShowStore(true)
       setUserLocation(location)
-
     }
   }, [location])
 

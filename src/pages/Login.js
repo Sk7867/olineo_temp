@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useContext, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
-import { userLogin } from '../api/Auth'
+import { userLogin, userLoginEmail } from '../api/Auth'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { Slide, toast, ToastContainer } from 'react-toastify'
 import { UserDataContext } from '../Contexts/UserContext'
+import { Slide, toast, ToastContainer } from 'react-toastify'
 
 toast.configure()
 const Login = ({ setUserLoggedIn, setLoginRedirect }) => {

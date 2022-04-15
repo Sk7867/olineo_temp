@@ -82,6 +82,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
         }
       })
   }, [])
+  // console.log(userCart);
 
   useEffect(() => {
     cartArray.cart.map((product) => (
@@ -215,6 +216,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
       reader.readAsDataURL(e.target.files[0])
     }
   }
+  // console.log(userContext);
 
   return (
     <>

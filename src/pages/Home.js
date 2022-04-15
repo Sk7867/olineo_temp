@@ -266,7 +266,7 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section2
           id={'section2'}
           heading='Normal products'
-          productData={sec2Data}
+          productData={allProducts}
           classes={{
             boxClass: 'bg_pink carousel_card',
           }}
@@ -295,7 +295,7 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section2
           id={'section5'}
           heading='Items for you'
-          productData={sec5Data}
+          productData={allProducts}
           classes={{
             boxClass: 'bg_blue carousel_card',
           }}

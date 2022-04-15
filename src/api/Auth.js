@@ -57,7 +57,7 @@ export const userLogin = async (contact) => {
 
   let loginResponse
 
-  await axios.post(`${process.env.REACT_APP_BASE_URL}/user/login`, loginData, { headers })
+  await axios.post(`${baseURL}/user/login`, loginData, { headers })
     .then(res => {
       // console.log(res);
       loginResponse = res.data
@@ -298,7 +298,7 @@ export const updateUser = async (userData) => {
 
   const headers = {
     "Access-Control-Allow-origin": "*",
-    'Content-Type': 'application/json',
+    'Content-Type': 'multipart/form-data',
     "Authorization": `Bearer ${userToken}`
   }
 
