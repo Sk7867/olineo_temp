@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import BankOfferModal from '../../components/ModalComponenr/BankOfferModal'
 import OrderProductCard from '../../components/OrderProductCard/OrderProductCard'
 import Section2 from '../../components/Section2/Section2'
 
 const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered }) => {
   const nav = useNavigate()
+  const [modalShow, setModalShow] = useState(false)
 
   let ordersNumber = ordersList.length
 
@@ -12,6 +14,16 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered }) => {
     e.preventDefault();
     nav('/')
   }
+
+  const offerModalData = {
+    offer_Name: 'Bank Offer',
+    offer_desc: '₹499 discount on HDFC Bank Credit Cards',
+    offerAvail: [
+      'Select eligible card at the time of checkout.',
+      'No promo code required to avail the offer.'
+    ],
+  }
+
   return (
     <>
       {
@@ -41,6 +53,10 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered }) => {
                               productDeliveryStatues={order.productDeliveryStatues}
                               productImage={order.productImage}
                               productPrice={order.productPrice}
+                              classes={{
+                                boxClass: 'section_Wrapper'
+                              }}
+                              setModalShow={setModalShow}
                             />
                           ) : ('')
                       ))
@@ -49,6 +65,10 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered }) => {
                       id={'Top-sellers-sec'}
                       heading='Suggested products'
                       productData={featureProducts}
+                      classes={{
+                        containerClass: 'section_Wrapper',
+                        boxClass: 'section_Wrapper'
+                      }}
                     />
                   </div>
                 )
@@ -68,6 +88,10 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered }) => {
                               productDeliveryStatues={order.productDeliveryStatues}
                               productImage={order.productImage}
                               productPrice={order.productPrice}
+                              classes={{
+                                boxClass: 'section_Wrapper'
+                              }}
+                              setModalShow={setModalShow}
                             />
                           ) : ('')
                       ))
@@ -76,6 +100,9 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered }) => {
                       id={'Top-sellers-sec'}
                       heading='Suggested products'
                       productData={featureProducts}
+                      classes={{
+                        containerClass: 'section_Wrapper',
+                      }}
                     />
                   </div>
                 )
@@ -84,6 +111,7 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered }) => {
           </>
         )
       }
+      <BankOfferModal modalShow={modalShow} setModalShow={setModalShow} offerModalData={offerModalData} />
     </>
   )
 }

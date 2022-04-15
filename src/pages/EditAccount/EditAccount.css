@@ -90,7 +90,7 @@
   .edit_Page_Wrapper{
     background: #FFFFFF;
     border-radius: 0.25rem;
-    margin: 1rem 0 0;
+    /* margin: 1rem 0 0; */
     height: fit-content;
   }
 

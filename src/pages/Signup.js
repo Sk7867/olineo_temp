@@ -28,8 +28,16 @@ const Signup = ({ setLoginRedirect }) => {
     }
   }
 
+  const validateNumber = (e) => {
+    const re = /^[0-9\b]+$/;
+    if (e.target.value === '' || re.test(e.target.value)) {
+      setPhone(e.target.value)
+    }
+  }
+  // console.log(phone);
+
   const validateForm = () => (
-    (name !== '') && (phone !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)
+    (name !== '') && (name.length > 0) && (phone !== '') && (phone.length > 0) && validLength ? setBtnDisable(false) : setBtnDisable(true)
   )
 
   const formSubmit = (e) => {
@@ -52,7 +60,8 @@ const Signup = ({ setLoginRedirect }) => {
     nav('/login')
   }
 
-  // console.log(name);
+  console.log(name + "-" + phone);
+  console.log(btnDisable);
 
   return (
     <>
@@ -67,7 +76,7 @@ const Signup = ({ setLoginRedirect }) => {
             <input type="text" name="Name" id="name" className='input-field' placeholder='Name' value={name} onChange={(e) => { setName(e.target.value) }} required />
             {
               matches ? (
-                <input type='tel' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' maxLength={10} onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} required />
+                <input type='tel' onkeypress="return isNumberKey(event)" name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' maxLength={10} onChange={(e) => { validateNumber(e); handleLength(e.target.value.length); }} required />
               ) : (
                 <input type='number' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' maxLength={10} onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} required />
               )

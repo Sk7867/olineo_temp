@@ -30,7 +30,7 @@ const AddressBox = ({ address, setEditID, setProfileState, deleteOption = true, 
 
   // console.log(address);
   return (
-    <div className={`address ${!border ? ('border-0') : ('')}`}>
+    <div className={`address section_Wrapper ${!border ? ('border-0') : ('')}`}>
       <div className='address_Box'>
         <div className="address_Box_Wrapper">
           <p className="address_Box_Name">{address.user_Full_Name}</p>

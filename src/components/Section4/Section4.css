@@ -46,9 +46,9 @@
   }
 
   .section4_card_container{
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 230px;
-    grid-column-gap: 24px;
+    grid-template-columns: repeat(4, 11rem);
+    grid-template-rows: repeat(2, 175px);
+    grid-column-gap: 0.5rem;
     grid-row-gap: 0px;
     margin: 18px 0;
   }
@@ -60,7 +60,7 @@
   }
   .section4_card_container{
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 356px;
+  grid-template-rows: repeat(2, 175px);
   grid-column-gap: 24px;
   grid-row-gap: 0px;
   }
