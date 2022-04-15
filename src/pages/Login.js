@@ -1,20 +1,35 @@
-import React, { useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useContext, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
-import { userLogin } from '../api/Auth'
+import { userLogin, userLoginEmail } from '../api/Auth'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { Slide, toast, ToastContainer } from 'react-toastify'
 import { UserDataContext } from '../Contexts/UserContext'
+import { Slide, toast, ToastContainer } from 'react-toastify'
 
 toast.configure()
 const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
   const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
   const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
   const matches = useMediaQuery("(min-width:768px)")
+  const [emailLogin, setEmailLogin] = useState(false)
   const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart } = useContext(UserDataContext)
+  const loc = useLocation()
+  // console.log(loc);
 
   const nav = useNavigate()
+
+  useEffect(() => {
+    if (loc.state) {
+      if (loc.state.emailLogin) {
+        setEmailLogin(true)
+      }
+    }
+  }, [loc.state])
+
+  // console.log(emailLogin);
+
 
   const handleLength = (length) => {
     if (length === 9) {
@@ -25,26 +40,51 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
   }
 
 
-  const validateForm = () => (
-    (phone !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)
-  )
+  const validateForm = () => {
+    if (emailLogin) {
+      (email !== '') ? setBtnDisable(false) : setBtnDisable(true)
+    } else {
+      (phone !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)
+    }
+
+  }
+
 
   const formSubmit = (e) => {
     e.preventDefault();
-    userLogin(phone)
-      .then(res => res ? (
-        setLoginRedirect(true),
-        nav('/otp'),
-        setUserContext(prev => ({
-          ...prev,
-          id: res.userId
-        }))
-      ) : toast.error('Mobile Number Not Registered'))
+    if (emailLogin) {
+      userLoginEmail(email)
+        .then(res => res ? (
+          setLoginRedirect(true),
+          nav('/otp'),
+          setUserContext(prev => ({
+            ...prev,
+            id: res.userId
+          }))
+        ) : toast.error('Email Not Registered'))
+    } else {
+      userLogin(phone)
+        .then(res => res ? (
+          setLoginRedirect(true),
+          nav('/otp'),
+          setUserContext(prev => ({
+            ...prev,
+            id: res.userId
+          }))
+        ) : toast.error('Mobile Number Not Registered'))
+    }
   }
 
   const pageSwitch = (e) => {
     e.preventDefault();
     nav('/signup')
+  }
+
+  const validateNumber = (e) => {
+    const re = /^[0-9\b]+$/;
+    if (e.target.value === '' || re.test(e.target.value)) {
+      setPhone(e.target.value)
+    }
   }
 
   // console.log(validLength);
@@ -60,10 +100,14 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
         <form action="" className={'signup-form'} onSubmit={formSubmit} onChange={validateForm}>
           <div className="inputfield-Container">
             {
-              matches ? (
-                <input type='tel' name="Phone" id="phone" maxLength={10} className='input-field' value={phone} placeholder='Phone' onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} />
+              emailLogin ? (
+                <input type='email' name="Email" id="email" className='input-field' value={email} placeholder='Email' onChange={(e) => setEmail(e.target.value)} />
               ) : (
-                <input type='number' name="Phone" id="phone" maxLength={10} className='input-field' value={phone} placeholder='Phone' onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} />
+                matches ? (
+                  <input type='tel' name="Phone" id="phone" maxLength={10} className='input-field' value={phone} placeholder='Phone' onChange={(e) => { validateNumber(e); handleLength(e.target.value.length) }} />
+                ) : (
+                  <input type='number' name="Phone" id="phone" maxLength={10} className='input-field' value={phone} placeholder='Phone' onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} />
+                )
               )
             }
           </div>

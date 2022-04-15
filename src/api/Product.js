@@ -12,9 +12,9 @@ const headers = {
 export const getAllProducts = async () => {
   let allProductsResponse
 
-  await axios.get(`${baseURL}/product/getAllProduct`, { headers })
+  await axios.get(`${baseURL}/product`, { headers })
     .then(res => {
-      allProductsResponse = res.data.styles.styleList
+      allProductsResponse = res.data.data
       // console.log(allProductsResponse);
     })
 

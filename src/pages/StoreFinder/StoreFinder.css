@@ -1,0 +1,177 @@
+.store_Finder_Container{
+  margin: 1rem 0;
+  padding: 1rem 0 0.75rem;
+  background: #FFFFFF;
+}
+
+.store_Finder_Heading{
+  padding: 0 3rem 1rem;
+}
+
+.store_Finder_Heading h3{
+  letter-spacing: -0.01em;
+  color: #000000;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  text-align: center;
+  margin: 0;
+}
+
+.store_Finder_Wrapper .store_Finder_Search{
+  padding: 0.5rem 1rem;
+}
+
+.store_Finder_Separtor{
+  margin: 0.875rem 0;
+}
+
+.store_Finder_Separtor, .store_Finder_Separtor p{
+  background: #FFFFFF;
+}
+
+.store_Finder_Result{
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.store_Result_Header{
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+
+.store_Result_Heading{
+  letter-spacing: -0.01em;
+  color: #000000;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-align: center;
+  margin: 0;
+}
+
+.store_Finder_Options{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 1rem;
+  border-radius: 0.25rem;
+}
+
+.store_Finder_Options .store_Finder_List, .store_Finder_Options .store_Finder_Map{
+  width: 50%;
+  padding: 0.75rem 0;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.store_Finder_Options .store_Finder_List img, .store_Finder_Options .store_Finder_Map img{
+  max-width: 24px;
+  max-height: 24px;
+  width: 100%;
+  height: 100%;
+}
+
+.store_Finder_Options .store_Finder_List p, .store_Finder_Options .store_Finder_Map p{
+  color: #1B325E;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  margin: 0;
+}
+
+.store_Finder_Options .store_Finder_List.selected, .store_Finder_Options .store_Finder_Map.selected{
+  background: #1B325E;
+}
+
+.store_Finder_Options .store_Finder_List.selected p, .store_Finder_Options .store_Finder_Map.selected p{
+  color: #FFFFFF;
+}
+
+.store_Finder_Options .store_Finder_List.store_Finder_List.selected{
+  border-radius: 0.25rem 0 0 0.25rem;
+}
+
+.store_Finder_Options .store_Finder_Map.store_Finder_Map.selected{
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.store_Result_List{
+  display: flex;
+  gap: 0.75rem;
+  flex-direction: column;
+  margin: 0 0 1rem;
+}
+
+.store_Result_Map{
+  width: 100%;
+  height: 360px;
+  background: grey;
+}
+
+@media screen and (min-width: 768px) {
+  .store_Finder_Container{
+    margin: 0;
+    padding: 1.5rem 8.75rem;
+    border-bottom: 1px solid #DDE0E7;
+  }
+
+  .store_Finder_Heading{
+    display: none;
+  }
+
+  .store_Finder_Search{
+    display: block;
+  }
+
+  .store_Finder_Wrapper .store_Finder_Search{
+    padding: 0;
+    border-radius: 0.25rem;
+    border: 1px solid #DDE0E7;
+  }
+
+  .store_Finder_Separtor{
+    margin: 1rem 0;
+  }
+
+  .store_Finder_Submit_Button button{
+    max-width: 100%;
+  }
+
+  .store_Finder_Result{
+    /* margin: 0.5rem 0 0; */
+    gap: 1rem;
+    background: #FFFFFF;
+    padding: 1.5rem 1.5rem 0;
+  }
+
+  .store_Result_Header{
+    gap: 1.5rem;
+  }
+
+  .store_Finder_Options{
+    max-width: 328px;
+    margin: 0 auto 0.5rem;
+  }
+
+  .store_Finder_Options .store_Finder_List, .store_Finder_Options .store_Finder_Map{
+    padding: 0.75rem 3rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .store_Finder_Result{
+    padding: 1.5rem 12rem 0;
+  }
+}

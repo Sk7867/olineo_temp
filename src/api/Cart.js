@@ -50,3 +50,26 @@ export const getCartData = async () => {
 
   return cartDataResponse
 }
+
+export const addToCart = async (id) => {
+  let addToCartResponse
+
+  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
+  const headers = {
+    "Access-Control-Allow-origin": "*",
+    'Content-Type': 'application/json',
+    "Authorization": `Bearer ${userToken}`
+  }
+  console.log(id);
+
+  await axios.patch(`${baseURL}/product/cart/${id}`, { headers })
+    .then(res => {
+      if (res) {
+        addToCartResponse = res
+        console.log(addToCartResponse);
+      }
+    })
+    .catch(err => console.log('Error:', err))
+
+  return addToCartResponse
+}

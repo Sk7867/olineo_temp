@@ -15,17 +15,30 @@ import cameraIcon from '../../assets/vector/camera_icon.svg'
 import lockIconBlue from '../../assets/vector/lock_outline_blue.svg'
 import locationIconBlue from '../../assets/vector/location_blue.svg'
 import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
+import defaultUserImage from '../../assets/png/default_user_image.png'
 
 //Component
 import UpdateModal from '../../components/ModalComponenr/UpdateModal';
 
 toast.configure()
-const EditDetails = ({ profilePic = true, setModalDataMobile }) => {
+const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpdate }) => {
   const [disabled, setDisabled] = useState(true);
   const matches = useMediaQuery("(min-width:768px)")
   const [showModal, setShowModal] = useState(false);
   const [selectedDay, setSelectedDay] = useState(null);
+  const [profilePic, setProfilePic] = useState(null)
+  const [newProfilePic, setNewProfilePic] = useState(null)
   const { userContext, setUserContext } = useContext(UserDataContext)
+
+  useEffect(() => {
+    if (userContext && userContext.profilePic) {
+      setProfilePic(userContext.profilePic)
+    } else if (newProfilePic !== null) {
+      setProfilePic(newProfilePic)
+    } else {
+      setProfilePic(defaultUserImage)
+    }
+  }, [userContext, newProfilePic])
 
   const [displayInfo, setDisplayInfo] = useState({
     user_Full_Name: '',
@@ -62,16 +75,40 @@ const EditDetails = ({ profilePic = true, setModalDataMobile }) => {
         user_Email: userContext.email,
       })
       if (userContext.dob) {
-        setSelectedDay({
-          year: userContext.dob.year,
-          month: userContext.dob.month,
-          day: userContext.dob.day,
-        })
+        if (typeof (userContext.dob) === 'string') {
+          let bdayRecieved = userContext.dob
+          let seperateDOB = bdayRecieved.split('-')
+          let yearRecieved = parseInt(seperateDOB[0])
+          let monthRecieved = parseInt(seperateDOB[1])
+          let dateRecieved = parseInt(seperateDOB[2])
+          // let dateSep = dateWhole.slice(0, 2)
+          // console.log(seperateDOB);
+          // console.log(`
+          // ${bdayRecieved}
+          //   year: ${yearRecieved},
+          //   month: ${monthRecieved},
+          //   whole date: ${dateRecieved}
+
+          // `);
+          setSelectedDay({
+            year: yearRecieved,
+            month: monthRecieved,
+            day: dateRecieved,
+          })
+        } else if (typeof (userContext.dob) === 'object') {
+          setSelectedDay({
+            year: userContext.dob.year,
+            month: userContext.dob.month,
+            day: userContext.dob.day,
+          })
+        }
       } else if (userContext.dob === null) {
         setSelectedDay(null)
       }
     }
   }, [userContext]);
+
+  // console.log(userContext);
 
   const handleUpdate = (prop) => {
     if (prop === 'number') {
@@ -102,13 +139,30 @@ const EditDetails = ({ profilePic = true, setModalDataMobile }) => {
     }
   }
 
-  const userProfile = {
-    userImage: userImage,
-    userName: 'Rohan khamkar',
-    userPhone: '+91-3987760925',
-    userMail: 'rohankhamkar@gmail.com',
-    Birthdate: '22-06-1998'
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader()
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setNewProfilePic(reader.result)
+          setUserContext(prev => ({
+            ...prev,
+            profilePic: reader.result
+          }))
+          // console.log(reader.result);
+        }
+      }
+      reader.readAsDataURL(e.target.files[0])
+    }
   }
+
+  // const userProfile = {
+  //   userImage: userImage,
+  //   userName: 'Rohan khamkar',
+  //   userPhone: '+91-3987760925',
+  //   userMail: 'rohankhamkar@gmail.com',
+  //   Birthdate: '22-06-1998'
+  // }
 
   const editPageOptions = [
     {
@@ -119,7 +173,7 @@ const EditDetails = ({ profilePic = true, setModalDataMobile }) => {
   ]
 
   const validateForm = () => {
-    (displayInfo.user_Full_Name !== '') && (displayInfo.user_ph_Number !== '') && (displayInfo.user_Email !== '') && (selectedDay !== null) ? setDisabled(false) : setDisabled(true)
+    (displayInfo.user_Full_Name !== '') && (displayInfo.user_ph_Number !== '') && (displayInfo.user_Email !== '') && (selectedDay !== null) && (userContext.profilePic) ? setDisabled(false) : setDisabled(true)
   }
 
   const handleModal = (prop) => {
@@ -162,12 +216,13 @@ const EditDetails = ({ profilePic = true, setModalDataMobile }) => {
     <>
       <div className='page_Wrapper edit_Page_Wrapper'>
         {
-          profilePic && (
+          profileDetails && (
             <div className='profile_User_Details'>
               <div className='user_Profile_Pic'>
-                <img src={userProfile.userImage} alt="" />
+                <img src={profilePic} alt="" />
                 <div className='user_Camera_Icon'>
                   <img src={cameraIcon} alt="" />
+                  <input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' />
                 </div>
               </div>
             </div>
