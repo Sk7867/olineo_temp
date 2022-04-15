@@ -51,6 +51,7 @@ import OrderDetails from './pages/OrderDetails/OrderDetails';
 import OrderCancel from './pages/OrderDetails/OrderCancel';
 import CataloguePage from './pages/CataloguePage/CataloguePage';
 import AddProduct from './pages/CataloguePage/AddProduct';
+import AboutUs from './pages/AboutContact/AboutUs'
 import Dashboard from './components/AdminComponent/Dashboard';
 import Page1 from './components/AdminComponent/pages/Page1/Page1';
 import Page2 from './components/AdminComponent/pages/Page2/Page2';
@@ -246,6 +247,7 @@ function App() {
             <Route path='/order-cancel' exact element={<OrderCancel setHeaderData={setHeaderData} />} />
             <Route path='/catelogue-page' exact element={<CataloguePage setHeaderData={setHeaderData} />} />
             <Route path='/catelogue-page/add-product' exact element={<AddProduct setHeaderData={setHeaderData} />} />
+            <Route path='/about-us' exact element={<AboutUs setHeaderData={setHeaderData} />} />
             <Route path="admin/*" element={<Dashboard />}>
               <Route path="page1" element={<Page1 />} />
               <Route path="page2" element={<Page2 />} />
