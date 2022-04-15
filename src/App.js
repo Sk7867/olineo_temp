@@ -51,6 +51,7 @@ import OrderDetails from './pages/OrderDetails/OrderDetails';
 import OrderCancel from './pages/OrderDetails/OrderCancel';
 import CataloguePage from './pages/CataloguePage/CataloguePage';
 import AddProduct from './pages/CataloguePage/AddProduct';
+import AboutUs from './pages/AboutContact/AboutUs'
 
 
 
@@ -244,6 +245,7 @@ function App() {
             <Route path='/order-cancel' exact element={<OrderCancel setHeaderData={setHeaderData} />} />
             <Route path='/catelogue-page' exact element={<CataloguePage setHeaderData={setHeaderData} />} />
             <Route path='/catelogue-page/add-product' exact element={<AddProduct setHeaderData={setHeaderData} />} />
+            <Route path='/about-us' exact element={<AboutUs setHeaderData={setHeaderData} />} />
           </Routes>
           <Footer />
         </UserDataContext.Provider>

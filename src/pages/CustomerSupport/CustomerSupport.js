@@ -127,7 +127,7 @@ const CustomerSupport = ({ setHeaderData }) => {
         </div>
       </div>
 
-      <div className='support_Extra_Option' onClick={() => nav('/write-to-us')}>
+      <div className='support_Extra_Option section_Wrapper' onClick={() => nav('/write-to-us')}>
         <div>
           <img src={queryWriteIconBlue} alt="" />
           <p>Other issues! write to us</p>
