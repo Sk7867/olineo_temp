@@ -31,9 +31,9 @@
 
 .section2_card_wrapper{
   display: flex;
-  gap: 12px;
+  gap: 0.75rem;
   white-space: nowrap;
-  padding: 0 0 10px;
+  padding: 0 0 0.625rem;
 }
 
 @media screen and (min-width: 768px) {
@@ -48,8 +48,8 @@
   }
 
   .section2_card_wrapper{
-    gap: 18px;
-    padding: 0 0 24px;
+    gap: 1.125rem;
+    padding: 0 0 1.5rem;
   }
 }
 

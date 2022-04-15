@@ -1,7 +1,7 @@
 .desk_Page_Wrapper{
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding: 1rem 0 0;
   gap: 1.5rem;
 }

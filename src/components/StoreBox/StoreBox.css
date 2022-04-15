@@ -9,7 +9,11 @@
   justify-content: center;
 }
 
-.store_Name, .store_Address, .store_Timing p, .store_Contact p, .store_Distance p, .store_Status p{
+.open_Store_button{
+  text-decoration: none;
+}
+
+.store_Name, .store_Address, .store_Timing p, .store_Contact p, .store_Distance p, .store_Status p, .store_Map_Link p, .open_Store_button p{
   margin: 0;
   color: #08090A;
 }
@@ -21,18 +25,28 @@
   line-height: 1.5rem;
 }
 
-.store_Address, .store_Timing p, .store_Contact p, .store_Distance p{
+.store_Address, .store_Timing p, .store_Contact p, .store_Distance p, .store_Map_Link p, .open_Store_button p{
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: #08090A;
 }
 
-.store_Contact p{
+.store_Contact > p{
   color: #3D5176;
+  border-bottom: 1px solid #1B325E;
 }
 
-.store_Timing, .store_Contact, .store_Distance{
+.store_Map_Link p{
+  color: #1B325E;
+  border-bottom: 1px solid #1B325E;
+}
+
+.store_Map_Link{
+  text-decoration: none;
+}
+
+.store_Timing, .store_Contact, .store_Distance, .store_Map_Link{
   display: flex;
   gap: 0.5rem;
   align-items: center;
@@ -51,4 +65,23 @@
   font-size: 0.63rem;
   line-height: 0.875rem;
   text-transform: uppercase;
+}
+
+.open_Store_button{
+  /* margin: 0 0.75rem; */
+  padding: 1rem 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+  border-top: 1px solid #EBEDF0;
+}
+
+@media screen and (min-width: 768px) {
+  .tab_Border{
+    border-radius: 0.25rem;
+    border: 1px solid #DDE0E7;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.02);
+  }
 }

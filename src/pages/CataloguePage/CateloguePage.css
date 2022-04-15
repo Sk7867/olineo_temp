@@ -1,0 +1,140 @@
+.catelogue_Page{
+  margin: 1rem 0 0;
+  background: #FFFFFF;
+  padding: 1rem 0.5rem;
+}
+
+.catelogue_Page_Header{
+  margin: 0 0 1.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.catelogue_Page_Heading{
+  margin: 0;
+  color: #08090A;
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 2.25rem;
+}
+
+.catelogue_Form{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.catelogue_Form_Group{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.catelogue_Page_Header .button-Container{
+  min-width: 120px;
+  margin: 0 10px 0  0;
+}
+
+.catelogue_Page_List{
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.catalogue_List_Item{
+  display: flex;
+  padding: 0.5rem;
+  border: 1px solid #EBEDF0;
+  border-radius: 0.25rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.catalogue_List_Item p{
+  margin: 0;
+  color: #08090A;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.catalogue_List_Content, .catalogue_List_Buttons{
+  display: flex;
+}
+
+.catalogue_List_Content{
+  gap: 0.75rem;
+}
+
+.catalogue_List_Buttons{
+  gap: 0.5rem;
+}
+
+.catalogue_Edit, .catalogue_Delete{
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #FFFFFF;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.catalogue_Edit{
+  background: #3D5176 ;
+}
+
+.catalogue_Edit:hover{
+  color: #FFFFFF;
+}
+
+.catalogue_Delete{
+  background: red;
+}
+
+.catalogue_Hint{
+  margin: 0 0 0 0.5rem;
+  color: #5f6368;
+  font-weight: 400;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+@media screen and (min-width: 768px) {
+  .catelogue_Page{
+    padding: 1.5rem;
+    max-width: 680px;
+    width: 100%;
+    margin: 2rem auto;
+  }
+
+  .catelogue_Page_Header .button-Container {
+    min-width: 220px;
+  }
+
+  .catalogue_List_Item {
+    padding: 0.75rem 1rem;
+  }
+
+  .catalogue_List_Content {
+    gap: 1rem;
+  }
+
+  .catalogue_List_Buttons {
+    gap: 1rem;
+  }
+
+  .catalogue_List_Item p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .catalogue_Edit,
+  .catalogue_Delete {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    padding: 0.75rem 1.25rem;
+  }
+}

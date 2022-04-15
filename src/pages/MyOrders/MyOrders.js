@@ -28,6 +28,9 @@ const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
       header3Cond: true,
       headerText: 'My Orders ',
       categoriesCond: true,
+      header3Store: true,
+      header3Cart: true,
+      header3Profile: true,
     })
   }, []);
 

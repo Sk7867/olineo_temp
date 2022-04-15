@@ -31,12 +31,12 @@ const MyAddress = ({ setEditID, setProfileState, border }) => {
       <div className="page_Wrapper edit_Page_Wrapper">
         {
           matches ? (
-            <div className='add_New_Address' onClick={() => setProfileState(10)}>
+            <div className='add_New_Address section_Wrapper' onClick={() => setProfileState(10)}>
               <img src={addIcon} alt="" />
               <p>Add a new address</p>
             </div>
           ) : (
-            <Link to={'/newaddress'} className='add_New_Address'>
+            <Link to={'/newaddress'} className='add_New_Address section_Wrapper'>
               <img src={addIcon} alt="" />
               <p>Add a new address</p>
             </Link>

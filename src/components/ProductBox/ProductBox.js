@@ -5,18 +5,19 @@ import { Link } from 'react-router-dom'
 import './ProductBox.css'
 
 const ProductBox = ({ card_heading, classes, product }) => {
-  // console.log(product);
   return (
     <>
       {
-        product && product.imagePath && (
-          <Link to={`/`} state={product} className={'productbox_Container ' + (classes ? classes.boxClass : '')}>
+        product && product.images.length > 0 && (
+          <Link to={`/product/${product.name}`} state={{ product: product }} className={'productbox_Container ' + (classes ? classes.boxClass : '')}>
             <>
-              <img src={product.imagePath} alt="" />
+              {product.images.length > 0 && (
+                <img src={product.images[0]} alt="" />
+              )}
               <div className="productbox_details">
                 <p className='box_heading'>{card_heading}</p>
-                <p className="box_price">₹{product.sellingPriceRange.min}</p>
-                <p className="box_itemName">{product.name}</p>
+                {product.price && (<p className="box_price">₹{product.price}</p>)}
+                {product.name && (<p className="box_itemName">{product.name}</p>)}
               </div>
             </>
           </Link>

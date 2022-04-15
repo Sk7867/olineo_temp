@@ -47,6 +47,11 @@ const CartSection = ({ featureProducts }) => {
               <p className='empty_order_text'>Your cart is empty</p>
               <button type='submit' className='submit-button' onClick={() => nav('/')} ><p>Start Shopping</p></button>
             </div>
+            {/* <Section2
+              id={'Top-sellers-sec'}
+              heading='Top Sellers'
+              productData={featureProducts}
+            /> */}
           </>
         ) : (
           <div className='order_Page_Right'>
@@ -85,11 +90,11 @@ const CartSection = ({ featureProducts }) => {
             </div>
 
             {/* cart carousel section */}
-            {/* <Section2
+            <Section2
               id={'Top-sellers-sec'}
               heading='Top Sellers'
               productData={featureProducts}
-            /> */}
+            />
 
             {/* cart saved for later */}
             <div className="cart_Save_Later">

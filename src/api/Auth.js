@@ -23,6 +23,7 @@ const headers = {
 
 var loginRef
 var signupRef
+var loginEmailRef
 
 // function update(value) {
 //   let prevData = JSON.parse(sessionStorage.getItem('user'));
@@ -46,7 +47,7 @@ export const userLogin = async (contact) => {
 
   let loginResponse
 
-  await axios.post(`${process.env.REACT_APP_BASE_URL}/user/login`, loginData, { headers })
+  await axios.post(`${baseURL}/user/login`, loginData, { headers })
     .then(res => {
       // console.log(res);
       loginResponse = res.data
@@ -55,6 +56,26 @@ export const userLogin = async (contact) => {
       // console.log(loginRef);
     })
     .catch(err => { console.log('Error:', err) })
+
+  return loginResponse
+}
+
+
+//User Login Email--------------------
+export const userLoginEmail = async (email) => {
+  const loginData = JSON.stringify({
+    "email": email
+  })
+
+  let loginResponse
+
+  await axios.post(`${baseURL}/user/signup/email`, loginData, { headers })
+    .then(res => {
+      loginResponse = res
+      loginRef = res.data.userId
+      // console.log(loginRef);
+      // console.log(loginResponse);
+    })
 
   return loginResponse
 }
@@ -125,6 +146,42 @@ export const verifyOtpLogin = async (otp, existingUser) => {
   return otpResponse
 }
 
+// export const verifyOtpLoginEmail = async (otp) => {
+//   let otpResponse;
+//   // console.log(otp, typeof (otp));
+
+//   const otpData = JSON.stringify({
+//     "otp": otp,
+//   })
+
+//   await axios.put(`${baseURL}/user/verifyOtp/${loginRef}`, otpData, { headers })
+//     .then(res => {
+//       if (res) {
+//         otpResponse = res.data
+//         // userInfo.fullName = ''
+//         // userInfo.mobileNumber = ''
+//         // userInfo.id = ''
+//         // userInfo.email = ''
+//         // userInfo.JWT = otpResponse.JWT
+//         // userInfo.dob = null
+//         // window.sessionStorage.setItem("user", JSON.stringify(userInfo))
+//         // userInfo.JWT = otpResponse.JWT
+//         // console.log(existingUser);
+//         // const saveUserData = {
+//         //   id: userInfo.id,
+//         //   name: userInfo.fullName,
+//         //   contact: userInfo.contact,
+//         //   email: userInfo.email,
+//         //   JWT: userInfo.JWT
+//         // }
+//       }
+//     })
+//     .catch(err => console.log('Error:', err))
+
+//   // console.log(userInfo);
+//   return otpResponse
+// }
+
 //Verify OTP SIGNUP----------------
 export const verifyOtpSignup = async (otp) => {
   let otpResponse;
@@ -170,7 +227,7 @@ export const getUser = async (JWT) => {
     'Content-Type': 'application/json',
     "Authorization": `Bearer ${JWT}`
   }
-  console.log(userToken);
+  // console.log(userToken);
 
   await axios.get(`${baseURL}/user/myProfile`, { headers })
     .then(res => {
@@ -231,7 +288,7 @@ export const updateUser = async (userData) => {
 
   const headers = {
     "Access-Control-Allow-origin": "*",
-    'Content-Type': 'application/json',
+    'Content-Type': 'multipart/form-data',
     "Authorization": `Bearer ${userToken}`
   }
 
@@ -315,4 +372,28 @@ export const logOutUser = async () => {
   //   .catch(err => console.log('Error:', err))
 
   return response
+}
+
+export const getUserLocation = () => {
+
+  let userLocationResponse
+
+  const onSuccess = (position) => {
+    userLocationResponse = position
+  }
+
+  const onError = (error) => {
+    userLocationResponse = error
+  }
+
+  // if (!('geolocation' in navigator)) {
+  //   userLocationResponse = {
+  //     code: 0,
+  //     message: 'Geolocation not supported'
+  //   }
+  // }
+
+  console.log(userLocationResponse);
+
+  navigator.geolocation.getCurrentPosition(onSuccess, onError)
 }

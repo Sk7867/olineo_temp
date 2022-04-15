@@ -27,6 +27,9 @@ const Payment = ({ setHeaderData, cartData }) => {
       header3Cond: true,
       headerText: 'Payment',
       categoriesCond: false,
+      header3Store: true,
+      header3Cart: true,
+      header3Profile: true,
     })
   }, []);
 

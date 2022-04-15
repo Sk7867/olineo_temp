@@ -23,6 +23,9 @@ const CustomerSupport = ({ setHeaderData }) => {
       header3Cond: true,
       headerText: 'Customer Support',
       categoriesCond: false,
+      header3Store: true,
+      header3Cart: true,
+      header3Profile: true,
     })
   }, []);
 

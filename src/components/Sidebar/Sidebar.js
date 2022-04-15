@@ -31,7 +31,7 @@ const Sidebar = ({ sidebar, setSidebar, userLoggedIn }) => {
     {
       image: storeBlue,
       text: 'Store finder',
-      link: '/orders',
+      link: '/store-finder',
     },
     {
       image: truckIcon,
@@ -57,7 +57,7 @@ const Sidebar = ({ sidebar, setSidebar, userLoggedIn }) => {
     {
       image: storeBlue,
       text: 'Store finder',
-      link: '/orders',
+      link: '/store-finder',
     },
     {
       image: globeIcon,

@@ -10,6 +10,7 @@ import './Profile.css'
 
 //Images
 import userImage from '../../assets/png/userImage.png'
+import defaultUserImage from '../../assets/png/default_user_image.png'
 import cameraIcon from '../../assets/vector/camera_icon.svg'
 import accountCircleBlue from '../../assets/vector/account_circle_blue.svg'
 import truckIconBlue from '../../assets/vector/truck_outline_blue.svg'
@@ -30,14 +31,30 @@ import OrderSection from '../MyOrders/OrderSection';
 import { getCartData } from '../../api/Cart';
 
 
-const Profile = ({ setEditID, editID, setHeaderData, featureProducts, ordersData }) => {
+const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
   const [profileState, setProfileState] = useState(1);
+  const [profilePic, setProfilePic] = useState(null)
+  const [newProfilePic, setNewProfilePic] = useState(null)
   const [addressData, setAddressData] = useState([])
   const matches = useMediaQuery("(min-width:768px)")
   const [editAddress, setEditAddress] = useState({});
   const loc = useLocation()
   const nav = useNavigate()
-  const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart } = useContext(UserDataContext)
+  const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts } = useContext(UserDataContext)
+
+  // console.log(profilePic);
+
+  useEffect(() => {
+    if (userContext && userContext.profilePic) {
+      setProfilePic(userContext.profilePic)
+    } else if (newProfilePic !== null) {
+      setProfilePic(newProfilePic)
+    } else {
+      setProfilePic(defaultUserImage)
+    }
+  }, [userContext, newProfilePic])
+  // console.log(profilePic);
+
 
   useEffect(() => {
     getAddress()
@@ -57,6 +74,7 @@ const Profile = ({ setEditID, editID, setHeaderData, featureProducts, ordersData
         }
       })
   }, [])
+  // console.log(userCart);
 
   // console.log(userCart);
 
@@ -65,6 +83,9 @@ const Profile = ({ setEditID, editID, setHeaderData, featureProducts, ordersData
       header3Cond: true,
       headerText: 'Profile',
       categoriesCond: false,
+      header3Store: true,
+      header3Cart: true,
+      header3Profile: false,
     })
   }, []);
 
@@ -85,7 +106,7 @@ const Profile = ({ setEditID, editID, setHeaderData, featureProducts, ordersData
       .then(res => {
         // console.log('User Logged Out')
         setUserContext({
-          profilePic: userImage,
+          profilePic: '',
           id: '',
           fullName: '',
           mobileNumber: '',
@@ -133,19 +154,39 @@ const Profile = ({ setEditID, editID, setHeaderData, featureProducts, ordersData
     },
   ]
 
+  console.log(userContext.profilePic);
+
   const profileStateSwitch = (profileState) => {
     switch (profileState) {
-      case 1: return (<EditDetails profilePic={false} />)
-      case 2: return (<OrderSection ordersList={ordersData} featureProducts={featureProducts} onTheWay={true} delivered={true} />)
-      case 3: return (<CartSection featureProducts={featureProducts} />)
+      case 1: return (<EditDetails profileDetails={false} profilePicUpdate={profilePic} />)
+      case 2: return (<OrderSection ordersList={ordersData} featureProducts={allProducts} onTheWay={true} delivered={true} />)
+      case 3: return (<CartSection featureProducts={allProducts} />)
       case 4: return (<MyAddress setEditID={setEditID} setProfileState={setProfileState} border={true} />)
-      case 5: return (<EditDetails profilePic={false} />)
+      case 5: return (<EditDetails profileDetails={false} profilePicUpdate={profilePic} />)
       case 10: return (<AddressForm setProfileState={setProfileState} />)
       case 11: return (<AddressForm editID={editID} addressProp={loc.state} setProfileState={setProfileState} />)
 
-      default: return (<EditDetails profilePic={false} />)
+      default: return (<EditDetails profileDetails={false} profilePicUpdate={profilePic} />)
     }
   }
+
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader()
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setNewProfilePic(reader.result);
+          setUserContext(prev => ({
+            ...prev,
+            profilePic: reader.result
+          }))
+          // console.log(reader.result);
+        }
+      }
+      reader.readAsDataURL(e.target.files[0])
+    }
+  }
+  // console.log(userContext);
 
   return (
     <>
@@ -156,9 +197,10 @@ const Profile = ({ setEditID, editID, setHeaderData, featureProducts, ordersData
             <div>
               <div className='profile_User_Details'>
                 <div className='user_Profile_Pic'>
-                  <img src={userContext.profilePic} alt="" />
+                  <img src={profilePic} alt="" />
                   <div className='user_Camera_Icon'>
                     <img src={cameraIcon} alt="" />
+                    <input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' />
                   </div>
                 </div>
                 <p className="user_Name">
@@ -202,12 +244,13 @@ const Profile = ({ setEditID, editID, setHeaderData, featureProducts, ordersData
         {
           matches && (
             <div className='desk_Page_Wrapper'>
-              <aside className="side_Section profile_Side_Section section_Wrapper">
+              <aside className="side_Section profile_Side_Section">
                 <div className='profile_User_Details'>
                   <div className='user_Profile_Pic'>
-                    <img src={userContext.profilePic} alt="" />
+                    <img src={profilePic} alt="" />
                     <div className='user_Camera_Icon'>
                       <img src={cameraIcon} alt="" />
+                      <input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' />
                     </div>
                   </div>
                   <p className="user_Name">

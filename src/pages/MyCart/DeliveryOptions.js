@@ -16,6 +16,9 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
       header3Cond: true,
       headerText: 'Delivery option',
       categoriesCond: false,
+      header3Store: true,
+      header3Cart: true,
+      header3Profile: true,
     })
   }, []);
 

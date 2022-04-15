@@ -24,6 +24,9 @@ const HomeDelivery = ({ setEditID, addressSelected, setAddressSelected, setHeade
       header3Cond: true,
       headerText: 'Select Address',
       categoriesCond: false,
+      header3Store: true,
+      header3Cart: true,
+      header3Profile: true,
     })
   }, []);
 

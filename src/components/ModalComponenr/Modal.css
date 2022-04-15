@@ -39,6 +39,10 @@
   padding: 0.5rem 1rem 1.5rem 1rem !important;
 }
 
+.modal-body a{
+  text-decoration: none;
+}
+
 .modal-footer{
   flex-direction: column;
   align-items: flex-start !important;
@@ -72,6 +76,30 @@
 
 .modal{
   z-index: 3000 !important;
+}
+
+.header_Pincode_Section{
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1.125rem 0 0;
+}
+
+.header_Pincode_Input{
+  width: 100%;
+}
+
+.header_Pincode_Input input{
+  border: 1px solid #1B325E;
+  border-radius: 0.25rem;
+}
+
+.header_Submit_Btn{
+  min-width: 128px;
+  width: 100%;
+  max-width: 128px;
+  margin: 0 -2.813rem 0 0;
 }
 
 @media screen and (min-width: 768px) {

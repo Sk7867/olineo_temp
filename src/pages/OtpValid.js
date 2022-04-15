@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
 import { getUser, verifyOtp, verifyOtpLogin, verifyOtpSignup } from '../api/Auth'
 import { UserDataContext } from '../Contexts/UserContext'
@@ -98,7 +98,7 @@ const OtpValid = ({ loginRedirect }) => {
             <button className='submit-button' type='submit' disabled={btnDisable}><p>Continue</p></button>
             {
               loginRedirect ? (
-                <p className='extra-btn'>Resend code via email</p>
+                <Link state={{ emailLogin: true }} to={'/login'} className='extra-btn'>Resend code via email</Link>
               ) : ('')
             }
           </div>

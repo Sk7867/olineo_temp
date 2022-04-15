@@ -4,9 +4,10 @@ import './OrderProductCard.css'
 //Images
 import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
 
-const OrderProductCard = ({ productName, productArrival, productImage, productDeliveryStatues, productPrice }) => {
+const OrderProductCard = ({ productName, productArrival, productImage, productDeliveryStatues, productPrice, classes, setModalShow }) => {
+  // console.log(classes);
   return (
-    <div className={`product_Container`}>
+    <div className={`product_Container ` + (classes ? classes.boxClass : '')}>
       <div className={`product_Wrapper`}>
         <div className={`product_Details`}>
           <div className="order_Product_Left">
@@ -41,7 +42,7 @@ const OrderProductCard = ({ productName, productArrival, productImage, productDe
       </div>
       {
         productDeliveryStatues === 'Arriving' && (
-          <div className={`product_Tracker`}>
+          <div className={`product_Tracker`} onClick={() => setModalShow(true)}  >
             <p className={`product_TrackText`}>Track order</p>
             <img src={arrowRightBlue} alt="" />
           </div>

@@ -28,6 +28,19 @@
   cursor: pointer;
 }
 
+.profile_Image{
+  max-width: 2rem;
+  max-height: 2rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  outline: none;
+  opacity: 0;
+}
+
 .user_Phone, .user_Mail{
   margin: 0.25rem 0 0;
   color: #1B325E;
@@ -117,7 +130,7 @@
   }
 
   .profile_Side_Section{
-    padding: 1rem 0;
+    padding: 0;
     gap: 2rem;
   }
 
