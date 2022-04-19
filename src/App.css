@@ -242,6 +242,7 @@ input[type='date']:focus::before{
   align-items: center;
   gap: 24px;
   padding: 80px 0;
+  margin: 1rem 0 0;
 }
 
 .empty_order_text{
