@@ -2,7 +2,7 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { useLocation, Routes, Route } from 'react-router-dom'
-import { getUser } from './api/Auth';
+import { getUser, getUserPic } from './api/Auth';
 import { getAllProducts } from './api/Product';
 import { getCartData } from './api/Cart';
 
@@ -80,7 +80,8 @@ function App() {
     pincode: ''
   })
   const [userAddress, setUserAddress] = useState({})
-  const [userCart, setUserCart] = useState({})
+  const [userCart, setUserCart] = useState([])
+  // console.log(userCart);
 
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,
@@ -114,23 +115,11 @@ function App() {
   }, [userContext])
 
   // useEffect(() => {
-  //   if (userLoggedIn) {
-  //     getCartData()
-  //       .then(res => {
-  //         if (res) {
-  //           setUserCart(res)
-  //         }
-  //       })
-  //     getAddress()
-  //       .then(res => {
-  //         if (res) {
-  //           setUserAddress(res)
-  //         }
-  //       })
-  //   }
+  //   getUserPic()
+  //     .then(res => console.log(res))
   // }, [])
   // console.log(userLoggedIn);
-  // console.log(userAddress);
+  // console.log(userContext);
 
   useEffect(() => {
     sessionStorage.setItem('user', JSON.stringify(userContext))
@@ -145,8 +134,6 @@ function App() {
         })
       })
   }, [])
-
-  // console.log(allProducts);
 
   const ordersData = [
     {

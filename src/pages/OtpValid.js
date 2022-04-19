@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
-import { getUser, verifyOtp, verifyOtpLogin, verifyOtpSignup } from '../api/Auth'
+import { getUser, getUserPic, verifyOtp, verifyOtpLogin, verifyOtpSignup } from '../api/Auth'
 import { UserDataContext } from '../Contexts/UserContext'
 import { Slide, toast, ToastContainer } from 'react-toastify'
+import { getCartData } from '../api/Cart'
 
 toast.configure()
 const OtpValid = ({ loginRedirect }) => {
@@ -13,7 +14,7 @@ const OtpValid = ({ loginRedirect }) => {
   const [seconds, setSeconds] = useState(60)
   // const [resend, setResend] = useState(true)
   const nav = useNavigate()
-  const { setUserContext } = useContext(UserDataContext)
+  const { setUserContext, setUserCart } = useContext(UserDataContext)
 
   const handleLength = (length) => {
     if (length === 5) {
@@ -59,7 +60,22 @@ const OtpValid = ({ loginRedirect }) => {
                 dob: user.dob
               }))
             }
+          }),
+        getUserPic(res.JWT)
+          .then(res => {
+            if (res) {
+              setUserContext(prev => ({
+                ...prev,
+                profilePic: res
+              }))
+            }
           })
+        // getCartData()
+        //   .then(res => {
+        //     if (res) {
+        //       setUserCart(res)
+        //     }
+        //   })
       ) : toast.error('OTP Expired or invalid'))
   }
 

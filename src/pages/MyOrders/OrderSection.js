@@ -6,22 +6,13 @@ import Section2 from '../../components/Section2/Section2'
 
 const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered }) => {
   const nav = useNavigate()
-  const [modalShow, setModalShow] = useState(false)
+
 
   let ordersNumber = ordersList.length
 
   const pageSwitch = (e) => {
     e.preventDefault();
     nav('/')
-  }
-
-  const offerModalData = {
-    offer_Name: 'Bank Offer',
-    offer_desc: '₹499 discount on HDFC Bank Credit Cards',
-    offerAvail: [
-      'Select eligible card at the time of checkout.',
-      'No promo code required to avail the offer.'
-    ],
   }
 
   return (
@@ -56,7 +47,6 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered }) => {
                               classes={{
                                 boxClass: 'section_Wrapper'
                               }}
-                              setModalShow={setModalShow}
                             />
                           ) : ('')
                       ))
@@ -91,7 +81,6 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered }) => {
                               classes={{
                                 boxClass: 'section_Wrapper'
                               }}
-                              setModalShow={setModalShow}
                             />
                           ) : ('')
                       ))
@@ -111,7 +100,6 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered }) => {
           </>
         )
       }
-      <BankOfferModal modalShow={modalShow} setModalShow={setModalShow} offerModalData={offerModalData} />
     </>
   )
 }

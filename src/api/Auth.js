@@ -288,7 +288,7 @@ export const updateUser = async (userData) => {
 
   const headers = {
     "Access-Control-Allow-origin": "*",
-    'Content-Type': 'multipart/form-data',
+    'Content-Type': 'application/json',
     "Authorization": `Bearer ${userToken}`
   }
 
@@ -315,6 +315,51 @@ export const updateUser = async (userData) => {
   return updateUserResponse
 
 }
+
+//GET USER PROFILE PIC
+export const getUserPic = async (JWT) => {
+  let userPicResponse
+
+  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
+
+  const headers = {
+    "Access-Control-Allow-origin": "*",
+    'Content-Type': 'application/json',
+    "Authorization": `Bearer ${JWT}`
+  }
+
+  await axios.get(`${baseURL}/user/photo`, { headers })
+    .then(res => {
+      userPicResponse = res.data
+      // console.log(userPicResponse);
+    })
+
+  return userPicResponse
+}
+
+
+//SAVE/UPDATE USER PROFILE PIC
+export const saveUserPic = async () => {
+  let savePicResponse
+
+  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
+
+  const headers = {
+    "Access-Control-Allow-origin": "*",
+    'Content-Type': 'multipart/form-data',
+    "Authorization": `Bearer ${userToken}`
+  }
+
+  await axios.patch(`${baseURL}/user/addphoto`, { headers })
+    .then(res => {
+      savePicResponse = res
+      // console.log(userPicResponse);
+    })
+
+  return savePicResponse
+}
+
+
 
 //UPDATE USER MOBILE NUMBER
 export const updateMobileNumber = async (userData) => {

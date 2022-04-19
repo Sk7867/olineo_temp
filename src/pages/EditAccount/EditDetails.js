@@ -173,7 +173,7 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
   ]
 
   const validateForm = () => {
-    (displayInfo.user_Full_Name !== '') && (displayInfo.user_ph_Number !== '') && (displayInfo.user_Email !== '') && (selectedDay !== null) && (userContext.profilePic) ? setDisabled(false) : setDisabled(true)
+    (displayInfo.user_Full_Name !== '') && (displayInfo.user_ph_Number !== '') && (displayInfo.user_Email !== '') && (selectedDay !== null) && (userContext.profilePic) && profilePicUpdate ? setDisabled(false) : setDisabled(true)
   }
 
   const handleModal = (prop) => {

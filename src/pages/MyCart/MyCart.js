@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { UserDataContext } from '../../Contexts/UserContext'
+import { getIndiProduct } from '../../api/Product'
 
 //CSS
 import './MyCart.css'
@@ -20,8 +21,11 @@ import { getCartData } from '../../api/Cart'
 
 const MyCart = ({ setHeaderData }) => {
   const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, allProducts } = useContext(UserDataContext)
+  const [cartArray, setCartArray] = useState({
+    cart: [],
+    no_of_carts: 0
+  })
   const nav = useNavigate()
-  console.log(userCart);
 
   useEffect(() => {
     setHeaderData({
@@ -38,7 +42,8 @@ const MyCart = ({ setHeaderData }) => {
     getCartData()
       .then(res => {
         if (res) {
-          setUserCart(res)
+          setCartArray(res)
+          console.log(res);
         }
       })
   }, [])
@@ -48,6 +53,19 @@ const MyCart = ({ setHeaderData }) => {
     // console.log(e);
     nav('/')
   }
+
+  useEffect(() => {
+    cartArray.cart.map((product) => (
+      getIndiProduct(product)
+        .then(res => {
+          if (res) {
+            console.log(res);
+            setUserCart([...userCart, res])
+          }
+        })
+    ))
+  }, [cartArray])
+
 
   const breadCrumbsData = [
     {
@@ -59,6 +77,8 @@ const MyCart = ({ setHeaderData }) => {
       url: ''
     },
   ]
+  console.log(cartArray);
+  console.log(userCart);
 
   // console.log(cartData);
 
@@ -67,7 +87,7 @@ const MyCart = ({ setHeaderData }) => {
       <div className='page_Wrapper page_Margin_Top'>
         <BreadCrumbs data={breadCrumbsData} />
         {
-          userCart.no_of_carts === 0 ? (
+          cartArray.no_of_carts === 0 ? (
             <>
               <div className="empty_order_sec">
                 <p className='empty_order_text'>Your cart is empty</p>
@@ -83,7 +103,7 @@ const MyCart = ({ setHeaderData }) => {
             <>
               <div className='desk_Page_Wrapper'>
                 <aside className="side_Section section_Wrapper" style={{ padding: '0', background: 'none' }}>
-                  <PriceDetailsBox HideDetails={false} classes={{ containerClass: '' }} />
+                  {/* <PriceDetailsBox HideDetails={false} classes={{ containerClass: '' }} /> */}
                   <div className="cart_Add_Items section_Wrapper">
                     <div className="add_Items_Wrapper">
                       <p>Add items worth ₹{`600`} to qualify for FREE Delivery</p>
@@ -93,7 +113,7 @@ const MyCart = ({ setHeaderData }) => {
                     </div>
                   </div>
                 </aside>
-                <CartSection featureProducts={allProducts} />
+                {/* <CartSection featureProducts={allProducts} /> */}
                 <Section2
                   id={'Top-sellers-sec'}
                   heading='Top Sellers'

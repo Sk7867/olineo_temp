@@ -59,6 +59,10 @@
   line-height: 1.25rem;
 }
 
+.catalogue_List_Item p:first-of-type{
+  width: 160px;
+}
+
 .catalogue_List_Content, .catalogue_List_Buttons{
   display: flex;
 }
@@ -129,6 +133,10 @@
   .catalogue_List_Item p {
     font-size: 1rem;
     line-height: 1.5rem;
+  }
+
+  .catalogue_List_Item p:first-of-type {
+    width: 230px;
   }
 
   .catalogue_Edit,

@@ -43,7 +43,7 @@ export const getCartData = async () => {
       if (res) {
         cartDataResponse = res.data.data
 
-        // console.log(cartDataResponse);
+        console.log(cartDataResponse);
       }
     })
     .catch(err => console.log('Error:', err))
@@ -58,9 +58,10 @@ export const addToCart = async (id) => {
   const headers = {
     "Access-Control-Allow-origin": "*",
     'Content-Type': 'application/json',
-    "Authorization": `Bearer ${userToken}`
+    "authorization": `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQ5NjMxMWU1ZDkxYWI0MzU1MWQzYzEiLCJpYXQiOjE2NTAyOTQ0OTEsImV4cCI6MTY1MTU5MDQ5MX0.PCB3XjTPWvCL2jzGc94z8Lo2Wu4iXEws66aGEHRt1bc`
   }
   console.log(id);
+  console.log(userToken);
 
   await axios.patch(`${baseURL}/product/cart/${id}`, { headers })
     .then(res => {

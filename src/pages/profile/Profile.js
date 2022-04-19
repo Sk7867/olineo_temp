@@ -72,9 +72,10 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
         if (res) {
           setUserCart(res)
         }
+        console.log(res);
       })
   }, [])
-  // console.log(userCart);
+  console.log(userCart);
 
   // console.log(userCart);
 
@@ -154,7 +155,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
     },
   ]
 
-  console.log(userContext.profilePic);
+  // console.log(userContext.profilePic);
 
   const profileStateSwitch = (profileState) => {
     switch (profileState) {

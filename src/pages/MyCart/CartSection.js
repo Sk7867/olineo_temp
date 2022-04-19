@@ -86,7 +86,7 @@ const CartSection = ({ featureProducts }) => {
 
             {/* cart price detials */}
             <div className={'tab_None'}>
-              <PriceDetailsBox HideDetails={false} />
+              {/* <PriceDetailsBox HideDetails={false} /> */}
             </div>
 
             {/* cart carousel section */}
