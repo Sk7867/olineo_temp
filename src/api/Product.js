@@ -15,8 +15,22 @@ export const getAllProducts = async () => {
   await axios.get(`${baseURL}/product`, { headers })
     .then(res => {
       allProductsResponse = res.data.data
-      // console.log(allProductsResponse);
+      console.log(allProductsResponse);
     })
 
   return allProductsResponse
+}
+
+
+//GET INDIVIDUAL PRODUCT
+export const getIndiProduct = async (id) => {
+  let indiProductResponse
+
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/${id}`, { headers })
+    .then(res => {
+      indiProductResponse = res.data.data.product
+      // console.log(indiProductResponse);
+    })
+
+  return indiProductResponse
 }

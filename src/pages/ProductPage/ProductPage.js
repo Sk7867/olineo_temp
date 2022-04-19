@@ -18,6 +18,7 @@ import Section2 from '../../components/Section2/Section2'
 import ProductInfoTable from '../../components/ProductInfoTable/ProductInfoTable'
 import OfferCard from '../../components/OfferCard/OfferCard'
 import AlternateProductBox from '../../components/AlternateProductCard/AlternateProductBox'
+import { getIndiProduct } from '../../api/Product'
 
 
 
@@ -28,45 +29,17 @@ const ProductPage = ({ setHeaderData }) => {
   const [seeMore, setSeeMore] = useState(false)
   const [preOrder, setPreOrder] = useState(false)
   const [previewImageSelected, setPreviewImageSelected] = useState(null)
+  const [productInfo, setProductInfo] = useState([])
   const [productData, setProductData] = useState({
     product_Id: '',
-    product_name: 'JBL C50HI Wired Headset  (Black, In the Ear)',
+    product_name: '',
     product_image: '',
-    product_price: '1,499',
-    product_Original_Price: '1,499',
+    product_price: '',
+    product_Original_Price: '',
     offer_Deadline: 'Deal ends in 14h 17m 04s',
     product_Instock: 255,
     product_image_List: [],
-    product_Information: [
-      {
-        table_key: 'Brand',
-        table_value: 'JBL'
-      },
-      {
-        table_key: 'Model',
-        table_value: 'JBLC100SIUBLK'
-      },
-      {
-        table_key: 'Model Year',
-        table_value: '2016'
-      },
-      {
-        table_key: 'Number of items',
-        table_value: '1'
-      },
-      {
-        table_key: 'Item Weight',
-        table_value: '50 g'
-      },
-    ],
-    product_Description: [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    ],
+    product_Description: [],
     product_Alternate: [
       {
         id: 1,
@@ -126,7 +99,7 @@ const ProductPage = ({ setHeaderData }) => {
       },
     ]
   })
-  console.log(loc);
+  // console.log(loc);
 
   useEffect(() => {
     setHeaderData({
@@ -143,22 +116,31 @@ const ProductPage = ({ setHeaderData }) => {
     if (loc.state) {
       let product = loc.state.product
       if (product) {
-        let productImage1 = product.images
         // let allProductImages = Object.values(product.otherImages)
         // allProductImages.unshift(productImage1)
-        setProductData(prev => ({
-          ...prev,
-          product_Id: product._id,
-          product_name: product.name,
-          product_image_List: productImage1,
-        }))
-        setPreviewImageSelected(
-          productImage1[0]
-        )
+        getIndiProduct(product._id)
+          .then(res => {
+            if (res) {
+              let productImage1 = res.images
+              let splitDesc = res.description.split('|')
+              setProductData(prev => ({
+                ...prev,
+                product_Id: res._id,
+                product_name: res.name,
+                product_price: res.price,
+                product_Description: splitDesc,
+                product_image_List: productImage1,
+              }))
+              setPreviewImageSelected(
+                productImage1[0]
+              )
+              setProductInfo(Object.entries(res.productInfo))
+            }
+          })
       }
     }
   }, [loc])
-  console.log(productData);
+  console.log(productInfo);
 
 
   const sec5Data = [
@@ -239,7 +221,7 @@ const ProductPage = ({ setHeaderData }) => {
   const bankOffersData = [
     {
       offer_Name: 'Bank offer',
-      offer_desc: '₹499 discount on HDFC Bank Credit Cards',
+      offer_desc: '₹499 discount on ICICI Bank Credit Cards',
       offer_Link: '/bank-offer',
       offerAvail: [
         'Select eligible card at the time of checkout.',
@@ -257,7 +239,7 @@ const ProductPage = ({ setHeaderData }) => {
     },
     {
       offer_Name: 'Bank offer',
-      offer_desc: '₹499 discount on HDFC Bank Credit Cards',
+      offer_desc: '₹499 discount on SBI Bank Credit Cards',
       offer_Link: '/bank-offer',
       offerAvail: [
         'Select eligible card at the time of checkout.',
@@ -345,7 +327,11 @@ const ProductPage = ({ setHeaderData }) => {
         <div className='order_Page_Right product_Page_Right'>
 
           <div className="product_Section_1">
-            <h3 className='product_Name'>{productData.product_name}</h3>
+            {productData.product_name === '' ? (
+              <h3 className='product_Name'>Loading</h3>
+            ) : (
+              <h3 className='product_Name'>{productData.product_name}</h3>
+            )}
             {/* Porduct Image preview section */}
             <div className="product_Preview_Section">
               <Carousel
@@ -372,7 +358,7 @@ const ProductPage = ({ setHeaderData }) => {
                 ₹{productData.product_price}
               </p>
               <p className="product_Original_Price">
-                ₹{productData.product_Original_Price}
+                ₹{parseInt(productData.product_price) + 2000}
               </p>
               <p className="product_Availability">
                 {
@@ -527,7 +513,7 @@ const ProductPage = ({ setHeaderData }) => {
           {/* Product Information Table */}
           <div className="productPage_Table">
             <h5 className='product_Section_Heading'>Product Information</h5>
-            <ProductInfoTable product_Information={productData.product_Information} />
+            <ProductInfoTable product_Information={productInfo} />
           </div>
 
         </div>

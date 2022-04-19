@@ -5,10 +5,11 @@ import { useMediaQuery } from '@mui/material'
 
 //Images
 import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
+import BankOfferModal from '../ModalComponenr/BankOfferModal'
 
 const OfferCard = ({ offer }) => {
   const matches = useMediaQuery("(min-width:768px)")
-  const [toggleDescription, setToggleDescription] = useState(false)
+  const [modalShow, setModalShow] = useState(false)
   // console.log(toggleDescription);
 
   return (
@@ -17,11 +18,13 @@ const OfferCard = ({ offer }) => {
         matches && toggleDescription ? ('') : ('')
       */  }
       <div className='offer_Card_Container'>
-        <p className="offer_Card_Name">{offer.offer_Name}</p>
-        <p className="offer_Card_Desc">{offer.offer_desc}</p>
+        <div>
+          <p className="offer_Card_Name">{offer.offer_Name}</p>
+          <p className="offer_Card_Desc">{offer.offer_desc}</p>
+        </div>
         {
           matches ? (
-            <div className="offer_Card_Link" onClick={() => setToggleDescription(true)} >
+            <div className="offer_Card_Link" onClick={() => setModalShow(true)} >
               <p>See more</p>
               <img src={arrowRightBlue} alt="" />
             </div>
@@ -57,6 +60,7 @@ const OfferCard = ({ offer }) => {
           ) : ('')
                   */  }
       </div>
+      <BankOfferModal modalShow={modalShow} setModalShow={setModalShow} offerModalData={offer} />
     </>
   )
 }

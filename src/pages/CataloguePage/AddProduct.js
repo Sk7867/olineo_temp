@@ -126,7 +126,12 @@ const AddProduct = ({ setHeaderData }) => {
             <div className="catelogue_Form_Group">
               <input type='text' name="Product Name" id="Product Name" value={product.name} className='input-field' placeholder='Enter Product Name' onChange={(value) => handleInput("name", value)} />
               <input type='text' name="Product EAN" id="Product EAN" value={product.EAN} className='input-field' placeholder='Enter Product EAN' onChange={(value) => handleInput("EAN", value)} />
+            </div>
+            <div className="catelogue_Form_Group">
               <input type='text' name="Product Description" id="Product Description" value={product.description} className='input-field' placeholder='Enter Product Description' onChange={(value) => handleInput("description", value)} />
+              <p className="catalogue_Hint">Add "|" seperated Image Description</p>
+            </div>
+            <div className="catelogue_Form_Group">
               <input type='text' name="Product Type" id="Product Type" value={product.type} className='input-field' placeholder='Enter Product Type' onChange={(value) => handleInput("type", value)} />
               <input type='text' name="Product Price" id="Product Price" value={product.price} className='input-field' placeholder='Enter Product Price' onChange={(value) => handleInput("price", value)} />
             </div>
