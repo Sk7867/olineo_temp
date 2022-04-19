@@ -80,9 +80,10 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
           })
           // console.log(res);
         }
+        console.log(res);
       })
   }, [])
-  // console.log(userCart);
+  console.log(userCart);
 
   useEffect(() => {
     cartArray.cart.map((product) => (

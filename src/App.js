@@ -95,7 +95,8 @@ function App() {
     pincode: ''
   })
   const [userAddress, setUserAddress] = useState({})
-  const [userCart, setUserCart] = useState({})
+  const [userCart, setUserCart] = useState([])
+  // console.log(userCart);
 
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,

@@ -58,6 +58,19 @@ const MyCart = ({ setHeaderData }) => {
     nav('/')
   }
 
+  useEffect(() => {
+    cartArray.cart.map((product) => (
+      getIndiProduct(product)
+        .then(res => {
+          if (res) {
+            console.log(res);
+            setUserCart([...userCart, res])
+          }
+        })
+    ))
+  }, [cartArray])
+
+
   const breadCrumbsData = [
     {
       text: 'Home',

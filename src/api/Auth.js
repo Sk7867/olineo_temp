@@ -298,7 +298,7 @@ export const updateUser = async (userData) => {
 
   const headers = {
     "Access-Control-Allow-origin": "*",
-    'Content-Type': 'multipart/form-data',
+    'Content-Type': 'application/json',
     "Authorization": `Bearer ${userToken}`
   }
 

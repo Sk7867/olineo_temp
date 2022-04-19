@@ -88,6 +88,15 @@ const OtpValid = ({ loginRedirect }) => {
                 orders: res.orders
               })
             }
+          }),
+        getUserPic(res.JWT)
+          .then(res => {
+            if (res) {
+              setUserContext(prev => ({
+                ...prev,
+                profilePic: res
+              }))
+            }
           })
         // getCartData()
         //   .then(res => {
