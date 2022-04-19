@@ -1,8 +1,9 @@
 //Dependencies
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { Accordion, Dropdown } from 'react-bootstrap'
+import { UserDataContext } from '../../Contexts/UserContext'
 
 //CSS
 import './ProductCategory.css'
@@ -29,6 +30,7 @@ const ProductCategory = ({ setHeaderData }) => {
   // const [checkboxFilter, setCheckboxFilter] = useState({})
   const [filterSelected, setFilterSelected] = useState([])
   const [filterArray, setFilterArray] = useState([])
+  const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts } = useContext(UserDataContext)
   // const [checkedItems, setCheckedItems] = useState({
   //   tags: []
   // })
@@ -44,7 +46,7 @@ const ProductCategory = ({ setHeaderData }) => {
     })
   }, []);
 
-  console.log(filterSelected);
+  // console.log(filterSelected);
 
   const breadCrumbsData = [
     {
@@ -201,12 +203,12 @@ const ProductCategory = ({ setHeaderData }) => {
 
   const isFilterSelected = (elem) => {
     var filterResult = filterSelected.some((filter) => filter.data === elem)
-    console.log(filterResult);
+    // console.log(filterResult);
     return filterResult
   }
 
   const isFilterPresent = (elem) => {
-    console.log(elem);
+    // console.log(elem);
   }
 
   // const filterModify = (element, heading, type) => {

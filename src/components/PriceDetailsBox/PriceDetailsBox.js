@@ -6,38 +6,41 @@ const PriceDetailsBox = ({ HideDetails, classes }) => {
   const [showDetails, setShowDetails] = useState(true);
   const { userCart, setUserCart } = useContext(UserDataContext)
 
+  // if (userCart.length !== 0) {
+  //   var cartItemsPrice = 0
+  //   userCart.cart.forEach(item => {
+  //     cartItemsPrice += parseInt(item.productOriginalPrice)
+  //   });
+
+  //   //Get Discounted Price
+  //   var totalDiscount = 0
+  //   userCart.cartData.forEach(item => {
+  //     var itemDiscount
+  //     itemDiscount = parseInt(item.productOriginalPrice) - parseInt(item.productDiscountPrice)
+  //     totalDiscount += itemDiscount
+  //   });
+
+  //   //Get Delivery Charges
+  //   var totalDeliveryCharge = 0
+  //   userCart.cart.forEach(item => {
+  //     totalDeliveryCharge += parseInt(item.productDeliveryCharge)
+  //   });
+
+
+  //   //Get Total Amount
+  //   var totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
+  // }
+
   //Get Price from cart Items
-  var cartItemsPrice = 0
-  userCart.cart.forEach(item => {
-    cartItemsPrice += parseInt(item.productOriginalPrice)
-  });
-
-  //Get Discounted Price
-  var totalDiscount = 0
-  userCart.cartData.forEach(item => {
-    var itemDiscount
-    itemDiscount = parseInt(item.productOriginalPrice) - parseInt(item.productDiscountPrice)
-    totalDiscount += itemDiscount
-  });
-
-  //Get Delivery Charges
-  var totalDeliveryCharge = 0
-  userCart.cart.forEach(item => {
-    totalDeliveryCharge += parseInt(item.productDeliveryCharge)
-  });
 
 
-  //Get Total Amount
-  var totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
-
-
-  console.log(classes);
+  // console.log(classes);
   return (
     <div className={"cart_Price_details " + (classes ? classes.containerClass : '')}>
       <div className="cart_Details_Header">
         <p>Price Details</p>
       </div>
-      {
+      {/* {
         showDetails && (
           <div className="cart_Details_Body">
             <div className="cart_Details_Price">
@@ -65,7 +68,7 @@ const PriceDetailsBox = ({ HideDetails, classes }) => {
             <p>{showDetails ? ('Hide') : ('Show')} Price Details</p>
           </div>
         )
-      }
+      } */}
     </div>
   )
 }
