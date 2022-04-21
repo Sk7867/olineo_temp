@@ -3,6 +3,7 @@ import './OrderProductCard.css'
 
 //Images
 import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
+import { Link } from 'react-router-dom'
 
 const OrderProductCard = ({ productName, productArrival, productImage, productDeliveryStatues, productPrice, classes }) => {
   // console.log(classes);
@@ -42,10 +43,10 @@ const OrderProductCard = ({ productName, productArrival, productImage, productDe
       </div>
       {
         productDeliveryStatues === 'Arriving' && (
-          <div className={`product_Tracker`}>
+          <Link to={'/order-details'} className={`product_Tracker`}>
             <p className={`product_TrackText`}>Track order</p>
             <img src={arrowRightBlue} alt="" />
-          </div>
+          </Link>
         )
       }
     </div>

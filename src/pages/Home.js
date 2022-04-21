@@ -261,6 +261,7 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section1
           id={'homepage_hero'}
           carouselData={sec1Data}
+          productData={allProducts}
         />
         <Section2
           id={'section2'}
@@ -273,6 +274,7 @@ const Home = ({ setHeaderData, allProducts }) => {
         <Section3
           id={'section3'}
           heading={'Pre-order product'}
+          productData={allProducts}
           cardButton={true}
         />
         <Section4
@@ -299,6 +301,7 @@ const Home = ({ setHeaderData, allProducts }) => {
           id={'section6'}
           heading={'Out-of-stock product'}
           cardButton={false}
+          productData={allProducts}
         />
         <Section4
           id={'section7'}

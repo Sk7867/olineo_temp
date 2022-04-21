@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { UserDataContext } from '../../Contexts/UserContext'
 
@@ -9,34 +9,39 @@ import Section2 from '../../components/Section2/Section2'
 
 const CartSection = ({ featureProducts }) => {
   const nav = useNavigate()
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart } = useContext(UserDataContext)
+  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, cartArray } = useContext(UserDataContext)
 
-  let cartItemsNumber = userCart.no_of_carts
+  let cartItemsNumber = cartArray.no_of_carts
+  var cartItemsPrice = 0
+  var totalDiscount = 0
+  var totalDeliveryCharge = 0
+  var totalAmount = 0
 
-  if (userCart.no_of_carts !== 0) {
-    //Get Price from cart Items
-    var cartItemsPrice = 0
-    userCart.cart.forEach(item => {
-      cartItemsPrice += parseInt(item.productOriginalPrice)
-    });
+  useEffect(() => {
+    if (cartArray.no_of_carts !== 0) {
+      //Get Price from cart Items
+      userCart.forEach(item => {
+        cartItemsPrice += parseInt(item.price) + 2000
+      });
 
-    //Get Discounted Price
-    var totalDiscount = 0
-    userCart.cart.forEach(item => {
-      var itemDiscount
-      itemDiscount = parseInt(item.productOriginalPrice) - parseInt(item.productDiscountPrice)
-      totalDiscount += itemDiscount
-    });
+      //Get Discounted Price
+      userCart.forEach(item => {
+        var itemDiscount
+        itemDiscount = parseInt(item.price)
+        totalDiscount += itemDiscount
+      });
 
-    //Get Delivery Charges
-    var totalDeliveryCharge = 0
-    userCart.cart.forEach(item => {
-      totalDeliveryCharge += parseInt(item.productDeliveryCharge)
-    });
+      //Get Delivery Charges
+      userCart.forEach((item, index) => {
+        totalDeliveryCharge += (index + 1) * 80
+      });
 
-    //Get Total Amount
-    var totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
-  }
+      //Get Total Amount
+      totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
+    }
+  }, [cartArray])
+
+
 
   return (
     <>
@@ -58,7 +63,7 @@ const CartSection = ({ featureProducts }) => {
             <p className="cart_Text section_Wrapper">My Cart</p>
             <div className="cards_Container">
               {
-                userCart.cart.map((item, index) => (
+                userCart.map((item, index) => (
                   <CartProductCard
                     key={index}
                     product={item}
@@ -86,7 +91,7 @@ const CartSection = ({ featureProducts }) => {
 
             {/* cart price detials */}
             <div className={'tab_None'}>
-              {/* <PriceDetailsBox HideDetails={false} /> */}
+              <PriceDetailsBox HideDetails={false} />
             </div>
 
             {/* cart carousel section */}
@@ -103,7 +108,7 @@ const CartSection = ({ featureProducts }) => {
               </div>
               <div className="cards_Container">
                 {
-                  userCart.cart.map((item, index) => (
+                  userCart.map((item, index) => (
                     <CartProductCard
                       key={index}
                       product={item}
@@ -125,6 +130,11 @@ const CartSection = ({ featureProducts }) => {
                 <button type='submit' className='submit-button' onClick={() => nav('/delivery-option')}><p>Checkout</p></button>
               </div>
             </div>
+            <Section2
+              id={'Top-sellers-sec'}
+              heading='Top Sellers'
+              productData={featureProducts}
+            />
           </div>
         )
       }

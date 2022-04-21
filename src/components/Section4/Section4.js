@@ -1,5 +1,6 @@
 import React from 'react'
 import ProductBox from '../ProductBox/ProductBox'
+import SkeletonElement from '../Skeletons/SkeletonElement'
 //CSS
 import './Section4.css'
 
@@ -21,10 +22,10 @@ const Section4 = ({ id, heading, productData, link, classes }) => {
             />) : ('')
         ))
         }
+        {
+          (productData.no_of_products === 0) && [1, 2, 3, 4].map((n) => (<SkeletonElement type={'productBox'} key={n} />))
+        }
       </div>
-      {
-        (productData.no_of_products === 0) && <div>Loading</div>
-      }
       <a href={link.link} className="section4_link mob_link logo_mob">{link.text}</a>
     </div>
   )

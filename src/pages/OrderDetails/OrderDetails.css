@@ -166,8 +166,12 @@
   border-bottom: 1px solid #EBEDF0;
 }
 
-.order_Cancel_Container div:last-child {
+.order_Cancel_Container div:nth-last-child(2), .order_Cancel_Container div:nth-last-child(1) {
   border: none;
+}
+
+.order_Cancel_Submit{
+  display: none;
 }
 
 @media screen and (min-width: 768px) {
@@ -266,8 +270,17 @@
     color: #FFFFFF;
   }
 
+  .order_Cancel_Button:hover p{
+    color: #FFFFFF;
+  }
+
   .order_Cancel_Container {
     margin: 1rem 0 3.375rem;
+  }
+
+  .order_Cancel_Submit{
+    display: block;
+    margin: 1.5rem 0 1rem;
   }
 }
 

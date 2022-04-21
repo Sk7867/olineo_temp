@@ -19,11 +19,12 @@ import ProductInfoTable from '../../components/ProductInfoTable/ProductInfoTable
 import OfferCard from '../../components/OfferCard/OfferCard'
 import AlternateProductBox from '../../components/AlternateProductCard/AlternateProductBox'
 import { getIndiProduct } from '../../api/Product'
+import SkeletonElement from '../../components/Skeletons/SkeletonElement'
 
 
 
 const ProductPage = ({ setHeaderData }) => {
-  const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts } = useContext(UserDataContext)
+  const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts, setCartArray } = useContext(UserDataContext)
   const matches = useMediaQuery("(min-width:768px)")
   const loc = useLocation()
   const [seeMore, setSeeMore] = useState(false)
@@ -31,6 +32,7 @@ const ProductPage = ({ setHeaderData }) => {
   const [previewImageSelected, setPreviewImageSelected] = useState(null)
   const [productInfo, setProductInfo] = useState([])
   const [productData, setProductData] = useState({
+    product_loaded: false,
     product_Id: '',
     product_name: '',
     product_image: '',
@@ -125,6 +127,7 @@ const ProductPage = ({ setHeaderData }) => {
               let splitDesc = res.description.split('|')
               setProductData(prev => ({
                 ...prev,
+                product_loaded: true,
                 product_Id: res._id,
                 product_name: res.name,
                 product_price: res.price,
@@ -140,7 +143,7 @@ const ProductPage = ({ setHeaderData }) => {
       }
     }
   }, [loc])
-  console.log(productInfo);
+  // console.log(productData);
 
 
   const sec5Data = [
@@ -261,16 +264,17 @@ const ProductPage = ({ setHeaderData }) => {
     addToCart(id)
       .then(res => {
         if (res) {
+          console.log(res);
           getCartData()
             .then(res => {
               if (res) {
-                setUserCart(res)
+                setCartArray(res)
               }
             })
         }
       })
+    // console.log(userContext);
   }
-  // console.log(userContext);
 
 
   return (
@@ -279,17 +283,27 @@ const ProductPage = ({ setHeaderData }) => {
 
         <aside className="side_Section section_Wrapper product_Side_Section">
           <div className="image_Preview_Side_Section">
-            <div className='image_Preview_Selected'>
-              <img src={previewImageSelected} alt="" />
+            <div className='image_Preview_Selected section_Wrapper'>
+              {productData.product_loaded === false ? (
+                <SkeletonElement type={'productPreviewImage'} />
+              ) : (
+                <img src={previewImageSelected} alt="" />
+              )}
             </div>
             <div className="product_Thumbnails">
-              {
-                productData.product_image_List.map((image, index) => (
-                  <div className="thumbnail" onMouseOver={() => setPreviewImageSelected(image)} >
-                    <img src={image} key={index} alt="" />
-                  </div>
-                ))
-              }
+              {productData.product_loaded === false ? (
+                [1, 2, 3, 4, 5].map((n) => (<SkeletonElement type={'productThumbnail'} key={n} />))
+              ) : (
+                <>
+                  {
+                    productData.product_image_List.map((image, index) => (
+                      <div className="thumbnail" key={index} onMouseOver={() => setPreviewImageSelected(image)} >
+                        <img src={image} alt="" />
+                      </div>
+                    ))
+                  }
+                </>
+              )}
             </div>
           </div>
           <div className="product_Side_Section_Buttons">
@@ -326,9 +340,9 @@ const ProductPage = ({ setHeaderData }) => {
         </aside>
         <div className='order_Page_Right product_Page_Right'>
 
-          <div className="product_Section_1">
-            {productData.product_name === '' ? (
-              <h3 className='product_Name'>Loading</h3>
+          <div className="product_Section_1 section_Wrapper">
+            {productData.product_loaded === false ? (
+              <SkeletonElement type={"productTitle"} />
             ) : (
               <h3 className='product_Name'>{productData.product_name}</h3>
             )}
@@ -395,7 +409,7 @@ const ProductPage = ({ setHeaderData }) => {
             }
           </div>
 
-          <div className="product_Alternate_Section">
+          <div className="product_Alternate_Section section_Wrapper">
             {
               matches ? (
                 <>
@@ -451,7 +465,7 @@ const ProductPage = ({ setHeaderData }) => {
             }
           </div>
 
-          <div className="product_Delivery_Section">
+          <div className="product_Delivery_Section section_Wrapper">
             <p className='product_Delivery_Details'>
               <span>Free delivery: Thursday, Feb 24 </span>
               on orders over ₹499
@@ -494,7 +508,7 @@ const ProductPage = ({ setHeaderData }) => {
             ) : ('')
           }
 
-          <div className='product_Description_Section '>
+          <div className='product_Description_Section section_Wrapper'>
             <div className='product_Description_Header d-flex justify-content-between align-items-center'>
               <h5 className='product_Section_Heading'>Description</h5>
               {seeMore ? (<p className='description_See_Less' onClick={() => setSeeMore(false)}>See less</p>) : ('')}
@@ -511,7 +525,7 @@ const ProductPage = ({ setHeaderData }) => {
           </div>
 
           {/* Product Information Table */}
-          <div className="productPage_Table">
+          <div className="productPage_Table section_Wrapper">
             <h5 className='product_Section_Heading'>Product Information</h5>
             <ProductInfoTable product_Information={productInfo} />
           </div>
@@ -520,7 +534,7 @@ const ProductPage = ({ setHeaderData }) => {
       </div>
 
       {/* Image Gallery */}
-      <div className="productPage_Image_Gallery">
+      <div className="productPage_Image_Gallery section_Wrapper">
         <h5 className='product_Section_Heading'>Product Image Gallery</h5>
         <div className="image_Gallery_Wrapper">
           {
