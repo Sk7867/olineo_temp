@@ -96,6 +96,10 @@ function App() {
   })
   const [userAddress, setUserAddress] = useState({})
   const [userCart, setUserCart] = useState([])
+  const [cartArray, setCartArray] = useState({
+    cart: [],
+    no_of_carts: 0
+  })
   // console.log(userCart);
 
   const [modalDataMobile, setModalDataMobile] = useState({

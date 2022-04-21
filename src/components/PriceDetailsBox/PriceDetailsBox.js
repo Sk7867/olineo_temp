@@ -23,7 +23,7 @@ const PriceDetailsBox = ({ HideDetails, classes }) => {
       <div className="cart_Details_Header">
         <p>Price Details</p>
       </div>
-      {/* {
+      {
         showDetails && (
           <div className="cart_Details_Body">
             <div className="cart_Details_Price">
@@ -51,7 +51,7 @@ const PriceDetailsBox = ({ HideDetails, classes }) => {
             <p>{showDetails ? ('Hide') : ('Show')} Price Details</p>
           </div>
         )
-      } */}
+      }
     </div>
   )
 }

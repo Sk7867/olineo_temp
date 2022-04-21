@@ -15,7 +15,7 @@ export const getAllProducts = async () => {
   await axios.get(`${process.env.REACT_APP_BASE_URL}/product`, { headers })
     .then(res => {
       allProductsResponse = res.data.data
-      console.log(allProductsResponse);
+      // console.log(allProductsResponse);
     })
 
   return allProductsResponse
