@@ -85,6 +85,7 @@
   margin: 1rem 0.25rem -0.25rem;
   border-top: 1px solid #EBEDF0;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .product_TrackText{

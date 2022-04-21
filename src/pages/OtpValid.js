@@ -14,7 +14,7 @@ const OtpValid = ({ loginRedirect }) => {
   const [seconds, setSeconds] = useState(60)
   // const [resend, setResend] = useState(true)
   const nav = useNavigate()
-  const { setUserContext, setUserCart } = useContext(UserDataContext)
+  const { setUserContext, setUserCart, setCartArray } = useContext(UserDataContext)
 
   const handleLength = (length) => {
     if (length === 5) {
@@ -59,6 +59,7 @@ const OtpValid = ({ loginRedirect }) => {
                 email: user.email,
                 dob: user.dob
               }))
+              setCartArray(user.cart)
             }
           }),
         getUserPic(res.JWT)

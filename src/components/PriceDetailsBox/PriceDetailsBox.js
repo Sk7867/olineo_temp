@@ -1,50 +1,53 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useRef } from 'react'
 import './PriceDetailsBox.css'
 import { UserDataContext } from '../../Contexts/UserContext'
 
 const PriceDetailsBox = ({ HideDetails, classes }) => {
   const [showDetails, setShowDetails] = useState(true);
-  const { userCart, setUserCart } = useContext(UserDataContext)
+  const { userCart, setUserCart, cartArray } = useContext(UserDataContext)
 
-  // if (userCart.length !== 0) {
-  //   var cartItemsPrice = 0
-  //   userCart.cart.forEach(item => {
-  //     cartItemsPrice += parseInt(item.productOriginalPrice)
-  //   });
+  let cartItemsNumber = cartArray.no_of_carts
+  var cartItemsPrice = 0
+  var totalDiscount = 0
+  var totalDeliveryCharge = 0
+  var totalAmount = 0
 
-  //   //Get Discounted Price
-  //   var totalDiscount = 0
-  //   userCart.cartData.forEach(item => {
-  //     var itemDiscount
-  //     itemDiscount = parseInt(item.productOriginalPrice) - parseInt(item.productDiscountPrice)
-  //     totalDiscount += itemDiscount
-  //   });
+  useEffect(() => {
+    if (cartArray.no_of_carts !== 0) {
+      //Get Price from cart Items
+      userCart.forEach(item => {
+        cartItemsPrice += parseInt(item.price) + 2000
+      });
 
-  //   //Get Delivery Charges
-  //   var totalDeliveryCharge = 0
-  //   userCart.cart.forEach(item => {
-  //     totalDeliveryCharge += parseInt(item.productDeliveryCharge)
-  //   });
+      //Get Discounted Price
+      userCart.forEach(item => {
+        var itemDiscount
+        itemDiscount = parseInt(item.price)
+        totalDiscount += itemDiscount
+      });
+
+      //Get Delivery Charges
+      userCart.forEach((item, index) => {
+        totalDeliveryCharge += (index + 1) * 80
+      });
+
+      //Get Total Amount
+      totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
+    }
+  }, [cartArray])
 
 
-  //   //Get Total Amount
-  //   var totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
-  // }
-
-  //Get Price from cart Items
-
-
-  // console.log(classes);
+  console.log(cartItemsPrice);
   return (
-    <div className={"cart_Price_details " + (classes ? classes.containerClass : '')}>
+    <div className={"cart_Price_details section_Wrapper " + (classes ? classes.containerClass : '')}>
       <div className="cart_Details_Header">
         <p>Price Details</p>
       </div>
-      {/* {
+      {
         showDetails && (
           <div className="cart_Details_Body">
             <div className="cart_Details_Price">
-              <p>Price ({userCart.no_of_carts} items) </p>
+              <p>Price ({cartItemsNumber} items) </p>
               <p>₹{cartItemsPrice}</p>
             </div>
             <div className="cart_Details_Discount">
@@ -68,7 +71,7 @@ const PriceDetailsBox = ({ HideDetails, classes }) => {
             <p>{showDetails ? ('Hide') : ('Show')} Price Details</p>
           </div>
         )
-      } */}
+      }
     </div>
   )
 }

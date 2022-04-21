@@ -13,23 +13,24 @@ const CartProductCard = ({
   product,
 }) => {
   const matches = useMediaQuery("(min-width:768px)")
+  // console.log(product);
   return (
-    <div className='cart_Product_Contianer'>
+    <div className='cart_Product_Contianer section_Wrapper'>
       <div className="cart_Product_Wrapper">
         <div className="product_Details cart_product_card">
           <div className="cart_Product_Left">
             <h4 className='cart_Product_Name'>
-              {product.productName}
+              {product.name}
             </h4>
             <p className="cart_Product_Color">
               Color : {product.productColor}
             </p>
             <div className="cart_Product_Price_Section">
               <p className="cart_Product_Discount_Price">
-                ₹{product.productDiscountPrice}
+                ₹{product.price}
               </p>
               <p className="cart_Product_Original_Price">
-                ₹{product.productOriginalPrice}
+                ₹{parseInt(product.price) + 2000}
               </p>
               <p className='cart_Product_Discount'>
                 {product.productDiscount}% off
@@ -55,7 +56,7 @@ const CartProductCard = ({
         </div>
         <div className="cart_Product_Card_Right">
           <div className="cart_Product_Image_Container">
-            <img src={product.productImage} alt="" />
+            <img src={product.images[0]} alt="" />
           </div>
           <div className="cart_Product_Counter_Container">
             <div className='counter_Icon_Container'>

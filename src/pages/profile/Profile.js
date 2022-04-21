@@ -29,6 +29,7 @@ import AddressForm from '../../components/AddressForm/AddressForm';
 import CartSection from '../MyCart/CartSection';
 import OrderSection from '../MyOrders/OrderSection';
 import { getCartData } from '../../api/Cart';
+import { getIndiProduct } from '../../api/Product';
 
 
 const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
@@ -40,7 +41,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
   const [editAddress, setEditAddress] = useState({});
   const loc = useLocation()
   const nav = useNavigate()
-  const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts } = useContext(UserDataContext)
+  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, allProducts, cartArray, setCartArray } = useContext(UserDataContext)
 
   // console.log(profilePic);
 
@@ -70,12 +71,26 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
     getCartData()
       .then(res => {
         if (res) {
-          setUserCart(res)
+          setCartArray(res)
+          // console.log(res);
         }
-        console.log(res);
       })
   }, [])
-  console.log(userCart);
+
+  useEffect(() => {
+    cartArray.cart.map((product) => (
+      getIndiProduct(product)
+        .then(res => {
+          if (res) {
+            // console.log(res);
+            let ind = userCart.findIndex(obj => obj._id === res._id)
+            if (ind === -1) {
+              setUserCart([...userCart, res])
+            }
+          }
+        })
+    ))
+  }, [cartArray])
 
   // console.log(userCart);
 
