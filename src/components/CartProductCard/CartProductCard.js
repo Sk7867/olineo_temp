@@ -13,12 +13,7 @@ const CartProductCard = ({
   product, handleQuantityInc, handleQuantityDec, handleRemoveFromCart
 }) => {
   const matches = useMediaQuery("(min-width:768px)")
-  const [discount, setDiscount] = useState('')
-  useEffect(() => {
-    if (product && product.discount.flatDiscount && product.discount.flatDiscount.value) {
-      setDiscount(product.discount.flatDiscount.value)
-    }
-  }, [product])
+  // console.log(product);
   return (
     <div className='cart_Product_Contianer section_Wrapper'>
       <div className="cart_Product_Wrapper">
@@ -32,10 +27,10 @@ const CartProductCard = ({
             </p>
             <div className="cart_Product_Price_Section">
               <p className="cart_Product_Discount_Price">
-                ₹{product.productDiscountPrice}
+                ₹{product.price}
               </p>
               <p className="cart_Product_Original_Price">
-                ₹{product.productOriginalPrice}
+                ₹{parseInt(product.price) + 2000}
               </p>
               <p className='cart_Product_Discount'>
                 {product.productDiscount}% off

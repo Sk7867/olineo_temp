@@ -4,7 +4,6 @@ import './OrderProductCard.css'
 //Images
 import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
 import { Link } from 'react-router-dom'
-import { getIndiProduct } from '../../api/Product'
 
 const OrderProductCard = ({ productName, productArrival, productImage, productDeliveryStatues, productPrice, classes }) => {
   // console.log(classes);
@@ -87,13 +86,17 @@ const OrderProductCard = ({ productName, productArrival, productImage, productDe
                 </div>
         </div>
         </div>
-        {
-          productDeliveryStatues === 'Arriving' && (
-            <div className={`product_Tracker`}>
-              <p className={`product_TrackText`}>Track order</p>
-              <img src={arrowRightBlue} alt="" />
-            </div>
-          )
-        }
+      </div>
+      {
+        productDeliveryStatues === 'Arriving' && (
+          <Link to={'/order-details'} className={`product_Tracker`}>
+            <p className={`product_TrackText`}>Track order</p>
+            <img src={arrowRightBlue} alt="" />
+          </Link>
+        )
+      }
+    </div>
+  )
+}
 
-        export default OrderProductCard
+export default OrderProductCard

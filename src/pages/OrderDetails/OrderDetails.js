@@ -91,9 +91,9 @@ const OrderDetails = ({ setHeaderData }) => {
           </div>
           {
             matches ? (
-              <div className='order_Cancel_Button'>
+              <Link to={'/order-cancel'} className="order_Cancel_Button">
                 <button type='submit' className='submit-button ' ><p>Request order cancellation</p></button>
-              </div>
+              </Link>
             ) : (
               <Link to={'/order-cancel'} className="order_Cancel_Button">
                 <p>Request order cancellation</p>

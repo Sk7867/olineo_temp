@@ -20,11 +20,7 @@ import CartSection from './CartSection'
 import { getCartData } from '../../api/Cart'
 
 const MyCart = ({ setHeaderData }) => {
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, allProducts } = useContext(UserDataContext)
-  const [cartArray, setCartArray] = useState({
-    cart: [],
-    no_of_carts: 0
-  })
+  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, allProducts, cartArray, setCartArray } = useContext(UserDataContext)
   const nav = useNavigate()
 
   useEffect(() => {
@@ -43,29 +39,32 @@ const MyCart = ({ setHeaderData }) => {
       .then(res => {
         if (res) {
           setCartArray(res)
-          console.log(res);
+          // console.log(res);
         }
       })
   }, [])
-
-  const pageSwitch = (e) => {
-    e.preventDefault();
-    // console.log(e);
-    nav('/')
-  }
 
   useEffect(() => {
     cartArray.cart.map((product) => (
       getIndiProduct(product)
         .then(res => {
           if (res) {
-            console.log(res);
-            setUserCart([...userCart, res])
+            // console.log(res);
+            let ind = userCart.findIndex(obj => obj._id === res._id)
+            if (ind === -1) {
+              setUserCart([...userCart, res])
+            }
           }
         })
     ))
   }, [cartArray])
 
+
+  const pageSwitch = (e) => {
+    e.preventDefault();
+    // console.log(e);
+    nav('/')
+  }
 
   const breadCrumbsData = [
     {
@@ -102,8 +101,8 @@ const MyCart = ({ setHeaderData }) => {
           ) : (
             <>
               <div className='desk_Page_Wrapper'>
-                <aside className="side_Section section_Wrapper" style={{ padding: '0', background: 'none' }}>
-                  {/* <PriceDetailsBox HideDetails={false} classes={{ containerClass: '' }} /> */}
+                <aside className="side_Section" style={{ padding: '0', background: 'none' }}>
+                  <PriceDetailsBox HideDetails={false} classes={{ containerClass: '' }} />
                   <div className="cart_Add_Items section_Wrapper">
                     <div className="add_Items_Wrapper">
                       <p>Add items worth ₹{`600`} to qualify for FREE Delivery</p>
@@ -113,12 +112,12 @@ const MyCart = ({ setHeaderData }) => {
                     </div>
                   </div>
                 </aside>
-                {/* <CartSection featureProducts={allProducts} /> */}
-                <Section2
+                <CartSection featureProducts={allProducts} />
+                {/* <Section2
                   id={'Top-sellers-sec'}
                   heading='Top Sellers'
                   productData={allProducts}
-                />
+                /> */}
               </div>
             </>
           )

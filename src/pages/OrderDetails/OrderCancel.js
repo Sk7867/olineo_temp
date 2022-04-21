@@ -91,6 +91,9 @@ const OrderCancel = ({ setHeaderData }) => {
                 </div>
               ))
             }
+            <div className='order_Cancel_Submit'>
+              <button type='submit' className='submit-button ' disabled={btnDisable} ><p>Submit</p></button>
+            </div>
           </div>
         </div>
       </div>
