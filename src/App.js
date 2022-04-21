@@ -83,6 +83,10 @@ function App() {
   })
   const [userAddress, setUserAddress] = useState({})
   const [userCart, setUserCart] = useState([])
+  const [cartArray, setCartArray] = useState({
+    cart: [],
+    no_of_carts: 0
+  })
   // console.log(userCart);
 
   const [modalDataMobile, setModalDataMobile] = useState({
@@ -100,7 +104,7 @@ function App() {
   });
   const loc = useLocation()
 
-  // console.log(allp);
+  // console.log(userCart);
 
   useEffect(() => {
     let user = JSON.parse(sessionStorage.getItem('user'))
@@ -120,8 +124,6 @@ function App() {
   //   getUserPic()
   //     .then(res => console.log(res))
   // }, [])
-  // console.log(userLoggedIn);
-  // console.log(userContext);
 
   useEffect(() => {
     sessionStorage.setItem('user', JSON.stringify(userContext))
@@ -196,7 +198,7 @@ function App() {
     <>
       <ScrollToTop />
       <div className="App">
-        <UserDataContext.Provider value={{ userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts, userLocation, setUserLocation }}>
+        <UserDataContext.Provider value={{ userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts, userLocation, setUserLocation, cartArray, setCartArray }}>
           {
             loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' || loc.pathname === '/admin' || loc.pathname === '/admin/page1' || loc.pathname === '/admin/page2' || loc.pathname === '/admin/page3' ? ('') : (
               <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />

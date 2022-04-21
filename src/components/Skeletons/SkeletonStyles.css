@@ -1,0 +1,71 @@
+.skeleton{
+  background: #eeecec;
+  border-radius: 1rem;
+}
+
+.skeleton.productBox {
+  width: 150px;
+  height: 216px;
+}
+
+.skeleton.productBanner {
+  width: 360px;
+  height: 260px;
+}
+
+.skeleton.productBannerSmall {
+  width: 328px;
+  height: 328px;
+}
+
+.skeleton.productTitle{
+  width: 50%;
+  height: 30px;
+  border-radius: 0.5rem;
+}
+
+.skeleton.productPreviewImage {
+  height: 424px;
+  width: 100%;
+  border-radius: 0;
+}
+
+.skeleton.productThumbnail{
+  height: 80px;
+  width: 80px;
+  border-radius: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .skeleton.productBox {
+    width: 312px;
+    height: 356px;
+  }
+  
+  .skeleton.productBanner {
+    width: 100%;
+    height: 400px;
+  }
+  
+  .skeleton.productBannerSmall {
+    width: 1120px;
+    height: 326px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .skeleton.productBox {
+    width: 312px;
+    height: 356px;
+  }
+  
+  .skeleton.productBanner {
+    width: 100%;
+    height: 400px;
+  }
+  
+  .skeleton.productBannerSmall {
+    width: 1120px;
+    height: 326px;
+  }
+}
