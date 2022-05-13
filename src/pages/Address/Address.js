@@ -27,7 +27,11 @@ const Address = ({ setEditID, setHeaderData }) => {
       .then(res => {
         // console.log(res);
         if (res) {
-          setUserAddress(res)
+          setUserAddress({
+            loaded: true,
+            no_of_address: res.no_of_address,
+            address: res.address
+          })
         }
       })
   }, [])

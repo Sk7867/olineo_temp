@@ -38,7 +38,11 @@ const MyCart = ({ setHeaderData }) => {
     getCartData()
       .then(res => {
         if (res) {
-          setCartArray(res)
+          setCartArray({
+            loaded: true,
+            no_of_carts: res.no_of_carts,
+            cart: res.cart
+          })
           // console.log(res);
         }
       })

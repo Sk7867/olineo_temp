@@ -6,6 +6,7 @@ import { getUser, getUserPic } from './api/Auth';
 import { getAllProducts } from './api/Product';
 import { getCartData } from './api/Cart';
 
+
 //Image 
 import product3 from './assets/png/product_3.png'
 import product1 from './assets/png/product_1.png'
@@ -52,6 +53,7 @@ import OrderCancel from './pages/OrderDetails/OrderCancel';
 import CataloguePage from './pages/CataloguePage/CataloguePage';
 import AddProduct from './pages/CataloguePage/AddProduct';
 import AboutUs from './pages/AboutContact/AboutUs'
+import BulkUpload from './pages/CataloguePage/BulkUpload';
 
 
 
@@ -64,8 +66,12 @@ function App() {
   const [addressSelected, setAddressSelected] = useState(0);
   const [storeSelected, setStoreSelected] = useState(0)
   const [allProducts, setAllProducts] = useState({
+    loaded: false,
     no_of_products: 0,
     products: []
+  })
+  const [seachedProduct, setSeachedProduct] = useState({
+    loaded: false,
   })
   const [userLocation, setUserLocation] = useState('')
 
@@ -79,13 +85,18 @@ function App() {
     dob: null,
     pincode: ''
   })
-  const [userAddress, setUserAddress] = useState({})
+  const [userAddress, setUserAddress] = useState({
+    loaded: false,
+    no_of_address: 0,
+    address: []
+  })
   const [userCart, setUserCart] = useState([])
   const [cartArray, setCartArray] = useState({
+    loaded: false,
     cart: [],
     no_of_carts: 0
   })
-  // console.log(userCart);
+  // console.log(cartArray);
 
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,
@@ -131,6 +142,7 @@ function App() {
     getAllProducts()
       .then(res => {
         setAllProducts({
+          loaded: true,
           no_of_products: res.no_of_products,
           products: res.products
         })
@@ -196,7 +208,22 @@ function App() {
     <>
       <ScrollToTop />
       <div className="App">
-        <UserDataContext.Provider value={{ userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts, userLocation, setUserLocation, cartArray, setCartArray }}>
+        <UserDataContext.Provider value={{
+          userContext,
+          setUserContext,
+          userAddress,
+          setUserAddress,
+          userCart,
+          setUserCart,
+          allProducts,
+          setAllProducts,
+          userLocation,
+          setUserLocation,
+          cartArray,
+          setCartArray,
+          seachedProduct,
+          setSeachedProduct
+        }}>
           {
             loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' ? ('') : (
               <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />
@@ -234,6 +261,7 @@ function App() {
             <Route path='/order-cancel' exact element={<OrderCancel setHeaderData={setHeaderData} />} />
             <Route path='/catelogue-page' exact element={<CataloguePage setHeaderData={setHeaderData} />} />
             <Route path='/catelogue-page/add-product' exact element={<AddProduct setHeaderData={setHeaderData} />} />
+            <Route path='/catelogue-page/bulk-upload' exact element={<BulkUpload setHeaderData={setHeaderData} />} />
             <Route path='/about-us' exact element={<AboutUs setHeaderData={setHeaderData} />} />
           </Routes>
           <Footer />

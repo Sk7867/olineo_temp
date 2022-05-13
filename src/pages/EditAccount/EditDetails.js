@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { updateUser, userLogin } from '../../api/Auth';
-import { userSignUp } from '../../api/Auth';
+import { userSignUp, saveUserPic } from '../../api/Auth';
 import moment from 'moment';
 import DatePicker from 'react-modern-calendar-datepicker';
 import { saveUser } from '../../api/Auth';
@@ -22,21 +22,21 @@ import UpdateModal from '../../components/ModalComponenr/UpdateModal';
 
 toast.configure()
 const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpdate }) => {
-  const [disabled, setDisabled] = useState(true);
+  const [disabled, setDisabled] = useState(false);
   const matches = useMediaQuery("(min-width:768px)")
   const [showModal, setShowModal] = useState(false);
   const [selectedDay, setSelectedDay] = useState(null);
-  const [profilePic, setProfilePic] = useState(null)
+  const [profilePic, setProfilePic] = useState({ locataion: '' })
   const [newProfilePic, setNewProfilePic] = useState(null)
   const { userContext, setUserContext } = useContext(UserDataContext)
 
   useEffect(() => {
     if (userContext && userContext.profilePic) {
-      setProfilePic(userContext.profilePic)
+      setProfilePic({ locataion: userContext.profilePic.locataion })
     } else if (newProfilePic !== null) {
-      setProfilePic(newProfilePic)
+      setProfilePic({ locataion: newProfilePic })
     } else {
-      setProfilePic(defaultUserImage)
+      setProfilePic({ locataion: defaultUserImage })
     }
   }, [userContext, newProfilePic])
 
@@ -175,6 +175,8 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
   const validateForm = () => {
     (displayInfo.user_Full_Name !== '') && (displayInfo.user_ph_Number !== '') && (displayInfo.user_Email !== '') && (selectedDay !== null) && (userContext.profilePic) && profilePicUpdate ? setDisabled(false) : setDisabled(true)
   }
+  console.log(selectedDay);
+  console.log(userContext.profilePic, profilePicUpdate);
 
   const handleModal = (prop) => {
     if (prop === 'email') {
@@ -210,6 +212,9 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
     }))
     updateUser(userContext)
       .then(res => res ? toast.success('Details Updated Successfully') : toast.error('Incomplete Data'))
+    saveUserPic(userContext.profilePic)
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
   }
 
   return (
@@ -219,7 +224,7 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
           profileDetails && (
             <div className='profile_User_Details'>
               <div className='user_Profile_Pic'>
-                <img src={profilePic} alt="" />
+                <img src={profilePic.locataion} alt="" />
                 <div className='user_Camera_Icon'>
                   <img src={cameraIcon} alt="" />
                   <input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' />

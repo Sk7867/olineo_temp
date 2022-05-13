@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useMediaQuery } from '@mui/material'
 import { Accordion, Dropdown, Carousel } from 'react-bootstrap'
 import { addToCart, getCartData } from '../../api/Cart'
@@ -27,6 +27,7 @@ const ProductPage = ({ setHeaderData }) => {
   const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts, setCartArray } = useContext(UserDataContext)
   const matches = useMediaQuery("(min-width:768px)")
   const loc = useLocation()
+  const nav = useNavigate()
   const [seeMore, setSeeMore] = useState(false)
   const [preOrder, setPreOrder] = useState(false)
   const [previewImageSelected, setPreviewImageSelected] = useState(null)
@@ -36,7 +37,11 @@ const ProductPage = ({ setHeaderData }) => {
     product_Id: '',
     product_name: '',
     product_image: '',
-    product_price: '',
+    product_price: {
+      mrp: '',
+      mop: '',
+      discountedPrice: ''
+    },
     product_Original_Price: '',
     offer_Deadline: 'Deal ends in 14h 17m 04s',
     product_Instock: 255,
@@ -117,6 +122,7 @@ const ProductPage = ({ setHeaderData }) => {
   useEffect(() => {
     if (loc.state) {
       let product = loc.state.product
+      console.log(product)
       if (product) {
         // let allProductImages = Object.values(product.otherImages)
         // allProductImages.unshift(productImage1)
@@ -130,20 +136,20 @@ const ProductPage = ({ setHeaderData }) => {
                 product_loaded: true,
                 product_Id: res._id,
                 product_name: res.name,
-                product_price: res.price,
+                // product_price: res.price,
                 product_Description: splitDesc,
                 product_image_List: productImage1,
               }))
-              setPreviewImageSelected(
-                productImage1[0]
-              )
-              setProductInfo(Object.entries(res.productInfo))
+              // setPreviewImageSelected(
+              //   productImage1[0]
+              // )
+              // setProductInfo(Object.entries(res.productInfo))
             }
           })
       }
     }
   }, [loc])
-  // console.log(productData);
+  console.log(productData);
 
 
   const sec5Data = [
@@ -261,20 +267,28 @@ const ProductPage = ({ setHeaderData }) => {
   ]
 
   const handleAddToCart = (id) => {
-    addToCart(id)
-      .then(res => {
-        if (res) {
-          console.log(res);
+    let userToken = userContext ? userContext.JWT : ''
+    if (userToken) {
+      addToCart(id)
+        .then(res => res ? (
+          console.log(res),
           getCartData()
-            .then(res => {
-              if (res) {
-                setCartArray(res)
-              }
-            })
-        }
-      })
-    // console.log(userContext);
+            .then(res => res ? (
+              setCartArray({
+                loaded: true,
+                no_of_carts: res.no_of_carts,
+                cart: res.cart
+              })
+            ) : (
+              ''
+            )
+            )
+        ) : (''))
+    } else {
+      nav('/login')
+    }
   }
+  // console.log(userContext);
 
 
   return (
@@ -341,11 +355,13 @@ const ProductPage = ({ setHeaderData }) => {
         <div className='order_Page_Right product_Page_Right'>
 
           <div className="product_Section_1 section_Wrapper">
-            {productData.product_loaded === false ? (
-              <SkeletonElement type={"productTitle"} />
-            ) : (
-              <h3 className='product_Name'>{productData.product_name}</h3>
-            )}
+            <h3 className='product_Name'>
+              {productData.product_loaded === false ? (
+                <SkeletonElement type={"productTitle"} />
+              ) : (
+                productData.product_name
+              )}
+            </h3>
             {/* Porduct Image preview section */}
             <div className="product_Preview_Section">
               <Carousel
@@ -368,20 +384,30 @@ const ProductPage = ({ setHeaderData }) => {
               </Carousel>
             </div>
             <div className="product_Price_Desc">
-              <p className="product_Discount_Price">
-                ₹{productData.product_price}
-              </p>
-              <p className="product_Original_Price">
-                ₹{parseInt(productData.product_price) + 2000}
-              </p>
-              <p className="product_Availability">
-                {
-                  preOrder ? ('') : (
-                    (productData.product_Instock > 10) ? 'In stock' :
-                      (productData.product_Instock < 10 && productData.product_Instock >= 1) ? 'Few in stock' : 'Out of stock'
-                  )
-                }
-              </p>
+              {productData.product_loaded === false ? (
+                <SkeletonElement type={"productPrice"} />
+              ) : (
+                <p className="product_Discount_Price"></p>
+              )}
+              {productData.product_loaded === false ? (
+                <SkeletonElement type={"productPrice"} />
+              ) : (
+                <p className="product_Original_Price">
+                  {/* ₹{productData.product_price.mrp} */}
+                </p>
+              )}
+              {productData.product_loaded === false ? (
+                <SkeletonElement type={"productPrice"} />
+              ) : (
+                <p className="product_Availability">
+                  {
+                    preOrder ? ('') : (
+                      (productData.product_Instock > 10) ? 'In stock' :
+                        (productData.product_Instock < 10 && productData.product_Instock >= 1) ? 'Few in stock' : 'Out of stock'
+                    )
+                  }
+                </p>
+              )}
             </div>
             <div className="product_Offer_Counter">
               <p>{

@@ -10,7 +10,7 @@ import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
 import saveLaterIcon from '../../assets/vector/save_later_outline.svg'
 
 const CartProductCard = ({
-  product,
+  product, handleQuantityInc, handleQuantityDec
 }) => {
   const matches = useMediaQuery("(min-width:768px)")
   // console.log(product);
@@ -59,11 +59,11 @@ const CartProductCard = ({
             <img src={product.images[0]} alt="" />
           </div>
           <div className="cart_Product_Counter_Container">
-            <div className='counter_Icon_Container'>
+            <div className='counter_Icon_Container' onClick={() => handleQuantityDec(product._id)} >
               <img src={deleteIconBlack} alt="Delete" />
             </div>
-            <p className='cart_Product_Counter'>1</p>
-            <div className='counter_Icon_Container'>
+            <p className='cart_Product_Counter'>{product.quantity}</p>
+            <div className='counter_Icon_Container' onClick={() => handleQuantityInc(product._id)} >
               <img src={addIcon} alt="Add" />
             </div>
           </div>

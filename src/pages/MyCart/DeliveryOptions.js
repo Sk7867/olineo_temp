@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery'
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox';
+import { UserDataContext } from '../../Contexts/UserContext'
+import { getAddress } from '../../api/Address';
 
 const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [selected, setSelected] = useState(null);
   const [disable, setDisable] = useState(true);
+  const { userAddress, setUserContext, setUserAddress } = useContext(UserDataContext)
   const nav = useNavigate()
 
   useEffect(() => {
@@ -21,6 +24,20 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
       header3Profile: true,
     })
   }, []);
+
+  useEffect(() => {
+    getAddress()
+      .then(res => {
+        // console.log(res);
+        if (res) {
+          setUserAddress({
+            loaded: true,
+            no_of_address: res.no_of_address,
+            address: res.address
+          })
+        }
+      })
+  }, [])
 
   const deliveryOptions = [
     {
@@ -68,7 +85,7 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
         </aside>
         <div className='order_Page_Right'>
           <p className="cart_Text section_Wrapper">Select delivery option</p>
-          <div className='payment_Methods delivery_Options'>
+          <div className='payment_Methods delivery_Options section_Wrapper'>
             <form className="payment_Methods_Body">
               {
                 deliveryOptions.map((item, index) => (
