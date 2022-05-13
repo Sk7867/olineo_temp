@@ -10,11 +10,12 @@ import AddressBox from '../../components/AddressBox/AddressBox';
 //Components
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox';
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
+import { getAddress } from '../../api/Address';
 
 const HomeDelivery = ({ setEditID, addressSelected, setAddressSelected, setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [disable, setDisable] = useState(true)
-  const { userAddress, setUserContext } = useContext(UserDataContext)
+  const { userAddress, setUserContext, setUserAddress } = useContext(UserDataContext)
 
   const nav = useNavigate()
 
@@ -29,6 +30,20 @@ const HomeDelivery = ({ setEditID, addressSelected, setAddressSelected, setHeade
       header3Profile: true,
     })
   }, []);
+
+  useEffect(() => {
+    getAddress()
+      .then(res => {
+        // console.log(res);
+        if (res) {
+          setUserAddress({
+            loaded: true,
+            no_of_address: res.no_of_address,
+            address: res.address
+          })
+        }
+      })
+  }, [])
 
   const breadCrumbsData = [
     {
@@ -57,22 +72,27 @@ const HomeDelivery = ({ setEditID, addressSelected, setAddressSelected, setHeade
             <p className="cart_Text section_Wrapper">Select Address</p>
             <div className="home_Delivery_Options">
               {
-                userAddress.delivery_Address.map((address, index) => (
-                  <div className="home_Delivery_Option" key={index}>
-                    <label htmlFor={address.id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setAddressSelected(address.id); setDisable(false) }}>
-                      <input type="radio" name='Delivery Address' id={address.id} value={address.id} />
-                      <span className="radio-custom"></span>
-                      <AddressBox setEditID={setEditID}
-                        address={address}
-                        deleteOption={false}
-                        border={false}
-                      />
-                    </label>
-                  </div>
-                ))
+                userAddress.no_of_address !== 0 ? (
+                  userAddress.no_of_address !== 0 && userAddress.address.map((address, index) => (
+                    <div className="home_Delivery_Option section_Wrapper" key={index}>
+                      <label htmlFor={address.id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setAddressSelected(address.id); setDisable(false) }}>
+                        <input type="radio" name='Delivery Address' id={address.id} value={address.id} />
+                        <span className="radio-custom"></span>
+                        <AddressBox setEditID={setEditID}
+                          address={address}
+                          deleteOption={false}
+                          border={false}
+                          fullWidth={true}
+                        />
+                      </label>
+                    </div>
+                  ))
+                ) : (
+                  ''
+                )
               }
             </div>
-            <Link to={'/newaddress'} className='add_New_Address home_Delivery_New_Address'>
+            <Link to={'/newaddress'} className='add_New_Address home_Delivery_New_Address section_Wrapper'>
               <img src={addIcon} alt="" />
               <p>Add a new address</p>
             </Link>

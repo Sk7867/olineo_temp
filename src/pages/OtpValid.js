@@ -59,7 +59,11 @@ const OtpValid = ({ loginRedirect }) => {
                 email: user.email,
                 dob: user.dob
               }))
-              setCartArray(user.cart)
+              setCartArray({
+                loaded: true,
+                cart: user.cart,
+                no_of_carts: user.cart.length
+              })
             }
           }),
         getUserPic(res.JWT)

@@ -1,23 +1,48 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 //CSS
 import './ProductBox.css'
 
 const ProductBox = ({ card_heading, classes, product }) => {
+  const [productInfo, setProductInfo] = useState({
+    image: '',
+    name: '',
+    price: ''
+  })
+
+  useEffect(() => {
+    var handlePrice
+    if (product) {
+      // if (product.price.discountPrice) {
+      //   handlePrice = product.price.discountPrice
+      // } else {
+      //   handlePrice = product.price.mop
+      // }
+      setProductInfo({
+        image: product.images[0],
+        name: product.name
+        // price: handlePrice
+      })
+    }
+
+
+  }, [product])
+
+  console.log(product);
   return (
     <>
       {
-        product && product.images.length > 0 && (
+        product && (
           <Link to={`/product/${product.name}`} state={{ product: product }} className={'productbox_Container ' + (classes ? classes.boxClass : '')}>
             <>
               {product.images.length > 0 && (
-                <img src={product.images[0]} alt="" />
+                <img src={productInfo.image} alt="" />
               )}
               <div className="productbox_details">
                 <p className='box_heading'>{card_heading}</p>
-                {product.price && (<p className="box_price">₹{product.price}</p>)}
-                {product.name && (<p className="box_itemName">{product.name}</p>)}
+                {/* {product.price.mop && (<p className="box_price">₹{productInfo.price}</p>)} */}
+                {product.name && (<p className="box_itemName">{productInfo.name}</p>)}
               </div>
             </>
           </Link>
