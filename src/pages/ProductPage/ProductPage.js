@@ -74,6 +74,7 @@ const ProductPage = ({ setHeaderData }) => {
   useEffect(() => {
     if (loc.state) {
       let product = loc.state.product
+      console.log(product)
       if (product) {
         console.log(product);
         // let allProductImages = Object.values(product.otherImages)

@@ -17,6 +17,11 @@
   justify-content: space-between;
 }
 
+.catelogue_Header_Buttons{
+  display: flex;
+  justify-content: space-between;
+}
+
 .catelogue_Page_Heading{
   margin: 0;
   color: #08090A;

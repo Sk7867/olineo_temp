@@ -54,7 +54,7 @@ export const addToCart = async (id) => {
   const headers = {
     "Access-Control-Allow-origin": "*",
     'Content-Type': 'application/json',
-    "authorization": `bearer ${userToken}`
+    "Authorization": `Bearer ${userToken}`
   }
 
   await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/cart/${id}`, {}, { headers })

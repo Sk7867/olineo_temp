@@ -94,13 +94,18 @@ function App() {
     dob: null,
     pincode: ''
   })
-  const [userAddress, setUserAddress] = useState({})
+  const [userAddress, setUserAddress] = useState({
+    loaded: false,
+    no_of_address: 0,
+    address: []
+  })
   const [userCart, setUserCart] = useState([])
   const [cartArray, setCartArray] = useState({
+    loaded: false,
     cart: [],
     no_of_carts: 0
   })
-  // console.log(userCart);
+  // console.log(cartArray);
 
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,

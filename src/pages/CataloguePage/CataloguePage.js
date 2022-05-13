@@ -43,7 +43,7 @@ const CataloguePage = ({ setHeaderData }) => {
       })
   }, [])
 
-  // console.log(allProducts);
+  console.log(allProducts);
 
   const validateNumber = (e) => {
     const re = /^[0-9\b]+$/;
