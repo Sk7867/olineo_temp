@@ -1,3 +1,7 @@
+.skeleton_Wrapper{
+  position: relative;
+  overflow: hidden;
+}
 .skeleton{
   background: #eeecec;
   border-radius: 1rem;
@@ -24,6 +28,12 @@
   border-radius: 0.5rem;
 }
 
+.skeleton.productPrice{
+  width: 25%;
+  height: 24px;
+  border-radius: 0.5rem;
+}
+
 .skeleton.productPreviewImage {
   height: 424px;
   width: 100%;
@@ -34,6 +44,33 @@
   height: 80px;
   width: 80px;
   border-radius: 0;
+}
+
+.shimmer_Wrapper{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  animation: loading 2.5s infinite;
+}
+
+.shimmer{
+  width: 50%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: skew(-20deg);
+  box-shadow: 0 0 30px 30px rgba(255, 255, 255, 0.05);
+}
+
+@keyframes loading {
+  0% { transform: translateX(-150%); }
+  50% {
+    transform: translateX(-60%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
 }
 
 @media screen and (min-width: 768px) {

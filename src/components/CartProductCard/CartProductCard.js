@@ -10,7 +10,7 @@ import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
 import saveLaterIcon from '../../assets/vector/save_later_outline.svg'
 
 const CartProductCard = ({
-  product, handleQuantityInc, handleQuantityDec, handleRemoveFromCart
+  product, handleQuantityInc, handleQuantityDec
 }) => {
   const matches = useMediaQuery("(min-width:768px)")
   // console.log(product);

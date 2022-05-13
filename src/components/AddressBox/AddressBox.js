@@ -20,7 +20,11 @@ const AddressBox = ({ address, setEditID, setProfileState, deleteOption = true, 
           .then(res => {
             // console.log(res);
             if (res) {
-              setUserAddress(res)
+              setUserAddress({
+                loaded: true,
+                no_of_address: res.no_of_address,
+                address: res.address
+              })
             }
           })
       })
@@ -29,7 +33,7 @@ const AddressBox = ({ address, setEditID, setProfileState, deleteOption = true, 
 
   // console.log(address);
   return (
-    <div className={`address section_Wrapper ${!border ? ('border-0') : ('')}`}>
+    <div className={`address section_Wrapper ${!border ? ('border-0') : ('')} ${fullWidth ? 'w-100' : ''}  `}>
       <div className='address_Box'>
         <div className="address_Box_Wrapper">
           <p className="address_Box_Name">{address.user_Full_Name}</p>

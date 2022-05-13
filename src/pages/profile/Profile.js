@@ -34,7 +34,7 @@ import { getIndiProduct } from '../../api/Product';
 
 const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
   const [profileState, setProfileState] = useState(1);
-  const [profilePic, setProfilePic] = useState(null)
+  const [profilePic, setProfilePic] = useState({ locataion: '' })
   const [newProfilePic, setNewProfilePic] = useState(null)
   const [addressData, setAddressData] = useState([])
   const matches = useMediaQuery("(min-width:768px)")
@@ -47,14 +47,14 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
 
   useEffect(() => {
     if (userContext && userContext.profilePic) {
-      setProfilePic(userContext.profilePic)
+      setProfilePic({ locataion: userContext.profilePic.locataion })
     } else if (newProfilePic !== null) {
-      setProfilePic(newProfilePic)
+      setProfilePic({ locataion: newProfilePic })
     } else {
-      setProfilePic(defaultUserImage)
+      setProfilePic({ locataion: defaultUserImage })
     }
   }, [userContext, newProfilePic])
-  // console.log(profilePic);
+  console.log(profilePic);
 
 
   useEffect(() => {
@@ -62,16 +62,25 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
       .then(res => {
         // console.log(res);
         if (res) {
-          setUserAddress(res)
+          setUserAddress({
+            loaded: true,
+            no_of_address: res.no_of_address,
+            address: res.address
+          })
         }
       })
   }, [])
 
+  console.log(userAddress);
   useEffect(() => {
     getCartData()
       .then(res => {
         if (res) {
-          setCartArray(res)
+          setCartArray({
+            loaded: true,
+            no_of_carts: res.no_of_carts,
+            cart: res.cart
+          })
           // console.log(res);
         }
       })
@@ -92,7 +101,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
     ))
   }, [cartArray])
 
-  // console.log(userCart);
+  console.log(profilePic)
 
   useEffect(() => {
     setHeaderData({
@@ -131,8 +140,17 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
           dob: null,
           pincode: ''
         })
-        setUserAddress({})
-        setUserCart({})
+        setUserAddress({
+          loaded: false,
+          no_of_address: 0,
+          address: []
+        })
+        setUserCart([])
+        setCartArray({
+          loaded: false,
+          cart: [],
+          no_of_carts: 0
+        })
       })
   }
 
@@ -174,15 +192,15 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
 
   const profileStateSwitch = (profileState) => {
     switch (profileState) {
-      case 1: return (<EditDetails profileDetails={false} profilePicUpdate={profilePic} />)
+      case 1: return (<EditDetails profileDetails={false} profilePicUpdate={true} />)
       case 2: return (<OrderSection ordersList={ordersData} featureProducts={allProducts} onTheWay={true} delivered={true} />)
       case 3: return (<CartSection featureProducts={allProducts} />)
       case 4: return (<MyAddress setEditID={setEditID} setProfileState={setProfileState} border={true} />)
-      case 5: return (<EditDetails profileDetails={false} profilePicUpdate={profilePic} />)
-      case 10: return (<AddressForm setProfileState={setProfileState} />)
-      case 11: return (<AddressForm editID={editID} addressProp={loc.state} setProfileState={setProfileState} />)
+      case 5: return (<EditDetails profileDetails={false} profilePicUpdate={true} />)
+      case 10: return (<AddressForm setProfileState={setProfileState} fromProfile={true} />)
+      case 11: return (<AddressForm editID={editID} addressProp={loc.state} setProfileState={setProfileState} fromProfile={true} />)
 
-      default: return (<EditDetails profileDetails={false} profilePicUpdate={profilePic} />)
+      default: return (<EditDetails profileDetails={false} profilePicUpdate={true} />)
     }
   }
 
@@ -194,7 +212,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
           setNewProfilePic(reader.result);
           setUserContext(prev => ({
             ...prev,
-            profilePic: reader.result
+            profilePic: { locataion: reader.result }
           }))
           // console.log(reader.result);
         }
@@ -202,7 +220,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
       reader.readAsDataURL(e.target.files[0])
     }
   }
-  // console.log(userContext);
+  console.log(newProfilePic);
 
   return (
     <>
@@ -213,7 +231,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
             <div>
               <div className='profile_User_Details'>
                 <div className='user_Profile_Pic'>
-                  <img src={profilePic} alt="" />
+                  <img src={profilePic.locataion} alt="" />
                   <div className='user_Camera_Icon'>
                     <img src={cameraIcon} alt="" />
                     <input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' />
@@ -263,7 +281,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
               <aside className="side_Section profile_Side_Section">
                 <div className='profile_User_Details'>
                   <div className='user_Profile_Pic'>
-                    <img src={profilePic} alt="" />
+                    <img src={profilePic.locataion} alt="" />
                     <div className='user_Camera_Icon'>
                       <img src={cameraIcon} alt="" />
                       <input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' />

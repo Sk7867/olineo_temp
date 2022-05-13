@@ -27,18 +27,19 @@ import mobilePinkDotted from '../../assets/vector/mobile_pink_dotted.svg'
 import mobileBlueDotted from '../../assets/vector/mobile_blue_dotted.svg'
 import arrowLeftWhite from '../../assets/vector/arrow_left_white.svg'
 import searchIconBlue from '../../assets/vector/search_blue.svg'
+import { getSearchedProduct } from '../../api/Product'
 
 
 const HeaderBar2 = ({ userLoggedIn, headerData }) => {
   const [modalShow, setModalShow] = useState(false)
   const [sidebar, setSidebar] = useState(false)
   const [useDP, setUseDP] = useState(true)
-  const [userDPPic, setUserDPPic] = useState('')
+  const [userDPPic, setUserDPPic] = useState({ locataion: '' })
   const [filteredData, setFilteredData] = useState([])
   const [searchedQuery, setSearchedQuery] = useState('')
   const nav = useNavigate()
   const { header3Cond, headerText, categoriesCond, header3Store, header3Cart, header3Profile } = headerData
-  const { userContext, allProducts } = useContext(UserDataContext)
+  const { userContext, allProducts, } = useContext(UserDataContext)
   // console.log(headerData);
   // console.log(allProducts);
 
@@ -48,9 +49,9 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
 
   useEffect(() => {
     if (userContext && userContext.profilePic) {
-      setUserDPPic(userContext.profilePic)
+      setUserDPPic({ locataion: userContext.profilePic.locataion })
     } else {
-      setUserDPPic(userDefaultDP)
+      setUserDPPic({ locataion: userDefaultDP })
     }
 
   }, [userContext])
@@ -135,7 +136,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
 
   const handleFilter = (e) => {
     const searchWord = e.target.value
-    const newFilter = allProducts.filter((value) => {
+    const newFilter = allProducts.products.filter((value) => {
       return value.name.toLowerCase().includes(searchWord)
     })
 
@@ -146,7 +147,18 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
       setFilteredData(newFilter)
       setSearchedQuery(searchWord)
     }
+  }
+  console.log(filteredData);
 
+  const handleSearchClick = (value) => {
+    nav(`/${value.name}`)
+    setFilteredData([])
+    setSearchedQuery('')
+    // let query = {productInfo.brand = `${value.name}` }
+    // getSearchedProduct()
+    // .then(res => res ? (
+    //   console.log(value),
+    // ) : (''))
   }
 
   return (
@@ -179,9 +191,9 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
                 {
                   filteredData.slice(0, 15).map((value, index) => {
                     return (
-                      <Link to={`/product/${value.id}`} className='search_Result_Item' key={index} >
+                      <div onClick={() => handleSearchClick(value)} className='search_Result_Item' key={index} >
                         <p>{value.name}</p>
-                      </Link>
+                      </div>
                     )
                   })
                 }
@@ -199,16 +211,44 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
               <p>Cart</p>
             </div>
             {
-              filteredData.slice(0, 15).map((value, index) => {
-                return (
-                  <div onClick={() => handleSearchClick(value)} className='search_Result_Item' key={index} >
-                    <p>{value.name}</p>
-                  </div>
-                )
-              })
+              userLoggedIn ? (
+                <div className="user_profile" onClick={() => nav('/profile')}>
+                  <p>My Profile</p>
+                  <img src={userDPPic.locataion} alt="" />
+                </div>
+              ) : (
+                <>
+                  <p className='right_login'>
+                    <Link to={'/login'}>Login</Link> | <Link to={'/signup'}>Create account</Link>
+                  </p>
+                  <p className='right_login login_tab_only'>
+                    <Link to={'/login'}>Login</Link>
+                  </p>
+                </>
+              )
             }
           </div>
-        )}
+        </div>
+        <div className="searchbarWrapper">
+          <div className="searchbar_Container">
+            <input type="text" placeholder='Search...' className='searchbar' onChange={handleFilter} />
+            <div className="seachbar_Icon">
+              <img src={searchIconBlue} alt="" />
+            </div>
+          </div>
+          {filteredData.length !== 0 && (
+            <div className="search_Results">
+              {
+                filteredData.slice(0, 15).map((value, index) => {
+                  return (
+                    <div onClick={() => handleSearchClick(value)} className='search_Result_Item' key={index} >
+                      <p>{value.name}</p>
+                    </div>
+                  )
+                })
+              }
+            </div>
+          )}
         </div>
         <div className='locationbarWrapper logo_mob' onClick={() => handleModalShow()}>
           <img src={locationWhite} alt="" />
@@ -339,7 +379,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
                 {header3Profile ? (
                   userLoggedIn ? (
                     <Link to={'/profile'} className="user_profile">
-                      <img src={userDPPic} alt="" />
+                      <img src={userDPPic.locataion} alt="" />
                     </Link>
                   ) : (
                     <>
