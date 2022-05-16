@@ -37,7 +37,7 @@ const PriceDetailsBox = ({ HideDetails, classes }) => {
   }, [cartArray])
 
 
-  console.log(cartItemsPrice);
+  // console.log(cartItemsPrice);
   return (
     <div className={"cart_Price_details section_Wrapper " + (classes ? classes.containerClass : '')}>
       <div className="cart_Details_Header">

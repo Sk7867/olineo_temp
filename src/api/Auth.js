@@ -1,7 +1,4 @@
 import axios from 'axios'
-import { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getAddress } from './Address'
 
 const baseURL = "https://onlineo-backend.herokuapp.com/api"
 
@@ -339,7 +336,7 @@ export const getUserPic = async (JWT) => {
 
 
 //SAVE/UPDATE USER PROFILE PIC
-export const saveUserPic = async () => {
+export const saveUserPic = async (pic) => {
   let savePicResponse
 
   let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
@@ -350,7 +347,11 @@ export const saveUserPic = async () => {
     "Authorization": `Bearer ${userToken}`
   }
 
-  await axios.patch(`${baseURL}/user/addphoto`, { headers })
+  const formData = new FormData()
+
+  formData.append('userImage', pic)
+
+  await axios.patch(`${baseURL}/user/addphoto`, formData, { headers })
     .then(res => {
       savePicResponse = res
       // console.log(userPicResponse);

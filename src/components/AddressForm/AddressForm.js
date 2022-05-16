@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { deleteAddress, getAddress, saveAddress } from '../../api/Address';
+import { Link } from 'react-router-dom';
 import { UserDataContext } from '../../Contexts/UserContext'
 
 //CSS
 import './AddressForm.css'
 
-const AddressForm = ({ addressProp, setProfileState }) => {
+const AddressForm = ({ addressProp, setProfileState, fromProfile }) => {
   const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext)
   const [address, setAddress] = useState({
     user_Full_Name: '',
@@ -58,7 +59,11 @@ const AddressForm = ({ addressProp, setProfileState }) => {
                 .then(res => {
                   // console.log(res);
                   if (res) {
-                    setUserAddress(res)
+                    setUserAddress({
+                      loaded: true,
+                      no_of_address: res.no_of_address,
+                      address: res.address
+                    })
                   }
                 })
 
@@ -74,7 +79,11 @@ const AddressForm = ({ addressProp, setProfileState }) => {
             .then(res => {
               // console.log(res);
               if (res) {
-                setUserAddress(res)
+                setUserAddress({
+                  loaded: true,
+                  no_of_address: res.no_of_address,
+                  address: res.address
+                })
               }
             })
           //get address call
@@ -82,6 +91,8 @@ const AddressForm = ({ addressProp, setProfileState }) => {
         })
     }
   }
+
+  //Handle Submit 2 Pending=======================================
 
   const handleInput = (prop, e) => {
     e.target
@@ -105,7 +116,15 @@ const AddressForm = ({ addressProp, setProfileState }) => {
         <input type="text" name='Landmark' placeholder='Landmark (optional)' value={address.user_Landmark} onChange={(value) => handleInput("user_Landmark", value)} />
         <button type='submit' className='submit-button address_Form_Submit' disabled={disabled}><p>SAVE DETAILS</p></button>
         <div className="address_Footer tab_None">
-          <button type='submit' className='submit-button' disabled={disabled} onClick={() => setProfileState(5)} ><p>SAVE DETAILS</p></button>
+          {
+            fromProfile ? (
+              <button type='submit' className='submit-button' disabled={disabled} onClick={() => setProfileState(5)} ><p>SAVE DETAILS</p></button>
+            ) : (
+              <Link to={'home-delivery'} className='submit-button'>
+                <button type='submit' className='submit-button' disabled={disabled} ><p>SAVE DETAILS</p></button>
+              </Link>
+            )
+          }
         </div>
       </form>
     </>

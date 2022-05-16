@@ -52,7 +52,7 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
             <PriceDetailsBox HideDetails={false} />
           </aside>
           <div className='order_Page_Right'>
-            <div className="pickup_Search_Bar_Container">
+            <div className="pickup_Search_Bar_Container section_Wrapper">
               <div className='pickup_Search_Bar'>
                 <input type="text" name="Store Search" id="" className='searchbar store_Search_Bar' placeholder={`Enter PIN code/Store name`} />
                 <img src={searchBlueIcon} alt="" />

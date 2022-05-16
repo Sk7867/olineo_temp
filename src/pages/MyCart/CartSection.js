@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { UserDataContext } from '../../Contexts/UserContext'
 
@@ -6,10 +6,13 @@ import { UserDataContext } from '../../Contexts/UserContext'
 import CartProductCard from '../../components/CartProductCard/CartProductCard'
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import Section2 from '../../components/Section2/Section2'
+import { initOrder } from '../../api/OrdersApi'
 
 const CartSection = ({ featureProducts }) => {
   const nav = useNavigate()
+  const [cartProducts, setCartProducts] = useState([])
   const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, cartArray } = useContext(UserDataContext)
+
 
   let cartItemsNumber = cartArray.no_of_carts
   var cartItemsPrice = 0
@@ -41,12 +44,96 @@ const CartSection = ({ featureProducts }) => {
     }
   }, [cartArray])
 
+  useEffect(() => {
+    if (userCart.length > 0) {
+      let helperArray = userCart.map(obj => ({ ...obj, quantity: 1 }))
+      setCartProducts(helperArray)
+      // console.log(helperArray);
+    }
+  }, [userCart])
 
+  // useEffect(() => {
+  //   setUserCart(cartProducts)
+  // }, [cartProducts])
+
+
+  // console.log(userCart);
+  // console.log(cartArray);
+  // console.log(cartProducts);
+
+  const handleQuantityInc = (id) => {
+    let tempState = [...cartProducts]
+    let index = cartProducts.findIndex(x => x._id === id)
+    let tempElement = { ...tempState[index] }
+    tempElement.quantity = tempElement.quantity + 1
+    tempState[index] = tempElement
+    setCartProducts(tempState)
+  }
+
+  const handleQuantityDec = (id) => {
+    let tempState = [...cartProducts]
+    let index = cartProducts.findIndex(x => x._id === id)
+    let tempElement = { ...tempState[index] }
+    if (tempElement.quantity === 1) {
+      tempElement.quantity = 1
+    } else {
+      tempElement.quantity = tempElement.quantity - 1
+    }
+    tempState[index] = tempElement
+    setCartProducts(tempState)
+  }
+
+  //ORDER INITIALIZATION CODE+++++++++++++++++++++++++++++++++++++++++
+
+  const sampleData = [
+    {
+      productID: 1,
+      productName: 'Test 1',
+      quantity: 2
+    },
+    {
+      productID: 2,
+      productName: 'Test 1',
+      quantity: 4
+    },
+    {
+      productID: 3,
+      productName: 'Test 1',
+      quantity: 6
+    },
+    {
+      productID: 9,
+      productName: 'Test 1',
+      quantity: 4
+    },
+  ]
+
+  const handleOrderInit = () => {
+    let productId = []
+    let quantity = []
+    let shippingAddress = ''
+    sampleData.forEach(item =>
+      productId.push(item.productID)
+    )
+    sampleData.forEach((item) => (
+      quantity.push({ qty: item.quantity })
+    ))
+    let data = {
+      productId: productId,
+      quantity: quantity,
+      shippingAddressId: shippingAddress
+    }
+    // console.log(data);
+    initOrder(data)
+      .then(res => res ? (
+        console.log(res)
+      ) : (''))
+  }
 
   return (
     <>
       {
-        userCart.no_of_carts === 0 ? (
+        cartArray.no_of_carts === 0 ? (
           <>
             <div className="empty_order_sec">
               <p className='empty_order_text'>Your cart is empty</p>
@@ -63,12 +150,15 @@ const CartSection = ({ featureProducts }) => {
             <p className="cart_Text section_Wrapper">My Cart</p>
             <div className="cards_Container">
               {
-                userCart.map((item, index) => (
-                  <CartProductCard
-                    key={index}
-                    product={item}
-                  />
-                ))
+                (cartProducts.length > 0) && cartProducts ? (
+                  cartProducts.map((item, index) => (
+                    <CartProductCard
+                      key={index}
+                      product={item}
+                      handleQuantityInc={handleQuantityInc}
+                      handleQuantityDec={handleQuantityDec}
+                    />
+                  ))) : ('')
               }
             </div>
 
@@ -108,12 +198,15 @@ const CartSection = ({ featureProducts }) => {
               </div>
               <div className="cards_Container">
                 {
-                  userCart.map((item, index) => (
-                    <CartProductCard
-                      key={index}
-                      product={item}
-                    />
-                  ))
+                  (cartProducts.length > 0) && cartProducts ? (
+                    cartProducts.map((item, index) => (
+                      <CartProductCard
+                        key={index}
+                        product={item}
+                        handleQuantityInc={handleQuantityInc}
+                        handleQuantityDec={handleQuantityDec}
+                      />
+                    ))) : ('')
                 }
               </div>
             </div>

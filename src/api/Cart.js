@@ -58,7 +58,7 @@ export const addToCart = async (id) => {
   const headers = {
     "Access-Control-Allow-origin": "*",
     'Content-Type': 'application/json',
-    "authorization": `bearer ${userToken}`
+    "Authorization": `Bearer ${userToken}`
   }
   console.log(id);
   console.log(userToken);
