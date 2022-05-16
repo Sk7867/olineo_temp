@@ -255,6 +255,16 @@
   margin: 0.5rem 0;
 }
 
+.catelogue_Table{
+  overflow-x: scroll;
+}
+
+.catelogue_Table thead, .catelogue_Table tr, .catelogue_Table td, .catelogue_Table th{
+  padding: 0.5rem;
+  border: 1px solid black;
+  white-space: nowrap;
+}
+
 @media screen and (min-width: 768px) {
   .catelogue_Page{
     padding: 1.5rem;

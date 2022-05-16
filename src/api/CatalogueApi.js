@@ -11,23 +11,24 @@ const headers = {
 export const addProductCatalogue = async (
   product,
   imagesArray,
-  productTypeSelected,
+  galleryImagesArray,
   L1Selected,
   L2Selected,
   L3Selected,
   discountedPrice,
-  discountGiven,
-  comboEAN,
-  containerEAN
+  flatDiscountDetails,
+  comboOfferDetails,
+  containerDetails
 ) => {
   let addProductResponse
+  console.log(galleryImagesArray);
 
   let addProductBody = {
     dynamicHeader: product.heading,
     name: product.name,
     ean: product.EAN,
     description: product.description,
-    type: productTypeSelected,
+    type: L2Selected,
     stock: product.stock,
     qty: product.stock,
     hierarchyL1: L1Selected,
@@ -38,6 +39,7 @@ export const addProductCatalogue = async (
     color: product.color,
     HSN: product.HSN,
     images: imagesArray,
+    gallery: galleryImagesArray,
     inwardDate: product.inwardDate,
     productInfo: {
       weight: product.weight,
@@ -53,9 +55,9 @@ export const addProductCatalogue = async (
       discountedPrice: discountedPrice
     },
     discount: {
-      flatDiscount: discountGiven,
-      combo: comboEAN,
-      conetainer: containerEAN
+      flatDiscount: flatDiscountDetails,
+      combo: comboOfferDetails,
+      conetainer: containerDetails
     }
   }
   console.log(addProductBody);

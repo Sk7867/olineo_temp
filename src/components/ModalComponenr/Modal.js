@@ -20,7 +20,7 @@ const ModalComp = ({ modalShow, setModalShow, userLoggedIn, children }) => {
   const [btnDisable, setBtnDisable] = useState(true)
   const { location, locationFetch } = useGeolocation()
   const { userLocation, setUserLocation } = useContext(UserDataContext)
-
+  console.log(children);
 
   const getLocation = () => {
     locationFetch()
@@ -90,6 +90,11 @@ const ModalComp = ({ modalShow, setModalShow, userLoggedIn, children }) => {
                 <h4 className="modal_heading">Choose your location</h4>
                 <p className="modal_header_desc">Select location to see product availability and delivery options.</p>
               </div>
+            )
+          }
+          {
+            modalShow && (
+              children.props.children[0]
             )
           }
         </Modal.Header>

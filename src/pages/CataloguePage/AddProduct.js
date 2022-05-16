@@ -13,6 +13,8 @@ import DatePicker from 'react-modern-calendar-datepicker';
 
 //Images
 import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
+import ModalComp from '../../components/ModalComponenr/Modal';
+import CatelogueModal from '../../components/ModalComponenr/CatelogueModal';
 
 
 toast.configure()
@@ -20,6 +22,7 @@ const AddProduct = ({ setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const { allProducts, setAllProducts } = useContext(UserDataContext)
   const [selectedDay, setSelectedDay] = useState(null);
+  const [defaultDate, setDefaultDate] = useState(null)
   const [product, setProduct] = useState({
     heading: '',
     name: '',
@@ -50,6 +53,23 @@ const AddProduct = ({ setHeaderData }) => {
   const [dynamicTable, setDynamicTable] = useState({})
   const [discountGiven, setDiscountGiven] = useState(null)
   const [discountedPrice, setDiscountedPrice] = useState(null)
+  const [discountFrom, setDiscountFrom] = useState(null)
+  const [discountTo, setDiscountTo] = useState(null)
+  const [flatDiscount, setFlatDiscount] = useState({
+    value: '',
+    from: null,
+    to: null
+  })
+  const [comboOffer, setComboOffer] = useState({
+    value: '',
+    from: null,
+    to: null
+  })
+  const [containerOffer, setContainerOffer] = useState({
+    value: [],
+    from: null,
+    to: null
+  })
   const [comboEAN, setComboEAN] = useState(null)
   const [containerEAN, setContainerEAN] = useState([{ productEAN: '' }])
   const [containerProducts, setContainerProducts] = useState([{ productInfo: '', loaded: false }])
@@ -57,8 +77,12 @@ const AddProduct = ({ setHeaderData }) => {
     loaded: false,
     product: []
   })
+  const [images, setImages] = useState('')
+  const [galleryImages, setGalleryImages] = useState('')
+  const [modalOpen, setModalOpen] = useState(false)
+  const [modalData, setModalData] = useState('')
 
-  // console.log(containerProducts);
+  console.log(L2Selected);
 
   useEffect(() => {
     setHeaderData({
@@ -147,7 +171,48 @@ const AddProduct = ({ setHeaderData }) => {
 
   const formSubmit = (e) => {
     e.preventDefault();
-    addProductCatalogue(product, imagesArray, productTypeSelected, L1Selected, L2Selected, L3Selected, discountedPrice, discountGiven, comboEAN, containerEAN)
+    let flatDiscountDetails = {
+      value: '',
+      from: '',
+      to: ''
+    }
+    let comboOfferDetails = {
+      value: '',
+      from: '',
+      to: ''
+    }
+    let containerDetails = {
+      value: '',
+      from: '',
+      to: ''
+    }
+    if (flatDiscount.value && flatDiscount.from && flatDiscount.to) {
+      flatDiscountDetails.value = flatDiscount.value
+      flatDiscountDetails.from = flatDiscount.from.year + '/' + flatDiscount.from.month + '/' + flatDiscount.from.day
+      flatDiscountDetails.to = flatDiscount.to.year + '/' + flatDiscount.to.month + '/' + flatDiscount.to.day
+    }
+    if (comboOffer.value && comboOffer.from && comboOffer.to) {
+      comboOfferDetails.value = comboOffer.value
+      comboOfferDetails.from = comboOffer.from.year + '/' + comboOffer.from.month + '/' + comboOffer.from.day
+      comboOfferDetails.to = comboOffer.to.year + '/' + comboOffer.to.month + '/' + comboOffer.to.day
+    }
+    if (containerOffer.value.length > 0) {
+      containerDetails.value = containerOffer.value
+      containerDetails.from = containerOffer.from.year + '/' + containerOffer.from.month + '/' + containerOffer.from.day
+      containerDetails.to = containerOffer.to.year + '/' + containerOffer.to.month + '/' + containerOffer.to.day
+
+    }
+    console.log(
+      `flat: ${JSON.stringify(flatDiscountDetails)},
+      combo: ${JSON.stringify(comboOfferDetails)},
+      container: ${JSON.stringify(containerDetails)}
+      `
+    );
+
+    let imagesArray = images.split(',')
+    let galleryImagesArray = galleryImages.split(',')
+
+    addProductCatalogue(product, imagesArray, galleryImagesArray, L1Selected, L2Selected.value, L3Selected, discountedPrice, flatDiscountDetails, comboOfferDetails, containerDetails)
       .then(res => res ? (
         // console.log(res),
         toast.success('Product Added Successfully'),
@@ -187,8 +252,11 @@ const AddProduct = ({ setHeaderData }) => {
   const handleContainerEAN = (e, index) => {
     const { name, value } = e.target
     let list = [...containerEAN]
+    let list2 = [...containerOffer.value]
     list[index][name] = value
+    list2.push(value)
     setContainerEAN(list)
+    setContainerOffer(prev => ({ ...prev, value: list2 }))
   }
 
   // const validateNumber = (e) => {
@@ -199,13 +267,9 @@ const AddProduct = ({ setHeaderData }) => {
   // }
 
   const productTypeList = [
-    { value: 'Soundbar', label: 'Soundbar' },
-    { value: 'True_Wireless_Earbuds', label: 'True Wireless Earbuds' },
-    { value: 'Bluetooth_Neckband_Earphones', label: 'Bluetooth Neckband Earphones' },
     { value: 'Bluetooth_Headphones', label: 'Bluetooth Headphones' },
     { value: 'Wired_Headphones', label: 'Wired Headphones' },
     { value: 'Wired_Earphone', label: 'Wired Earphone' },
-    { value: 'Powerbank', label: 'Powerbank' },
     { value: 'Tablet', label: 'Tablet' },
     { value: 'Smart_TV', label: 'Smart TV' },
     { value: 'Laptop', label: 'Laptop' },
@@ -219,7 +283,10 @@ const AddProduct = ({ setHeaderData }) => {
   ]
 
   const hL2List = [
-    { value: 'Bluetooth Speaker', label: 'Bluetooth Speaker' },
+    { value: 'Soundbar', label: 'Soundbar' },
+    { value: 'Bluetooth_Speaker', label: 'Bluetooth Speaker' },
+    { value: 'Bluetooth_Neckband_Earphones', label: 'Bluetooth Neckband Earphones' },
+    { value: 'True_Wireless_Earbuds', label: 'True Wireless Earbuds' },
     { value: 'Smartphone', label: 'Smartphone' },
     { value: 'Adapter', label: 'Adapter' },
     { value: 'Charging_Cable', label: 'Charging Cable' },
@@ -232,9 +299,11 @@ const AddProduct = ({ setHeaderData }) => {
     { value: 'Wired_Headphones', label: 'Wired Headphones' },
     { value: 'Wired_Earphone', label: 'Wired Earphone' },
     { value: 'Tablet', label: 'Tablet' },
+    { value: 'Powerbank', label: 'Powerbank' },
     { value: 'Laptop', label: 'Laptop' },
     { value: 'Wifi_Smart_Speaker', label: 'Wifi Smart Speaker' },
     { value: 'Security_Camera', label: 'Security Camera' },
+    { value: 'Miscellaneous', label: 'Miscellaneous' },
   ]
 
   const hL3List = [
@@ -254,8 +323,11 @@ const AddProduct = ({ setHeaderData }) => {
       if (product.MRP !== '') {
         let discountPrice = parseInt(priceGiven)
         let price = product.MRP
-        let discount = ((price - discountPrice) / price) * 100
-        setDiscountGiven(isNaN(discount) ? null : discount)
+        let discount = Math.floor(((price - discountPrice) / price) * 100)
+        setFlatDiscount(prev => ({
+          ...prev,
+          value: isNaN(discount) ? null : discount
+        }))
         setDiscountedPrice(priceGiven)
       }
     }
@@ -263,7 +335,7 @@ const AddProduct = ({ setHeaderData }) => {
 
   const searchComboProduct = (e) => {
     e.preventDefault();
-    let product = allProducts.products.filter((product) => product.ean === comboEAN)
+    let product = allProducts.products.filter((product) => product.ean === comboOffer.value)
     setComboProduct({
       loaded: true,
       product: product
@@ -291,7 +363,6 @@ const AddProduct = ({ setHeaderData }) => {
       return true
     }
   }
-  console.log(testFile);
 
   const imageHandleChange = (e) => {
     if (e.target.files) {
@@ -314,105 +385,188 @@ const AddProduct = ({ setHeaderData }) => {
   //   console.log(temp);
   // }
 
+  const handleDate = (e, type, prop) => {
+    let key
+    if (prop) {
+      key = 'from'
+    } else {
+      key = 'to'
+    }
+    type(prev => ({ ...prev, [key]: e }))
+  }
+
+  const setImageLink = (e) => {
+    var imageLink = e.target.value
+    // console.log(imageLink);
+    setImages(imageLink)
+  }
+
+  const setImageGalleryLink = (e) => {
+    var imageLink = e.target.value
+    // console.log(imageLink);
+    setGalleryImages(imageLink)
+  }
+
+  const handleOpen = (e, images) => {
+    e.preventDefault()
+    setModalOpen(true)
+    setModalData(images)
+  }
+
+  // const modalData = () => {
+  //   return (
+  //     <>
+  //       <header id='modal-header'>Hello There</header>
+  //       <main id='modal-main' >
+  //         New Body
+  //       </main>
+  //       <footer>
+  //         New Footer
+  //       </footer>
+  //     </>
+  //   )
+  // }
+
   const dynamicTableComp = (type) => {
     switch (type) {
       case 'Soundbar':
         return (
           <>
-            <input type='text' name="Product Power Output" id="Product Power Output" value={dynamicTable.powerOutput} className='input-field' placeholder='Enter Product Power Output' onChange={(value) => { handleDyanmicTableValues("powerOutput", value); handleInput("powerOutput", value) }} />
-            <input type='text' name="Product Channel Configuration" id="Product Channel Configuration" value={dynamicTable.channelConfiguration} className='input-field' placeholder='Enter Product Channel Configuration' onChange={(value) => { handleDyanmicTableValues("channelConfiguration", value); handleInput("channelConfiguration", value) }} />
-            <input type='text' name="Product Connection type" id="Product Connection type" value={dynamicTable.connectionType} className='input-field' placeholder='Enter Product Connection Type' onChange={(value) => { handleDyanmicTableValues("connectionType", value); handleInput("connectionType", value) }} />
-            <input type='text' name="Product Sattelite Channels" id="Product Sattelite Channels" value={dynamicTable.satteliteChannels} className='input-field' placeholder='Enter Product Sattelite Channels' onChange={(value) => { handleDyanmicTableValues("satteliteChannels", value); handleInput("satteliteChannels", value) }} />
-            <input type='text' name="Product Included subwoofer" id="Product Included subwoofer" value={dynamicTable.includedSubwoofer} className='input-field' placeholder='Enter Product Included Subwoofer' onChange={(value) => { handleDyanmicTableValues("includedSubwoofer", value); handleInput("includedSubwoofer", value) }} />
-            <input type='text' name="Product Input ports" id="Product Input ports" value={dynamicTable.inputPorts} className='input-field' placeholder='Enter Product Input ports' onChange={(value) => { handleDyanmicTableValues("inputPorts", value); handleInput("inputPorts", value) }} />
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product Power Output" id="Product Power Output" value={dynamicTable.powerOutput} className='input-field' placeholder='Enter Product Power Output' onChange={(value) => { handleDyanmicTableValues("powerOutput", value); handleInput("powerOutput", value) }} />
+              <input type='text' name="Product Channel Configuration" id="Product Channel Configuration" value={dynamicTable.channelConfiguration} className='input-field' placeholder='Enter Product Channel Configuration' onChange={(value) => { handleDyanmicTableValues("channelConfiguration", value); handleInput("channelConfiguration", value) }} />
+              <input type='text' name="Product Connection type" id="Product Connection type" value={dynamicTable.connectionType} className='input-field' placeholder='Enter Product Connection Type' onChange={(value) => { handleDyanmicTableValues("connectionType", value); handleInput("connectionType", value) }} />
+              <input type='text' name="Product Sattelite Channels" id="Product Sattelite Channels" value={dynamicTable.satteliteChannels} className='input-field' placeholder='Enter Product Sattelite Channels' onChange={(value) => { handleDyanmicTableValues("satteliteChannels", value); handleInput("satteliteChannels", value) }} />
+              <input type='text' name="Product Included subwoofer" id="Product Included subwoofer" value={dynamicTable.includedSubwoofer} className='input-field' placeholder='Enter Product Included Subwoofer' onChange={(value) => { handleDyanmicTableValues("includedSubwoofer", value); handleInput("includedSubwoofer", value) }} />
+              <input type='text' name="Product Input ports" id="Product Input ports" value={dynamicTable.inputPorts} className='input-field' placeholder='Enter Product Input ports' onChange={(value) => { handleDyanmicTableValues("inputPorts", value); handleInput("inputPorts", value) }} />
+            </div>
           </>)
       case 'True_Wireless_Earbuds':
         return (
-          <div className="catelogue_Form_Group">
-            <input type='text' name="Product Bluetooth Version" id="Product Bluetooth Version" value={dynamicTable.bluetoothVersion} className='input-field' placeholder='Enter Product Bluetooth Version' onChange={(value) => { handleDyanmicTableValues("bluetoothVersion", value); handleInput("bluetoothVersion", value) }} />
-            <input type='text' name="Product Total Playback Time" id="Product Total Playback Time" value={dynamicTable.totalPlaybackTime} className='input-field' placeholder='Enter Product Total Playback Time' onChange={(value) => { handleDyanmicTableValues("totalPlaybackTime", value); handleInput("totalPlaybackTime", value) }} />
-            <input type='text' name="Product Quick Charge" id="Product Quick Charge" value={dynamicTable.quickCharge} className='input-field' placeholder='Enter Product Quick Charge' onChange={(value) => { handleDyanmicTableValues("quickCharge", value); handleInput("quickCharge", value) }} />
-          </div>)
+          <>
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product Bluetooth Version" id="Product Bluetooth Version" value={dynamicTable.bluetoothVersion} className='input-field' placeholder='Enter Product Bluetooth Version' onChange={(value) => { handleDyanmicTableValues("bluetoothVersion", value); handleInput("bluetoothVersion", value) }} />
+              <input type='text' name="Product Total Playback Time" id="Product Total Playback Time" value={dynamicTable.totalPlaybackTime} className='input-field' placeholder='Enter Product Total Playback Time' onChange={(value) => { handleDyanmicTableValues("totalPlaybackTime", value); handleInput("totalPlaybackTime", value) }} />
+              <input type='text' name="Product Quick Charge" id="Product Quick Charge" value={dynamicTable.quickCharge} className='input-field' placeholder='Enter Product Quick Charge' onChange={(value) => { handleDyanmicTableValues("quickCharge", value); handleInput("quickCharge", value) }} />
+            </div>
+          </>)
       case 'Bluetooth_Neckband_Earphones':
         return (
-          <div className="catelogue_Form_Group">
-            <input type='text' name="Product Bluetooth Version" id="Product Bluetooth Version" value={dynamicTable.bluetoothVersion} className='input-field' placeholder='Enter Product Bluetooth Version' onChange={(value) => { handleDyanmicTableValues("bluetoothVersion", value); handleInput("bluetoothVersion", value) }} />
-            <input type='text' name="Product Playback Time" id="Product Playback Time" value={dynamicTable.playbackTime} className='input-field' placeholder='Enter Product Playback Time' onChange={(value) => { handleDyanmicTableValues("playbackTime", value); handleInput("playbackTime", value) }} />
-            <input type='text' name="Product Quick Charge" id="Product Quick Charge" value={dynamicTable.quickCharge} className='input-field' placeholder='Enter Product Quick Charge' onChange={(value) => { handleDyanmicTableValues("quickCharge", value); handleInput("quickCharge", value) }} />
-          </div>)
+          <>
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product Bluetooth Version" id="Product Bluetooth Version" value={dynamicTable.bluetoothVersion} className='input-field' placeholder='Enter Product Bluetooth Version' onChange={(value) => { handleDyanmicTableValues("bluetoothVersion", value); handleInput("bluetoothVersion", value) }} />
+              <input type='text' name="Product Playback Time" id="Product Playback Time" value={dynamicTable.playbackTime} className='input-field' placeholder='Enter Product Playback Time' onChange={(value) => { handleDyanmicTableValues("playbackTime", value); handleInput("playbackTime", value) }} />
+              <input type='text' name="Product Quick Charge" id="Product Quick Charge" value={dynamicTable.quickCharge} className='input-field' placeholder='Enter Product Quick Charge' onChange={(value) => { handleDyanmicTableValues("quickCharge", value); handleInput("quickCharge", value) }} />
+            </div>
+          </>)
       case 'Bluetooth_Headphones':
         return (
-          <div className="catelogue_Form_Group">
-            <input type='text' name="Product Bluetooth Version" id="Product Bluetooth Version" value={dynamicTable.bluetoothVersion} className='input-field' placeholder='Enter Product Bluetooth Version' onChange={(value) => { handleDyanmicTableValues("bluetoothVersion", value); handleInput("bluetoothVersion", value) }} />
-            <input type='text' name="Product Playback Time" id="Product Playback Time" value={dynamicTable.playbackTime} className='input-field' placeholder='Enter Product Playback Time' onChange={(value) => { handleDyanmicTableValues("playbackTime", value); handleInput("playbackTime", value) }} />
-            <input type='text' name="Product Quick Charge" id="Product Quick Charge" value={dynamicTable.quickCharge} className='input-field' placeholder='Enter Product Quick Charge' onChange={(value) => { handleDyanmicTableValues("quickCharge", value); handleInput("quickCharge", value) }} />
-            <input type='text' name="Product Mic" id="Product Mic" value={dynamicTable.mic} className='input-field' placeholder='Enter Product Mic' onChange={(value) => { handleDyanmicTableValues("mic", value); handleInput("mic", value) }} />
-          </div>)
+          <>
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product Bluetooth Version" id="Product Bluetooth Version" value={dynamicTable.bluetoothVersion} className='input-field' placeholder='Enter Product Bluetooth Version' onChange={(value) => { handleDyanmicTableValues("bluetoothVersion", value); handleInput("bluetoothVersion", value) }} />
+              <input type='text' name="Product Playback Time" id="Product Playback Time" value={dynamicTable.playbackTime} className='input-field' placeholder='Enter Product Playback Time' onChange={(value) => { handleDyanmicTableValues("playbackTime", value); handleInput("playbackTime", value) }} />
+              <input type='text' name="Product Quick Charge" id="Product Quick Charge" value={dynamicTable.quickCharge} className='input-field' placeholder='Enter Product Quick Charge' onChange={(value) => { handleDyanmicTableValues("quickCharge", value); handleInput("quickCharge", value) }} />
+              <input type='text' name="Product Mic" id="Product Mic" value={dynamicTable.mic} className='input-field' placeholder='Enter Product Mic' onChange={(value) => { handleDyanmicTableValues("mic", value); handleInput("mic", value) }} />
+            </div>
+          </>)
       case 'Wired_Headphones':
         return (
-          <div className="catelogue_Form_Group">
-            <input type='text' name="Product Mic" id="Product Mic" value={dynamicTable.mic} className='input-field' placeholder='Enter Product Mic' onChange={(value) => { handleDyanmicTableValues("mic", value); handleInput("mic", value) }} />
-            <input type='text' name="Product Wired Controls" id="Product Wired Controls" value={dynamicTable.wiredControls} className='input-field' placeholder='Enter Product Wired Controls' onChange={(value) => { handleDyanmicTableValues("wiredControls", value); handleInput("wiredControls", value) }} />
-            <input type='text' name="Product Weight" id="Product Weight" value={dynamicTable.weight} className='input-field' placeholder='Enter Product Weight' onChange={(value) => { handleDyanmicTableValues("weight", value); handleInput("weight", value) }} />
-          </div>)
+          <>
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product Mic" id="Product Mic" value={dynamicTable.mic} className='input-field' placeholder='Enter Product Mic' onChange={(value) => { handleDyanmicTableValues("mic", value); handleInput("mic", value) }} />
+              <input type='text' name="Product Wired Controls" id="Product Wired Controls" value={dynamicTable.wiredControls} className='input-field' placeholder='Enter Product Wired Controls' onChange={(value) => { handleDyanmicTableValues("wiredControls", value); handleInput("wiredControls", value) }} />
+              <input type='text' name="Product Weight" id="Product Weight" value={dynamicTable.weight} className='input-field' placeholder='Enter Product Weight' onChange={(value) => { handleDyanmicTableValues("weight", value); handleInput("weight", value) }} />
+            </div>
+          </>)
       case 'Wired_Earphone':
         return (
-          <div className="catelogue_Form_Group">
-            <input type='text' name="Product Mic" id="Product Mic" value={dynamicTable.mic} className='input-field' placeholder='Enter Product Mic' onChange={(value) => { handleDyanmicTableValues("mic", value); handleInput("mic", value) }} />
-            <input type='text' name="Product Wired Controls" id="Product Wired Controls" value={dynamicTable.wiredControls} className='input-field' placeholder='Enter Product Wired Controls' onChange={(value) => { handleDyanmicTableValues("wiredControls", value); handleInput("wiredControls", value) }} />
-          </div>)
+          <>
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product Mic" id="Product Mic" value={dynamicTable.mic} className='input-field' placeholder='Enter Product Mic' onChange={(value) => { handleDyanmicTableValues("mic", value); handleInput("mic", value) }} />
+              <input type='text' name="Product Wired Controls" id="Product Wired Controls" value={dynamicTable.wiredControls} className='input-field' placeholder='Enter Product Wired Controls' onChange={(value) => { handleDyanmicTableValues("wiredControls", value); handleInput("wiredControls", value) }} />
+            </div>
+          </>)
       case 'Powerbank':
         return (
-          <div className="catelogue_Form_Group">
-            <input type='text' name="Product Capacity" id="Product Capacity" value={dynamicTable.capacity} className='input-field' placeholder='Enter Product Capacity' onChange={(value) => { handleDyanmicTableValues("capacity", value); handleInput("capacity", value) }} />
-            <input type='text' name="Product Output Ports" id="Product Output Ports" value={dynamicTable.outputPorts} className='input-field' placeholder='Enter Product Output Ports' onChange={(value) => { handleDyanmicTableValues("outputPorts", value); handleInput("outputPorts", value) }} />
-            <input type='text' name="Product Fast Charging" id="Product Fast Charging" value={dynamicTable.fastCharging} className='input-field' placeholder='Enter Product Fast Charging' onChange={(value) => { handleDyanmicTableValues("fastCharging", value); handleInput("fastCharging", value) }} />
-          </div>)
+          <>
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product Capacity" id="Product Capacity" value={dynamicTable.capacity} className='input-field' placeholder='Enter Product Capacity' onChange={(value) => { handleDyanmicTableValues("capacity", value); handleInput("capacity", value) }} />
+              <input type='text' name="Product Output Ports" id="Product Output Ports" value={dynamicTable.outputPorts} className='input-field' placeholder='Enter Product Output Ports' onChange={(value) => { handleDyanmicTableValues("outputPorts", value); handleInput("outputPorts", value) }} />
+              <input type='text' name="Product Fast Charging" id="Product Fast Charging" value={dynamicTable.fastCharging} className='input-field' placeholder='Enter Product Fast Charging' onChange={(value) => { handleDyanmicTableValues("fastCharging", value); handleInput("fastCharging", value) }} />
+            </div>
+          </>)
       case 'Tablet':
         return (
-          <div className="catelogue_Form_Group">
-            <input type='text' name="Product RAM" id="Product RAM" value={dynamicTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleInput("ram", value) }} />
-            <input type='text' name="Product Internal Storage" id="Product Internal Storage" value={dynamicTable.internalStorage} className='input-field' placeholder='Enter Product Internal Storage' onChange={(value) => { handleDyanmicTableValues("internalStorage", value); handleInput("internalStorage", value) }} />
-            <input type='text' name="Product Screen Size" id="Product Screen Size" value={dynamicTable.screenSize} className='input-field' placeholder='Enter Product Screen Size' onChange={(value) => { handleDyanmicTableValues("screenSize", value); handleInput("screenSize", value) }} />
-            <input type='text' name="Product Screen Resolution" id="Product Screen Resolution" value={dynamicTable.screenResolution} className='input-field' placeholder='Enter Product Screen Resolution' onChange={(value) => { handleDyanmicTableValues("screenResolution", value); handleInput("screenResolution", value) }} />
-            <input type='text' name="Product Screen Type" id="Product Screen Type" value={dynamicTable.screenType} className='input-field' placeholder='Enter Product Screen Type' onChange={(value) => { handleDyanmicTableValues("screenType", value); handleInput("screenType", value) }} />
-            {/* <input type='text' name="Product Screen Type" id="Product Screen Type" value={dynamicTable.screenType} className='input-field' placeholder='Enter Product Screen Type' onChange={(value) => handleDyanmicTableValues("screenType", value)} /> */}
-          </div>)
+          <>
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product RAM" id="Product RAM" value={dynamicTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleInput("ram", value) }} />
+              <input type='text' name="Product Internal Storage" id="Product Internal Storage" value={dynamicTable.internalStorage} className='input-field' placeholder='Enter Product Internal Storage' onChange={(value) => { handleDyanmicTableValues("internalStorage", value); handleInput("internalStorage", value) }} />
+              <input type='text' name="Product Screen Size" id="Product Screen Size" value={dynamicTable.screenSize} className='input-field' placeholder='Enter Product Screen Size' onChange={(value) => { handleDyanmicTableValues("screenSize", value); handleInput("screenSize", value) }} />
+              <input type='text' name="Product Screen Resolution" id="Product Screen Resolution" value={dynamicTable.screenResolution} className='input-field' placeholder='Enter Product Screen Resolution' onChange={(value) => { handleDyanmicTableValues("screenResolution", value); handleInput("screenResolution", value) }} />
+              <input type='text' name="Product Screen Type" id="Product Screen Type" value={dynamicTable.screenType} className='input-field' placeholder='Enter Product Screen Type' onChange={(value) => { handleDyanmicTableValues("screenType", value); handleInput("screenType", value) }} />
+              {/* <input type='text' name="Product Screen Type" id="Product Screen Type" value={dynamicTable.screenType} className='input-field' placeholder='Enter Product Screen Type' onChange={(value) => handleDyanmicTableValues("screenType", value)} /> */}
+            </div>
+          </>)
       case 'Smart_TV':
         return (
-          <div className="catelogue_Form_Group">
-            <input type='text' name="Product Operating System" id="Product Operating System" value={dynamicTable.operatingSystem} className='input-field' placeholder='Enter Product Operating System' onChange={(value) => { handleDyanmicTableValues("operatingSystem", value); handleInput("operatingSystem", value) }} />
-            <input type='text' name="Product Screen Size" id="Product Screen Size" value={dynamicTable.screenSize} className='input-field' placeholder='Enter Product Screen Size' onChange={(value) => { handleDyanmicTableValues("screenSize", value); handleInput("screenSize", value) }} />
-            <input type='text' name="Product Screen Resolution" id="Product Screen Resolution" value={dynamicTable.screenResolution} className='input-field' placeholder='Enter Product Screen Resolution' onChange={(value) => { handleDyanmicTableValues("screenResolution", value); handleInput("screenResolution", value) }} />
-            <input type='text' name="Product Display Technology" id="Product Display Technology" value={dynamicTable.displayTechnology} className='input-field' placeholder='Enter Product Display Technology' onChange={(value) => { handleDyanmicTableValues("displayTechnology", value); handleInput("displayTechnology", value) }} />
-            <input type='text' name="Product Input ports" id="Product Input ports" value={dynamicTable.inputPorts} className='input-field' placeholder='Enter Product Input ports' onChange={(value) => { handleDyanmicTableValues("inputPorts", value); handleInput("inputPorts", value) }} />
-            <input type='text' name="Product Refresh Rate" id="Product Refresh Rate" value={dynamicTable.refreshRate} className='input-field' placeholder='Enter Product Refresh Rate' onChange={(value) => { handleDyanmicTableValues("refreshRate", value); handleInput("refreshRate", value) }} />
-          </div>)
+          <>
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product Operating System" id="Product Operating System" value={dynamicTable.operatingSystem} className='input-field' placeholder='Enter Product Operating System' onChange={(value) => { handleDyanmicTableValues("operatingSystem", value); handleInput("operatingSystem", value) }} />
+              <input type='text' name="Product Screen Size" id="Product Screen Size" value={dynamicTable.screenSize} className='input-field' placeholder='Enter Product Screen Size' onChange={(value) => { handleDyanmicTableValues("screenSize", value); handleInput("screenSize", value) }} />
+              <input type='text' name="Product Screen Resolution" id="Product Screen Resolution" value={dynamicTable.screenResolution} className='input-field' placeholder='Enter Product Screen Resolution' onChange={(value) => { handleDyanmicTableValues("screenResolution", value); handleInput("screenResolution", value) }} />
+              <input type='text' name="Product Display Technology" id="Product Display Technology" value={dynamicTable.displayTechnology} className='input-field' placeholder='Enter Product Display Technology' onChange={(value) => { handleDyanmicTableValues("displayTechnology", value); handleInput("displayTechnology", value) }} />
+              <input type='text' name="Product Input ports" id="Product Input ports" value={dynamicTable.inputPorts} className='input-field' placeholder='Enter Product Input ports' onChange={(value) => { handleDyanmicTableValues("inputPorts", value); handleInput("inputPorts", value) }} />
+              <input type='text' name="Product Refresh Rate" id="Product Refresh Rate" value={dynamicTable.refreshRate} className='input-field' placeholder='Enter Product Refresh Rate' onChange={(value) => { handleDyanmicTableValues("refreshRate", value); handleInput("refreshRate", value) }} />
+            </div>
+          </>)
       case 'Laptop':
         return (
-          <div className="catelogue_Form_Group">
-            <input type='text' name="Product RAM" id="Product RAM" value={dynamicTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleInput("ram", value) }} />
-            <input type='text' name="Product Internal Storage" id="Product Internal Storage" value={dynamicTable.internalStorage} className='input-field' placeholder='Enter Product Internal Storage' onChange={(value) => { handleDyanmicTableValues("internalStorage", value); handleInput("internalStorage", value) }} />
-            <input type='text' name="Product Screen Size" id="Product Screen Size" value={dynamicTable.screenSize} className='input-field' placeholder='Enter Product Screen Size' onChange={(value) => { handleDyanmicTableValues("screenSize", value); handleInput("screenSize", value) }} />
-            <input type='text' name="Product Screen Resolution" id="Product Screen Resolution" value={dynamicTable.screenResolution} className='input-field' placeholder='Enter Product Screen Resolution' onChange={(value) => { handleDyanmicTableValues("screenResolution", value); handleInput("screenResolution", value) }} />
-            <input type='text' name="Product Screen Type" id="Product Screen Type" value={dynamicTable.screenType} className='input-field' placeholder='Enter Product Screen Type' onChange={(value) => { handleDyanmicTableValues("screenType", value); handleInput("screenType", value) }} />
-            <input type='text' name="Product Graphics Card" id="Product Graphics Card" value={dynamicTable.graphicsCard} className='input-field' placeholder='Enter Product Graphics Card' onChange={(value) => { handleDyanmicTableValues("graphicsCard", value); handleInput("graphicsCard", value) }} />
-          </div>)
+          <>
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product RAM" id="Product RAM" value={dynamicTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleInput("ram", value) }} />
+              <input type='text' name="Product Internal Storage" id="Product Internal Storage" value={dynamicTable.internalStorage} className='input-field' placeholder='Enter Product Internal Storage' onChange={(value) => { handleDyanmicTableValues("internalStorage", value); handleInput("internalStorage", value) }} />
+              <input type='text' name="Product Screen Size" id="Product Screen Size" value={dynamicTable.screenSize} className='input-field' placeholder='Enter Product Screen Size' onChange={(value) => { handleDyanmicTableValues("screenSize", value); handleInput("screenSize", value) }} />
+              <input type='text' name="Product Screen Resolution" id="Product Screen Resolution" value={dynamicTable.screenResolution} className='input-field' placeholder='Enter Product Screen Resolution' onChange={(value) => { handleDyanmicTableValues("screenResolution", value); handleInput("screenResolution", value) }} />
+              <input type='text' name="Product Screen Type" id="Product Screen Type" value={dynamicTable.screenType} className='input-field' placeholder='Enter Product Screen Type' onChange={(value) => { handleDyanmicTableValues("screenType", value); handleInput("screenType", value) }} />
+              <input type='text' name="Product Graphics Card" id="Product Graphics Card" value={dynamicTable.graphicsCard} className='input-field' placeholder='Enter Product Graphics Card' onChange={(value) => { handleDyanmicTableValues("graphicsCard", value); handleInput("graphicsCard", value) }} />
+            </div>
+          </>)
       case 'Wifi_Smart_Speaker':
         return (
-          <div className="catelogue_Form_Group">
-            <input type='text' name="Product Supported smart assistants" id="Product Supported smart assistants" value={dynamicTable.supportedSmartAssistants} className='input-field' placeholder='Enter Product Supported smart assistants' onChange={(value) => { handleDyanmicTableValues("supportedSmartAssistants", value); handleInput("supportedSmartAssistants", value) }} />
-            <input type='text' name="Product Power Output" id="Product Power Output" value={dynamicTable.powerOutput} className='input-field' placeholder='Enter Product Power Output' onChange={(value) => { handleDyanmicTableValues("powerOutput", value); handleInput("powerOutput", value) }} />
-          </div>)
+          <>
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product Supported smart assistants" id="Product Supported smart assistants" value={dynamicTable.supportedSmartAssistants} className='input-field' placeholder='Enter Product Supported smart assistants' onChange={(value) => { handleDyanmicTableValues("supportedSmartAssistants", value); handleInput("supportedSmartAssistants", value) }} />
+              <input type='text' name="Product Power Output" id="Product Power Output" value={dynamicTable.powerOutput} className='input-field' placeholder='Enter Product Power Output' onChange={(value) => { handleDyanmicTableValues("powerOutput", value); handleInput("powerOutput", value) }} />
+            </div>
+          </>)
       case 'Security_Camera':
         return (
-          <div className="catelogue_Form_Group">
-            <input type='text' name="Product Sensor Resolution" id="Product Sensor Resolution" value={dynamicTable.sensorResolution} className='input-field' placeholder='Enter Product Sensor Resolution' onChange={(value) => { handleDyanmicTableValues("sensorResolution", value); handleInput("sensorResolution", value) }} />
-          </div>)
+          <>
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product Sensor Resolution" id="Product Sensor Resolution" value={dynamicTable.sensorResolution} className='input-field' placeholder='Enter Product Sensor Resolution' onChange={(value) => { handleDyanmicTableValues("sensorResolution", value); handleInput("sensorResolution", value) }} />
+            </div>
+          </>)
+
+      case 'Miscellaneous':
+        return (
+          <></>
+        )
 
       default:
         return <>
-          <p>Select Product Type first</p>
+          <p className='alert alert-danger' >Select Product Type first</p>
         </>
     }
   }
@@ -426,7 +580,7 @@ const AddProduct = ({ setHeaderData }) => {
           </div>
           <form className="catelogue_Form" onSubmit={formSubmit}>
             <fieldset className='catelogue_Fieldset' >
-              <Dropdown>
+              {/* <Dropdown>
                 <Dropdown.Toggle id="dropdown-basic">
                   <div className="catalogue_Dropdown">
                     {productTypeSelected ? (<p>{productTypeSelected.label}</p>) : (<p>Select Product Type</p>)}
@@ -440,7 +594,7 @@ const AddProduct = ({ setHeaderData }) => {
                     ))
                   }
                 </Dropdown.Menu>
-              </Dropdown>
+              </Dropdown> */}
 
               <Dropdown>
                 <Dropdown.Toggle id="dropdown-basic">
@@ -460,14 +614,14 @@ const AddProduct = ({ setHeaderData }) => {
               <Dropdown>
                 <Dropdown.Toggle id="dropdown-basic">
                   <div className="catalogue_Dropdown">
-                    {L2Selected ? (<p>{L2Selected}</p>) : (<p>Select L2</p>)}
+                    {L2Selected ? (<p>{L2Selected.label}</p>) : (<p>Select L2</p>)}
                   </div>
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
                   {
                     hL2List.map((item, index) => (
-                      <Dropdown.Item key={index} value={item.value} onClick={() => setL2Selected(item.value)}>{item.label}</Dropdown.Item>
+                      <Dropdown.Item key={index} value={item.value} onClick={() => setL2Selected(item)}>{item.label}</Dropdown.Item>
                     ))
                   }
                 </Dropdown.Menu>
@@ -491,12 +645,12 @@ const AddProduct = ({ setHeaderData }) => {
             <div className="catelogue_Form_Group">
               <h4>Dynamic Header Preview</h4>
               {
-                product.name && dynamicTable && checkDynamicTable(dynamicTable) && (
-                  <p>{product.name},
-                    {
+                product.name && (
+                  <p>{product.name}
+                    {dynamicTable && checkDynamicTable(dynamicTable) && (
                       (Object.values(dynamicTable)).map((item, index) => (
-                        <span key={index} > {item}, </span>
-                      ))
+                        <span key={index} >{index === 0 ? ' (' : ''}{item}{(Object.values(dynamicTable).length - 1) === index ? ')' : ','} </span>
+                      )))
                     }
                   </p>
                 )
@@ -542,34 +696,63 @@ const AddProduct = ({ setHeaderData }) => {
               }
             </div>
             <div className="catelogue_Form_Group">
-              <h4>Product Specific Details</h4>
               {
-                dynamicTableComp(productTypeSelected.value)
+                dynamicTableComp(L2Selected.value)
               }
             </div>
-            <div className="catelogue_Form_Group catalogue_Image_Preview">
+            {/* <div className="catelogue_Form_Group catalogue_Image_Preview">
               {imagesArray && (imagesArray.length > 0) ? (
                 renderImages(imagesArray)
               ) : ('')}
-            </div>
+            </div> */}
             <h4>Product Images</h4>
             <div className="catelogue_Form_Group">
-              <input type='file' name="Product Images" multiple id="Product Images" className='input-field' placeholder='Enter Product Images URL' onChange={imageHandleChange} />
-              <p className="catalogue_Hint">Add Maximun 5 images</p>
+              {/* <input type='file' name="Product Images" multiple id="Product Images" className='input-field' placeholder='Enter Product Images URL' onChange={imageHandleChange} />
+              <p className="catalogue_Hint">Add Maximun 5 images</p> */}
+              <input type='url' name="Product Images" id="Product Images" className='input-field' placeholder='Enter Product Images URL' value={images} onChange={(e) => setImageLink(e)} />
+              <p className="catalogue_Hint">Add comma seperated Image links, Add maximum 5 Images</p>
+              <div className={'button-Container'} onClick={(e) => handleOpen(e, images)}>
+                <button type='submit' className='submit-button'><p>Preview Images</p></button>
+              </div>
+            </div>
+            <div className="catelogue_Form_Group">
+              {/* <input type='file' name="Product Images" multiple id="Product Images" className='input-field' placeholder='Enter Product Images URL' onChange={imageHandleChange} />
+              <p className="catalogue_Hint">Add Maximun 5 images</p> */}
+              <input type='url' name="Product Gallery Images" id="Product Gallery Images" className='input-field' placeholder='Enter Product Gallery Images URL' value={galleryImages} onChange={(e) => setImageGalleryLink(e)} />
+              <p className="catalogue_Hint">Add comma seperated Image links</p>
+              <div className={'button-Container'} onClick={(e) => handleOpen(e, galleryImages)}>
+                <button type='submit' className='submit-button'><p>Preview Images</p></button>
+              </div>
             </div>
             {/* <input type="file" name="file" id="file" onChange={testImageHandle} /> */}
             <h4>Add Product Offers</h4>
             <div className="addoffer_Input">
               <p>Enter Flat Discount Price</p>
               <input type="text" name='Discounted Price' id='Discounted Price' className='input-field' placeholder='Discounted Price/ MOP' onChange={(e) => handleDiscountCalc(e.target.value)} />
-              <p>{discountGiven ? (<>Discount Given : {discountGiven}</>) : ''}</p>
+              <p>{flatDiscount.value ? (<>Discount Given : {flatDiscount.value}</>) : ''}</p>
+              <DatePicker
+                value={flatDiscount.from}
+                onChange={(e) => handleDate(e, setFlatDiscount, true)}
+                inputPlaceholder="Discount Valid From Date"
+                inputClassName='input-field'
+                shouldHighlightWeekends
+              />
+              {flatDiscount.value && !flatDiscount.from && (<p className='alert alert-danger'>Enter Date!</p>)}
+              <DatePicker
+                value={flatDiscount.to}
+                onChange={(e) => handleDate(e, setFlatDiscount, false)}
+                inputPlaceholder="Discount Valid Till Date"
+                inputClassName='input-field'
+                shouldHighlightWeekends
+              />
+              {flatDiscount.value && !flatDiscount.to && (<p className='alert alert-danger'>Enter Date!</p>)}
             </div>
             <div className="addoffer_Input">
               <p>Enter Combo Offer Product</p>
               <div className="addoffer_Input2">
-                <input type="text" name='Free Product' id='Free Product' className='input-field' placeholder='Enter Free Product EAN' onChange={(e) => setComboEAN(e.target.value)} />
+                <input type="text" name='Free Product' id='Free Product' className='input-field' placeholder='Enter Free Product EAN' onChange={(e) => setComboOffer(prev => ({ ...prev, value: e.target.value }))} />
                 <div className={'button-Container'}>
-                  <button className='submit-button' onClick={searchComboProduct} disabled={(comboEAN === null) ? true : false}   ><p>Search Product</p></button>
+                  <button className='submit-button' onClick={searchComboProduct} disabled={(comboOffer.value === null) ? true : false}   ><p>Search Product</p></button>
                 </div>
               </div>
               <p>{comboProduct.loaded ? (
@@ -579,6 +762,22 @@ const AddProduct = ({ setHeaderData }) => {
                   <span>Product Selected : {comboProduct.product[0].name}, EAN : {comboProduct.product[0].ean}</span>
                 )
               ) : ('')}</p>
+              <DatePicker
+                value={comboOffer.from}
+                onChange={(e) => handleDate(e, setComboOffer, true)}
+                inputPlaceholder="Combo Valid From Date"
+                inputClassName='input-field'
+                shouldHighlightWeekends
+              />
+              {comboOffer.value && !comboOffer.from && (<p className='alert alert-danger'>Enter Date!</p>)}
+              <DatePicker
+                value={comboOffer.to}
+                onChange={(e) => handleDate(e, setComboOffer, false)}
+                inputPlaceholder="Combo Valid Till Date"
+                inputClassName='input-field'
+                shouldHighlightWeekends
+              />
+              {comboOffer.value && !comboOffer.to && (<p className='alert alert-danger'>Enter Date!</p>)}
             </div>
             <div className="addoffer_Input">
               <p>Enter Container Offer Products</p>
@@ -608,6 +807,22 @@ const AddProduct = ({ setHeaderData }) => {
                   </div>
                 ))
               }
+              <DatePicker
+                value={containerOffer.from}
+                onChange={(e) => handleDate(e, setContainerOffer, true)}
+                inputPlaceholder="Container Valid From Date"
+                inputClassName='input-field'
+                shouldHighlightWeekends
+              />
+              {containerOffer.value.length > 0 && !containerOffer.from && (<p className='alert alert-danger'>Enter Date!</p>)}
+              <DatePicker
+                value={containerOffer.to}
+                onChange={(e) => handleDate(e, setContainerOffer, false)}
+                inputPlaceholder="Container Valid Till Date"
+                inputClassName='input-field'
+                shouldHighlightWeekends
+              />
+              {containerOffer.value.length > 0 && !containerOffer.to && (<p className='alert alert-danger'>Enter Date!</p>)}
               <div className={'button-Container'}>
                 <button type='submit' className='submit-button' onClick={handleAddInput} ><p>Add Container Product</p></button>
               </div>
@@ -630,6 +845,9 @@ const AddProduct = ({ setHeaderData }) => {
         pauseOnHover
         transition={Slide}
       />
+      <CatelogueModal modalShow={modalOpen} setModalShow={setModalOpen} modalData={modalData} />
+      {/* {modalData()}
+      </ModalComp> */}
     </>
   )
 }
