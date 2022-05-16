@@ -229,7 +229,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
       setSearchedQuery(searchWord)
     }
   }
-  console.log(filteredData);
+  // console.log(filteredData);
 
   const handleSearchClick = (value) => {
     nav(`/${value.name}`)
@@ -402,7 +402,6 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
           </header>
         )
       }
-      {/* <Sidebar sidebar={sidebar} setSidebar={setSidebar} /> */}
       <ModalComp modalShow={modalShow} setModalShow={setModalShow} userLoggedIn={userLoggedIn} />
       <Sidebar sidebar={sidebar} setSidebar={setSidebar} userLoggedIn={userLoggedIn} />
     </>

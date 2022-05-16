@@ -11,6 +11,7 @@ import product1 from '../assets/png/product_1.png'
 import product2 from '../assets/png/product_2.png'
 import bannerImage from '../assets/png/hero_banner.png'
 
+
 const Home = ({ setHeaderData, allProducts }) => {
   const [demoElement, setDemoElement] = useState({
     product_id: '',
@@ -55,8 +56,6 @@ const Home = ({ setHeaderData, allProducts }) => {
   // for (let index = 0; index < 4; index++) {
   //   gridCardProducts2.push(allProducts[index + 20])
   // }
-
-
 
   const sec1Data = [
     {

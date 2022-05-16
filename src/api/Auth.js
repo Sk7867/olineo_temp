@@ -1,7 +1,4 @@
 import axios from 'axios'
-import { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getAddress } from './Address'
 
 const baseURL = "https://onlineo-backend.herokuapp.com/api"
 

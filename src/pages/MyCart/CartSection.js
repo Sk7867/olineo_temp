@@ -6,6 +6,7 @@ import { UserDataContext } from '../../Contexts/UserContext'
 import CartProductCard from '../../components/CartProductCard/CartProductCard'
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import Section2 from '../../components/Section2/Section2'
+import { initOrder } from '../../api/OrdersApi'
 
 const CartSection = ({ featureProducts }) => {
   const nav = useNavigate()
@@ -56,9 +57,9 @@ const CartSection = ({ featureProducts }) => {
   // }, [cartProducts])
 
 
-  console.log(userCart);
-  console.log(cartArray);
-  console.log(cartProducts);
+  // console.log(userCart);
+  // console.log(cartArray);
+  // console.log(cartProducts);
 
   const handleQuantityInc = (id) => {
     let tempState = [...cartProducts]
@@ -66,8 +67,6 @@ const CartSection = ({ featureProducts }) => {
     let tempElement = { ...tempState[index] }
     tempElement.quantity = tempElement.quantity + 1
     tempState[index] = tempElement
-    console.log(tempElement);
-    console.log(tempState);
     setCartProducts(tempState)
   }
 
@@ -81,12 +80,55 @@ const CartSection = ({ featureProducts }) => {
       tempElement.quantity = tempElement.quantity - 1
     }
     tempState[index] = tempElement
-    console.log(tempElement);
-    console.log(tempState);
     setCartProducts(tempState)
   }
 
+  //ORDER INITIALIZATION CODE+++++++++++++++++++++++++++++++++++++++++
 
+  const sampleData = [
+    {
+      productID: 1,
+      productName: 'Test 1',
+      quantity: 2
+    },
+    {
+      productID: 2,
+      productName: 'Test 1',
+      quantity: 4
+    },
+    {
+      productID: 3,
+      productName: 'Test 1',
+      quantity: 6
+    },
+    {
+      productID: 9,
+      productName: 'Test 1',
+      quantity: 4
+    },
+  ]
+
+  const handleOrderInit = () => {
+    let productId = []
+    let quantity = []
+    let shippingAddress = ''
+    sampleData.forEach(item =>
+      productId.push(item.productID)
+    )
+    sampleData.forEach((item) => (
+      quantity.push({ qty: item.quantity })
+    ))
+    let data = {
+      productId: productId,
+      quantity: quantity,
+      shippingAddressId: shippingAddress
+    }
+    // console.log(data);
+    initOrder(data)
+      .then(res => res ? (
+        console.log(res)
+      ) : (''))
+  }
 
   return (
     <>
