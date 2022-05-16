@@ -12,6 +12,7 @@ import product2 from '../assets/png/product_2.png'
 import bannerImage from '../assets/png/hero_banner.png'
 import ScartchCardComp from '../components/ScratchCard/ScartchCard'
 
+
 const Home = ({ setHeaderData, allProducts }) => {
   const [demoElement, setDemoElement] = useState({
     product_id: '',

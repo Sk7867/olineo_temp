@@ -361,8 +361,11 @@ const AddProduct = ({ setHeaderData }) => {
   const handleContainerEAN = (e, index) => {
     const { name, value } = e.target
     let list = [...containerEAN]
+    let list2 = [...containerOffer.value]
     list[index][name] = value
+    list2.push(value)
     setContainerEAN(list)
+    setContainerOffer(prev => ({ ...prev, value: list2 }))
   }
 
   const handleBankOffer = (e, index) => {
@@ -905,7 +908,7 @@ const AddProduct = ({ setHeaderData }) => {
               <Dropdown>
                 <Dropdown.Toggle id="dropdown-basic">
                   <div className="catalogue_Dropdown">
-                    {L2Selected ? (<p>{L2Selected}</p>) : (<p>Select L2</p>)}
+                    {L2Selected ? (<p>{L2Selected.label}</p>) : (<p>Select L2</p>)}
                   </div>
                 </Dropdown.Toggle>
 

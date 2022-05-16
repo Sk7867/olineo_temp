@@ -24,6 +24,7 @@ export const addProductCatalogue = async (
   bankOffers
 ) => {
   let addProductResponse
+  console.log(galleryImagesArray);
 
   let addProductBody = {
     dynamicHeader: dynamicHeader,
