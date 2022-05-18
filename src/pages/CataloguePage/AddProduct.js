@@ -50,6 +50,7 @@ const AddProduct = ({ setHeaderData }) => {
   const [L1Selected, setL1Selected] = useState('')
   const [L2Selected, setL2Selected] = useState('')
   const [L3Selected, setL3Selected] = useState('')
+  const [classificationSelected, setClassificationSelected] = useState('')
   const [dynamicTable, setDynamicTable] = useState({})
   const [discountGiven, setDiscountGiven] = useState(null)
   const [discountedPrice, setDiscountedPrice] = useState(null)
@@ -66,6 +67,7 @@ const AddProduct = ({ setHeaderData }) => {
     to: null
   })
   const [containerOffer, setContainerOffer] = useState({
+    valAdded: false,
     value: [],
     from: null,
     to: null
@@ -82,7 +84,7 @@ const AddProduct = ({ setHeaderData }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [modalData, setModalData] = useState('')
 
-  console.log(L2Selected);
+  // console.log(L2Selected);
 
   useEffect(() => {
     setHeaderData({
@@ -100,15 +102,15 @@ const AddProduct = ({ setHeaderData }) => {
       let product = loc.state.product
       console.log(product)
       setProduct({
-        heading: '',
+        heading: product.dynamicHeader,
         ID: product._id,
         EAN: product.ean,
         name: product.name,
         description: product.description,
         HSN: product.HSN,
         color: product.color,
-        MRP: '',
-        MOP: '',
+        MRP: product.price.mrp,
+        MOP: product.price.mop,
         size: product.productInfo.size,
         brand: product.productInfo.brand,
         modelYear: product.productInfo.modelYear,
@@ -116,38 +118,44 @@ const AddProduct = ({ setHeaderData }) => {
         stock: product.qty,
         weight: product.productInfo.weight
       })
-      setDiscountGiven(product.discount.flatDiscount)
-      if (loc.state.inwardDate) {
-        if (typeof (loc.state.inwardDate) === 'string') {
-          let bdayRecieved = loc.state.inwardDate
-          let seperateDOB = bdayRecieved.split('-')
-          let yearRecieved = parseInt(seperateDOB[0])
-          let monthRecieved = parseInt(seperateDOB[1])
-          let dateRecieved = parseInt(seperateDOB[2])
-          // let dateSep = dateWhole.slice(0, 2)
-          // console.log(seperateDOB);
-          // console.log(`
-          // ${bdayRecieved}
-          //   year: ${yearRecieved},
-          //   month: ${monthRecieved},
-          //   whole date: ${dateRecieved}
+      setL1Selected(product.hierarchyL1)
+      setL2Selected(product.hierarchyL2)
+      setL3Selected(product.hierarchyL3)
+      setClassificationSelected(product.classification)
+      setImages(product.images.join(','))
+      setGalleryImages(product.gallery.join(','))
+      // setDiscountGiven(product.discount.flatDiscount)
+      // if (loc.state.inwardDate) {
+      //   if (typeof (loc.state.inwardDate) === 'string') {
+      //     let bdayRecieved = loc.state.inwardDate
+      //     let seperateDOB = bdayRecieved.split('-')
+      //     let yearRecieved = parseInt(seperateDOB[0])
+      //     let monthRecieved = parseInt(seperateDOB[1])
+      //     let dateRecieved = parseInt(seperateDOB[2])
+      //     // let dateSep = dateWhole.slice(0, 2)
+      //     // console.log(seperateDOB);
+      //     // console.log(`
+      //     // ${bdayRecieved}
+      //     //   year: ${yearRecieved},
+      //     //   month: ${monthRecieved},
+      //     //   whole date: ${dateRecieved}
 
-          // `);
-          setSelectedDay({
-            year: yearRecieved,
-            month: monthRecieved,
-            day: dateRecieved,
-          })
-        } else if (typeof (loc.state.inwardDate) === 'object') {
-          setSelectedDay({
-            year: loc.state.inwardDate.year,
-            month: loc.state.inwardDate.month,
-            day: loc.state.inwardDate.day,
-          })
-        }
-      } else if (loc.state.inwardDate === null) {
-        setSelectedDay(null)
-      }
+      //     // `);
+      //     setSelectedDay({
+      //       year: yearRecieved,
+      //       month: monthRecieved,
+      //       day: dateRecieved,
+      //     })
+      //   } else if (typeof (loc.state.inwardDate) === 'object') {
+      //     setSelectedDay({
+      //       year: loc.state.inwardDate.year,
+      //       month: loc.state.inwardDate.month,
+      //       day: loc.state.inwardDate.day,
+      //     })
+      //   }
+      // } else if (loc.state.inwardDate === null) {
+      //   setSelectedDay(null)
+      // }
     }
   }, [loc])
   // console.log(product);
@@ -173,19 +181,15 @@ const AddProduct = ({ setHeaderData }) => {
     e.preventDefault();
     let flatDiscountDetails = {
       value: '',
-      from: '',
-      to: ''
+      from: null,
+      to: null
     }
     let comboOfferDetails = {
       value: '',
-      from: '',
-      to: ''
+      from: null,
+      to: null
     }
-    let containerDetails = {
-      value: '',
-      from: '',
-      to: ''
-    }
+    let containerDetails = []
     if (flatDiscount.value && flatDiscount.from && flatDiscount.to) {
       flatDiscountDetails.value = flatDiscount.value
       flatDiscountDetails.from = flatDiscount.from.year + '/' + flatDiscount.from.month + '/' + flatDiscount.from.day
@@ -196,23 +200,38 @@ const AddProduct = ({ setHeaderData }) => {
       comboOfferDetails.from = comboOffer.from.year + '/' + comboOffer.from.month + '/' + comboOffer.from.day
       comboOfferDetails.to = comboOffer.to.year + '/' + comboOffer.to.month + '/' + comboOffer.to.day
     }
-    if (containerOffer.value.length > 0) {
-      containerDetails.value = containerOffer.value
-      containerDetails.from = containerOffer.from.year + '/' + containerOffer.from.month + '/' + containerOffer.from.day
-      containerDetails.to = containerOffer.to.year + '/' + containerOffer.to.month + '/' + containerOffer.to.day
-
+    if (containerOffer.valAdded) {
+      let temp = {
+        value: '',
+        from: null,
+        to: null
+      }
+      containerOffer.value.forEach(val => (
+        temp.value = val,
+        temp.from = containerOffer.from.year + '/' + containerOffer.from.month + '/' + containerOffer.from.day,
+        temp.to = containerOffer.to.year + '/' + containerOffer.to.month + '/' + containerOffer.to.day,
+        containerDetails.push(temp)
+      ))
     }
-    console.log(
-      `flat: ${JSON.stringify(flatDiscountDetails)},
-      combo: ${JSON.stringify(comboOfferDetails)},
-      container: ${JSON.stringify(containerDetails)}
-      `
-    );
+    // console.log(
+    //   `flat: ${JSON.stringify(flatDiscountDetails)},
+    //   combo: ${JSON.stringify(comboOfferDetails)},
+    //   container: ${JSON.stringify(containerDetails)}`
+    // );
 
     let imagesArray = images.split(',')
     let galleryImagesArray = galleryImages.split(',')
 
-    addProductCatalogue(product, imagesArray, galleryImagesArray, L1Selected, L2Selected.value, L3Selected, discountedPrice, flatDiscountDetails, comboOfferDetails, containerDetails)
+    let dynamicHeader
+
+    if (product && dynamicTable && checkDynamicTable(dynamicTable)) {
+      let temp = Object.values(dynamicTable)
+      dynamicHeader = product.name + ' (' + temp.map(item => (` ${item}`)) + ')'
+    }
+
+    // console.log(dynamicHeader);
+
+    addProductCatalogue(product, dynamicHeader, imagesArray, galleryImagesArray, L1Selected, L2Selected, L3Selected, discountedPrice, classificationSelected, flatDiscountDetails, comboOfferDetails, containerDetails)
       .then(res => res ? (
         // console.log(res),
         toast.success('Product Added Successfully'),
@@ -252,11 +271,8 @@ const AddProduct = ({ setHeaderData }) => {
   const handleContainerEAN = (e, index) => {
     const { name, value } = e.target
     let list = [...containerEAN]
-    let list2 = [...containerOffer.value]
     list[index][name] = value
-    list2.push(value)
     setContainerEAN(list)
-    setContainerOffer(prev => ({ ...prev, value: list2 }))
   }
 
   // const validateNumber = (e) => {
@@ -278,38 +294,71 @@ const AddProduct = ({ setHeaderData }) => {
   ]
 
   const hL1List = [
-    { value: 'Mobile_&_Tablets', label: 'Mobile & Tablets' },
-    { value: 'Consumer_Electronics', label: 'Consumer Electronics' }
+    'Mobile & Tablets',
+    'Consumer Electronics'
   ]
 
   const hL2List = [
-    { value: 'Soundbar', label: 'Soundbar' },
-    { value: 'Bluetooth_Speaker', label: 'Bluetooth Speaker' },
-    { value: 'Bluetooth_Neckband_Earphones', label: 'Bluetooth Neckband Earphones' },
-    { value: 'True_Wireless_Earbuds', label: 'True Wireless Earbuds' },
-    { value: 'Smartphone', label: 'Smartphone' },
-    { value: 'Adapter', label: 'Adapter' },
-    { value: 'Charging_Cable', label: 'Charging Cable' },
-    { value: 'Neckband_Bluetooth', label: 'Neckband Bluetooth' },
-    { value: 'Power_Bank', label: 'Power Bank' },
-    { value: 'TWS', label: 'TWS' },
-    { value: 'Wired_Earphone', label: 'Wired Earphone' },
-    { value: 'Smart_TV', label: 'Smart TV' },
-    { value: 'Bluetooth_Headphones', label: 'Bluetooth Headphones' },
-    { value: 'Wired_Headphones', label: 'Wired Headphones' },
-    { value: 'Wired_Earphone', label: 'Wired Earphone' },
-    { value: 'Tablet', label: 'Tablet' },
-    { value: 'Powerbank', label: 'Powerbank' },
-    { value: 'Laptop', label: 'Laptop' },
-    { value: 'Wifi_Smart_Speaker', label: 'Wifi Smart Speaker' },
-    { value: 'Security_Camera', label: 'Security Camera' },
-    { value: 'Miscellaneous', label: 'Miscellaneous' },
+    'Soundbar',
+    'Bluetooth Speaker',
+    'Bluetooth Neckband Earphones',
+    'Smartphone',
+    'Adapter',
+    'Charging Cable',
+    'Neckband Bluetooth',
+    'Power Bank',
+    'Wired Earphone',
+    'Bluetooth Headphones',
+    'Wired Headphones',
+    'Wired Earphone',
+    'Tablet',
+    'Powerbank',
+    'Smart TV',
+    'TWS',
+    'Wifi Smart Speaker',
+    'Security Camera',
+    'Miscellaneous'
+    // { value: 'Soundbar', label: '' },
+    // { value: 'Bluetooth_Speaker', label: '' },
+    // { value: 'Bluetooth_Neckband_Earphones', label: '' },
+    // { value: 'True_Wireless_Earbuds', label: 'True Wireless Earbuds' },
+    // { value: 'Smartphone', label: '' },
+    // { value: 'Adapter', label: '' },
+    // { value: 'Charging_Cable', label: '' },
+    // { value: 'Neckband_Bluetooth', label: '' },
+    // { value: 'Power_Bank', label: '' },
+    // { value: 'TWS', label: '' },
+    // { value: 'Wired_Earphone', label: '' },
+    // { value: 'Smart_TV', label: '' },
+    // { value: 'Bluetooth_Headphones', label: '' },
+    // { value: 'Wired_Headphones', label: '' },
+    // { value: 'Wired_Earphone', label: '' },
+    // { value: 'Tablet', label: '' },
+    // { value: 'Powerbank', label: '' },
+    // { value: 'Laptop', label: 'Laptop' },
+    // { value: 'Wifi_Smart_Speaker', label: '' },
+    // { value: 'Security_Camera', label: '' },
+    // { value: 'Miscellaneous', label: '' },
   ]
 
   const hL3List = [
-    { value: 'Premium', label: 'Premium' },
-    { value: 'Midrange', label: 'Midrange' },
-    { value: 'Budget', label: 'Budget' },
+    'Premium',
+    'Midrange',
+    'Budget'
+    // { value: 'Premium', label: '' },
+    // { value: 'Midrange', label: '' },
+    // { value: 'Budget', label: '' },
+  ]
+
+  const productClassifications = [
+    'Normal',
+    'Coming Soon',
+    'Out Of Stock',
+    'Temp Hidden'
+    // { value: 'Normal', label: '' },
+    // { value: 'Coming_Soon', label: '' },
+    // { value: 'Out_Of_Stock', label: '' },
+    // { value: 'Temp_Hidden', label: '' },
   ]
 
   const handleDyanmicTableValues = (prop, e) => {
@@ -345,15 +394,21 @@ const AddProduct = ({ setHeaderData }) => {
   const handleContainerProds = (e, index) => {
     e.preventDefault();
     let list = [...containerEAN]
+    let list2 = [...containerOffer.value]
     let productList = [...containerProducts]
     let product = list[index]
     let { productEAN } = product
     let productFound = allProducts.products.filter((product) => product.ean === productEAN)
     let productInfo = productFound.pop()
-    let loaded = true
-    let productToLoad = { productInfo, loaded }
-    productList.splice(index, 1, productToLoad)
-    setContainerProducts(productList)
+    let loaded
+    if (productInfo) {
+      loaded = true
+      let productToLoad = { productInfo, loaded }
+      productList.splice(index, 1, productToLoad)
+      list2.push(productEAN)
+      setContainerProducts(productList)
+      setContainerOffer(prev => ({ ...prev, valAdded: true, value: list2 }))
+    }
   }
 
   const checkDynamicTable = (obj) => {
@@ -426,6 +481,9 @@ const AddProduct = ({ setHeaderData }) => {
   //     </>
   //   )
   // }
+  // console.log(containerEAN);
+  // console.log(containerOffer);
+  // console.log(containerProducts);
 
   const dynamicTableComp = (type) => {
     switch (type) {
@@ -442,7 +500,7 @@ const AddProduct = ({ setHeaderData }) => {
               <input type='text' name="Product Input ports" id="Product Input ports" value={dynamicTable.inputPorts} className='input-field' placeholder='Enter Product Input ports' onChange={(value) => { handleDyanmicTableValues("inputPorts", value); handleInput("inputPorts", value) }} />
             </div>
           </>)
-      case 'True_Wireless_Earbuds':
+      case 'TWS':
         return (
           <>
             <h4>Product Specific Details</h4>
@@ -558,6 +616,16 @@ const AddProduct = ({ setHeaderData }) => {
               <input type='text' name="Product Sensor Resolution" id="Product Sensor Resolution" value={dynamicTable.sensorResolution} className='input-field' placeholder='Enter Product Sensor Resolution' onChange={(value) => { handleDyanmicTableValues("sensorResolution", value); handleInput("sensorResolution", value) }} />
             </div>
           </>)
+      case 'Smartphone':
+        return (
+          <>
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product Color" id="Product Color" value={dynamicTable.color} className='input-field' placeholder='Enter Product Color' onChange={(value) => { handleDyanmicTableValues("color", value); handleInput("oolor", value) }} />
+              <input type='text' name="Product RAM" id="Product RAM" value={dynamicTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleInput("ram", value) }} />
+              <input type='text' name="Product ROM" id="Product ROM" value={dynamicTable.rom} className='input-field' placeholder='Enter Product ROM' onChange={(value) => { handleDyanmicTableValues("rom", value); handleInput("rom", value) }} />
+            </div>
+          </>)
 
       case 'Miscellaneous':
         return (
@@ -606,7 +674,7 @@ const AddProduct = ({ setHeaderData }) => {
                 <Dropdown.Menu>
                   {
                     hL1List.map((item, index) => (
-                      <Dropdown.Item key={index} value={item.value} onClick={() => setL1Selected(item.value)}>{item.label}</Dropdown.Item>
+                      <Dropdown.Item key={index} value={item} onClick={() => setL1Selected(item)}>{item}</Dropdown.Item>
                     ))
                   }
                 </Dropdown.Menu>
@@ -614,14 +682,14 @@ const AddProduct = ({ setHeaderData }) => {
               <Dropdown>
                 <Dropdown.Toggle id="dropdown-basic">
                   <div className="catalogue_Dropdown">
-                    {L2Selected ? (<p>{L2Selected.label}</p>) : (<p>Select L2</p>)}
+                    {L2Selected ? (<p>{L2Selected}</p>) : (<p>Select L2</p>)}
                   </div>
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
                   {
                     hL2List.map((item, index) => (
-                      <Dropdown.Item key={index} value={item.value} onClick={() => setL2Selected(item)}>{item.label}</Dropdown.Item>
+                      <Dropdown.Item key={index} value={item} onClick={() => setL2Selected(item)}>{item}</Dropdown.Item>
                     ))
                   }
                 </Dropdown.Menu>
@@ -636,7 +704,22 @@ const AddProduct = ({ setHeaderData }) => {
                 <Dropdown.Menu>
                   {
                     hL3List.map((item, index) => (
-                      <Dropdown.Item key={index} value={item.value} onClick={() => setL3Selected(item.value)}>{item.label}</Dropdown.Item>
+                      <Dropdown.Item key={index} value={item} onClick={() => setL3Selected(item)}>{item}</Dropdown.Item>
+                    ))
+                  }
+                </Dropdown.Menu>
+              </Dropdown>
+              <Dropdown>
+                <Dropdown.Toggle id="dropdown-basic">
+                  <div className="catalogue_Dropdown">
+                    {classificationSelected ? (<p>{classificationSelected}</p>) : (<p>Select Product Classification</p>)}
+                  </div>
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  {
+                    productClassifications.map((item, index) => (
+                      <Dropdown.Item key={index} value={item} onClick={() => setClassificationSelected(item)}>{item}</Dropdown.Item>
                     ))
                   }
                 </Dropdown.Menu>
@@ -664,10 +747,11 @@ const AddProduct = ({ setHeaderData }) => {
             </div>
             <div className="catelogue_Form_Group">
               <input type='text' name="Product Description" id="Product Description" value={product.description} className='input-field' placeholder='Enter Product Description' onChange={(value) => handleInput("description", value)} />
-              <p className="catalogue_Hint">Add "|" seperated Image Description</p>
+              <p className="catalogue_Hint">Add "~" seperated Image Description</p>
             </div>
             <div className="catelogue_Form_Group">
               <input type='text' name="Product Color" id="Product Color" value={product.color} className='input-field' placeholder='Enter Product Color' onChange={(value) => handleInput("color", value)} />
+              <input type='text' name="Product Size" id="Product Size" value={product.size} className='input-field' placeholder='Enter Product Size/Dimensions' onChange={(value) => handleInput("size", value)} />
               <DatePicker
                 value={selectedDay}
                 onChange={setSelectedDay}
@@ -697,7 +781,7 @@ const AddProduct = ({ setHeaderData }) => {
             </div>
             <div className="catelogue_Form_Group">
               {
-                dynamicTableComp(L2Selected.value)
+                dynamicTableComp(L2Selected)
               }
             </div>
             {/* <div className="catelogue_Form_Group catalogue_Image_Preview">

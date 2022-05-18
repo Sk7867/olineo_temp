@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { deleteAddress, getAddress, saveAddress } from '../../api/Address';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserDataContext } from '../../Contexts/UserContext'
 
 //CSS
 import './AddressForm.css'
 
-const AddressForm = ({ addressProp, setProfileState, fromProfile }) => {
+const AddressForm = ({ addressProp, setProfileState, fromProfile = false }) => {
+  const nav = useNavigate()
   const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext)
   const [address, setAddress] = useState({
     user_Full_Name: '',
@@ -74,7 +75,6 @@ const AddressForm = ({ addressProp, setProfileState, fromProfile }) => {
     } else {
       saveAddress(address)
         .then(res => {
-          setProfileState(4)
           getAddress()
             .then(res => {
               // console.log(res);
@@ -86,6 +86,11 @@ const AddressForm = ({ addressProp, setProfileState, fromProfile }) => {
                 })
               }
             })
+          if (fromProfile) {
+            setProfileState(4)
+          } else {
+            nav(-1)
+          }
           //get address call
           //set address props
         })
@@ -99,6 +104,7 @@ const AddressForm = ({ addressProp, setProfileState, fromProfile }) => {
       ? setAddress({ ...address, [prop]: e.target.value })
       : setAddress({ ...address, [prop]: e.label })
   }
+  console.log(fromProfile);
   return (
     <>
       <form className="address_Form_Container" onChange={validateForm} onSubmit={handleSubmit} >

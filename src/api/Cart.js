@@ -1,7 +1,5 @@
 import axios from 'axios'
 
-const baseURL = "https://onlineo-backend.herokuapp.com/api"
-
 const headers = {
   "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with",
   'Content-Type': 'application/json',
@@ -38,7 +36,7 @@ export const getCartData = async () => {
     "Authorization": `Bearer ${userToken}`
   }
 
-  await axios.get(`${baseURL}/product/cart/`, { headers })
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/cart/`, { headers })
     .then(res => {
       if (res) {
         cartDataResponse = res.data.data
@@ -63,7 +61,7 @@ export const addToCart = async (id) => {
   console.log(id);
   console.log(userToken);
 
-  await axios.patch(`${baseURL}/product/cart/${id}`, { headers })
+  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/cart/${id}`, {}, { headers })
     .then(res => {
       if (res) {
         addToCartResponse = res

@@ -103,8 +103,8 @@
 }
 
 .modal_Image_Preview{
-  max-width: 300px;
-  max-height: 300px;
+  max-width: 275px;
+  /* max-height: 300px; */
   margin: 0 auto 1rem;
 }
 

@@ -1,7 +1,5 @@
 import axios from 'axios'
 
-const baseURL = "https://onlineo-backend.herokuapp.com/api"
-
 const headers = {
   "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with",
   'Content-Type': 'application/json',
@@ -12,7 +10,7 @@ const headers = {
 export const getAllProducts = async () => {
   let allProductsResponse
 
-  await axios.get(`${baseURL}/product`, { headers })
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/product`, { headers })
     .then(res => {
       allProductsResponse = res.data.data
       // console.log(allProductsResponse);

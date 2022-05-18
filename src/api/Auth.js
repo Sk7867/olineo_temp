@@ -1,8 +1,5 @@
 import axios from 'axios'
 
-const baseURL = "https://onlineo-backend.herokuapp.com/api"
-
-
 const headers = {
   "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with",
   'Content-Type': 'application/json',
@@ -44,7 +41,7 @@ export const userLogin = async (contact) => {
 
   let loginResponse
 
-  await axios.post(`${baseURL}/user/login`, loginData, { headers })
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/user/login`, loginData, { headers })
     .then(res => {
       // console.log(res);
       loginResponse = res.data
@@ -66,7 +63,7 @@ export const userLoginEmail = async (email) => {
 
   let loginResponse
 
-  await axios.post(`${baseURL}/user/signup/email`, loginData, { headers })
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/user/signup/email`, loginData, { headers })
     .then(res => {
       loginResponse = res
       loginRef = res.data.userId
@@ -88,7 +85,7 @@ export const userSignUp = async (contact, name) => {
 
   let signupResponse
 
-  await axios.post(`${baseURL}/user/signup`, signUpData, { headers })
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/user/signup`, signUpData, { headers })
     .then(res => {
       signupResponse = res.data
       // console.log(signupResponse);
@@ -115,7 +112,7 @@ export const verifyOtpLogin = async (otp, existingUser) => {
     "otp": otp,
   })
 
-  await axios.put(`${baseURL}/user/verifyOtp/${loginRef}`, otpData, { headers })
+  await axios.put(`${process.env.REACT_APP_BASE_URL}/user/verifyOtp/${loginRef}`, otpData, { headers })
     .then(res => {
       if (res) {
         otpResponse = res.data
@@ -151,7 +148,7 @@ export const verifyOtpLogin = async (otp, existingUser) => {
 //     "otp": otp,
 //   })
 
-//   await axios.put(`${baseURL}/user/verifyOtp/${loginRef}`, otpData, { headers })
+//   await axios.put(`${process.env.REACT_APP_BASE_URL}/user/verifyOtp/${loginRef}`, otpData, { headers })
 //     .then(res => {
 //       if (res) {
 //         otpResponse = res.data
@@ -188,7 +185,7 @@ export const verifyOtpSignup = async (otp) => {
     "otp": otp,
   })
 
-  await axios.put(`${baseURL}/user/verifyOtp/${signupRef}`, otpData, { headers })
+  await axios.put(`${process.env.REACT_APP_BASE_URL}/user/verifyOtp/${signupRef}`, otpData, { headers })
     .then(res => {
       if (res) {
         otpResponse = res.data.JWT
@@ -226,7 +223,7 @@ export const getUser = async (JWT) => {
   }
   // console.log(userToken);
 
-  await axios.get(`${baseURL}/user/myProfile`, { headers })
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/user/myProfile`, { headers })
     .then(res => {
       if (res) {
         getUserResponse = res.data.data.user
@@ -267,7 +264,7 @@ export const saveUser = async (userData) => {
 
   let saveUserResponse;
 
-  await axios.put(`${baseURL}/user/updateProfile`, JSON.stringify(userData), { headers })
+  await axios.put(`${process.env.REACT_APP_BASE_URL}/user/updateProfile`, JSON.stringify(userData), { headers })
     .then(res => {
       saveUserResponse = res.data
       // window.sessionStorage.setItem("user", JSON.stringify(userInfo))
@@ -301,7 +298,7 @@ export const updateUser = async (userData) => {
 
   let updateUserResponse;
 
-  await axios.put(`${baseURL}/user/updateProfile`, JSON.stringify(userData), { headers })
+  await axios.put(`${process.env.REACT_APP_BASE_URL}/user/updateProfile`, JSON.stringify(userData), { headers })
     .then(res => {
       updateUserResponse = res.data
       // window.sessionStorage.setItem("user", JSON.stringify(userInfo))
@@ -325,7 +322,7 @@ export const getUserPic = async (JWT) => {
     "Authorization": `Bearer ${JWT}`
   }
 
-  await axios.get(`${baseURL}/user/photo`, { headers })
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/user/photo`, { headers })
     .then(res => {
       userPicResponse = res.data
       // console.log(userPicResponse);
@@ -351,7 +348,7 @@ export const saveUserPic = async (pic) => {
 
   formData.append('userImage', pic)
 
-  await axios.patch(`${baseURL}/user/addphoto`, formData, { headers })
+  await axios.patch(`${process.env.REACT_APP_BASE_URL}/user/addphoto`, formData, { headers })
     .then(res => {
       savePicResponse = res
       // console.log(userPicResponse);
@@ -409,7 +406,7 @@ export const logOutUser = async () => {
   // userInfo.dob = null
   // sessionStorage.setItem("user", JSON.stringify(userInfo))
 
-  // await axios.post(`${baseURL}/`, { headers })
+  // await axios.post(`${process.env.REACT_APP_BASE_URL}/`, { headers })
   //   .then(res => {
   //     if (res) {
   //       sessionStorage.setItem("user", JSON.stringify(userInfo))

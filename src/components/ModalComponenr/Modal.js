@@ -20,8 +20,6 @@ const ModalComp = ({ modalShow, setModalShow, userLoggedIn, children }) => {
   const [btnDisable, setBtnDisable] = useState(true)
   const { location, locationFetch } = useGeolocation()
   const { userLocation, setUserLocation } = useContext(UserDataContext)
-  console.log(children);
-
   const getLocation = () => {
     locationFetch()
   }

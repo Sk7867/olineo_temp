@@ -212,7 +212,7 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
     }))
     updateUser(userContext)
       .then(res => res ? toast.success('Details Updated Successfully') : toast.error('Incomplete Data'))
-    saveUserPic(userContext.profilePic)
+    saveUserPic(userContext.profilePic.locataion)
       .then(res => console.log(res))
       .catch(err => console.log(err))
   }

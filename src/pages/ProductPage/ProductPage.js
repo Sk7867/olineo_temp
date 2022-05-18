@@ -32,20 +32,22 @@ const ProductPage = ({ setHeaderData }) => {
   const [preOrder, setPreOrder] = useState(false)
   const [previewImageSelected, setPreviewImageSelected] = useState(null)
   const [productInfo, setProductInfo] = useState([])
+  const [discountedPrice, setDiscountedPrice] = useState('')
   const [productData, setProductData] = useState({
     product_loaded: false,
     product_Id: '',
+    product_Heading: '',
     product_name: '',
     product_image: '',
     product_price: {
       mrp: '',
       mop: '',
-      discountedPrice: ''
     },
-    product_Original_Price: '',
+    product_Disccount: {},
     offer_Deadline: 'Deal ends in 14h 17m 04s',
     product_Instock: 255,
     product_image_List: [],
+    product_Gallery_Image: [],
     product_Description: [],
     product_Alternate: [
       {
@@ -120,6 +122,17 @@ const ProductPage = ({ setHeaderData }) => {
   }, []);
 
   useEffect(() => {
+    if (productData.product_price.mop && productData.product_Disccount.flatDiscount.value) {
+      let discount = productData.product_Disccount.flatDiscount.value
+      let mop = productData.product_price.mop
+      let tempPrice = Math.floor(mop - ((discount * mop / 100)))
+      console.log(tempPrice);
+      setDiscountedPrice(tempPrice)
+    }
+  }, [productData])
+
+
+  useEffect(() => {
     if (loc.state) {
       let product = loc.state.product
       console.log(product)
@@ -129,21 +142,24 @@ const ProductPage = ({ setHeaderData }) => {
         getIndiProduct(product._id)
           .then(res => {
             if (res) {
-              let productImage1 = res.images
-              let splitDesc = res.description.split('|')
+              let images = res.images
+              let splitDesc = res.description.split('~')
               setProductData(prev => ({
                 ...prev,
                 product_loaded: true,
                 product_Id: res._id,
+                product_Heading: res.dynamicHeader,
                 product_name: res.name,
-                // product_price: res.price,
+                product_price: res.price,
                 product_Description: splitDesc,
-                product_image_List: productImage1,
+                product_image_List: images,
+                product_Gallery_Image: res.gallery,
+                product_Disccount: res.discount
               }))
-              // setPreviewImageSelected(
-              //   productImage1[0]
-              // )
-              // setProductInfo(Object.entries(res.productInfo))
+              setPreviewImageSelected(
+                images[0]
+              )
+              setProductInfo(Object.entries(res.productInfo))
             }
           })
       }
@@ -359,7 +375,7 @@ const ProductPage = ({ setHeaderData }) => {
               {productData.product_loaded === false ? (
                 <SkeletonElement type={"productTitle"} />
               ) : (
-                productData.product_name
+                (productData.product_Heading) ? (productData.product_Heading) : (productData.product_name)
               )}
             </h3>
             {/* Porduct Image preview section */}
@@ -387,13 +403,15 @@ const ProductPage = ({ setHeaderData }) => {
               {productData.product_loaded === false ? (
                 <SkeletonElement type={"productPrice"} />
               ) : (
-                <p className="product_Discount_Price"></p>
+                <p className="product_Discount_Price">
+                  ₹{discountedPrice}
+                </p>
               )}
               {productData.product_loaded === false ? (
                 <SkeletonElement type={"productPrice"} />
               ) : (
                 <p className="product_Original_Price">
-                  {/* ₹{productData.product_price.mrp} */}
+                  ₹{productData.product_price.mrp}
                 </p>
               )}
               {productData.product_loaded === false ? (
@@ -564,7 +582,7 @@ const ProductPage = ({ setHeaderData }) => {
         <h5 className='product_Section_Heading'>Product Image Gallery</h5>
         <div className="image_Gallery_Wrapper">
           {
-            productData.product_image_List.map((image, index) => (
+            productData.product_Gallery_Image.map((image, index) => (
               <img src={image} key={index} className={`product_Gallery_Image`} alt="" />
             ))
           }

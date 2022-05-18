@@ -1,5 +1,4 @@
 import axios from 'axios'
-const baseURL = "https://onlineo-backend.herokuapp.com/api"
 
 export const initOrder = async (data) => {
   let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
@@ -17,8 +16,8 @@ export const initOrder = async (data) => {
     quantity: data.quantity,
     shippingAddressId: data.shippingAddressId
   }
-
-  await axios.post(`${baseURL}/product/order/init`, JSON.stringify(initBody), { headers })
+  console.log(initBody);
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/order/init`, JSON.stringify(initBody), { headers })
     .then(res => {
       initResponse = res
     })
@@ -41,7 +40,7 @@ export const completeOrder = async (id) => {
     orderId: id
   }
 
-  await axios.post(`${baseURL}/product/order/init`, JSON.stringify(completeBody), { headers })
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/order/init`, JSON.stringify(completeBody), { headers })
     .then(res => {
       completeOrderResponse = res
     })

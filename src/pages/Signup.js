@@ -21,11 +21,17 @@ const Signup = ({ setLoginRedirect }) => {
 
 
   const handleLength = (length) => {
-    if (length === 9) {
+    if ((name !== '') && (length === 10)) {
       setValidLength(true)
-    } else {
-      setValidLength(false)
+      return setBtnDisable(false)
     }
+    setValidLength(false)
+    setBtnDisable(true)
+    // if (length === 9) {
+    //   setValidLength(true)
+    // } else {
+    //   setValidLength(false)
+    // }
   }
 
   const validateNumber = (e) => {
@@ -36,9 +42,9 @@ const Signup = ({ setLoginRedirect }) => {
   }
   // console.log(phone);
 
-  const validateForm = () => (
-    (name !== '') && (name.length > 0) && (phone !== '') && (phone.length > 0) && validLength ? setBtnDisable(false) : setBtnDisable(true)
-  )
+  // const validateForm = () => (
+  //   (name !== '') && (name.length > 0) && (phone !== '') && (phone.length > 0) && validLength ? setBtnDisable(false) : setBtnDisable(true)
+  // )
 
   const formSubmit = (e) => {
     e.preventDefault();
@@ -60,8 +66,8 @@ const Signup = ({ setLoginRedirect }) => {
     nav('/login')
   }
 
-  console.log(name + "-" + phone);
-  console.log(btnDisable);
+  // console.log(name + "-" + phone);
+  // console.log(btnDisable);
 
   return (
     <>
@@ -71,7 +77,7 @@ const Signup = ({ setLoginRedirect }) => {
           <h1 className='page-heading'>Welcome to Olineo</h1>
           <p className={'page-desc'}>Create an account</p>
         </div>
-        <form action="" className={'signup-form'} onSubmit={formSubmit} onChange={validateForm}>
+        <form action="" className={'signup-form'} onSubmit={formSubmit}>
           <div className="inputfield-Container">
             <input type="text" name="Name" id="name" className='input-field' placeholder='Name' value={name} onChange={(e) => { setName(e.target.value) }} required />
             {

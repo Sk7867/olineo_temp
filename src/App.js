@@ -112,6 +112,11 @@ function App() {
     header3Profile: false,
   });
   const loc = useLocation()
+  const [orderInit, setOrderInit] = useState({
+    productId: [],
+    quantity: [],
+    shippingAddressId: ''
+  })
 
   // console.log(userCart);
 
@@ -222,7 +227,9 @@ function App() {
           cartArray,
           setCartArray,
           seachedProduct,
-          setSeachedProduct
+          setSeachedProduct,
+          orderInit,
+          setOrderInit
         }}>
           {
             loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' ? ('') : (
