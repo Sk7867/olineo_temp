@@ -32,21 +32,21 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
 
 
   const handleLength = (length) => {
-    if (length === 9) {
+    // if (length === 10) {
+    //   console.log('valid lenght', length);
+    //   setValidLength(true)
+    //   setBtnDisable(false)
+    // } else {
+    //   console.log('invalid lenght', length);
+    //   setValidLength(false)
+    //   setBtnDisable(false)
+    // }
+    if (length === 10) {
       setValidLength(true)
-    } else {
-      setValidLength(false)
+      return setBtnDisable(false)
     }
-  }
-
-
-  const validateForm = () => {
-    if (emailLogin) {
-      (email !== '') ? setBtnDisable(false) : setBtnDisable(true)
-    } else {
-      (phone !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)
-    }
-
+    setValidLength(false)
+    setBtnDisable(true)
   }
 
 
@@ -97,7 +97,7 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
           <h1 className='page-heading'>Welcome Back!</h1>
           <p className={'page-desc'}>Login here</p>
         </div>
-        <form action="" className={'signup-form'} onSubmit={formSubmit} onChange={validateForm}>
+        <form action="" className={'signup-form'} onSubmit={formSubmit}>
           <div className="inputfield-Container">
             {
               emailLogin ? (

@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 const AddressBox = ({ address, setEditID, setProfileState, deleteOption = true, border, fullWidth = false }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const { userAddress, setUserAddress } = useContext(UserDataContext)
-
+  console.log(address);
   const handleDeleteAddress = (id) => {
     deleteAddress(id)
       .then(res => {
@@ -37,9 +37,9 @@ const AddressBox = ({ address, setEditID, setProfileState, deleteOption = true, 
     <div className={`address section_Wrapper ${!border ? ('border-0') : ('')} ${fullWidth ? 'w-100' : ''}  `}>
       <div className='address_Box'>
         <div className="address_Box_Wrapper">
-          <p className="address_Box_Name">{address.user_Full_Name}</p>
-          <p>{address.address}, {address.city}, {address.state} - {address.pincode}</p>
-          <p>{address.user_ph_Number}</p>
+          <p className="address_Box_Name">{address.customerName}</p>
+          <p>{address.address_line1}, {address.city}, {address.state} - {address.zip}</p>
+          <p>{address.phone}</p>
         </div>
         <div className="address_Box_Footer">
           {

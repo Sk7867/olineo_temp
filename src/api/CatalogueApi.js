@@ -1,7 +1,5 @@
 import axios from "axios"
 
-const baseURL = "https://onlineo-backend.herokuapp.com/api"
-
 const headers = {
   "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with",
   'Content-Type': 'application/json',
@@ -10,11 +8,13 @@ const headers = {
 
 export const addProductCatalogue = async (
   product,
+  dynamicHeader,
   imagesArray,
   galleryImagesArray,
   L1Selected,
   L2Selected,
   L3Selected,
+  classificationSelected,
   discountedPrice,
   flatDiscountDetails,
   comboOfferDetails,
@@ -24,7 +24,7 @@ export const addProductCatalogue = async (
   console.log(galleryImagesArray);
 
   let addProductBody = {
-    dynamicHeader: product.heading,
+    dynamicHeader: dynamicHeader,
     name: product.name,
     ean: product.EAN,
     description: product.description,
@@ -34,7 +34,8 @@ export const addProductCatalogue = async (
     hierarchyL1: L1Selected,
     hierarchyL2: L2Selected,
     hierarchyL3: L3Selected,
-    modelNo: product.modelNumber,
+    classification: classificationSelected,
+    modelNo: parseInt(product.modelNumber),
     brand: product.brand,
     color: product.color,
     HSN: product.HSN,
@@ -62,7 +63,7 @@ export const addProductCatalogue = async (
   }
   console.log(addProductBody);
 
-  await axios.post(`${baseURL}/product/`, JSON.stringify(addProductBody), { headers })
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(addProductBody), { headers })
     .then(res => {
       addProductResponse = res
     })
@@ -73,7 +74,7 @@ export const addProductCatalogue = async (
 //Delete Product From Catalogue
 export const deleteProductCatalogue = async (id) => {
   let deleteProductResponse
-  await axios.delete(`${baseURL}/product/${id}`, { headers })
+  await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/${id}`, { headers })
     .then(res => {
       deleteProductResponse = res
     })
@@ -86,7 +87,7 @@ export const deleteProductCatalogue = async (id) => {
 export const updateProductCatalogue = async (id) => {
   let updateProductResponse
   let updateProductBody = {}
-  await axios.patch(`${baseURL}/product/${id}`, JSON.stringify(updateProductBody), { headers })
+  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${id}`, JSON.stringify(updateProductBody), { headers })
     .then(res => {
       updateProductResponse = res
     })

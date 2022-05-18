@@ -41,7 +41,7 @@ const CataloguePage = ({ setHeaderData }) => {
       })
   }, [])
 
-  console.log(allProducts);
+  // console.log(allProducts);
 
   const validateNumber = (e) => {
     const re = /^[0-9\b]+$/;
@@ -83,6 +83,7 @@ const CataloguePage = ({ setHeaderData }) => {
           {(allProducts.no_of_products > 0) && allProducts.products.map((product, index) => (
             <div className="catalogue_List_Item" key={index}>
               <div className='catalogue_List_Content'>
+                {product.ean && (<p>{product.ean}</p>)}
                 {product.name && (<p>{product.name}</p>)}
                 {/* {product.price.mop && (<p>{product.price.mop}</p>)} */}
               </div>

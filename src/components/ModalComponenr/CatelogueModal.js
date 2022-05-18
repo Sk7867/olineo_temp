@@ -5,7 +5,7 @@ import { Modal } from 'react-bootstrap';
 const CatelogueModal = ({ modalShow, setModalShow, modalData }) => {
 
   const imageData = modalData.split(',')
-  console.log(imageData)
+  // console.log(imageData)
   const handleClose = () => setModalShow(false);
   return (
     <>
