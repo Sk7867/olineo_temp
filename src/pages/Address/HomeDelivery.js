@@ -11,11 +11,13 @@ import AddressBox from '../../components/AddressBox/AddressBox';
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox';
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 import { getAddress } from '../../api/Address';
+import { initOrder } from '../../api/OrdersApi';
 
-const HomeDelivery = ({ setEditID, addressSelected, setAddressSelected, setHeaderData }) => {
+const HomeDelivery = ({ setEditID, setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [disable, setDisable] = useState(true)
-  const { userAddress, setUserContext, setUserAddress } = useContext(UserDataContext)
+  const [addressSelected, setAddressSelected] = useState('')
+  const { userAddress, setUserContext, setUserAddress, orderInit, setOrderInit } = useContext(UserDataContext)
 
   const nav = useNavigate()
 
@@ -67,42 +69,13 @@ const HomeDelivery = ({ setEditID, addressSelected, setAddressSelected, setHeade
     }))
   }, [addressSelected])
 
-  // console.log(orderInit);
 
   const handleOrderInit = (e) => {
     e.preventDefault();
     initOrder(orderInit)
-      .then(res => {
-        if (res) {
-          let orderId = res._id
-          // console.log(orderId);
-          completeOrder(orderId)
-            .then(res => {
-              if (res) {
-                // console.log(res)
-                orderInit.productId.map(item => (
-                  removeFromCart(item)
-                    .then(res => {
-                      if (res) {
-                        setUserCart([])
-                        getCartData()
-                          .then(res => {
-                            if (res) {
-                              setCartArray({
-                                loaded: true,
-                                no_of_carts: res.no_of_carts,
-                                cart: res.cart
-                              })
-                              nav('/mycart')
-                            }
-                          })
-                      }
-                    })
-                ))
-              }
-            })
-        }
-      })
+      .then(res => res ? (
+        console.log(res)
+      ) : (''))
   }
 
   return (
@@ -120,7 +93,7 @@ const HomeDelivery = ({ setEditID, addressSelected, setAddressSelected, setHeade
                 userAddress.no_of_address !== 0 ? (
                   userAddress.no_of_address !== 0 && userAddress.address.map((address, index) => (
                     <div className="home_Delivery_Option section_Wrapper" key={index}>
-                      <label htmlFor={address.id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setAddressSelected(address.id); setDisable(false) }}>
+                      <label htmlFor={address.id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setAddressSelected(address._id); setDisable(false) }}>
                         <input type="radio" name='Delivery Address' id={address.id} value={address.id} />
                         <span className="radio-custom"></span>
                         <AddressBox setEditID={setEditID}

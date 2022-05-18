@@ -50,16 +50,6 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
   }
 
 
-  const validateForm = () => {
-    if (emailLogin) {
-      (email !== '') ? setBtnDisable(false) : setBtnDisable(true)
-    } else {
-      (phone !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)
-    }
-
-  }
-
-
   const formSubmit = (e) => {
     e.preventDefault();
     if (emailLogin) {

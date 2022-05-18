@@ -99,19 +99,6 @@ const OtpValid = ({ loginRedirect }) => {
       ) : toast.error('OTP Expired or invalid'))
   }
 
-  const newUserSignUp = (e) => {
-    e.preventDefault();
-    // let OTP = parseInt(otp)
-    verifyOtpSignup(otp)
-      .then(res => res ? (
-        nav('/adduser'),
-        setUserContext(prev => ({
-          ...prev,
-          JWT: res
-        }))
-      ) : toast.error('OTP Expired or invalid'))
-  }
-
   // const validateForm = () => (
   //   (otp !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)
   // )
@@ -123,7 +110,7 @@ const OtpValid = ({ loginRedirect }) => {
           <h1 className='page-heading'>Confirmation code</h1>
           <p className={'page-desc'}>Please check you phone for 6-digit confimation code.</p>
         </div>
-        <form action="" className={'signup-form'} onSubmit={loginRedirect ? existingUserLogin : newUserSignUp} onChange={validateForm}>
+        <form action="" className={'signup-form'} onSubmit={loginRedirect ? existingUserLogin : newUserSignUp}>
           <div className="inputfield-Container">
             <div className="inputField">
               <input type='text' name="Code" id="code" className='input-field' value={otp} autoComplete='off' placeholder='Confirmation code' maxLength={6} onChange={(e) => { setOtp(e.target.value); handleLength(e.target.value.length) }} />

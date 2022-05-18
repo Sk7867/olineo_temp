@@ -42,9 +42,9 @@ const Signup = ({ setLoginRedirect }) => {
   }
   // console.log(phone);
 
-  const validateForm = () => (
-    (name !== '') && (name.length > 0) && (phone !== '') && (phone.length > 0) && validLength ? setBtnDisable(false) : setBtnDisable(true)
-  )
+  // const validateForm = () => (
+  //   (name !== '') && (name.length > 0) && (phone !== '') && (phone.length > 0) && validLength ? setBtnDisable(false) : setBtnDisable(true)
+  // )
 
   const formSubmit = (e) => {
     e.preventDefault();
@@ -66,8 +66,8 @@ const Signup = ({ setLoginRedirect }) => {
     nav('/login')
   }
 
-  console.log(name + "-" + phone);
-  console.log(btnDisable);
+  // console.log(name + "-" + phone);
+  // console.log(btnDisable);
 
   return (
     <>
