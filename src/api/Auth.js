@@ -1,8 +1,5 @@
 import axios from 'axios'
 
-const baseURL = "https://onlineo-backend.herokuapp.com/api"
-
-
 const headers = {
   "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with",
   'Content-Type': 'application/json',
@@ -54,7 +51,7 @@ export const userLogin = async (contact) => {
 
   let loginResponse
 
-  await axios.post(`${baseURL}/user/login`, loginData, { headers })
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/user/login`, loginData, { headers })
     .then(res => {
       // console.log(res);
       loginResponse = res.data

@@ -201,7 +201,6 @@ const AddProduct = ({ setHeaderData }) => {
       to: null
     }
     let containerDetails = []
-
     if (flatDiscount.value && flatDiscount.from && flatDiscount.to) {
       flatDiscountDetails.value = flatDiscount.value
       flatDiscountDetails.from = flatDiscount.from.year + '/' + flatDiscount.from.month + '/' + flatDiscount.from.day
@@ -361,11 +360,8 @@ const AddProduct = ({ setHeaderData }) => {
   const handleContainerEAN = (e, index) => {
     const { name, value } = e.target
     let list = [...containerEAN]
-    let list2 = [...containerOffer.value]
     list[index][name] = value
-    list2.push(value)
     setContainerEAN(list)
-    setContainerOffer(prev => ({ ...prev, value: list2 }))
   }
 
   const handleBankOffer = (e, index) => {
@@ -851,6 +847,16 @@ const AddProduct = ({ setHeaderData }) => {
           <>
             <input type='text' name="Product ASIN" id="Product ASIN" value={technicalDetailsTable.ASIN} className='input-field' placeholder='Enter Product ASIN' onChange={(value) => { handleTechnicalTableValues("ASIN", value) }} />
           </>)
+      case 'Smartphone':
+        return (
+          <>
+            <h4>Product Specific Details</h4>
+            <div className="catelogue_Form_Group">
+              <input type='text' name="Product Color" id="Product Color" value={dynamicTable.color} className='input-field' placeholder='Enter Product Color' onChange={(value) => { handleDyanmicTableValues("color", value); handleInput("oolor", value) }} />
+              <input type='text' name="Product RAM" id="Product RAM" value={dynamicTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleInput("ram", value) }} />
+              <input type='text' name="Product ROM" id="Product ROM" value={dynamicTable.rom} className='input-field' placeholder='Enter Product ROM' onChange={(value) => { handleDyanmicTableValues("rom", value); handleInput("rom", value) }} />
+            </div>
+          </>)
 
 
       case 'Miscellaneous':
@@ -908,7 +914,7 @@ const AddProduct = ({ setHeaderData }) => {
               <Dropdown>
                 <Dropdown.Toggle id="dropdown-basic">
                   <div className="catalogue_Dropdown">
-                    {L2Selected ? (<p>{L2Selected.label}</p>) : (<p>Select L2</p>)}
+                    {L2Selected ? (<p>{L2Selected}</p>) : (<p>Select L2</p>)}
                   </div>
                 </Dropdown.Toggle>
 

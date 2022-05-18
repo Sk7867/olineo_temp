@@ -33,6 +33,7 @@ const ProductPage = ({ setHeaderData }) => {
   const [preOrder, setPreOrder] = useState(false)
   const [previewImageSelected, setPreviewImageSelected] = useState(null)
   const [productInfo, setProductInfo] = useState([])
+  const [discountedPrice, setDiscountedPrice] = useState('')
   const [productData, setProductData] = useState({
     product_loaded: false,
     product_Id: '',
@@ -70,6 +71,17 @@ const ProductPage = ({ setHeaderData }) => {
       header3Profile: true,
     })
   }, []);
+
+  useEffect(() => {
+    if (productData.product_price.mop && productData.product_Disccount.flatDiscount.value) {
+      let discount = productData.product_Disccount.flatDiscount.value
+      let mop = productData.product_price.mop
+      let tempPrice = Math.floor(mop - ((discount * mop / 100)))
+      console.log(tempPrice);
+      setDiscountedPrice(tempPrice)
+    }
+  }, [productData])
+
 
   useEffect(() => {
     if (loc.state) {
