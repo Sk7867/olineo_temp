@@ -35,7 +35,7 @@ const StoreFinder = ({ setHeaderData }) => {
     })
   }, []);
 
-  console.log(location);
+  // console.log(location);
 
   const markerPostions = [
     { lat: 17, lng: 73 },

@@ -4,6 +4,7 @@ import { useMediaQuery } from '@mui/material'
 import { Accordion, Dropdown, Carousel } from 'react-bootstrap'
 import { addToCart, getCartData } from '../../api/Cart'
 import { UserDataContext } from '../../Contexts/UserContext'
+import { Slide, toast, ToastContainer } from 'react-toastify'
 
 //CSS
 import './ProductPage.css'
@@ -21,8 +22,7 @@ import AlternateProductBox from '../../components/AlternateProductCard/Alternate
 import { getIndiProduct } from '../../api/Product'
 import SkeletonElement from '../../components/Skeletons/SkeletonElement'
 
-
-
+toast.configure()
 const ProductPage = ({ setHeaderData }) => {
   const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts, setCartArray } = useContext(UserDataContext)
   const matches = useMediaQuery("(min-width:768px)")
@@ -126,7 +126,7 @@ const ProductPage = ({ setHeaderData }) => {
       let discount = productData.product_Disccount.flatDiscount.value
       let mop = productData.product_price.mop
       let tempPrice = Math.floor(mop - ((discount * mop / 100)))
-      console.log(tempPrice);
+      // console.log(tempPrice);
       setDiscountedPrice(tempPrice)
     }
   }, [productData])
@@ -135,7 +135,6 @@ const ProductPage = ({ setHeaderData }) => {
   useEffect(() => {
     if (loc.state) {
       let product = loc.state.product
-      console.log(product)
       if (product) {
         // let allProductImages = Object.values(product.otherImages)
         // allProductImages.unshift(productImage1)
@@ -166,6 +165,17 @@ const ProductPage = ({ setHeaderData }) => {
     }
   }, [loc])
   console.log(productData);
+
+  // Search Alternate products from all Products
+  // useEffect(() => {
+  //   if (loc.state) {
+  //     if (productData.product_name) {
+  //       let alternateArray = allProducts.products.filter(item => item.productInfo.brand === productInfo.brand)
+  //       console.log(alternateArray);
+  //     }
+  //   }
+  // }, [loc, productData])
+
 
 
   const sec5Data = [
@@ -287,7 +297,7 @@ const ProductPage = ({ setHeaderData }) => {
     if (userToken) {
       addToCart(id)
         .then(res => res ? (
-          console.log(res),
+          toast.success('Product Added to Cart'),
           getCartData()
             .then(res => res ? (
               setCartArray({
@@ -308,132 +318,233 @@ const ProductPage = ({ setHeaderData }) => {
 
 
   return (
-    <div className='page_Wrapper page_Margin_Top  page_Margin_Top_Secondary'>
-      <div className='desk_Page_Wrapper'>
+    <>
+      <div className='page_Wrapper page_Margin_Top  page_Margin_Top_Secondary'>
+        <div className='desk_Page_Wrapper'>
 
-        <aside className="side_Section section_Wrapper product_Side_Section">
-          <div className="image_Preview_Side_Section">
-            <div className='image_Preview_Selected section_Wrapper'>
-              {productData.product_loaded === false ? (
-                <SkeletonElement type={'productPreviewImage'} />
-              ) : (
-                <img src={previewImageSelected} alt="" />
-              )}
-            </div>
-            <div className="product_Thumbnails">
-              {productData.product_loaded === false ? (
-                [1, 2, 3, 4, 5].map((n) => (<SkeletonElement type={'productThumbnail'} key={n} />))
-              ) : (
-                <>
-                  {
-                    productData.product_image_List.map((image, index) => (
-                      <div className="thumbnail" key={index} onMouseOver={() => setPreviewImageSelected(image)} >
-                        <img src={image} alt="" />
-                      </div>
-                    ))
-                  }
-                </>
-              )}
-            </div>
-          </div>
-          <div className="product_Side_Section_Buttons">
-            <div className="submit_Button_2">
-              <button type='submit' className='submit-button'><p>{
-                preOrder ? ('Notify when product releases') : ('Add to Wishlist')
-              }</p></button>
-            </div>
-            <div className="button_Set_2">
-              {
-                preOrder ? (
-                  <div className='submit_Button_1'>
-                    <button type='submit' className='submit-button'><p>Pay in Advance</p></button>
-                  </div>
+          <aside className="side_Section section_Wrapper product_Side_Section">
+            <div className="image_Preview_Side_Section">
+              <div className='image_Preview_Selected section_Wrapper'>
+                {productData.product_loaded === false ? (
+                  <SkeletonElement type={'productPreviewImage'} />
+                ) : (
+                  <img src={previewImageSelected} alt="" />
+                )}
+              </div>
+              <div className="product_Thumbnails">
+                {productData.product_loaded === false ? (
+                  [1, 2, 3, 4, 5].map((n) => (<SkeletonElement type={'productThumbnail'} key={n} />))
                 ) : (
                   <>
-                    {userContext ? (
-                      <div className='submit_Button_3'>
-                        <button type='submit' className='submit-button' onClick={() => handleAddToCart(productData.product_Id)} ><p>Add to cart</p></button>
+                    {
+                      productData.product_image_List.map((image, index) => (
+                        <div className="thumbnail" key={index} onMouseOver={() => setPreviewImageSelected(image)} >
+                          <img src={image} alt="" />
+                        </div>
+                      ))
+                    }
+                  </>
+                )}
+              </div>
+            </div>
+            <div className="product_Side_Section_Buttons">
+              <div className="submit_Button_2">
+                <button type='submit' className='submit-button'><p>{
+                  preOrder ? ('Notify when product releases') : ('Add to Wishlist')
+                }</p></button>
+              </div>
+              <div className="button_Set_2">
+                {
+                  preOrder ? (
+                    <div className='submit_Button_1'>
+                      <button type='submit' className='submit-button'><p>Pay in Advance</p></button>
+                    </div>
+                  ) : (
+                    <>
+                      {userContext ? (
+                        <div className='submit_Button_3'>
+                          <button type='submit' className='submit-button' onClick={() => handleAddToCart(productData.product_Id)} ><p>Add to cart</p></button>
+                        </div>
+                      ) : (
+                        <Link to={'/login'} className='submit_Button_3'>
+                          <button type='submit' className='submit-button'><p>Add to cart</p></button>
+                        </Link>
+                      )}
+                      <div>
+                        <button type='submit' className='submit-button'><p>Buy now</p></button>
                       </div>
-                    ) : (
-                      <Link to={'/login'} className='submit_Button_3'>
-                        <button type='submit' className='submit-button'><p>Add to cart</p></button>
-                      </Link>
-                    )}
-                    <div>
-                      <button type='submit' className='submit-button'><p>Buy now</p></button>
+                    </>
+                  )
+                }
+              </div>
+            </div>
+          </aside>
+          <div className='order_Page_Right product_Page_Right'>
+
+            <div className="product_Section_1 section_Wrapper">
+              <h3 className='product_Name'>
+                {productData.product_loaded === false ? (
+                  <SkeletonElement type={"productTitle"} />
+                ) : (
+                  (productData.product_Heading) ? (productData.product_Heading) : (productData.product_name)
+                )}
+              </h3>
+              {/* Porduct Image preview section */}
+              <div className="product_Preview_Section">
+                <Carousel
+                  interval={5000}
+                // infiniteLoop
+                // showThumbs={false}
+                // showStatus={false}
+                >
+                  {
+                    productData.product_image_List.map((image, index) => (
+                      <Carousel.Item key={index}>
+                        <img
+                          className="d-block w-100 product_Carousel_Image"
+                          src={image}
+                          alt={`product-${index}`}
+                        />
+                      </Carousel.Item>
+                    ))
+                  }
+                </Carousel>
+              </div>
+              <div className="product_Price_Desc">
+                {productData.product_loaded === false ? (
+                  <SkeletonElement type={"productPrice"} />
+                ) : (
+                  <p className="product_Discount_Price">
+                    ₹{discountedPrice}
+                  </p>
+                )}
+                {productData.product_loaded === false ? (
+                  <SkeletonElement type={"productPrice"} />
+                ) : (
+                  <p className="product_Original_Price">
+                    ₹{productData.product_price.mrp}
+                  </p>
+                )}
+                {productData.product_loaded === false ? (
+                  <SkeletonElement type={"productPrice"} />
+                ) : (
+                  <p className="product_Availability">
+                    {
+                      preOrder ? ('') : (
+                        (productData.product_Instock > 10) ? 'In stock' :
+                          (productData.product_Instock < 10 && productData.product_Instock >= 1) ? 'Few in stock' : 'Out of stock'
+                      )
+                    }
+                  </p>
+                )}
+              </div>
+              <div className="product_Offer_Counter">
+                <p>{
+                  preOrder ? ('Deal is 40% Claimed') : (`${productData.offer_Deadline}`)
+                } </p>
+              </div>
+              {
+                matches ? (
+                  <div className="product_Offer_Section">
+                    <div className="product_Offer_Header">
+                      <img src={offerIconYellow} alt="" />
+                      <h5 className='product_Section_Heading'>Offers</h5>
+                    </div>
+                    <div className="product_Offer_Cards_Container">
+                      <div className="product_Offer_Cards_Wrapper">
+                        {
+                          bankOffersData.map((offer, index) => (
+                            <OfferCard offer={offer} key={index} />
+                          ))
+                        }
+                      </div>
+                    </div>
+                  </div>
+                ) : ('')
+              }
+            </div>
+
+            <div className="product_Alternate_Section section_Wrapper">
+              {
+                matches ? (
+                  <>
+                    <div className="product_Alternate_Section_Header">
+                      <p>Color : <span> Black</span></p>
+                    </div>
+                    <div className="product_Alternate_Section_Body">
+                      {
+                        productData.product_Alternate.map((product) => (
+                          product.alternate_Image && (
+                            <AlternateProductBox key={product.id} product={product} />
+                          )
+                        ))
+                      }
+                    </div>
+                    <div className="product_Alternate_Section_Footer">
+                      <p>
+                        Size :
+                        <span> 4GB RAM & 64GB Storgae</span>
+                      </p>
+
+                    </div>
+                    <div className='product_Alternate_Footer_Cards'>
+                      {
+                        productData.product_Alternate.map((product) => (
+                          product.alternate_Heading && (
+                            <AlternateProductBox key={product.id} product={product} dataOnly={true} />
+                          )
+                        ))
+                      }
                     </div>
                   </>
+                ) : (
+                  <Accordion>
+                    <Accordion.Item eventKey="0">
+                      <Accordion.Header>
+                        <p>Color : <span> Black</span></p>
+                      </Accordion.Header>
+                      <Accordion.Body>
+                        <div className="product_Offer_Cards_Container">
+                          <div className="product_Offer_Cards_Wrapper">
+                            {
+                              productData.product_Alternate.map((product) => (
+                                <AlternateProductBox key={product.id} product={product} />
+                              ))
+                            }
+                          </div>
+                        </div>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
                 )
               }
             </div>
-          </div>
-        </aside>
-        <div className='order_Page_Right product_Page_Right'>
 
-          <div className="product_Section_1 section_Wrapper">
-            <h3 className='product_Name'>
-              {productData.product_loaded === false ? (
-                <SkeletonElement type={"productTitle"} />
-              ) : (
-                (productData.product_Heading) ? (productData.product_Heading) : (productData.product_name)
-              )}
-            </h3>
-            {/* Porduct Image preview section */}
-            <div className="product_Preview_Section">
-              <Carousel
-                interval={5000}
-              // infiniteLoop
-              // showThumbs={false}
-              // showStatus={false}
-              >
-                {
-                  productData.product_image_List.map((image, index) => (
-                    <Carousel.Item key={index}>
-                      <img
-                        className="d-block w-100 product_Carousel_Image"
-                        src={image}
-                        alt={`product-${index}`}
-                      />
-                    </Carousel.Item>
-                  ))
-                }
-              </Carousel>
+            <div className="product_Delivery_Section section_Wrapper">
+              <p className='product_Delivery_Details'>
+                <span>Free delivery: Thursday, Feb 24 </span>
+                on orders over ₹499
+              </p>
+              {
+                !matches ? (
+                  <>
+                    <p className='cart_Product_Availability product_Page_Availability'>In stock</p>
+                    <div className="product_Delivery_Footer submit_Button_2">
+                      <button type='submit' className='submit-button'><p>{
+                        preOrder ? (
+                          'Notify when product releases'
+                        ) : (
+                          'Add to Wishlist'
+                        )
+                      }</p></button>
+                    </div>
+                  </>
+                ) : ('')
+              }
             </div>
-            <div className="product_Price_Desc">
-              {productData.product_loaded === false ? (
-                <SkeletonElement type={"productPrice"} />
-              ) : (
-                <p className="product_Discount_Price">
-                  ₹{discountedPrice}
-                </p>
-              )}
-              {productData.product_loaded === false ? (
-                <SkeletonElement type={"productPrice"} />
-              ) : (
-                <p className="product_Original_Price">
-                  ₹{productData.product_price.mrp}
-                </p>
-              )}
-              {productData.product_loaded === false ? (
-                <SkeletonElement type={"productPrice"} />
-              ) : (
-                <p className="product_Availability">
-                  {
-                    preOrder ? ('') : (
-                      (productData.product_Instock > 10) ? 'In stock' :
-                        (productData.product_Instock < 10 && productData.product_Instock >= 1) ? 'Few in stock' : 'Out of stock'
-                    )
-                  }
-                </p>
-              )}
-            </div>
-            <div className="product_Offer_Counter">
-              <p>{
-                preOrder ? ('Deal is 40% Claimed') : (`${productData.offer_Deadline}`)
-              } </p>
-            </div>
+
             {
-              matches ? (
+              !matches ? (
                 <div className="product_Offer_Section">
                   <div className="product_Offer_Header">
                     <img src={offerIconYellow} alt="" />
@@ -451,166 +562,80 @@ const ProductPage = ({ setHeaderData }) => {
                 </div>
               ) : ('')
             }
-          </div>
 
-          <div className="product_Alternate_Section section_Wrapper">
-            {
-              matches ? (
-                <>
-                  <div className="product_Alternate_Section_Header">
-                    <p>Color : <span> Black</span></p>
-                  </div>
-                  <div className="product_Alternate_Section_Body">
-                    {
-                      productData.product_Alternate.map((product) => (
-                        product.alternate_Image && (
-                          <AlternateProductBox key={product.id} product={product} />
-                        )
-                      ))
-                    }
-                  </div>
-                  <div className="product_Alternate_Section_Footer">
-                    <p>
-                      Size :
-                      <span> 4GB RAM & 64GB Storgae</span>
-                    </p>
-
-                  </div>
-                  <div className='product_Alternate_Footer_Cards'>
-                    {
-                      productData.product_Alternate.map((product) => (
-                        product.alternate_Heading && (
-                          <AlternateProductBox key={product.id} product={product} dataOnly={true} />
-                        )
-                      ))
-                    }
-                  </div>
-                </>
-              ) : (
-                <Accordion>
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>
-                      <p>Color : <span> Black</span></p>
-                    </Accordion.Header>
-                    <Accordion.Body>
-                      <div className="product_Offer_Cards_Container">
-                        <div className="product_Offer_Cards_Wrapper">
-                          {
-                            productData.product_Alternate.map((product) => (
-                              <AlternateProductBox key={product.id} product={product} />
-                            ))
-                          }
-                        </div>
-                      </div>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              )
-            }
-          </div>
-
-          <div className="product_Delivery_Section section_Wrapper">
-            <p className='product_Delivery_Details'>
-              <span>Free delivery: Thursday, Feb 24 </span>
-              on orders over ₹499
-            </p>
-            {
-              !matches ? (
-                <>
-                  <p className='cart_Product_Availability product_Page_Availability'>In stock</p>
-                  <div className="product_Delivery_Footer submit_Button_2">
-                    <button type='submit' className='submit-button'><p>{
-                      preOrder ? (
-                        'Notify when product releases'
-                      ) : (
-                        'Add to Wishlist'
-                      )
-                    }</p></button>
-                  </div>
-                </>
-              ) : ('')
-            }
-          </div>
-
-          {
-            !matches ? (
-              <div className="product_Offer_Section">
-                <div className="product_Offer_Header">
-                  <img src={offerIconYellow} alt="" />
-                  <h5 className='product_Section_Heading'>Offers</h5>
-                </div>
-                <div className="product_Offer_Cards_Container">
-                  <div className="product_Offer_Cards_Wrapper">
-                    {
-                      bankOffersData.map((offer, index) => (
-                        <OfferCard offer={offer} key={index} />
-                      ))
-                    }
-                  </div>
-                </div>
+            <div className='product_Description_Section section_Wrapper'>
+              <div className='product_Description_Header d-flex justify-content-between align-items-center'>
+                <h5 className='product_Section_Heading'>Description</h5>
+                {seeMore ? (<p className='description_See_Less' onClick={() => setSeeMore(false)}>See less</p>) : ('')}
               </div>
-            ) : ('')
-          }
 
-          <div className='product_Description_Section section_Wrapper'>
-            <div className='product_Description_Header d-flex justify-content-between align-items-center'>
-              <h5 className='product_Section_Heading'>Description</h5>
-              {seeMore ? (<p className='description_See_Less' onClick={() => setSeeMore(false)}>See less</p>) : ('')}
+              <ul className={`product_Description_Wrapper d-flex flex-column ${seeMore ? 'description_Expanded' : ''}`}>
+                {
+                  productData.product_Description.map((element, index) => (
+                    <li key={index} className='product_Description' >{element}</li>
+                  ))
+                }
+              </ul>
+              <p className={`description_See_More ${seeMore ? 'description_Expanded' : ''}`} onClick={() => setSeeMore(true)} >See more</p>
             </div>
 
-            <ul className={`product_Description_Wrapper d-flex flex-column ${seeMore ? 'description_Expanded' : ''}`}>
-              {
-                productData.product_Description.map((element, index) => (
-                  <li key={index} className='product_Description' >{element}</li>
-                ))
-              }
-            </ul>
-            <p className={`description_See_More ${seeMore ? 'description_Expanded' : ''}`} onClick={() => setSeeMore(true)} >See more</p>
+            {/* Product Information Table */}
+            <div className="productPage_Table section_Wrapper">
+              <h5 className='product_Section_Heading'>Product Information</h5>
+              <ProductInfoTable product_Information={productInfo} />
+            </div>
+
           </div>
-
-          {/* Product Information Table */}
-          <div className="productPage_Table section_Wrapper">
-            <h5 className='product_Section_Heading'>Product Information</h5>
-            <ProductInfoTable product_Information={productInfo} />
-          </div>
-
         </div>
-      </div>
 
-      {/* Image Gallery */}
-      <div className="productPage_Image_Gallery section_Wrapper">
-        <h5 className='product_Section_Heading'>Product Image Gallery</h5>
-        <div className="image_Gallery_Wrapper">
-          {
-            productData.product_Gallery_Image.map((image, index) => (
-              <img src={image} key={index} className={`product_Gallery_Image`} alt="" />
-            ))
-          }
-        </div>
-      </div>
-      <Section2
-        id={'Top-sellers-sec'}
-        heading='Suggested products'
-        productData={sec5Data}
-      />
-      {/* Floating Footer */}
-      {!matches && (
-        <div className="floating_Footer">
-          <div className="floating_Footer_Wrapper product_Page_Floating_Wrapper">
-            <div className="floating_Footer_Left">
-              {userContext ? (
-                <p className='floater_Add_Cart' onClick={() => handleAddToCart(productData.product_Id)} >Add to cart</p>
-              ) : (
-                <Link to={'/login'} className='floater_Add_Cart' >Add to cart</Link>
+        {/* Image Gallery */}
+        <div className="productPage_Image_Gallery section_Wrapper">
+          <h5 className='product_Section_Heading'>Product Image Gallery</h5>
+          <div className="image_Gallery_Wrapper">
+            {
+              productData.product_loaded ? (productData.product_Gallery_Image.map((image, index) => (
+                <img src={image} key={index} className={`product_Gallery_Image`} alt="" />
+              ))) : (
+                [1, 2, 3, 4, 5].map((n) => (<SkeletonElement type={'productBanner'} key={n} />))
               )}
-            </div>
-            <div className="floating_Footer_Right">
-              <button type='submit' className='submit-button'><p>Buy now</p></button>
-            </div>
           </div>
         </div>
-      )}
-    </div>
+        <Section2
+          id={'Top-sellers-sec'}
+          heading='Suggested products'
+          productData={sec5Data}
+        />
+        {/* Floating Footer */}
+        {!matches && (
+          <div className="floating_Footer">
+            <div className="floating_Footer_Wrapper product_Page_Floating_Wrapper">
+              <div className="floating_Footer_Left">
+                {userContext ? (
+                  <p className='floater_Add_Cart' onClick={() => handleAddToCart(productData.product_Id)} >Add to cart</p>
+                ) : (
+                  <Link to={'/login'} className='floater_Add_Cart' >Add to cart</Link>
+                )}
+              </div>
+              <div className="floating_Footer_Right">
+                <button type='submit' className='submit-button'><p>Buy now</p></button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
+    </>
   )
 }
 

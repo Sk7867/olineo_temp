@@ -80,7 +80,7 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
     <div className='page_Wrapper page_Margin_Top_Secondary'>
       <BreadCrumbs data={breadCrumbsData} />
       <div className='desk_Page_Wrapper'>
-        <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
+        <aside className="side_Section" style={{ padding: '0' }}>
           <PriceDetailsBox HideDetails={false} />
         </aside>
         <div className='order_Page_Right'>

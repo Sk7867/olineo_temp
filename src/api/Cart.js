@@ -40,8 +40,6 @@ export const getCartData = async () => {
     .then(res => {
       if (res) {
         cartDataResponse = res.data.data
-
-        console.log(cartDataResponse);
       }
     })
     .catch(err => console.log('Error:', err))
@@ -58,17 +56,35 @@ export const addToCart = async (id) => {
     'Content-Type': 'application/json',
     "Authorization": `Bearer ${userToken}`
   }
-  console.log(id);
-  console.log(userToken);
 
   await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/cart/${id}`, {}, { headers })
     .then(res => {
       if (res) {
         addToCartResponse = res
-        console.log(addToCartResponse);
       }
     })
     .catch(err => console.log('Error:', err))
 
   return addToCartResponse
 }
+
+export const removeFromCart = async (id) => {
+  let removeFromCartResponse
+
+  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
+  const headers = {
+    "Access-Control-Allow-origin": "*",
+    'Content-Type': 'application/json',
+    "Authorization": `Bearer ${userToken}`
+  }
+  await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/cart/${id}`, { headers })
+    .then(res => {
+      if (res) {
+        removeFromCartResponse = res
+      }
+    })
+    .catch(err => console.log('Error:', err))
+
+  return removeFromCartResponse
+}
+

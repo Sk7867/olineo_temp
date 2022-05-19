@@ -70,7 +70,7 @@ const Sidebar = ({ sidebar, setSidebar, userLoggedIn }) => {
     {
       image: userIcon,
       text: 'About Us',
-      link: '/orders',
+      link: '/about-us',
     },
     {
       image: callIcon,
