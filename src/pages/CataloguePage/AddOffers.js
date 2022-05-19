@@ -146,6 +146,15 @@ const AddOffers = ({ setHeaderData }) => {
   }
 
 
+  const availOffers = [
+    'Discount',
+    'combo',
+    'container',
+    'coupon'
+  ]
+
+  console.log(eanEntered);
+
   useEffect(() => {
     setHeaderData({
       header3Cond: true,
@@ -201,6 +210,8 @@ const AddOffers = ({ setHeaderData }) => {
       product: [...product]
     })
   }
+
+  console.log(selectedProduct);
 
   const searchComboProduct = (e) => {
     e.preventDefault();

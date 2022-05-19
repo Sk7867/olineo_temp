@@ -15,6 +15,7 @@ import { completeOrder, initOrder } from '../../api/OrdersApi';
 import { Slide, toast, ToastContainer } from 'react-toastify'
 import { getCartData, removeFromCart } from '../../api/Cart';
 
+toast.configure()
 const HomeDelivery = ({ setEditID, setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [disable, setDisable] = useState(true)

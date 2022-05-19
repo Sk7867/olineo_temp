@@ -90,11 +90,6 @@ const ModalComp = ({ modalShow, setModalShow, userLoggedIn }) => {
               </div>
             )
           }
-          {
-            modalShow && (
-              children.props.children[0]
-            )
-          }
         </Modal.Header>
         {
           userLoggedIn ? ('') : (

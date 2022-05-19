@@ -34,7 +34,7 @@ import { getIndiProduct } from '../../api/Product';
 
 const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
   const [profileState, setProfileState] = useState(1);
-  const [profilePic, setProfilePic] = useState({ locataion: '' })
+  const [profilePic, setProfilePic] = useState(null)
   const [newProfilePic, setNewProfilePic] = useState(null)
   const [addressData, setAddressData] = useState([])
   const matches = useMediaQuery("(min-width:768px)")
@@ -47,11 +47,11 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
 
   useEffect(() => {
     if (userContext && userContext.profilePic) {
-      setProfilePic({ locataion: userContext.profilePic.locataion })
+      setProfilePic(userContext.profilePic)
     } else if (newProfilePic !== null) {
-      setProfilePic({ locataion: newProfilePic })
+      setProfilePic(newProfilePic)
     } else {
-      setProfilePic({ locataion: defaultUserImage })
+      setProfilePic(defaultUserImage)
     }
   }, [userContext, newProfilePic])
 
@@ -223,7 +223,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
           setNewProfilePic(reader.result);
           setUserContext(prev => ({
             ...prev,
-            profilePic: { locataion: reader.result }
+            profilePic: reader.result
           }))
           // console.log(reader.result);
         }

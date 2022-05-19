@@ -14,7 +14,6 @@ export const addProductCatalogue = async (
   L1Selected,
   L2Selected,
   L3Selected,
-  classificationSelected,
   discountedPrice,
   classificationSelected,
   advancePayment,
@@ -25,7 +24,6 @@ export const addProductCatalogue = async (
   bankOffers
 ) => {
   let addProductResponse
-  console.log(galleryImagesArray);
 
   let addProductBody = {
     dynamicHeader: dynamicHeader,

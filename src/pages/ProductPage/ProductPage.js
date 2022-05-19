@@ -77,7 +77,7 @@ const ProductPage = ({ setHeaderData }) => {
       let discount = productData.product_Disccount.flatDiscount.value
       let mop = productData.product_price.mop
       let tempPrice = Math.floor(mop - ((discount * mop / 100)))
-      console.log(tempPrice);
+      // console.log(tempPrice);
       setDiscountedPrice(tempPrice)
     }
   }, [productData])
@@ -86,7 +86,6 @@ const ProductPage = ({ setHeaderData }) => {
   useEffect(() => {
     if (loc.state) {
       let product = loc.state.product
-      console.log(product)
       if (product) {
         console.log(product);
         // let allProductImages = Object.values(product.otherImages)
@@ -147,6 +146,17 @@ const ProductPage = ({ setHeaderData }) => {
   //   }
   // }, [alternateColorean, alternateSpecean])
   console.log(colorAlternateProds);
+
+  // Search Alternate products from all Products
+  // useEffect(() => {
+  //   if (loc.state) {
+  //     if (productData.product_name) {
+  //       let alternateArray = allProducts.products.filter(item => item.productInfo.brand === productInfo.brand)
+  //       console.log(alternateArray);
+  //     }
+  //   }
+  // }, [loc, productData])
+
 
 
   const sec5Data = [
