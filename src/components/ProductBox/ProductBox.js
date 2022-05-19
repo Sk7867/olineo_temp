@@ -29,7 +29,7 @@ const ProductBox = ({ card_heading, classes, product }) => {
 
   }, [product])
 
-  console.log(product);
+  // console.log(product);
   return (
     <>
       {

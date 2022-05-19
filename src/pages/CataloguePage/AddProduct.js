@@ -100,7 +100,6 @@ const AddProduct = ({ setHeaderData }) => {
   useEffect(() => {
     if (loc.state) {
       let product = loc.state.product
-      console.log(product)
       setProduct({
         heading: product.dynamicHeader,
         ID: product._id,
@@ -231,7 +230,19 @@ const AddProduct = ({ setHeaderData }) => {
 
     // console.log(dynamicHeader);
 
-    addProductCatalogue(product, dynamicHeader, imagesArray, galleryImagesArray, L1Selected, L2Selected, L3Selected, discountedPrice, classificationSelected, flatDiscountDetails, comboOfferDetails, containerDetails)
+    addProductCatalogue(
+      product,
+      dynamicHeader,
+      imagesArray,
+      galleryImagesArray,
+      L1Selected,
+      L2Selected,
+      L3Selected,
+      discountedPrice,
+      classificationSelected,
+      flatDiscountDetails,
+      comboOfferDetails,
+      containerDetails)
       .then(res => res ? (
         // console.log(res),
         toast.success('Product Added Successfully'),
@@ -247,6 +258,7 @@ const AddProduct = ({ setHeaderData }) => {
           brand: '',
           modelYear: '',
         }),
+        toast.success('Product Added Successfully'),
         nav('/catelogue-page')
 
       ) : (
@@ -435,11 +447,6 @@ const AddProduct = ({ setHeaderData }) => {
     })
   }
 
-  // const testImageHandle = (e) => {
-  //   let temp = csvToJson.formatValueByType().getJsonFromCsv(e.target.value);
-  //   console.log(temp);
-  // }
-
   const handleDate = (e, type, prop) => {
     let key
     if (prop) {
@@ -468,16 +475,16 @@ const AddProduct = ({ setHeaderData }) => {
     setModalData(images)
   }
 
-  // const modalData = () => {
+  // const expData = () => {
   //   return (
   //     <>
-  //       <header id='modal-header'>Hello There</header>
-  //       <main id='modal-main' >
+  //       <div id='modal-header'>Hello There</div>
+  //       <div id='modal-main' >
   //         New Body
-  //       </main>
-  //       <footer>
+  //       </div>
+  //       <div id='modal-footer'>
   //         New Footer
-  //       </footer>
+  //       </div>
   //     </>
   //   )
   // }

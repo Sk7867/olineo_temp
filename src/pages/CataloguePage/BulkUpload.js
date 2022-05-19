@@ -46,8 +46,8 @@ const BulkUpload = ({ setHeaderData }) => {
 
 
 
-  console.log(fileJsonData);
-  console.log(fileUploaded);
+  // console.log(fileJsonData);
+  // console.log(fileUploaded);
 
   return (
     <>

@@ -28,8 +28,6 @@ const MyAddress = ({ setEditID, setProfileState, border }) => {
       })
   }, [])
 
-  console.log(userAddress);
-
   return (
     <>
       <div className="page_Wrapper edit_Page_Wrapper">

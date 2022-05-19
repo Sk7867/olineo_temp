@@ -175,8 +175,8 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
   const validateForm = () => {
     (displayInfo.user_Full_Name !== '') && (displayInfo.user_ph_Number !== '') && (displayInfo.user_Email !== '') && (selectedDay !== null) && (userContext.profilePic) && profilePicUpdate ? setDisabled(false) : setDisabled(true)
   }
-  console.log(selectedDay);
-  console.log(userContext.profilePic, profilePicUpdate);
+  // console.log(selectedDay);
+  // console.log(userContext.profilePic, profilePicUpdate);
 
   const handleModal = (prop) => {
     if (prop === 'email') {

@@ -10,7 +10,7 @@ import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
 import saveLaterIcon from '../../assets/vector/save_later_outline.svg'
 
 const CartProductCard = ({
-  product, handleQuantityInc, handleQuantityDec
+  product, handleQuantityInc, handleQuantityDec, handleRemoveFromCart
 }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [discount, setDiscount] = useState('')
@@ -19,8 +19,6 @@ const CartProductCard = ({
       setDiscount(product.discount.flatDiscount.value)
     }
   }, [product])
-
-  console.log(product);
   return (
     <div className='cart_Product_Contianer section_Wrapper'>
       <div className="cart_Product_Wrapper">
@@ -81,7 +79,7 @@ const CartProductCard = ({
           <img src={saveLaterIcon} alt="Save For Later" />
           <p>Save for Later</p>
         </div>
-        <div className="combined_Button_Two">
+        <div className="combined_Button_Two" onClick={() => handleRemoveFromCart(product._id)} >
           <img src={deleteIcon} alt="Save For Later" />
           <p>Remove</p>
         </div>

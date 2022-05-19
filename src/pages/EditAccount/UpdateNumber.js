@@ -5,7 +5,7 @@ import Update from './Update';
 const UpdateNumber = (props) => {
   const { setHeaderData, modalDataMobile } = props
   const loc = useLocation()
-  console.log(modalDataMobile);
+  // console.log(modalDataMobile);
   useEffect(() => {
     setHeaderData({
       header3Cond: true,

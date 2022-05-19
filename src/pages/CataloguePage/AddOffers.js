@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { Dropdown } from 'react-bootstrap'
 import { UserDataContext } from '../../Contexts/UserContext'
 
 const AddOffers = ({ setHeaderData }) => {
@@ -14,7 +15,17 @@ const AddOffers = ({ setHeaderData }) => {
     loaded: false,
     product: []
   })
+  const [offerTypeSelected, setOfferTypeSelected] = useState('')
 
+
+  const availOffers = [
+    'Discount',
+    'combo',
+    'container',
+    'coupon'
+  ]
+
+  console.log(eanEntered);
 
   useEffect(() => {
     setHeaderData({
@@ -27,17 +38,22 @@ const AddOffers = ({ setHeaderData }) => {
     })
   }, []);
 
-  console.log(allProducts);
-  console.log(comboProduct);
-
   const searchEAN = (e) => {
     e.preventDefault();
-    let product = allProducts.products.filter((product) => product.ean === eanEntered)
+    let ean = eanEntered.split(',')
+    let product = []
+    ean.forEach(item => {
+      let demo = allProducts.products.filter((product) => product.ean === item)
+      product.push(demo)
+    })
+    // let product = allProducts.products.filter((product) => product.ean === eanEntered)
     setSelectedProduct({
       loaded: true,
-      product: product
+      product: [...product]
     })
   }
+
+  console.log(selectedProduct);
 
   const searchComboProduct = (e) => {
     e.preventDefault();
@@ -67,53 +83,31 @@ const AddOffers = ({ setHeaderData }) => {
             <h4 className='catelogue_Page_Heading'>Add Offer Page</h4>
           </div>
           <form onSubmit={searchEAN} className='catelogue_Product_Search'>
-            <input type="text" id='EAN' name='EAN' className='input-field' placeholder='Enter Product EAN Number' onChange={(e) => setEanEntered(e.target.value)} />
+            <div className="addoffer_Input2">
+              <input type="text" id='EAN' name='EAN' className='input-field' placeholder='Enter Product EAN Number' onChange={(e) => setEanEntered(e.target.value)} />
+              <p className="catalogue_Hint">Add comma seperated Product EAN</p>
+            </div>
             <div className={'button-Container'}>
               <button type='submit' className='submit-button'><p>Search Product</p></button>
             </div>
           </form>
-          {
-            selectedProduct.loaded ? (
-              selectedProduct.product.length === 0 ? (
-                <div>Product Not Found, Enter Correct EAN number</div>
-              ) : (
-                <>
-                  <div className='catelog_Product_Info'>
-                    <div className='product_Info_Left'>
-                      <p>Product Name : {selectedProduct.product[0].name}</p>
-                      <p>Product EAN : {selectedProduct.product[0].ean}</p>
-                      <p>Product Price : {selectedProduct.product[0].price}</p>
-                    </div>
-                    <div className="product_Info_Right">
-                      <img src={selectedProduct.product[0].images[0]} alt="" />
-                    </div>
-                  </div>
-                  <form className="catelogue_Form addoffer_Form">
-                    <div className="addoffer_Input">
-                      <input type="text" name='Discounted Price' id='Discounted Price' className='input-field' placeholder='Discounted Price/ MOP' onChange={(e) => handleDiscountCalc(e.target.value)} />
-                      <p>{discountGiven ? (<>Discount Given : {discountGiven}</>) : ''}</p>
-                    </div>
-                    <div className="addoffer_Input">
-                      <div className="addoffer_Input2">
-                        <input type="text" name='Free Product' id='Free Product' className='input-field' placeholder='Enter Free Product EAN' onChange={(e) => setComboEAN(e.target.value)} />
-                        <div className={'button-Container'}>
-                          <button className='submit-button' onClick={searchComboProduct} disabled={(comboEAN === null) ? true : false}   ><p>Search Product</p></button>
-                        </div>
-                      </div>
-                      <p>{comboProduct.loaded ? (
-                        comboProduct.product.length === 0 ? (
-                          <div>Product Not Found, Enter Correct EAN number</div>
-                        ) : (
-                          <span>Product Selected : {comboProduct.product[0].name}, Price : {comboProduct.product[0].price}, EAN : {comboProduct.product[0].ean}</span>
-                        )
-                      ) : ('')}</p>
-                    </div>
-                  </form>
-                </>
-              )
+          <fieldset className='catelogue_Fieldset' >
+            <Dropdown>
+              <Dropdown.Toggle id="dropdown-basic">
+                <div className="catalogue_Dropdown">
+                  {offerTypeSelected ? (<p>{offerTypeSelected}</p>) : (<p>Select Offer Type</p>)}
+                </div>
+              </Dropdown.Toggle>
 
-            ) : ('')
-          }
+              <Dropdown.Menu>
+                {
+                  availOffers.map((item, index) => (
+                    <Dropdown.Item key={index} value={item} onClick={() => setOfferTypeSelected(item)}>{item}</Dropdown.Item>
+                  ))
+                }
+              </Dropdown.Menu>
+            </Dropdown>
+          </fieldset>
         </div>
       </div>
     </>

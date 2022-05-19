@@ -55,10 +55,6 @@ const Update = ({ number, oldInfo, newInfo, user_Full_Name, handleClose }) => {
       })
       .catch(err => console.log(err))
   }
-  console.log(oldNumberVerify, newNumberVerify);
-
-
-
 
   // console.log(number);
   return (

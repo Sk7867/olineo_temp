@@ -1,18 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { UserDataContext } from '../../Contexts/UserContext'
+import { Slide, toast, ToastContainer } from 'react-toastify'
 
 //Components
 import CartProductCard from '../../components/CartProductCard/CartProductCard'
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import Section2 from '../../components/Section2/Section2'
 import { initOrder } from '../../api/OrdersApi'
+import { getCartData, removeFromCart } from '../../api/Cart'
 
+toast.configure()
 const CartSection = ({ featureProducts }) => {
   const nav = useNavigate()
   const [cartProducts, setCartProducts] = useState([])
 
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, cartArray, orderInit, setOrderInit } = useContext(UserDataContext)
+  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, cartArray, setCartArray, orderInit, setOrderInit } = useContext(UserDataContext)
 
 
   let cartItemsNumber = cartArray.no_of_carts
@@ -129,7 +132,26 @@ const CartSection = ({ featureProducts }) => {
     // console.log(data);
   }
 
-  console.log(cartProducts);
+  const handleRemoveFromCart = (id) => {
+    removeFromCart(id)
+      .then(res => res ? (
+        setUserCart([]),
+        toast.success('Product Added to Cart'),
+        getCartData()
+          .then(res => res ? (
+            setCartArray({
+              loaded: true,
+              no_of_carts: res.no_of_carts,
+              cart: res.cart
+            })
+          ) : (
+            ''
+          )
+          )
+      ) : (''))
+  }
+
+  // console.log(cartProducts);
 
   return (
     <>
@@ -156,6 +178,7 @@ const CartSection = ({ featureProducts }) => {
                     <CartProductCard
                       key={index}
                       product={item}
+                      handleRemoveFromCart={handleRemoveFromCart}
                       handleQuantityInc={handleQuantityInc}
                       handleQuantityDec={handleQuantityDec}
                     />
@@ -206,6 +229,7 @@ const CartSection = ({ featureProducts }) => {
                         product={item}
                         handleQuantityInc={handleQuantityInc}
                         handleQuantityDec={handleQuantityDec}
+                        handleRemoveFromCart={handleRemoveFromCart}
                       />
                     ))) : ('')
                 }
@@ -232,6 +256,18 @@ const CartSection = ({ featureProducts }) => {
           </div>
         )
       }
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
     </>
 
   )
