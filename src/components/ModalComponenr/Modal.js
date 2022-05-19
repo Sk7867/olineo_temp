@@ -13,7 +13,7 @@ import locationBlue from '../../assets/vector/location_blue.svg'
 import navigationBlue from '../../assets/vector/navigation_outline_blue.svg'
 import { UserDataContext } from '../../Contexts/UserContext';
 
-const ModalComp = ({ modalShow, setModalShow, userLoggedIn, children }) => {
+const ModalComp = ({ modalShow, setModalShow, userLoggedIn }) => {
   const [pincode, setPincode] = useState('')
   const matches = useMediaQuery("(min-width:768px)")
   const [validLength, setValidLength] = useState(false)
@@ -88,11 +88,6 @@ const ModalComp = ({ modalShow, setModalShow, userLoggedIn, children }) => {
                 <h4 className="modal_heading">Choose your location</h4>
                 <p className="modal_header_desc">Select location to see product availability and delivery options.</p>
               </div>
-            )
-          }
-          {
-            modalShow && (
-              children.props.children[0]
             )
           }
         </Modal.Header>

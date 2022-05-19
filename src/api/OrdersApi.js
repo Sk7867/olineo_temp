@@ -19,7 +19,7 @@ export const initOrder = async (data) => {
   console.log(initBody);
   await axios.post(`${process.env.REACT_APP_BASE_URL}/product/order/init`, JSON.stringify(initBody), { headers })
     .then(res => {
-      initResponse = res
+      initResponse = res.data.data.order
     })
 
   return initResponse
@@ -40,7 +40,7 @@ export const completeOrder = async (id) => {
     orderId: id
   }
 
-  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/order/init`, JSON.stringify(completeBody), { headers })
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/order`, JSON.stringify(completeBody), { headers })
     .then(res => {
       completeOrderResponse = res
     })
