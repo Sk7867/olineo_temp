@@ -3,7 +3,7 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { useLocation, Routes, Route } from 'react-router-dom'
 import { getUser, getUserPic } from './api/Auth';
-import { getAllProducts } from './api/Product';
+import { getAllProducts, getIndiProduct } from './api/Product';
 import { getCartData } from './api/Cart';
 
 
@@ -54,6 +54,7 @@ import CataloguePage from './pages/CataloguePage/CataloguePage';
 import AddProduct from './pages/CataloguePage/AddProduct';
 import AboutUs from './pages/AboutContact/AboutUs'
 import BulkUpload from './pages/CataloguePage/BulkUpload';
+import AddOffers from './pages/CataloguePage/AddOffers';
 
 
 
@@ -112,6 +113,11 @@ function App() {
     header3Profile: false,
   });
   const loc = useLocation()
+  const [orderInit, setOrderInit] = useState({
+    productId: [],
+    quantity: [],
+    shippingAddressId: ''
+  })
 
   // console.log(userCart);
 
@@ -148,6 +154,22 @@ function App() {
         })
       })
   }, [])
+
+  useEffect(() => {
+    cartArray.cart.map((product) => (
+      getIndiProduct(product)
+        .then(res => {
+          if (res) {
+            // console.log(res);
+            let ind = userCart.findIndex(obj => obj._id === res._id)
+            if (ind === -1) {
+              setUserCart([...userCart, res])
+            }
+          }
+        })
+    ))
+  }, [cartArray])
+  // console.log(userCart);
 
   const ordersData = [
     {
@@ -222,7 +244,9 @@ function App() {
           cartArray,
           setCartArray,
           seachedProduct,
-          setSeachedProduct
+          setSeachedProduct,
+          orderInit,
+          setOrderInit
         }}>
           {
             loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' ? ('') : (
@@ -262,6 +286,7 @@ function App() {
             <Route path='/catelogue-page' exact element={<CataloguePage setHeaderData={setHeaderData} />} />
             <Route path='/catelogue-page/add-product' exact element={<AddProduct setHeaderData={setHeaderData} />} />
             <Route path='/catelogue-page/bulk-upload' exact element={<BulkUpload setHeaderData={setHeaderData} />} />
+            <Route path='/catelogue-page/add-offers' exact element={<AddOffers setHeaderData={setHeaderData} />} />
             <Route path='/about-us' exact element={<AboutUs setHeaderData={setHeaderData} />} />
           </Routes>
           <Footer />

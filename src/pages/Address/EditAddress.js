@@ -26,7 +26,6 @@ const EditAddress = ({ setHeaderData, editID }) => {
   useEffect(() => {
     getAddress()
       .then(res => {
-        console.log(res);
         if (res) {
           setUserAddress({
             loaded: true,

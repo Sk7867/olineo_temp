@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import useMediaQuery from '@mui/material/useMediaQuery'
 //CSS
 import './CartProductCard.css'
@@ -10,10 +10,15 @@ import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
 import saveLaterIcon from '../../assets/vector/save_later_outline.svg'
 
 const CartProductCard = ({
-  product, handleQuantityInc, handleQuantityDec
+  product, handleQuantityInc, handleQuantityDec, handleRemoveFromCart
 }) => {
   const matches = useMediaQuery("(min-width:768px)")
-  // console.log(product);
+  const [discount, setDiscount] = useState('')
+  useEffect(() => {
+    if (product && product.discount.flatDiscount.value) {
+      setDiscount(product.discount.flatDiscount.value)
+    }
+  }, [product])
   return (
     <div className='cart_Product_Contianer section_Wrapper'>
       <div className="cart_Product_Wrapper">
@@ -23,17 +28,17 @@ const CartProductCard = ({
               {product.name}
             </h4>
             <p className="cart_Product_Color">
-              Color : {product.productColor}
+              Color : {product.color}
             </p>
             <div className="cart_Product_Price_Section">
               <p className="cart_Product_Discount_Price">
-                ₹{product.price}
+                ₹{product.price.mop}
               </p>
               <p className="cart_Product_Original_Price">
-                ₹{parseInt(product.price) + 2000}
+                ₹{product.price.mrp}
               </p>
               <p className='cart_Product_Discount'>
-                {product.productDiscount}% off
+                {discount}% off
               </p>
             </div>
             <p className="cart_Product_Offers">
@@ -74,7 +79,7 @@ const CartProductCard = ({
           <img src={saveLaterIcon} alt="Save For Later" />
           <p>Save for Later</p>
         </div>
-        <div className="combined_Button_Two">
+        <div className="combined_Button_Two" onClick={() => handleRemoveFromCart(product._id)} >
           <img src={deleteIcon} alt="Save For Later" />
           <p>Remove</p>
         </div>

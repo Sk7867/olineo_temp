@@ -1,17 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { UserDataContext } from '../../Contexts/UserContext'
+import { Slide, toast, ToastContainer } from 'react-toastify'
 
 //Components
 import CartProductCard from '../../components/CartProductCard/CartProductCard'
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import Section2 from '../../components/Section2/Section2'
 import { initOrder } from '../../api/OrdersApi'
+import { getCartData, removeFromCart } from '../../api/Cart'
 
+toast.configure()
 const CartSection = ({ featureProducts }) => {
   const nav = useNavigate()
   const [cartProducts, setCartProducts] = useState([])
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, cartArray } = useContext(UserDataContext)
+
+  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, cartArray, setCartArray, orderInit, setOrderInit } = useContext(UserDataContext)
 
 
   let cartItemsNumber = cartArray.no_of_carts
@@ -20,29 +24,29 @@ const CartSection = ({ featureProducts }) => {
   var totalDeliveryCharge = 0
   var totalAmount = 0
 
-  useEffect(() => {
-    if (cartArray.no_of_carts !== 0) {
-      //Get Price from cart Items
-      userCart.forEach(item => {
-        cartItemsPrice += parseInt(item.price) + 2000
-      });
+  // useEffect(() => {
+  //   if (cartArray.no_of_carts !== 0) {
+  //     //Get Price from cart Items
+  //     userCart.forEach(item => {
+  //       cartItemsPrice += parseInt(item.price) + 2000
+  //     });
 
-      //Get Discounted Price
-      userCart.forEach(item => {
-        var itemDiscount
-        itemDiscount = parseInt(item.price)
-        totalDiscount += itemDiscount
-      });
+  //     //Get Discounted Price
+  //     userCart.forEach(item => {
+  //       var itemDiscount
+  //       itemDiscount = parseInt(item.price)
+  //       totalDiscount += itemDiscount
+  //     });
 
-      //Get Delivery Charges
-      userCart.forEach((item, index) => {
-        totalDeliveryCharge += (index + 1) * 80
-      });
+  //     //Get Delivery Charges
+  //     userCart.forEach((item, index) => {
+  //       totalDeliveryCharge += (index + 1) * 80
+  //     });
 
-      //Get Total Amount
-      totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
-    }
-  }, [cartArray])
+  //     //Get Total Amount
+  //     totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
+  //   }
+  // }, [cartArray])
 
   useEffect(() => {
     if (userCart.length > 0) {
@@ -108,27 +112,46 @@ const CartSection = ({ featureProducts }) => {
     },
   ]
 
-  const handleOrderInit = () => {
+  const handleOrderInit = (e) => {
+    e.preventDefault();
     let productId = []
     let quantity = []
     let shippingAddress = ''
-    sampleData.forEach(item =>
-      productId.push(item.productID)
+    cartProducts.forEach(item =>
+      productId.push(item._id)
     )
-    sampleData.forEach((item) => (
+    cartProducts.forEach((item) => (
       quantity.push({ qty: item.quantity })
     ))
-    let data = {
+    setOrderInit(prev => ({
+      ...prev,
       productId: productId,
-      quantity: quantity,
-      shippingAddressId: shippingAddress
-    }
+      quantity: quantity
+    }))
+    nav('/delivery-option')
     // console.log(data);
-    initOrder(data)
+  }
+
+  const handleRemoveFromCart = (id) => {
+    removeFromCart(id)
       .then(res => res ? (
-        console.log(res)
+        setUserCart([]),
+        toast.success('Product Added to Cart'),
+        getCartData()
+          .then(res => res ? (
+            setCartArray({
+              loaded: true,
+              no_of_carts: res.no_of_carts,
+              cart: res.cart
+            })
+          ) : (
+            ''
+          )
+          )
       ) : (''))
   }
+
+  // console.log(cartProducts);
 
   return (
     <>
@@ -155,6 +178,7 @@ const CartSection = ({ featureProducts }) => {
                     <CartProductCard
                       key={index}
                       product={item}
+                      handleRemoveFromCart={handleRemoveFromCart}
                       handleQuantityInc={handleQuantityInc}
                       handleQuantityDec={handleQuantityDec}
                     />
@@ -165,7 +189,7 @@ const CartSection = ({ featureProducts }) => {
             <div className='cart_Subtotal_Section section_Wrapper'>
               <p>Subtotal ({cartItemsNumber} items): <span> ₹{totalAmount}</span></p>
               <div className="cart_Footer_Right">
-                <button type='submit' className='submit-button' onClick={() => nav('/delivery-option')}><p>Checkout</p></button>
+                <button type='submit' className='submit-button' onClick={handleOrderInit}><p>Checkout</p></button>
               </div>
             </div>
 
@@ -205,6 +229,7 @@ const CartSection = ({ featureProducts }) => {
                         product={item}
                         handleQuantityInc={handleQuantityInc}
                         handleQuantityDec={handleQuantityDec}
+                        handleRemoveFromCart={handleRemoveFromCart}
                       />
                     ))) : ('')
                 }
@@ -220,7 +245,7 @@ const CartSection = ({ featureProducts }) => {
                 <p className='footer_Left_Text'>View price details</p>
               </div>
               <div className="cart_Footer_Right">
-                <button type='submit' className='submit-button' onClick={() => nav('/delivery-option')}><p>Checkout</p></button>
+                <button type='submit' className='submit-button' onClick={handleOrderInit}><p>Checkout</p></button>
               </div>
             </div>
             <Section2
@@ -231,6 +256,18 @@ const CartSection = ({ featureProducts }) => {
           </div>
         )
       }
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
     </>
 
   )

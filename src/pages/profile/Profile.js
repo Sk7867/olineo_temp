@@ -34,7 +34,7 @@ import { getIndiProduct } from '../../api/Product';
 
 const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
   const [profileState, setProfileState] = useState(1);
-  const [profilePic, setProfilePic] = useState({ locataion: '' })
+  const [profilePic, setProfilePic] = useState(null)
   const [newProfilePic, setNewProfilePic] = useState(null)
   const [addressData, setAddressData] = useState([])
   const matches = useMediaQuery("(min-width:768px)")
@@ -47,11 +47,11 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
 
   useEffect(() => {
     if (userContext && userContext.profilePic) {
-      setProfilePic({ locataion: userContext.profilePic.locataion })
+      setProfilePic(userContext.profilePic)
     } else if (newProfilePic !== null) {
-      setProfilePic({ locataion: newProfilePic })
+      setProfilePic(newProfilePic)
     } else {
-      setProfilePic({ locataion: defaultUserImage })
+      setProfilePic(defaultUserImage)
     }
   }, [userContext, newProfilePic])
   console.log(profilePic);
@@ -175,11 +175,11 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
       title: 'My Address',
       link: '/myaddress',
     },
-    {
-      image: walletIconBlue,
-      title: 'My Wallet',
-      link: '/',
-    },
+    // {
+    //   image: walletIconBlue,
+    //   title: 'My Wallet',
+    //   link: '/',
+    // },
     {
       image: logoutIconRed,
       title: 'Logout',
@@ -196,7 +196,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
       case 2: return (<OrderSection ordersList={ordersData} featureProducts={allProducts} onTheWay={true} delivered={true} />)
       case 3: return (<CartSection featureProducts={allProducts} />)
       case 4: return (<MyAddress setEditID={setEditID} setProfileState={setProfileState} border={true} />)
-      case 5: return (<EditDetails profileDetails={false} profilePicUpdate={true} />)
+      // case 5: return (<EditDetails profileDetails={false} profilePicUpdate={true} />)
       case 10: return (<AddressForm setProfileState={setProfileState} fromProfile={true} />)
       case 11: return (<AddressForm editID={editID} addressProp={loc.state} setProfileState={setProfileState} fromProfile={true} />)
 
@@ -212,7 +212,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
           setNewProfilePic(reader.result);
           setUserContext(prev => ({
             ...prev,
-            profilePic: { locataion: reader.result }
+            profilePic: reader.result
           }))
           // console.log(reader.result);
         }
@@ -231,7 +231,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
             <div>
               <div className='profile_User_Details'>
                 <div className='user_Profile_Pic'>
-                  <img src={profilePic.locataion} alt="" />
+                  <img src={profilePic} alt="" />
                   <div className='user_Camera_Icon'>
                     <img src={cameraIcon} alt="" />
                     <input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' />
@@ -281,7 +281,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
               <aside className="side_Section profile_Side_Section">
                 <div className='profile_User_Details'>
                   <div className='user_Profile_Pic'>
-                    <img src={profilePic.locataion} alt="" />
+                    <img src={profilePic} alt="" />
                     <div className='user_Camera_Icon'>
                       <img src={cameraIcon} alt="" />
                       <input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' />

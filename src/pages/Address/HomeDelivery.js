@@ -11,11 +11,25 @@ import AddressBox from '../../components/AddressBox/AddressBox';
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox';
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 import { getAddress } from '../../api/Address';
+import { completeOrder, initOrder } from '../../api/OrdersApi';
+import { Slide, toast, ToastContainer } from 'react-toastify'
+import { getCartData, removeFromCart } from '../../api/Cart';
 
-const HomeDelivery = ({ setEditID, addressSelected, setAddressSelected, setHeaderData }) => {
+toast.configure()
+const HomeDelivery = ({ setEditID, setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [disable, setDisable] = useState(true)
-  const { userAddress, setUserContext, setUserAddress } = useContext(UserDataContext)
+  const [addressSelected, setAddressSelected] = useState('')
+  const {
+    userAddress,
+    setUserContext,
+    setUserAddress,
+    orderInit,
+    setOrderInit,
+    setCartArray,
+    userCart,
+    setUserCart,
+  } = useContext(UserDataContext)
 
   const nav = useNavigate()
 
@@ -60,12 +74,55 @@ const HomeDelivery = ({ setEditID, addressSelected, setAddressSelected, setHeade
     },
   ]
 
+  useEffect(() => {
+    setOrderInit(prev => ({
+      ...prev,
+      shippingAddressId: addressSelected
+    }))
+  }, [addressSelected])
+
+
+  const handleOrderInit = (e) => {
+    e.preventDefault();
+    initOrder(orderInit)
+      .then(res => {
+        if (res) {
+          let orderId = res._id
+          completeOrder(orderId)
+            .then(res => {
+              if (res) {
+                console.log(res)
+                orderInit.productId.map(item => (
+                  removeFromCart(item)
+                    .then(res => {
+                      if (res) {
+                        setUserCart([])
+                        getCartData()
+                          .then(res => {
+                            if (res) {
+                              setCartArray({
+                                loaded: true,
+                                no_of_carts: res.no_of_carts,
+                                cart: res.cart
+                              })
+                              nav('/mycart')
+                            }
+                          })
+                      }
+                    })
+                ))
+              }
+            })
+        }
+      })
+  }
+
   return (
     <>
       <div className="page_Wrapper page_Margin_Top_Secondary">
         <BreadCrumbs data={breadCrumbsData} />
         <div className='desk_Page_Wrapper'>
-          <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
+          <aside className="side_Section" style={{ padding: '0' }}>
             <PriceDetailsBox HideDetails={false} />
           </aside>
           <div className='order_Page_Right'>
@@ -75,7 +132,7 @@ const HomeDelivery = ({ setEditID, addressSelected, setAddressSelected, setHeade
                 userAddress.no_of_address !== 0 ? (
                   userAddress.no_of_address !== 0 && userAddress.address.map((address, index) => (
                     <div className="home_Delivery_Option section_Wrapper" key={index}>
-                      <label htmlFor={address.id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setAddressSelected(address.id); setDisable(false) }}>
+                      <label htmlFor={address.id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setAddressSelected(address._id); setDisable(false) }}>
                         <input type="radio" name='Delivery Address' id={address.id} value={address.id} />
                         <span className="radio-custom"></span>
                         <AddressBox setEditID={setEditID}
@@ -100,7 +157,7 @@ const HomeDelivery = ({ setEditID, addressSelected, setAddressSelected, setHeade
             {
               matches && (
                 <div className='home_Delivery_Submit'>
-                  <button type='submit' className='submit-button ' disabled={disable} onClick={() => nav('/payment')}><p>Continue</p></button>
+                  <button type='submit' className='submit-button ' disabled={disable} onClick={handleOrderInit}><p>Continue</p></button>
                 </div>
               )
             }
@@ -108,13 +165,25 @@ const HomeDelivery = ({ setEditID, addressSelected, setAddressSelected, setHeade
             {
               !matches && (
                 <div className="address_Footer">
-                  <button type='submit' className='submit-button' disabled={disable} onClick={() => nav('/payment')}><p>Continue</p></button>
+                  <button type='submit' className='submit-button' disabled={disable} onClick={handleOrderInit}><p>Continue</p></button>
                 </div>
               )
             }
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
     </>
   )
 };
