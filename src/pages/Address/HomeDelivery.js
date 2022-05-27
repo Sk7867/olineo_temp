@@ -81,6 +81,7 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
     }))
   }, [addressSelected])
 
+  // console.log(orderInit);
 
   const handleOrderInit = (e) => {
     e.preventDefault();
@@ -88,10 +89,11 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
       .then(res => {
         if (res) {
           let orderId = res._id
+          // console.log(orderId);
           completeOrder(orderId)
             .then(res => {
               if (res) {
-                console.log(res)
+                // console.log(res)
                 orderInit.productId.map(item => (
                   removeFromCart(item)
                     .then(res => {

@@ -8,7 +8,9 @@ const headers = {
 
 export const addProductCatalogue = async (
   product,
+  technicalDetailsTable,
   dynamicHeader,
+  url,
   imagesArray,
   galleryImagesArray,
   L1Selected,
@@ -18,7 +20,9 @@ export const addProductCatalogue = async (
   classificationSelected,
   flatDiscountDetails,
   comboOfferDetails,
-  containerDetails
+  containerDetails,
+  alternateProds,
+  bankOffers
 ) => {
   let addProductResponse
 
@@ -26,6 +30,7 @@ export const addProductCatalogue = async (
     dynamicHeader: dynamicHeader,
     name: product.name,
     ean: product.EAN,
+    slug: url,
     description: product.description,
     type: L2Selected,
     stock: product.stock,
@@ -34,35 +39,42 @@ export const addProductCatalogue = async (
     hierarchyL2: L2Selected,
     hierarchyL3: L3Selected,
     classification: classificationSelected,
-    modelNo: parseInt(product.modelNumber),
-    brand: product.brand,
-    color: product.color,
+    modelNo: technicalDetailsTable.modelNumber,
+    brand: technicalDetailsTable.brand,
+    color: technicalDetailsTable.color,
     HSN: product.HSN,
     images: imagesArray,
     gallery: galleryImagesArray,
     inwardDate: product.inwardDate,
-    productInfo: {
-      weight: product.weight,
-      size: product.size,
-      brand: product.brand,
-      modelYear: product.modelYear,
-      modelNo: product.modelNumber,
-      color: product.color,
-    },
+    productInfo: technicalDetailsTable,
     price: {
       mrp: product.MRP,
       mop: product.MOP,
-      discountedPrice: discountedPrice
+      discountPrice: discountedPrice
     },
     discount: {
       flatDiscount: flatDiscountDetails,
       combo: comboOfferDetails,
       conetainer: containerDetails
-    }
+    },
+    altProduct: alternateProds,
+    offers: bankOffers
   }
-  console.log(addProductBody);
+  // console.log(addProductBody);
 
   await axios.post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(addProductBody), { headers })
+    .then(res => {
+      addProductResponse = res
+    })
+
+  return addProductResponse
+}
+
+export const addBulkOrder = async (order) => {
+  let addProductResponse
+  // console.log(order);
+
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(order), { headers })
     .then(res => {
       addProductResponse = res
     })
@@ -83,10 +95,60 @@ export const deleteProductCatalogue = async (id) => {
 
 
 //Update Product From Catalogue
-export const updateProductCatalogue = async (id) => {
+export const updateProductCatalogue = async (
+  product,
+  technicalDetailsTable,
+  dynamicHeader,
+  url,
+  imagesArray,
+  galleryImagesArray,
+  L1Selected,
+  L2Selected,
+  L3Selected,
+  discountedPrice,
+  classificationSelected,
+  flatDiscountDetails,
+  comboOfferDetails,
+  containerDetails,
+  alternateProds,
+  bankOffers
+) => {
   let updateProductResponse
-  let updateProductBody = {}
-  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${id}`, JSON.stringify(updateProductBody), { headers })
+  let updateProductBody = {
+    dynamicHeader: dynamicHeader,
+    name: product.name,
+    ean: product.EAN,
+    slug: url,
+    description: product.description,
+    type: L2Selected,
+    stock: product.stock,
+    qty: product.stock,
+    hierarchyL1: L1Selected,
+    hierarchyL2: L2Selected,
+    hierarchyL3: L3Selected,
+    classification: classificationSelected,
+    modelNo: technicalDetailsTable.modelNumber,
+    brand: technicalDetailsTable.brand,
+    color: technicalDetailsTable.color,
+    HSN: product.HSN,
+    images: imagesArray,
+    gallery: galleryImagesArray,
+    inwardDate: product.inwardDate,
+    productInfo: technicalDetailsTable,
+    price: {
+      mrp: product.MRP,
+      mop: product.MOP,
+      discountPrice: discountedPrice
+    },
+    discount: {
+      flatDiscount: flatDiscountDetails,
+      combo: comboOfferDetails,
+      conetainer: containerDetails
+    },
+    altProduct: alternateProds,
+    offers: bankOffers
+  }
+  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${product.ID}`, JSON.stringify(updateProductBody), { headers })
     .then(res => {
       updateProductResponse = res
     })

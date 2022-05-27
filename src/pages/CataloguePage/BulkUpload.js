@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as XLSX from 'xlsx/xlsx.mjs';
+import { addBulkOrder, addProductCatalogue } from '../../api/CatalogueApi';
 
 
 const BulkUpload = ({ setHeaderData }) => {
@@ -32,6 +33,7 @@ const BulkUpload = ({ setHeaderData }) => {
     const columnData = XLSX.utils.sheet_to_json(workSheet, {
       header: 1,
       defval: '',
+      blankrows: false,
     })
     setfileUploaded({
       loaded: true,
@@ -43,11 +45,15 @@ const BulkUpload = ({ setHeaderData }) => {
     })
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addBulkOrder(fileJsonData.fileData)
+      .then(res => console.log(res))
+  }
 
 
-
-  // console.log(fileJsonData);
-  // console.log(fileUploaded);
+  console.log(fileJsonData);
+  console.log(fileUploaded);
 
   return (
     <>
@@ -63,41 +69,46 @@ const BulkUpload = ({ setHeaderData }) => {
             onChange={(e) => handleFile(e)} />
           {
             fileUploaded.loaded && (
-              <div className='catelogue_Table'>
-                <table>
-                  <thead>
-                    <tr>
+              <>
+                <div className='catelogue_Table'>
+                  <table>
+                    <thead>
+                      <tr>
+                        {
+                          fileUploaded.fileData[0].map((item, index) => (
+                            <th key={index} >{item}</th>
+                          ))
+                        }
+                        <th>Image Files Upload</th>
+                        <th>Image Files Preview</th>
+                      </tr>
+                    </thead>
+                    <tbody>
                       {
-                        fileUploaded.fileData[0].map((item, index) => (
-                          <th key={index} >{item}</th>
+                        fileUploaded.fileData.map((item, index) => (
+                          index === 0 ? ('') : (
+                            <tr key={index} >
+                              {
+                                item.map((itm, index) => (
+                                  <td key={index} >{itm}</td>
+                                ))
+                              }
+                              <td><input type="file" /></td>
+                              <td>image files 2</td>
+                            </tr>
+                          )
                         ))
                       }
-                      <th>Image Files Upload</th>
-                      <th>Image Files Preview</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {
-                      fileUploaded.fileData.map((item, index) => (
-                        index === 0 ? ('') : (
-                          <tr key={index} >
-                            {
-                              item.map((itm, index) => (
-                                <td key={index} >{itm}</td>
-                              ))
-                            }
-                            <td><input type="file" /></td>
-                            <td>image files 2</td>
-                          </tr>
-                        )
-                      ))
-                    }
-                  </tbody>
-                  <tbody>
+                    </tbody>
+                    <tbody>
 
-                  </tbody>
-                </table>
-              </div>
+                    </tbody>
+                  </table>
+                </div>
+                <div className={'button-Container'}>
+                  <button type='submit' className='submit-button' onClick={handleSubmit} ><p>Submit</p></button>
+                </div>
+              </>
             )
           }
         </div>

@@ -5,6 +5,7 @@ import { getUser, getUserPic, verifyOtp, verifyOtpLogin, verifyOtpSignup } from 
 import { UserDataContext } from '../Contexts/UserContext'
 import { Slide, toast, ToastContainer } from 'react-toastify'
 import { getCartData } from '../api/Cart'
+import { getAllOrder } from '../api/OrdersApi'
 
 toast.configure()
 const OtpValid = ({ loginRedirect }) => {
@@ -14,7 +15,7 @@ const OtpValid = ({ loginRedirect }) => {
   const [seconds, setSeconds] = useState(60)
   // const [resend, setResend] = useState(true)
   const nav = useNavigate()
-  const { setUserContext, setUserCart, setCartArray } = useContext(UserDataContext)
+  const { setUserContext, setUserCart, setCartArray, userOrderData, setUserOrderData } = useContext(UserDataContext)
 
   const handleLength = (length) => {
     if (length === 6) {
@@ -75,6 +76,17 @@ const OtpValid = ({ loginRedirect }) => {
                 ...prev,
                 profilePic: res
               }))
+            }
+          }),
+        getAllOrder(res.JWT)
+          .then(res => {
+            if (res) {
+              // console.log(res);
+              setUserOrderData({
+                loaded: true,
+                no_of_orders: res.no_of_orders,
+                orders: res.orders
+              })
             }
           })
         // getCartData()

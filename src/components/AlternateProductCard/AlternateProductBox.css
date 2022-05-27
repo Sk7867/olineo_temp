@@ -18,6 +18,7 @@
   width: 100%;
   max-width: 100px;
   max-height: 100px;
+  
 }
 
 .product_Box_Heading{
@@ -73,6 +74,14 @@
 
   .heading_Spacing{
     padding: 0.625rem;
+  }
+
+  .product_Box_Heading{
+    display: none;
+  }
+
+  .product_Box_Top_Section img {
+    border-radius: 0.5rem;
   }
 }
  .product_Unavailable{

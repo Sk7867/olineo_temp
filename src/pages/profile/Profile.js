@@ -54,8 +54,6 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
       setProfilePic(defaultUserImage)
     }
   }, [userContext, newProfilePic])
-  console.log(profilePic);
-
 
   useEffect(() => {
     getAddress()
@@ -71,7 +69,6 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
       })
   }, [])
 
-  console.log(userAddress);
   useEffect(() => {
     getCartData()
       .then(res => {
@@ -100,8 +97,6 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
         })
     ))
   }, [cartArray])
-
-  console.log(profilePic)
 
   useEffect(() => {
     setHeaderData({
@@ -220,7 +215,6 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
       reader.readAsDataURL(e.target.files[0])
     }
   }
-  console.log(newProfilePic);
 
   return (
     <>
@@ -230,8 +224,8 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
           !matches && (
             <div>
               <div className='profile_User_Details'>
-                <div className='user_Profile_Pic'>
-                  <img src={profilePic} alt="" />
+                <div className='user_Profile_Pic_Container'>
+                  <div className="user_Profile_Pic"><img src={profilePic} alt="" /></div>
                   <div className='user_Camera_Icon'>
                     <img src={cameraIcon} alt="" />
                     <input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' />
@@ -280,8 +274,8 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
             <div className='desk_Page_Wrapper'>
               <aside className="side_Section profile_Side_Section">
                 <div className='profile_User_Details'>
-                  <div className='user_Profile_Pic'>
-                    <img src={profilePic} alt="" />
+                  <div className='user_Profile_Pic_Container'>
+                    <div className="user_Profile_Pic"><img src={profilePic} alt="" /></div>
                     <div className='user_Camera_Icon'>
                       <img src={cameraIcon} alt="" />
                       <input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' />
