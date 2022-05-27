@@ -64,7 +64,7 @@
   margin: 0;
 }
 
-.product_Section_1 .product_Price_Desc .product_Availability, .product_Section_1 .product_Offer_Counter p{
+.product_Section_1 .product_Price_Desc .product_Availability, .product_Section_1 .product_Offer_Counter p, .product_Discount{
   letter-spacing: -0.015em;
   color: #3F8F00;
   font-weight: 600;
@@ -398,13 +398,13 @@
     margin: 0 0 0.75rem;
   }
 
-  .product_Section_1 .product_Price_Desc .product_Original_Price, .product_Section_1 .product_Price_Desc .product_Availability{
+  .product_Section_1 .product_Price_Desc .product_Original_Price, .product_Section_1 .product_Price_Desc .product_Availability, .product_Discount{
     font-size: 1.5rem;
     line-height: 2.25rem;
     font-weight: 500;
   }
 
-  .product_Section_1 .product_Price_Desc .product_Original_Price{
+  .product_Section_1 .product_Price_Desc .product_Original_Price, .product_Discount{
     font-weight: 600;
   }
 
@@ -521,11 +521,15 @@
     min-height: 424px;
     max-width: 425px;
     max-height: 425px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .product_Side_Section .image_Preview_Side_Section .image_Preview_Selected img {
-    max-width: 425px;
-    max-height: 425px;
+    max-width: 420px;
+    max-height: 415px;
+    margin: 0 auto;
   }
 
   .image_Preview_Side_Section .product_Thumbnails .thumbnail{

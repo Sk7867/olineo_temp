@@ -7,16 +7,21 @@
   background: #F8F9FA;
 }
 
-.user_Profile_Pic{
+.user_Profile_Pic_Container{
   margin: 0 0 0.5rem;
+  position: relative;
+}
+
+.user_Profile_Pic{
   max-height: 120px;
   max-width: 120px;
-  position: relative;
 }
 
 .user_Profile_Pic img{
   width: 100%;
   height: 100%;
+  border-radius: 50%;
+  min-width: 120px;
 }
 
 .user_Camera_Icon{
