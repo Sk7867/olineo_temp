@@ -5,7 +5,7 @@ import './ProductOfferTag.css'
 const ProductOfferTag = ({ offer }) => {
   return (
     <div className='offer_Tag'>
-      <p>{offer}</p>
+      <p>{offer}% off</p>
     </div>
   )
 }

@@ -25,7 +25,7 @@ const AddOffers = ({ setHeaderData }) => {
     'coupon'
   ]
 
-  console.log(eanEntered);
+  // console.log(eanEntered);
 
   useEffect(() => {
     setHeaderData({
@@ -53,7 +53,7 @@ const AddOffers = ({ setHeaderData }) => {
     })
   }
 
-  console.log(selectedProduct);
+  // console.log(selectedProduct);
 
   const searchComboProduct = (e) => {
     e.preventDefault();

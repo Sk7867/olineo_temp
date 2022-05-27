@@ -8,11 +8,14 @@ import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 
 //CSS
 import './OrderDetails.css'
+import { getOrderStatus } from '../../api/OrdersApi';
 
 const OrderDetails = ({ setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [editAddress, setEditAddress] = useState({});
+  const [product, setProduct] = useState({})
   const loc = useLocation()
+  const [orderNumber, setOrderNumber] = useState('')
   const nav = useNavigate()
   const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts } = useContext(UserDataContext)
 
@@ -26,6 +29,21 @@ const OrderDetails = ({ setHeaderData }) => {
       header3Profile: false,
     })
   }, []);
+
+  useEffect(() => {
+    if (loc && loc.state) {
+      setProduct(loc.state)
+      // console.log(loc.state);
+      let orderId = loc.state._id
+      getOrderStatus(orderId)
+        .then(res => {
+          // console.log(res)
+          setOrderNumber(res.orderId)
+        })
+    }
+  }, [loc])
+
+  //console.log(product);
 
   const breadCrumbsData = [
     {
@@ -72,7 +90,7 @@ const OrderDetails = ({ setHeaderData }) => {
         <div className="order_Details_Wrapper">
           <div className="order_Details_Header section_Wrapper">
             <p className='header_Order_Status'>Arriving on 25th February</p>
-            <p className='header_Order_Number'>Order Number : 444000</p>
+            <p className='header_Order_Number'>Order Number : {orderNumber} </p>
           </div>
           <div className="order_Track_Container section_Wrapper">
             <div className="order_Track_Wrapper">
@@ -91,11 +109,11 @@ const OrderDetails = ({ setHeaderData }) => {
           </div>
           {
             matches ? (
-              <Link to={'/order-cancel'} className="order_Cancel_Button">
+              <Link to={'/order-cancel'} state={product} className="order_Cancel_Button">
                 <button type='submit' className='submit-button ' ><p>Request order cancellation</p></button>
               </Link>
             ) : (
-              <Link to={'/order-cancel'} className="order_Cancel_Button">
+              <Link to={'/order-cancel'} state={product} className="order_Cancel_Button">
                 <p>Request order cancellation</p>
               </Link>
             )

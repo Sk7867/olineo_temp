@@ -66,6 +66,10 @@
   max-height: 24px;
 }
 
+.user_profile img{
+  border-radius: 50%;
+}
+
 .storeIcon p, .cartIcon p, .user_profile p{
   display: none;
   margin: 0;

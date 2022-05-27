@@ -32,11 +32,11 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
 
   useEffect(() => {
     if (userContext && userContext.profilePic) {
-      setProfilePic({ locataion: userContext.profilePic.locataion })
+      setProfilePic(userContext.profilePic)
     } else if (newProfilePic !== null) {
-      setProfilePic({ locataion: newProfilePic })
+      setProfilePic(newProfilePic)
     } else {
-      setProfilePic({ locataion: defaultUserImage })
+      setProfilePic(defaultUserImage)
     }
   }, [userContext, newProfilePic])
 
@@ -212,7 +212,7 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
     }))
     updateUser(userContext)
       .then(res => res ? toast.success('Details Updated Successfully') : toast.error('Incomplete Data'))
-    saveUserPic(userContext.profilePic.locataion)
+    saveUserPic(userContext.profilePic)
       .then(res => console.log(res))
       .catch(err => console.log(err))
   }
@@ -223,8 +223,8 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
         {
           profileDetails && (
             <div className='profile_User_Details'>
-              <div className='user_Profile_Pic'>
-                <img src={profilePic.locataion} alt="" />
+              <div className='user_Profile_Pic_Container'>
+                <div className="user_Profile_Pic"><img src={profilePic} alt="" /></div>
                 <div className='user_Camera_Icon'>
                   <img src={cameraIcon} alt="" />
                   <input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' />

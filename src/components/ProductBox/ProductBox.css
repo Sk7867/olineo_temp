@@ -33,6 +33,10 @@
   border-radius: 0.5rem;
 }
 
+.productbox_Container img {
+  max-width: 165px;
+}
+
 .grid_card{
   max-width: 158px;
   max-height: 158px;

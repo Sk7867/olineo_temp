@@ -10,6 +10,7 @@ import Section1 from '../components/Section1/Section1'
 import product1 from '../assets/png/product_1.png'
 import product2 from '../assets/png/product_2.png'
 import bannerImage from '../assets/png/hero_banner.png'
+import ScartchCardComp from '../components/ScratchCard/ScartchCard'
 
 
 const Home = ({ setHeaderData, allProducts }) => {
@@ -19,6 +20,7 @@ const Home = ({ setHeaderData, allProducts }) => {
     product_name: '',
     product_price: '',
   })
+  const [modalShow, setModalShow] = useState(false)
   // const [sec2Data, setSec2Data] = useState([])
 
   useEffect(() => {
@@ -314,6 +316,7 @@ const Home = ({ setHeaderData, allProducts }) => {
             boxClass: 'grid_card',
           }}
         />
+
       </div>
 
     </>

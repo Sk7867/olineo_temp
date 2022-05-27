@@ -19,8 +19,8 @@ const OfferCard = ({ offer }) => {
       */  }
       <div className='offer_Card_Container'>
         <div>
-          <p className="offer_Card_Name">{offer.offer_Name}</p>
-          <p className="offer_Card_Desc">{offer.offer_desc}</p>
+          <p className="offer_Card_Name">Bank Offer</p>
+          <p className="offer_Card_Desc">{offer.offerName}</p>
         </div>
         {
           matches ? (
@@ -29,7 +29,7 @@ const OfferCard = ({ offer }) => {
               <img src={arrowRightBlue} alt="" />
             </div>
           ) : (
-            <Link to={offer.offer_Link} state={offer} className="offer_Card_Link">
+            <Link to={'/bank-offer'} state={offer} className="offer_Card_Link">
               <p>See more</p>
               <img src={arrowRightBlue} alt="" />
             </Link>

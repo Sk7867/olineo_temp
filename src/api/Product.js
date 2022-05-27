@@ -35,14 +35,13 @@ export const getIndiProduct = async (id) => {
 
 //GET SEARCHED PRODUCT
 export const getSearchedProduct = async (query) => {
-  let indiProductResponse = true
-  console.log(query);
+  let indiProductResponse
+  // console.log(query);
 
-  // await axios.get(`${process.env.REACT_APP_BASE_URL}/product/${id}`, { headers })
-  //   .then(res => {
-  //     indiProductResponse = res.data.data.product
-  //     // console.log(indiProductResponse);
-  //   })
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/product?${query}`, { headers })
+    .then(res => {
+      indiProductResponse = res.data.data.products
+    })
 
   return indiProductResponse
 }

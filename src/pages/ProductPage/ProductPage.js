@@ -21,6 +21,7 @@ import OfferCard from '../../components/OfferCard/OfferCard'
 import AlternateProductBox from '../../components/AlternateProductCard/AlternateProductBox'
 import { getIndiProduct } from '../../api/Product'
 import SkeletonElement from '../../components/Skeletons/SkeletonElement'
+import ScartchCardComp from '../../components/ScratchCard/ScartchCard'
 
 toast.configure()
 const ProductPage = ({ setHeaderData }) => {
@@ -32,16 +33,17 @@ const ProductPage = ({ setHeaderData }) => {
   const [preOrder, setPreOrder] = useState(false)
   const [previewImageSelected, setPreviewImageSelected] = useState(null)
   const [productInfo, setProductInfo] = useState([])
-  const [discountedPrice, setDiscountedPrice] = useState('')
   const [productData, setProductData] = useState({
     product_loaded: false,
     product_Id: '',
     product_Heading: '',
     product_name: '',
+    product_color: '',
     product_image: '',
     product_price: {
       mrp: '',
       mop: '',
+      discountPrice: ''
     },
     product_Disccount: {},
     offer_Deadline: 'Deal ends in 14h 17m 04s',
@@ -49,65 +51,13 @@ const ProductPage = ({ setHeaderData }) => {
     product_image_List: [],
     product_Gallery_Image: [],
     product_Description: [],
-    product_Alternate: [
-      {
-        id: 1,
-        alternate_Heading: '4GB RAM & 64GB Storage',
-        alternate_Color: 'Red',
-        alternate_Price: '1,499',
-        stock_Available: true,
-      },
-      {
-        id: 2,
-        alternate_Heading: '6GB RAM & 128GB Storage',
-        alternate_Color: 'White',
-        alternate_Price: '1,499',
-        stock_Available: false,
-      },
-      {
-        id: 3,
-        alternate_Image: defaultImage,
-        alternate_Color: 'Green',
-        alternate_Price: '1,499',
-        stock_Available: false,
-      },
-      {
-        id: 4,
-        alternate_Image: defaultImage,
-        alternate_Color: 'Blue',
-        alternate_Price: '1,499',
-        stock_Available: true,
-      },
-      {
-        id: 5,
-        alternate_Image: defaultImage,
-        alternate_Color: 'Red',
-        alternate_Price: '1,499',
-        stock_Available: true,
-      },
-      {
-        id: 6,
-        alternate_Image: defaultImage,
-        alternate_Color: 'White',
-        alternate_Price: '1,499',
-        stock_Available: true,
-      },
-      {
-        id: 7,
-        alternate_Image: defaultImage,
-        alternate_Color: 'Green',
-        alternate_Price: '1,499',
-        stock_Available: false,
-      },
-      {
-        id: 9,
-        alternate_Image: defaultImage,
-        alternate_Color: 'Blue',
-        alternate_Price: '1,499',
-        stock_Available: true,
-      },
-    ]
   })
+  const [colorAlternateProds, setColorAlternateProds] = useState([])
+  const [specAlternateProds, setSpecAlternateProds] = useState([])
+  const [modalShow, setModalShow] = useState(false)
+  const [alternateColorean, setAlternateColorean] = useState([])
+  const [alternateSpecean, setAlternateSpecean] = useState([])
+  const [productBankOffers, setProductBankOffers] = useState([])
   // console.log(loc);
 
   useEffect(() => {
@@ -120,17 +70,6 @@ const ProductPage = ({ setHeaderData }) => {
       header3Profile: true,
     })
   }, []);
-
-  useEffect(() => {
-    if (productData.product_price.mop && productData.product_Disccount.flatDiscount.value) {
-      let discount = productData.product_Disccount.flatDiscount.value
-      let mop = productData.product_price.mop
-      let tempPrice = Math.floor(mop - ((discount * mop / 100)))
-      // console.log(tempPrice);
-      setDiscountedPrice(tempPrice)
-    }
-  }, [productData])
-
 
   useEffect(() => {
     if (loc.state) {
@@ -149,6 +88,7 @@ const ProductPage = ({ setHeaderData }) => {
                 product_Id: res._id,
                 product_Heading: res.dynamicHeader,
                 product_name: res.name,
+                product_color: res.color,
                 product_price: res.price,
                 product_Description: splitDesc,
                 product_image_List: images,
@@ -159,23 +99,39 @@ const ProductPage = ({ setHeaderData }) => {
                 images[0]
               )
               setProductInfo(Object.entries(res.productInfo))
+              let colorArray = [...res.altProduct.color]
+              let specArray = [...res.altProduct.spec]
+              colorArray = colorArray.filter(item => item);
+              specArray = specArray.filter(item => item);
+              setAlternateColorean(colorArray)
+              setAlternateSpecean(specArray)
+              setProductBankOffers(res.offers)
             }
           })
       }
     }
   }, [loc])
-  console.log(productData);
 
-  // Search Alternate products from all Products
-  // useEffect(() => {
-  //   if (loc.state) {
-  //     if (productData.product_name) {
-  //       let alternateArray = allProducts.products.filter(item => item.productInfo.brand === productInfo.brand)
-  //       console.log(alternateArray);
-  //     }
-  //   }
-  // }, [loc, productData])
-
+  useEffect(() => {
+    if (alternateColorean.length > 0) {
+      let demo = allProducts.products.filter(item => alternateColorean.includes(item.ean))
+      if (demo !== undefined) {
+        let ind = colorAlternateProds.findIndex(obj => obj.ean === demo[0].ean)
+        if (ind === -1) {
+          setColorAlternateProds([...colorAlternateProds, demo[0]])
+        }
+      }
+    }
+    if (alternateSpecean.length > 0) {
+      let demo = allProducts.products.filter(item => alternateColorean.includes(item.ean))
+      if (demo !== undefined) {
+        let ind = specAlternateProds.findIndex(obj => obj.ean === demo[0].ean)
+        if (ind === -1) {
+          setSpecAlternateProds([...specAlternateProds, demo[0]])
+        }
+      }
+    }
+  }, [alternateColorean, alternateSpecean])
 
 
   const sec5Data = [
@@ -314,7 +270,7 @@ const ProductPage = ({ setHeaderData }) => {
       nav('/login')
     }
   }
-  // console.log(userContext);
+  // console.log(productBankOffers);
 
 
   return (
@@ -410,34 +366,33 @@ const ProductPage = ({ setHeaderData }) => {
                   }
                 </Carousel>
               </div>
-              <div className="product_Price_Desc">
-                {productData.product_loaded === false ? (
-                  <SkeletonElement type={"productPrice"} />
+              {
+                productData.product_loaded ? (
+
+                  <div className="product_Price_Desc">
+                    <p className="product_Discount_Price">
+                      ₹{productData.product_price.discountPrice ? productData.product_price.discountPrice : productData.product_price.mop}
+                    </p>
+                    <p className="product_Original_Price">
+                      ₹{productData.product_price.mrp}
+                    </p>
+                    <p className='product_Discount'>
+                      {productData.product_Disccount.flatDiscount.value}%
+                    </p>
+                    <p className="product_Availability">
+                      {
+                        preOrder ? ('') : (
+                          (productData.product_Instock > 10) ? 'In stock' :
+                            (productData.product_Instock < 10 && productData.product_Instock >= 1) ? 'Few in stock' : 'Out of stock'
+                        )
+                      }
+                    </p>
+                  </div>
                 ) : (
-                  <p className="product_Discount_Price">
-                    ₹{discountedPrice}
-                  </p>
-                )}
-                {productData.product_loaded === false ? (
-                  <SkeletonElement type={"productPrice"} />
-                ) : (
-                  <p className="product_Original_Price">
-                    ₹{productData.product_price.mrp}
-                  </p>
-                )}
-                {productData.product_loaded === false ? (
-                  <SkeletonElement type={"productPrice"} />
-                ) : (
-                  <p className="product_Availability">
-                    {
-                      preOrder ? ('') : (
-                        (productData.product_Instock > 10) ? 'In stock' :
-                          (productData.product_Instock < 10 && productData.product_Instock >= 1) ? 'Few in stock' : 'Out of stock'
-                      )
-                    }
-                  </p>
-                )}
-              </div>
+                  <SkeletonElement type={"productTitle"} />
+                )
+              }
+
               <div className="product_Offer_Counter">
                 <p>{
                   preOrder ? ('Deal is 40% Claimed') : (`${productData.offer_Deadline}`)
@@ -453,7 +408,7 @@ const ProductPage = ({ setHeaderData }) => {
                     <div className="product_Offer_Cards_Container">
                       <div className="product_Offer_Cards_Wrapper">
                         {
-                          bankOffersData.map((offer, index) => (
+                          productBankOffers.map((offer, index) => (
                             <OfferCard offer={offer} key={index} />
                           ))
                         }
@@ -469,27 +424,26 @@ const ProductPage = ({ setHeaderData }) => {
                 matches ? (
                   <>
                     <div className="product_Alternate_Section_Header">
-                      <p>Color : <span> Black</span></p>
+                      <p>Color : <span>{productData.product_color}</span></p>
                     </div>
                     <div className="product_Alternate_Section_Body">
                       {
-                        productData.product_Alternate.map((product) => (
-                          product.alternate_Image && (
-                            <AlternateProductBox key={product.id} product={product} />
+                        colorAlternateProds.map((product) => (
+                          product.images[0] && (
+                            <AlternateProductBox key={product._id} product={product} />
                           )
                         ))
                       }
                     </div>
                     <div className="product_Alternate_Section_Footer">
                       <p>
-                        Size :
-                        <span> 4GB RAM & 64GB Storgae</span>
+                        Size : <span> 4GB RAM & 64GB Storgae</span>
                       </p>
 
                     </div>
                     <div className='product_Alternate_Footer_Cards'>
                       {
-                        productData.product_Alternate.map((product) => (
+                        specAlternateProds.map((product) => (
                           product.alternate_Heading && (
                             <AlternateProductBox key={product.id} product={product} dataOnly={true} />
                           )
@@ -501,13 +455,13 @@ const ProductPage = ({ setHeaderData }) => {
                   <Accordion>
                     <Accordion.Item eventKey="0">
                       <Accordion.Header>
-                        <p>Color : <span> Black</span></p>
+                        <p>Color : <span>{productData.product_color}</span></p>
                       </Accordion.Header>
                       <Accordion.Body>
                         <div className="product_Offer_Cards_Container">
                           <div className="product_Offer_Cards_Wrapper">
                             {
-                              productData.product_Alternate.map((product) => (
+                              colorAlternateProds.map((product) => (
                                 <AlternateProductBox key={product.id} product={product} />
                               ))
                             }
@@ -521,7 +475,7 @@ const ProductPage = ({ setHeaderData }) => {
             </div>
 
             <div className="product_Delivery_Section section_Wrapper">
-              <p className='product_Delivery_Details'>
+              <p className='product_Delivery_Details' onClick={() => setModalShow(true)} >
                 <span>Free delivery: Thursday, Feb 24 </span>
                 on orders over ₹499
               </p>
@@ -553,7 +507,7 @@ const ProductPage = ({ setHeaderData }) => {
                   <div className="product_Offer_Cards_Container">
                     <div className="product_Offer_Cards_Wrapper">
                       {
-                        bankOffersData.map((offer, index) => (
+                        productBankOffers.map((offer, index) => (
                           <OfferCard offer={offer} key={index} />
                         ))
                       }
@@ -635,6 +589,7 @@ const ProductPage = ({ setHeaderData }) => {
         pauseOnHover
         transition={Slide}
       />
+      <ScartchCardComp modalShow={modalShow} setModalShow={setModalShow} />
     </>
   )
 }

@@ -33,13 +33,13 @@ import { getSearchedProduct } from '../../api/Product'
 const HeaderBar2 = ({ userLoggedIn, headerData }) => {
   const [modalShow, setModalShow] = useState(false)
   const [sidebar, setSidebar] = useState(false)
-  const [useDP, setUseDP] = useState(true)
   const [userDPPic, setUserDPPic] = useState({ locataion: '' })
   const [filteredData, setFilteredData] = useState([])
   const [searchedQuery, setSearchedQuery] = useState('')
+  const [manualQuery, setManualQuery] = useState('')
   const nav = useNavigate()
   const { header3Cond, headerText, categoriesCond, header3Store, header3Cart, header3Profile } = headerData
-  const { userContext, allProducts, } = useContext(UserDataContext)
+  const { userContext, allProducts, searchedProduct, setSearchedProduct } = useContext(UserDataContext)
   // console.log(headerData);
   // console.log(allProducts);
 
@@ -49,13 +49,12 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
 
   useEffect(() => {
     if (userContext && userContext.profilePic) {
-      setUserDPPic({ locataion: userContext.profilePic.locataion })
+      setUserDPPic(userContext.profilePic)
     } else {
-      setUserDPPic({ locataion: userDefaultDP })
+      setUserDPPic(userDefaultDP)
     }
 
   }, [userContext])
-
 
   const categoriesList = [
     {
@@ -66,159 +65,84 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
     {
       categoryImage: mobileGreenDotted,
       categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryLink: 'Mobiles',
     },
     {
       categoryImage: mobileBlueDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryName: 'Tablets',
+      categoryLink: 'Tablets',
     },
     {
       categoryImage: mobilePinkDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryName: 'Soundbar',
+      categoryLink: 'Soundbar',
     },
     {
       categoryImage: mobileGreenDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryName: 'Bluetooth Speaker',
+      categoryLink: 'Bluetooth Speaker',
     },
     {
       categoryImage: mobileBlueDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryName: 'TWS',
+      categoryLink: 'TWS',
     },
     {
       categoryImage: mobilePinkDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryName: 'Wired Earphones',
+      categoryLink: 'Wired Earphones',
     },
     {
       categoryImage: mobileGreenDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryName: 'Wired Headphones',
+      categoryLink: 'Wired Headphones',
     },
     {
       categoryImage: mobileBlueDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryName: 'Bluetooth Neckband',
+      categoryLink: 'Bluetooth Neckband',
     },
     {
       categoryImage: mobilePinkDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryName: 'Adaptor',
+      categoryLink: 'Adaptor',
     },
     {
       categoryImage: mobileGreenDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryName: 'Charging Cable',
+      categoryLink: 'Charging Cable',
     },
     {
       categoryImage: mobileBlueDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryName: 'Powerbank',
+      categoryLink: 'Powerbank',
     },
     {
       categoryImage: mobilePinkDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryName: 'Smart TV',
+      categoryLink: 'Smart TV',
     },
     {
       categoryImage: mobileGreenDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryName: 'Wifi Smart Speaker',
+      categoryLink: 'Wifi Smart Speaker',
     },
     {
       categoryImage: mobileBlueDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobilePinkDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobileGreenDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobileBlueDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobilePinkDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobileGreenDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobileBlueDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobilePinkDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobileGreenDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobileBlueDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobilePinkDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobileGreenDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobileBlueDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobilePinkDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobileGreenDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobileBlueDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
-    },
-    {
-      categoryImage: mobilePinkDotted,
-      categoryName: 'Mobiles',
-      categoryLink: '',
+      categoryName: 'Miscellaneous',
+      categoryLink: 'Miscellaneous',
     },
   ]
 
   const handleFilter = (e) => {
     const searchWord = e.target.value
     const newFilter = allProducts.products.filter((value) => {
-      return value.name.toLowerCase().includes(searchWord)
+      if (
+        value.name.toLowerCase().includes(searchWord) ||
+        value.productInfo.brand.toLowerCase().includes(searchWord)
+      ) {
+        return value
+      }
     })
 
     if (searchWord === '') {
@@ -231,16 +155,62 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
   }
   // console.log(filteredData);
 
+  const handleKeyDown = (e) => {
+    let value = e.target.value
+    if (e.code === 'Enter') {
+      let searchTerm = 'name=' + value
+      setSearchedQuery(value)
+      getSearchedProduct(searchTerm)
+        .then(res => {
+          if (res) {
+            // console.log(res);
+            setSearchedProduct({
+              loaded: true,
+              products: res,
+              no_of_products: res.length
+            })
+            nav(`/${searchTerm}`)
+          }
+        })
+    }
+  }
+
   const handleSearchClick = (value) => {
-    nav(`/${value.name}`)
+    let searchKey = Object.keys(value)
+    let searchValue = Object.values(value)
+    let searchTerm = searchKey[0] + '=' + searchValue[0]
     setFilteredData([])
     setSearchedQuery('')
-    // let query = {productInfo.brand = `${value.name}` }
-    // getSearchedProduct()
-    // .then(res => res ? (
-    //   console.log(value),
-    // ) : (''))
+    getSearchedProduct(searchTerm)
+      .then(res => {
+        if (res) {
+          // console.log(res);
+          setSearchedProduct({
+            loaded: true,
+            products: res,
+            no_of_products: res.length
+          })
+          nav(`/${value.name}`)
+        }
+      })
   }
+
+  const handleCategorySearch = (value) => {
+    let searchTerm = 'hierarchyL2=' + value
+    getSearchedProduct(searchTerm)
+      .then(res => {
+        if (res) {
+          setSearchedProduct({
+            loaded: true,
+            products: res,
+            no_of_products: res.length
+          })
+          nav(`/${searchTerm}`)
+        }
+      })
+  }
+
+  // console.log(searchedProduct);
 
   return (
     <>
@@ -262,7 +232,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
           </div>
           <div className="headerbarCenter">
             <div className="searchbar_Container">
-              <input type="text" placeholder='Search...' className='searchbar' onChange={handleFilter} />
+              <input type="text" placeholder='Search...' value={searchedQuery} onKeyDown={handleKeyDown} className='searchbar' onChange={handleFilter} />
               <div className="seachbar_Icon">
                 <img src={searchIconBlue} alt="" />
               </div>
@@ -272,7 +242,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
                 {
                   filteredData.slice(0, 15).map((value, index) => {
                     return (
-                      <div onClick={() => handleSearchClick(value)} className='search_Result_Item' key={index} >
+                      <div onClick={() => handleSearchClick({ 'name': value.name })} className='search_Result_Item' key={index} >
                         <p>{value.name}</p>
                       </div>
                     )
@@ -295,7 +265,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
               userLoggedIn ? (
                 <div className="user_profile" onClick={() => nav('/profile')}>
                   <p>My Profile</p>
-                  <img src={userDPPic.locataion} alt="" />
+                  <img src={userDPPic} alt="" />
                 </div>
               ) : (
                 <>
@@ -312,7 +282,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
         </div>
         <div className="searchbarWrapper">
           <div className="searchbar_Container">
-            <input type="text" placeholder='Search...' className='searchbar' onChange={handleFilter} />
+            <input type="text" placeholder='Search...' value={searchedQuery} onKeyDown={handleKeyDown} className='searchbar' onChange={handleFilter} />
             <div className="seachbar_Icon">
               <img src={searchIconBlue} alt="" />
             </div>
@@ -341,7 +311,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
               <div className="categories_Wrapper">
                 {
                   categoriesList.map((item, index) => (
-                    <div className="category" key={index}>
+                    <div className="category" key={index} onClick={() => handleCategorySearch(item.categoryLink)} >
                       <img src={item.categoryImage} alt="" />
                       <p>{item.categoryName}</p>
                     </div>
@@ -383,7 +353,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
                 {header3Profile ? (
                   userLoggedIn ? (
                     <Link to={'/profile'} className="user_profile">
-                      <img src={userDPPic.locataion} alt="" />
+                      <img src={userDPPic} alt="" />
                     </Link>
                   ) : (
                     <>
@@ -403,7 +373,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
         )
       }
       <ModalComp modalShow={modalShow} setModalShow={setModalShow} userLoggedIn={userLoggedIn} />
-      <Sidebar sidebar={sidebar} setSidebar={setSidebar} userLoggedIn={userLoggedIn} />
+      <Sidebar sidebar={sidebar} setSidebar={setSidebar} userLoggedIn={userLoggedIn} handleCategorySearch={handleCategorySearch} />
     </>
   )
 }

@@ -20,8 +20,9 @@ import CartSection from './CartSection'
 import { getCartData } from '../../api/Cart'
 
 const MyCart = ({ setHeaderData }) => {
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, allProducts, cartArray, setCartArray } = useContext(UserDataContext)
+  const { setUserCart, userCart, allProducts, cartArray, setCartArray, } = useContext(UserDataContext)
   const nav = useNavigate()
+
 
   useEffect(() => {
     setHeaderData({
@@ -47,6 +48,9 @@ const MyCart = ({ setHeaderData }) => {
         }
       })
   }, [])
+
+
+
 
   const pageSwitch = (e) => {
     e.preventDefault();

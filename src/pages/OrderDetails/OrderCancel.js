@@ -5,14 +5,16 @@ import { logOutUser } from '../../api/Auth';
 import { getAddress } from '../../api/Address';
 import { UserDataContext } from '../../Contexts/UserContext'
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
+import { cancelOrder, getAllOrder } from '../../api/OrdersApi';
 
 const OrderCancel = ({ setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [cancelSelected, setCancelSelected] = useState({});
   const [btnDisable, setbtnDisable] = useState(true)
+  const [prodId, setProdId] = useState('')
   const loc = useLocation()
   const nav = useNavigate()
-  const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts } = useContext(UserDataContext)
+  const { userOrderData, setUserOrderData } = useContext(UserDataContext)
 
   useEffect(() => {
     setHeaderData({
@@ -24,6 +26,12 @@ const OrderCancel = ({ setHeaderData }) => {
       header3Profile: false,
     })
   }, []);
+
+  useEffect(() => {
+    if (loc && loc.state) {
+      setProdId(loc.state._id)
+    }
+  }, [loc])
 
   const breadCrumbsData = [
     {
@@ -75,6 +83,16 @@ const OrderCancel = ({ setHeaderData }) => {
     },
   ]
 
+  const handleOrderCancel = (e) => {
+    e.preventDefault()
+    let id = prodId
+    let query = cancelSelected.data
+    cancelOrder(id, query)
+      .then(res => {
+        console.log(res)
+      })
+  }
+
   return (
     <>
       <div className='page_Wrapper page_Margin_Top_Secondary'>
@@ -92,14 +110,14 @@ const OrderCancel = ({ setHeaderData }) => {
               ))
             }
             <div className='order_Cancel_Submit'>
-              <button type='submit' className='submit-button ' disabled={btnDisable} ><p>Submit</p></button>
+              <button type='submit' className='submit-button ' onClick={handleOrderCancel} disabled={btnDisable} ><p>Submit</p></button>
             </div>
           </div>
         </div>
       </div>
       <div className="floating_Footer">
         <div className="floating_Footer_Center">
-          <button type='submit' className='submit-button ' disabled={btnDisable} ><p>Submit</p></button>
+          <button type='submit' className='submit-button' onClick={handleOrderCancel} disabled={btnDisable} ><p>Submit</p></button>
         </div>
       </div>
     </>

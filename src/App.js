@@ -55,8 +55,7 @@ import AddProduct from './pages/CataloguePage/AddProduct';
 import AboutUs from './pages/AboutContact/AboutUs'
 import BulkUpload from './pages/CataloguePage/BulkUpload';
 import AddOffers from './pages/CataloguePage/AddOffers';
-
-
+import { getAllOrder } from './api/OrdersApi';
 
 
 function App() {
@@ -118,6 +117,32 @@ function App() {
     quantity: [],
     shippingAddressId: ''
   })
+  const [priceBoxDetails, setPriceBoxDetails] = useState({
+    cartItemsNumber: 0,
+    cartItemsPrice: 0,
+    totalDiscount: 0,
+    totalDeliveryCharge: 0,
+    totalAmount: 0
+  })
+  const [userOrderData, setUserOrderData] = useState({
+    loaded: false,
+    no_of_orders: 0,
+    orders: []
+  })
+  const [orderTypes, setOrderTypes] = useState({
+    onThewayOrders: [],
+    deliveredOrders: [],
+    cancelledOrders: []
+  })
+  const [searchedProduct, setSearchedProduct] = useState({
+    loaded: false,
+    products: [],
+    no_of_products: 0
+  })
+  const [storeLocations, setStoreLocations] = useState({
+    loaded: false,
+    location: []
+  })
 
   // console.log(userCart);
 
@@ -163,6 +188,7 @@ function App() {
             // console.log(res);
             let ind = userCart.findIndex(obj => obj._id === res._id)
             if (ind === -1) {
+              res["quantity"] = 1
               setUserCart([...userCart, res])
             }
           }
@@ -170,6 +196,35 @@ function App() {
     ))
   }, [cartArray])
   // console.log(userCart);
+
+
+  // Price Box Details Calculation===========================
+  useEffect(() => {
+    if (userCart.length > 0) {
+      let productNumbers = userCart.reduce((accumulator, current) => accumulator + current.quantity, 0)
+      let productPrice = userCart.reduce((accumulator, current) => accumulator + (current.price.mop * current.quantity), 0)
+      let totalDiscount = 0
+      let totalDeliveryCharge = 0
+      let totalAmount = ((productPrice - totalDiscount) + totalDeliveryCharge)
+      setPriceBoxDetails(prev => ({ ...prev, cartItemsNumber: productNumbers, cartItemsPrice: productPrice, totalAmount: totalAmount }))
+    }
+  }, [userCart])
+
+  //Order Filtering Function=========================
+  let orders = [...userOrderData.orders]
+  let orderNumbers = userOrderData.no_of_orders
+  useEffect(() => {
+    if (userOrderData.no_of_orders > 0) {
+      let notcancelled = userOrderData.orders.filter((item) => (item.status === 'NOSTORETOSERVICE'))
+      let delivered = userOrderData.orders.filter(item => (item.status === 'DELIVERED'))
+      let cancelled = userOrderData.orders.filter(item => (item.status === 'CANCELLED'))
+      setOrderTypes({
+        onThewayOrders: notcancelled,
+        deliveredOrders: delivered,
+        cancelledOrders: cancelled
+      })
+    }
+  }, [])
 
   const ordersData = [
     {
@@ -246,7 +301,17 @@ function App() {
           seachedProduct,
           setSeachedProduct,
           orderInit,
-          setOrderInit
+          setOrderInit,
+          priceBoxDetails,
+          setPriceBoxDetails,
+          userOrderData,
+          setUserOrderData,
+          orderTypes,
+          setOrderTypes,
+          searchedProduct,
+          setSearchedProduct,
+          storeLocations,
+          setStoreLocations
         }}>
           {
             loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' ? ('') : (

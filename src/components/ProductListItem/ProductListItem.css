@@ -2,6 +2,11 @@
   background: #fff;
   padding: 1rem;
   cursor: pointer;
+  text-decoration: none;
+}
+
+.productListItem_Contaier > *{
+  text-decoration: none;
 }
 
 .productListItem_Wrapper{

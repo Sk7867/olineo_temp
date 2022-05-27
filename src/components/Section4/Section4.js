@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import ProductBox from '../ProductBox/ProductBox'
 import SkeletonElement from '../Skeletons/SkeletonElement'
 //CSS
@@ -9,7 +10,7 @@ const Section4 = ({ id, heading, productData, link, classes }) => {
     <div className='section4_container' id={id}>
       <div className="section4_header">
         <h3 className="section4_heading">{heading}</h3>
-        <a href={link.link} className="section4_link">{link.text}</a>
+        <Link to={link.link} className="section4_link">{link.text}</Link>
       </div>
       <div className="section4_card_container">
         {(productData.no_of_products > 0) && productData.products.map((item, index) => (

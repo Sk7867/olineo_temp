@@ -15,14 +15,11 @@ const CartSection = ({ featureProducts }) => {
   const nav = useNavigate()
   const [cartProducts, setCartProducts] = useState([])
 
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, cartArray, setCartArray, orderInit, setOrderInit } = useContext(UserDataContext)
 
 
-  let cartItemsNumber = cartArray.no_of_carts
-  var cartItemsPrice = 0
-  var totalDiscount = 0
-  var totalDeliveryCharge = 0
-  var totalAmount = 0
+  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, cartArray, setCartArray, orderInit, setOrderInit, priceBoxDetails } = useContext(UserDataContext)
+
+
 
   // useEffect(() => {
   //   if (cartArray.no_of_carts !== 0) {
@@ -48,13 +45,13 @@ const CartSection = ({ featureProducts }) => {
   //   }
   // }, [cartArray])
 
-  useEffect(() => {
-    if (userCart.length > 0) {
-      let helperArray = userCart.map(obj => ({ ...obj, quantity: 1 }))
-      setCartProducts(helperArray)
-      // console.log(helperArray);
-    }
-  }, [userCart])
+  // useEffect(() => {
+  //   if (userCart.length > 0) {
+  //     let helperArray = userCart.map(obj => ({ ...obj, quantity: 1 }))
+  //     setCartProducts(helperArray)
+  //     // console.log(helperArray);
+  //   }
+  // }, [userCart])
 
   // useEffect(() => {
   //   setUserCart(cartProducts)
@@ -66,17 +63,17 @@ const CartSection = ({ featureProducts }) => {
   // console.log(cartProducts);
 
   const handleQuantityInc = (id) => {
-    let tempState = [...cartProducts]
-    let index = cartProducts.findIndex(x => x._id === id)
+    let tempState = [...userCart]
+    let index = userCart.findIndex(x => x._id === id)
     let tempElement = { ...tempState[index] }
     tempElement.quantity = tempElement.quantity + 1
     tempState[index] = tempElement
-    setCartProducts(tempState)
+    setUserCart(tempState)
   }
 
   const handleQuantityDec = (id) => {
-    let tempState = [...cartProducts]
-    let index = cartProducts.findIndex(x => x._id === id)
+    let tempState = [...userCart]
+    let index = userCart.findIndex(x => x._id === id)
     let tempElement = { ...tempState[index] }
     if (tempElement.quantity === 1) {
       tempElement.quantity = 1
@@ -84,7 +81,7 @@ const CartSection = ({ featureProducts }) => {
       tempElement.quantity = tempElement.quantity - 1
     }
     tempState[index] = tempElement
-    setCartProducts(tempState)
+    setUserCart(tempState)
   }
 
   //ORDER INITIALIZATION CODE+++++++++++++++++++++++++++++++++++++++++
@@ -116,12 +113,11 @@ const CartSection = ({ featureProducts }) => {
     e.preventDefault();
     let productId = []
     let quantity = []
-    let shippingAddress = ''
-    cartProducts.forEach(item =>
+    userCart.forEach(item =>
       productId.push(item._id)
     )
-    cartProducts.forEach((item) => (
-      quantity.push({ qty: item.quantity })
+    userCart.forEach((item) => (
+      quantity.push(parseInt(item.quantity))
     ))
     setOrderInit(prev => ({
       ...prev,
@@ -136,7 +132,7 @@ const CartSection = ({ featureProducts }) => {
     removeFromCart(id)
       .then(res => res ? (
         setUserCart([]),
-        toast.success('Product Added to Cart'),
+        toast.error('Product Removed from Cart'),
         getCartData()
           .then(res => res ? (
             setCartArray({
@@ -151,7 +147,7 @@ const CartSection = ({ featureProducts }) => {
       ) : (''))
   }
 
-  // console.log(cartProducts);
+  // console.log(userCart);
 
   return (
     <>
@@ -173,8 +169,8 @@ const CartSection = ({ featureProducts }) => {
             <p className="cart_Text section_Wrapper">My Cart</p>
             <div className="cards_Container">
               {
-                (cartProducts.length > 0) && cartProducts ? (
-                  cartProducts.map((item, index) => (
+                (userCart.length > 0) && userCart ? (
+                  userCart.map((item, index) => (
                     <CartProductCard
                       key={index}
                       product={item}
@@ -187,7 +183,7 @@ const CartSection = ({ featureProducts }) => {
             </div>
 
             <div className='cart_Subtotal_Section section_Wrapper'>
-              <p>Subtotal ({cartItemsNumber} items): <span> ₹{totalAmount}</span></p>
+              <p>Subtotal ({priceBoxDetails.cartItemsNumber} items): <span> ₹{priceBoxDetails.totalAmount}</span></p>
               <div className="cart_Footer_Right">
                 <button type='submit' className='submit-button' onClick={handleOrderInit}><p>Checkout</p></button>
               </div>
@@ -222,8 +218,8 @@ const CartSection = ({ featureProducts }) => {
               </div>
               <div className="cards_Container">
                 {
-                  (cartProducts.length > 0) && cartProducts ? (
-                    cartProducts.map((item, index) => (
+                  (userCart.length > 0) && userCart ? (
+                    userCart.map((item, index) => (
                       <CartProductCard
                         key={index}
                         product={item}
@@ -240,7 +236,7 @@ const CartSection = ({ featureProducts }) => {
             <div className="cart_Footer ">
               <div className="cart_Footer_Left">
                 <p className="footer_Price">
-                  ₹{`${totalAmount}`}
+                  ₹{`${priceBoxDetails.totalAmount}`}
                 </p>
                 <p className='footer_Left_Text'>View price details</p>
               </div>
