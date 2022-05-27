@@ -33,7 +33,6 @@ const ProductPage = ({ setHeaderData }) => {
   const [preOrder, setPreOrder] = useState(false)
   const [previewImageSelected, setPreviewImageSelected] = useState(null)
   const [productInfo, setProductInfo] = useState([])
-  const [discountedPrice, setDiscountedPrice] = useState('')
   const [productData, setProductData] = useState({
     product_loaded: false,
     product_Id: '',
@@ -71,17 +70,6 @@ const ProductPage = ({ setHeaderData }) => {
       header3Profile: true,
     })
   }, []);
-
-  useEffect(() => {
-    if (productData.product_price.mop && productData.product_Disccount.flatDiscount.value) {
-      let discount = productData.product_Disccount.flatDiscount.value
-      let mop = productData.product_price.mop
-      let tempPrice = Math.floor(mop - ((discount * mop / 100)))
-      // console.log(tempPrice);
-      setDiscountedPrice(tempPrice)
-    }
-  }, [productData])
-
 
   useEffect(() => {
     if (loc.state) {
@@ -157,6 +145,26 @@ const ProductPage = ({ setHeaderData }) => {
   //   }
   // }, [loc, productData])
 
+  useEffect(() => {
+    if (alternateColorean.length > 0) {
+      let demo = allProducts.products.filter(item => alternateColorean.includes(item.ean))
+      if (demo !== undefined) {
+        let ind = colorAlternateProds.findIndex(obj => obj.ean === demo[0].ean)
+        if (ind === -1) {
+          setColorAlternateProds([...colorAlternateProds, demo[0]])
+        }
+      }
+    }
+    if (alternateSpecean.length > 0) {
+      let demo = allProducts.products.filter(item => alternateColorean.includes(item.ean))
+      if (demo !== undefined) {
+        let ind = specAlternateProds.findIndex(obj => obj.ean === demo[0].ean)
+        if (ind === -1) {
+          setSpecAlternateProds([...specAlternateProds, demo[0]])
+        }
+      }
+    }
+  }, [alternateColorean, alternateSpecean])
 
 
   const sec5Data = [

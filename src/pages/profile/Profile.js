@@ -69,7 +69,6 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
       })
   }, [])
 
-  console.log(userAddress);
   useEffect(() => {
     getCartData()
       .then(res => {
@@ -231,7 +230,6 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
       reader.readAsDataURL(e.target.files[0])
     }
   }
-  console.log(newProfilePic);
 
   return (
     <>

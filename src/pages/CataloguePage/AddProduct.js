@@ -201,6 +201,7 @@ const AddProduct = ({ setHeaderData }) => {
       to: null
     }
     let containerDetails = []
+
     if (flatDiscount.value && flatDiscount.from && flatDiscount.to) {
       flatDiscountDetails.value = flatDiscount.value
       flatDiscountDetails.from = flatDiscount.from.year + '/' + flatDiscount.from.month + '/' + flatDiscount.from.day
@@ -411,10 +412,6 @@ const AddProduct = ({ setHeaderData }) => {
     'Laptop',
     'Wifi Smart Speaker',
     'Security Camera',
-    'Miscellaneous'
-    // { value: 'Soundbar', label: '' },
-    // { value: 'Bluetooth_Speaker', label: '' },
-    // { value: 'Bluetooth_Neckband_Earphones', label: '' },
     // { value: 'True_Wireless_Earbuds', label: 'True Wireless Earbuds' },
     // { value: 'Smartphone', label: '' },
     // { value: 'Adapter', label: '' },
@@ -794,7 +791,7 @@ const AddProduct = ({ setHeaderData }) => {
             <input type='text' name="Product Remote Control Type" id="Product Remote Control Type" value={technicalDetailsTable.remoteControlType} className='input-field' placeholder='Enter Product Remote Control Type' onChange={(value) => handleTechnicalTableValues("remoteControlType", value)} />
             <input type='text' name="Product Display Technology" id="Product Display Technology" value={dynamicTable.displayTechnology} className='input-field' placeholder='Enter Product Display Technology' onChange={(value) => { handleTechnicalTableValues("displayTechnology", value) }} />
           </>)
-      case 'Laptop':
+      case 'Adaptor':
         return (
           <>
             <input type='text' name="Product Batteries" id="Product Batteries" value={technicalDetailsTable.batteries} className='input-field' placeholder='Enter Product Batteries' onChange={(value) => { handleTechnicalTableValues("batteries", value) }} />
@@ -847,16 +844,56 @@ const AddProduct = ({ setHeaderData }) => {
           <>
             <input type='text' name="Product ASIN" id="Product ASIN" value={technicalDetailsTable.ASIN} className='input-field' placeholder='Enter Product ASIN' onChange={(value) => { handleTechnicalTableValues("ASIN", value) }} />
           </>)
-      case 'Smartphone':
+      case 'Smart TV':
         return (
           <>
-            <h4>Product Specific Details</h4>
-            <div className="catelogue_Form_Group">
-              <input type='text' name="Product Color" id="Product Color" value={dynamicTable.color} className='input-field' placeholder='Enter Product Color' onChange={(value) => { handleDyanmicTableValues("color", value); handleInput("oolor", value) }} />
-              <input type='text' name="Product RAM" id="Product RAM" value={dynamicTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleInput("ram", value) }} />
-              <input type='text' name="Product ROM" id="Product ROM" value={dynamicTable.rom} className='input-field' placeholder='Enter Product ROM' onChange={(value) => { handleDyanmicTableValues("rom", value); handleInput("rom", value) }} />
-            </div>
+            <input type='text' name="Product Batteries" id="Product Batteries" value={technicalDetailsTable.batteries} className='input-field' placeholder='Enter Product Batteries' onChange={(value) => { handleTechnicalTableValues("batteries", value) }} />
+            <input type='text' name="Product Memory Storage Capacity" id="Product Memory Storage Capacity" value={technicalDetailsTable.memoryStorageCapacity} className='input-field' placeholder='Enter Product Memory Storage Capacity' onChange={(value) => { handleTechnicalTableValues("memoryStorageCapacity", value) }} />
+            <input type='text' name="Product Ram Memory Installed Size" id="Product Ram Memory Installed Size" value={technicalDetailsTable.ramMemoryInstalledSize} className='input-field' placeholder='Enter Product Ram Memory Installed Size' onChange={(value) => { handleTechnicalTableValues("ramMemoryInstalledSize", value) }} />
+            <input type='text' name="Product OS" id="Product OS" value={technicalDetailsTable.os} className='input-field' placeholder='Enter Product OS' onChange={(value) => handleTechnicalTableValues("os", value)} />
+            <input type='text' name="Product Hardware Interface" id="Product Hardware Interface" value={technicalDetailsTable.hardwareInterface} className='input-field' placeholder='Enter Product Hardware Interface' onChange={(value) => handleTechnicalTableValues("hardwareInterface", value)} />
+            <input type='text' name="Product Graphics Coprocessor" id="Product Graphics Coprocessor" value={technicalDetailsTable.graphicsCoprocessor} className='input-field' placeholder='Enter Product Graphics Coprocessor' onChange={(value) => handleTechnicalTableValues("graphicsCoprocessor", value)} />
+            <input type='text' name="Product Tuner Technology" id="Product Tuner Technology" value={technicalDetailsTable.tunerTechnology} className='input-field' placeholder='Enter Product Tuner Technology' onChange={(value) => handleTechnicalTableValues("tunerTechnology", value)} />
+            <input type='text' name="Product Response Time" id="Product Response Time" value={technicalDetailsTable.responseTime} className='input-field' placeholder='Enter Product Response Time' onChange={(value) => handleTechnicalTableValues("responseTime", value)} />
+            <input type='text' name="Product Resolution" id="Product Resolution" value={technicalDetailsTable.resolution} className='input-field' placeholder='Enter Product Resolution' onChange={(value) => handleTechnicalTableValues("resolution", value)} />
+            <input type='text' name="Product Special features" id="Product Special features" value={technicalDetailsTable.spacialFeature} className='input-field' placeholder='Enter Product Special features' onChange={(value) => handleTechnicalTableValues("spacialFeature", value)} />
+            <input type='text' name="Product Mounting Hardware" id="Product Mounting Hardware" value={technicalDetailsTable.mountingHardware} className='input-field' placeholder='Enter Product Mounting Hardware' onChange={(value) => handleTechnicalTableValues("mountingHardware", value)} />
+            <input type='text' name="Product Number Of Items" id="Product Number Of Items" value={technicalDetailsTable.numberOfItems} className='input-field' placeholder='Enter Product Number Of Items' onChange={(value) => handleTechnicalTableValues("numberOfItems", value)} />
+            <input type='text' name="Product Remote Control Description" id="Product Remote Control Description" value={technicalDetailsTable.remoteControlDescription} className='input-field' placeholder='Enter Product Remote Control Description' onChange={(value) => handleTechnicalTableValues("remoteControlDescription", value)} />
+            <input type='text' name="Product Remote Control Type" id="Product Remote Control Type" value={technicalDetailsTable.remoteControlType} className='input-field' placeholder='Enter Product Remote Control Type' onChange={(value) => handleTechnicalTableValues("remoteControlType", value)} />
+            <input type='text' name="Product Display Technology" id="Product Display Technology" value={dynamicTable.displayTechnology} className='input-field' placeholder='Enter Product Display Technology' onChange={(value) => { handleTechnicalTableValues("displayTechnology", value) }} />
           </>)
+      // case 'Laptop':
+      //   return (
+      //     <>
+      //       <h4>Product Specific Details</h4>
+      //       <div className="catelogue_Form_Group">
+      //         <input type='text' name="Product RAM" id="Product RAM" value={dynamicTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleInput("ram", value) }} />
+      //         <input type='text' name="Product Internal Storage" id="Product Internal Storage" value={dynamicTable.internalStorage} className='input-field' placeholder='Enter Product Internal Storage' onChange={(value) => { handleDyanmicTableValues("internalStorage", value); handleInput("internalStorage", value) }} />
+      //         <input type='text' name="Product Screen Size" id="Product Screen Size" value={dynamicTable.screenSize} className='input-field' placeholder='Enter Product Screen Size' onChange={(value) => { handleDyanmicTableValues("screenSize", value); handleInput("screenSize", value) }} />
+      //         <input type='text' name="Product Screen Resolution" id="Product Screen Resolution" value={dynamicTable.screenResolution} className='input-field' placeholder='Enter Product Screen Resolution' onChange={(value) => { handleDyanmicTableValues("screenResolution", value); handleInput("screenResolution", value) }} />
+      //         <input type='text' name="Product Screen Type" id="Product Screen Type" value={dynamicTable.screenType} className='input-field' placeholder='Enter Product Screen Type' onChange={(value) => { handleDyanmicTableValues("screenType", value); handleInput("screenType", value) }} />
+      //         <input type='text' name="Product Graphics Card" id="Product Graphics Card" value={dynamicTable.graphicsCard} className='input-field' placeholder='Enter Product Graphics Card' onChange={(value) => { handleDyanmicTableValues("graphicsCard", value); handleInput("graphicsCard", value) }} />
+      //       </div>
+      //     </>)
+      // case 'Wifi_Smart_Speaker':
+      //   return (
+      //     <>
+      //       <h4>Product Specific Details</h4>
+      //       <div className="catelogue_Form_Group">
+      //         <input type='text' name="Product Supported smart assistants" id="Product Supported smart assistants" value={dynamicTable.supportedSmartAssistants} className='input-field' placeholder='Enter Product Supported smart assistants' onChange={(value) => { handleDyanmicTableValues("supportedSmartAssistants", value); handleInput("supportedSmartAssistants", value) }} />
+      //         <input type='text' name="Product Power Output" id="Product Power Output" value={dynamicTable.powerOutput} className='input-field' placeholder='Enter Product Power Output' onChange={(value) => { handleDyanmicTableValues("powerOutput", value); handleInput("powerOutput", value) }} />
+      //       </div>
+      //     </>)
+      // case 'Security_Camera':
+      //   return (
+      //     <>
+      //       <h4>Product Specific Details</h4>
+      //       <div className="catelogue_Form_Group">
+      //         <input type='text' name="Product Sensor Resolution" id="Product Sensor Resolution" value={dynamicTable.sensorResolution} className='input-field' placeholder='Enter Product Sensor Resolution' onChange={(value) => { handleDyanmicTableValues("sensorResolution", value); handleInput("sensorResolution", value) }} />
+      //       </div>
+      //     </>)
+
 
 
       case 'Miscellaneous':

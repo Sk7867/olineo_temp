@@ -49,9 +49,9 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
 
   useEffect(() => {
     if (userContext && userContext.profilePic) {
-      setUserDPPic({ locataion: userContext.profilePic.locataion })
+      setUserDPPic(userContext.profilePic)
     } else {
-      setUserDPPic({ locataion: userDefaultDP })
+      setUserDPPic(userDefaultDP)
     }
 
   }, [userContext])
@@ -265,7 +265,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
               userLoggedIn ? (
                 <div className="user_profile" onClick={() => nav('/profile')}>
                   <p>My Profile</p>
-                  <img src={userDPPic.locataion} alt="" />
+                  <img src={userDPPic} alt="" />
                 </div>
               ) : (
                 <>
@@ -353,7 +353,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
                 {header3Profile ? (
                   userLoggedIn ? (
                     <Link to={'/profile'} className="user_profile">
-                      <img src={userDPPic.locataion} alt="" />
+                      <img src={userDPPic} alt="" />
                     </Link>
                   ) : (
                     <>
