@@ -19,7 +19,7 @@ const HeaderBar = ({ alternateWay, alternateLink }) => {
         <Link to='/' className={'logo'}>
           <img src={navbarLogo} alt="" className='logo_mob' />
           <img src={navbarLogoDesk} alt="" className='logo_tab logo_desk' />
-        </a>
+        </Link>
         <p className={'alternate-way'} onClick={pageSwitch}>
           {alternateWay}
         </p>

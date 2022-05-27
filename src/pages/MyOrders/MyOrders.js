@@ -18,6 +18,7 @@ import OrderSection from './OrderSection'
 const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
   const [onTheWay, setOnTheWay] = useState(true)
   const [delivered, setDelivered] = useState(true)
+  const [cancelled, setCancelled] = useState(true)
 
   const nav = useNavigate()
 
@@ -170,7 +171,7 @@ const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
                     Cancelled
                   </label>
                 </aside>
-                <OrderSection ordersList={ordersList} featureProducts={featureProducts} onTheWay={onTheWay} delivered={delivered} />
+                <OrderSection ordersList={ordersList} featureProducts={featureProducts} onTheWay={onTheWay} delivered={delivered} cancelled={cancelled} />
               </div>
             </>
           )

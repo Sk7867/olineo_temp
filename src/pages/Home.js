@@ -20,6 +20,7 @@ const Home = ({ setHeaderData, allProducts }) => {
     product_name: '',
     product_price: '',
   })
+  const [modalShow, setModalShow] = useState(false)
   // const [sec2Data, setSec2Data] = useState([])
 
   useEffect(() => {

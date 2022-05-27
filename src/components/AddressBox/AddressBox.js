@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 const AddressBox = ({ address, setEditID, setProfileState, deleteOption = true, border, fullWidth = false }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const { userAddress, setUserAddress } = useContext(UserDataContext)
-  console.log(address);
+  // console.log(address);
   const handleDeleteAddress = (id) => {
     deleteAddress(id)
       .then(res => {
