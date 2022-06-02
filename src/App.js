@@ -35,6 +35,10 @@ import EditAddress from './pages/Address/EditAddress';
 import HomeDelivery from './pages/Address/HomeDelivery';
 import StorePickUp from './pages/Pickup/StorePickUp';
 import StoreNear from './pages/Pickup/StoreNear';
+import Dashboard from './components/AdminComponent/Dashboard';
+import Page1 from './components/AdminComponent/pages/Page1/Page1';
+import Page2 from './components/AdminComponent/pages/Page2/Page2';
+import Page3 from './components/AdminComponent/pages/Page3/Page3';
 
 
 function App() {
@@ -143,9 +147,9 @@ function App() {
   return (
     <>
       <ScrollToTop />
-      <div className="App">
+      <div>
         {
-          loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' ? ('') : (
+          loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' || loc.pathname === '/admin' || loc.pathname === '/admin/page1' || loc.pathname === '/admin/page2' || loc.pathname === '/admin/page3' ? ('') : (
             <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />
           )
         }
@@ -171,8 +175,17 @@ function App() {
           <Route path='/home-delivery' element={<HomeDelivery userDetails={userDetails} setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />} />
           <Route path='/store-pickup' element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
           <Route path='/store-near-me' element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
+          <Route path="admin/*" element={<Dashboard />}>
+            <Route path="page1" element={<Page1 />} />
+            <Route path="page2" element={<Page2 />} />
+            <Route path="page3" element={<Page3 />} />
+          </Route>
         </Routes>
-        <Footer />
+        {
+          loc.pathname === '/admin' || loc.pathname === '/admin/page1' || loc.pathname === '/admin/page2' || loc.pathname === '/admin/page3' ? ('') : (
+            <Footer />
+          )
+        }
       </div>
     </>
   );
