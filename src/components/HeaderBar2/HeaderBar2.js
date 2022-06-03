@@ -138,8 +138,8 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
     const searchWord = e.target.value
     const newFilter = allProducts.products.filter((value) => {
       if (
-        value.name.toLowerCase().includes(searchWord) ||
-        value.productInfo.brand.toLowerCase().includes(searchWord)
+        value.name.toLowerCase().includes(searchWord)
+        // || value.productInfo.brand.toLowerCase().includes(searchWord)
       ) {
         return value
       }

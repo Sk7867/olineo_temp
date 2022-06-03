@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useMediaQuery } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Slide, toast, ToastContainer } from 'react-toastify'
-import { addProductCatalogue, updateProductCatalogue } from '../../api/CatalogueApi';
+import { addProductCatalogue, addProductGalleryImages, addProductImages, updateProductCatalogue } from '../../api/CatalogueApi';
 import { UserDataContext } from '../../Contexts/UserContext'
 
 
 //CSS
 import './CateloguePage.css'
 import { Dropdown } from 'react-bootstrap';
-import DatePicker from 'react-modern-calendar-datepicker';
+import DatePicker from 'react-date-picker';
 
 //Images
 import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
@@ -20,36 +20,30 @@ import CatelogueModal from '../../components/ModalComponenr/CatelogueModal';
 toast.configure()
 const AddProduct = ({ setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
-  const { allProducts } = useContext(UserDataContext)
-  const [selectedDay, setSelectedDay] = useState(null);
-  const [product, setProduct] = useState({
-    heading: '',
-    name: '',
-    ID: '',
-    EAN: '',
-    HSN: '',
-    description: '',
-    color: '',
-    MRP: '',
-    MOP: '',
-    stock: '',
-    weight: '',
-    size: '',
-    brand: '',
-    modelYear: '',
-    modelNumber: '',
-    inwardDate: ''
-  })
-
-  const [imagesArray, setImagesArray] = useState([])
   const nav = useNavigate()
   const loc = useLocation()
-  const [testFile, setTestFile] = useState(null)
+  const { allProducts } = useContext(UserDataContext)
   const [L1Selected, setL1Selected] = useState('')
   const [L2Selected, setL2Selected] = useState('')
   const [L3Selected, setL3Selected] = useState('')
   const [classificationSelected, setClassificationSelected] = useState('')
-  const [dynamicTable, setDynamicTable] = useState({})
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [dynamicHeader, setDynamicHeader] = useState('')
+  const [name, setName] = useState('')
+  const [id, setId] = useState('')
+  const [ean, setEan] = useState('')
+  const [hsn, setHsn] = useState('')
+  const [description, setDescription] = useState('')
+  const [color, setColor] = useState('')
+  const [mrp, setMrp] = useState('')
+  const [mop, setMop] = useState('')
+  const [weight, setWeight] = useState('')
+  const [size, setSize] = useState('')
+  const [inwardDate, setInwardDate] = useState('')
+
+  const [imagesArray, setImagesArray] = useState([])
+  const [testFile, setTestFile] = useState(null)
+  const [dynamicTable, setDynamicTable] = useState([])
   const [discountGiven, setDiscountGiven] = useState(null)
   const [discountedPrice, setDiscountedPrice] = useState(null)
   const [flatDiscount, setFlatDiscount] = useState({
@@ -75,7 +69,7 @@ const AddProduct = ({ setHeaderData }) => {
     product: []
   })
   const [images, setImages] = useState('')
-  const [galleryImages, setGalleryImages] = useState('')
+  const [galleryImages, setGalleryImages] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const [modalData, setModalData] = useState('')
   const [technicalDetailsTable, setTechnicalDetailsTable] = useState({})
@@ -96,88 +90,104 @@ const AddProduct = ({ setHeaderData }) => {
     })
   }, []);
 
-  useEffect(() => {
-    if (loc.state) {
-      let product = loc.state.product
-      console.log(product);
-      setProduct({
-        heading: product.dynamicHeader,
-        ID: product._id,
-        EAN: product.ean,
-        name: product.name,
-        description: product.description,
-        HSN: product.HSN,
-        color: product.color,
-        MRP: product.price.mrp,
-        MOP: product.price.mop,
-        size: product.productInfo.size,
-        brand: product.productInfo.brand,
-        modelYear: product.productInfo.modelYear,
-        modelNumber: product.productInfo.modelNo,
-        stock: product.qty,
-        weight: product.productInfo.weight
-      })
-      setL1Selected(product.hierarchyL1)
-      setL2Selected(product.hierarchyL2)
-      setL3Selected(product.hierarchyL3)
-      setClassificationSelected(product.classification)
-      setImages(product.images.join(','))
-      setGalleryImages(product.gallery.join(','))
-      // setDiscountGiven(product.discount.flatDiscount)
-      // if (loc.state.inwardDate) {
-      //   if (typeof (loc.state.inwardDate) === 'string') {
-      //     let bdayRecieved = loc.state.inwardDate
-      //     let seperateDOB = bdayRecieved.split('-')
-      //     let yearRecieved = parseInt(seperateDOB[0])
-      //     let monthRecieved = parseInt(seperateDOB[1])
-      //     let dateRecieved = parseInt(seperateDOB[2])
-      //     // let dateSep = dateWhole.slice(0, 2)
-      //     // console.log(seperateDOB);
-      //     // console.log(`
-      //     // ${bdayRecieved}
-      //     //   year: ${yearRecieved},
-      //     //   month: ${monthRecieved},
-      //     //   whole date: ${dateRecieved}
+  // useEffect(() => {
+  //   if (loc.state) {
+  //     let product = loc.state.product
+  //     console.log(product);
+  //     setProduct({
+  //       heading: product.dynamicHeader,
+  //       ID: product._id,
+  //       EAN: product.ean,
+  //       name: product.name,
+  //       description: product.description,
+  //       HSN: product.HSN,
+  //       color: product.color,
+  //       MRP: product.price.mrp,
+  //       MOP: product.price.mop,
+  //       size: product.productInfo.size,
+  //       brand: product.productInfo.brand,
+  //       modelYear: product.productInfo.modelYear,
+  //       modelNumber: product.productInfo.modelNo,
+  //       stock: product.qty,
+  //       weight: product.productInfo.weight
+  //     })
+  //     setL1Selected(product.hierarchyL1)
+  //     setL2Selected(product.hierarchyL2)
+  //     setL3Selected(product.hierarchyL3)
+  //     setClassificationSelected(product.classification)
+  //     setImages(product.images)
+  //     setGalleryImages(product.gallery)
+  //     setTechnicalDetailsTable(product.productInfo)
+  //     // setFlatDiscount(product.discount.flatDiscount)
+  //     // setComboOffer(product.discount.combo)
+  //     // setContainerOffer(prev => ({
+  //     //   ...prev,
+  //     //   value: product.discount.conetainer
+  //     // }))
+  //     // setDiscountGiven(product.discount.flatDiscount)
+  //     // if (loc.state.inwardDate) {
+  //     //   if (typeof (loc.state.inwardDate) === 'string') {
+  //     //     let bdayRecieved = loc.state.inwardDate
+  //     //     let seperateDOB = bdayRecieved.split('-')
+  //     //     let yearRecieved = parseInt(seperateDOB[0])
+  //     //     let monthRecieved = parseInt(seperateDOB[1])
+  //     //     let dateRecieved = parseInt(seperateDOB[2])
+  //     //     // let dateSep = dateWhole.slice(0, 2)
+  //     //     // console.log(seperateDOB);
+  //     //     // console.log(`
+  //     //     // ${bdayRecieved}
+  //     //     //   year: ${yearRecieved},
+  //     //     //   month: ${monthRecieved},
+  //     //     //   whole date: ${dateRecieved}
 
-      //     // `);
-      //     setSelectedDay({
-      //       year: yearRecieved,
-      //       month: monthRecieved,
-      //       day: dateRecieved,
-      //     })
-      //   } else if (typeof (loc.state.inwardDate) === 'object') {
-      //     setSelectedDay({
-      //       year: loc.state.inwardDate.year,
-      //       month: loc.state.inwardDate.month,
-      //       day: loc.state.inwardDate.day,
-      //     })
-      //   }
-      // } else if (loc.state.inwardDate === null) {
-      //   setSelectedDay(null)
-      // }
-    }
-  }, [loc])
+  //     //     // `);
+  //     //     setSelectedDay({
+  //     //       year: yearRecieved,
+  //     //       month: monthRecieved,
+  //     //       day: dateRecieved,
+  //     //     })
+  //     //   } else if (typeof (loc.state.inwardDate) === 'object') {
+  //     //     setSelectedDay({
+  //     //       year: loc.state.inwardDate.year,
+  //     //       month: loc.state.inwardDate.month,
+  //     //       day: loc.state.inwardDate.day,
+  //     //     })
+  //     //   }
+  //     // } else if (loc.state.inwardDate === null) {
+  //     //   setSelectedDay(null)
+  //     // }
+  //   }
+  // }, [loc])
   // console.log(product);
 
-  useEffect(() => {
-    if (selectedDay) {
-      let dateEntered = selectedDay.day + '/' + selectedDay.month + '/' + selectedDay.year
-      setProduct(prev => ({
-        ...prev,
-        inwardDate: dateEntered
-      }))
-    }
-  }, [selectedDay])
+  // useEffect(() => {
+  //   if (selectedDay) {
+  //     let dateEntered = selectedDay.day + '/' + selectedDay.month + '/' + selectedDay.year
+  //     setProduct(prev => ({
+  //       ...prev,
+  //       inwardDate: dateEntered
+  //     }))
+  //   }
+  // }, [selectedDay])
 
 
-  const handleInput = (prop, e) => {
-    e.target
-      ? setProduct({ ...product, [prop]: e.target.value })
-      : setProduct({ ...product, [prop]: e.label })
-  }
+  // const handleInput = (prop, e) => {
+  //   e.target
+  //     ? setProduct({ ...product, [prop]: e.target.value })
+  //     : setProduct({ ...product, [prop]: e.label })
+  // }
 
-  const formSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
+    let product = {
+      name: name,
+      ean: ean,
+      id: id,
+      description: description,
+      HSN: hsn
+
+    }
+
     let flatDiscountDetails = {
       value: '',
       from: null,
@@ -213,102 +223,113 @@ const AddProduct = ({ setHeaderData }) => {
         containerDetails.push(temp)
       ))
     }
-
-    let imagesArray = images.split(',')
-    let galleryImagesArray = galleryImages.split(',')
-
-    let alternateProds = {
-      color: alternateColorProds.split(','),
-      spec: alternateSpecProds.split(',')
-    }
-
     let dynamicHeader
-    if (product && dynamicTable && checkDynamicTable(dynamicTable)) {
-      let temp = Object.values(dynamicTable)
-      dynamicHeader = product.name + ' (' + temp.map(item => (` ${item}`)) + ')'
-    }
-
+    // if (product && dynamicTable && checkDynamicTable(dynamicTable)) {
+    //   let temp = Object.values(dynamicTable)
+    //   dynamicHeader = product.name + ' (' + temp.map(item => (` ${item}`)) + ')'
+    // }
     let dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
     let dynamicArray2 = dynamicArray.filter(n => n)
     let url = dynamicArray2.join('-')
 
-    if (loc.state) {
-      updateProductCatalogue(
-        product,
-        technicalDetailsTable,
-        dynamicHeader,
-        url,
-        imagesArray,
-        galleryImagesArray,
-        L1Selected,
-        L2Selected,
-        L3Selected,
-        discountedPrice,
-        classificationSelected,
-        flatDiscountDetails,
-        comboOfferDetails,
-        containerDetails,
-        alternateProds,
-        bankOffers
-      )
-        .then(res => res ? (
-          // console.log(res),
-          toast.success('Product Added Successfully'),
-          setProduct({
-            name: '',
-            ID: '',
-            EAN: '',
-            description: '',
-            type: '',
-            stock: '',
-            weight: '',
-            size: '',
-            brand: '',
-            modelYear: '',
-          }),
-          toast.success('Product Added Successfully'),
-          nav('/catelogue-page')
-        ) : (
-          toast.error('Incomplete Data')))
-    } else {
-      addProductCatalogue(
-        product,
-        technicalDetailsTable,
-        dynamicHeader,
-        url,
-        imagesArray,
-        galleryImagesArray,
-        L1Selected,
-        L2Selected,
-        L3Selected,
-        discountedPrice,
-        classificationSelected,
-        flatDiscountDetails,
-        comboOfferDetails,
-        containerDetails,
-        alternateProds,
-        bankOffers)
-        .then(res => res ? (
-          // console.log(res),
-          toast.success('Product Added Successfully'),
-          setProduct({
-            name: '',
-            ID: '',
-            EAN: '',
-            description: '',
-            type: '',
-            stock: '',
-            weight: '',
-            size: '',
-            brand: '',
-            modelYear: '',
-          }),
-          toast.success('Product Added Successfully'),
-          nav('/catelogue-page')
-        ) : (
-          toast.error('Incomplete Data')))
+    let colour = []
+    let specs = []
+    if (alternateColorProds !== '') {
+      colour = alternateColorProds.split(',')
+    };
+    if (alternateColorProds !== '') {
+      specs = alternateColorProds.split(',')
+    };
+
+    const alternateProds = {
+      color: colour,
+      spec: specs
     }
+
+    // formSubmit(
+    //   dynamicHeader,
+    //   url,
+    //   flatDiscountDetails,
+    //   comboOfferDetails,
+    //   containerDetails,
+    //   alternateProds)
   }
+
+  // const formSubmit = (
+  //   dynamicHeader,
+  //   url,
+  //   flatDiscountDetails,
+  //   comboOfferDetails,
+  //   containerDetails,
+  //   alternateProds
+  // ) => {
+
+
+  //   (imagesArray.length > 0 && galleryImages.length > 0) ? (
+  //     (loc.state) ? (
+  //       updateProductCatalogue(
+  //         product,
+  //         technicalDetailsTable,
+  //         dynamicHeader,
+  //         url,
+  //         L1Selected,
+  //         L2Selected,
+  //         L3Selected,
+  //         discountedPrice,
+  //         classificationSelected,
+  //         flatDiscountDetails,
+  //         comboOfferDetails,
+  //         containerDetails,
+  //         alternateProds,
+  //         bankOffers
+  //       )
+  //         .then(res => res ? (
+  //           // console.log(res),
+  //           toast.success('Product Added Successfully'),
+  //           setProduct({
+  //             name: '',
+  //             ID: '',
+  //             EAN: '',
+  //             description: '',
+  //             type: '',
+  //             stock: '',
+  //             weight: '',
+  //             size: '',
+  //             brand: '',
+  //             modelYear: '',
+  //           }),
+  //           nav('/catelogue-page')
+  //         ) : (
+  //           toast.error('Incomplete Data')))
+  //     ) : (
+  //       addProductCatalogue(
+  //         product,
+  //         technicalDetailsTable,
+  //         dynamicHeader,
+  //         url,
+  //         L1Selected,
+  //         L2Selected,
+  //         L3Selected,
+  //         discountedPrice,
+  //         classificationSelected,
+  //         flatDiscountDetails,
+  //         comboOfferDetails,
+  //         containerDetails,
+  //         alternateProds,
+  //         bankOffers)
+  //         .then(res => {
+  //           if (res) {
+  //             let id = res._id
+  //             console.log(id);
+  //             addProductImages(id, imagesArray)
+  //             addProductGalleryImages(id, galleryImages)
+  //           } else {
+  //             (toast.error('Incomplete Data'))
+  //           }
+  //         }))
+  //   ) : (toast.error('Incomplete Data'))
+
+  // }
 
   const handleAddInput = (e) => {
     e.preventDefault();
@@ -382,13 +403,14 @@ const AddProduct = ({ setHeaderData }) => {
     'Bluetooth Headphones',
     'Bluetooth Neckband',
     'Soundbar',
-    'Adaptor',
+    'Adapter',
     'Charging Cable',
     'Power Bank',
     'Smart TV',
     'TWS',
-    // 'Wifi Smart Speaker',
-    // 'Security Camera',
+    'Laptop',
+    'Wifi Smart Speaker',
+    'Security Camera',
     'Miscellaneous'
     // { value: 'Soundbar', label: '' },
     // { value: 'Bluetooth_Speaker', label: '' },
@@ -446,17 +468,15 @@ const AddProduct = ({ setHeaderData }) => {
   }
 
   const handleDiscountCalc = (priceGiven) => {
-    if (product) {
-      if (product.MRP !== '') {
-        let discountPrice = parseInt(priceGiven)
-        let price = product.MRP
-        let discount = Math.floor(((price - discountPrice) / price) * 100)
-        setFlatDiscount(prev => ({
-          ...prev,
-          value: isNaN(discount) ? null : discount
-        }))
-        setDiscountedPrice(priceGiven)
-      }
+    if (mrp !== '') {
+      let discountPrice = parseInt(priceGiven)
+      let price = mrp
+      let discount = Math.floor(((price - discountPrice) / price) * 100)
+      setFlatDiscount(prev => ({
+        ...prev,
+        value: isNaN(discount) ? null : discount
+      }))
+      setDiscountedPrice(priceGiven)
     }
   }
 
@@ -497,12 +517,12 @@ const AddProduct = ({ setHeaderData }) => {
     }
   }
 
-  const imageHandleChange = (e) => {
+  const imageHandleChange = (e, target) => {
     if (e.target.files) {
       let fileArray = Array.from(e.target.files).map((file) => URL.createObjectURL(file))
       // console.log(fileArray);
 
-      setImagesArray((prevImages) => prevImages.concat(fileArray))
+      target((prevImages) => prevImages.concat(fileArray))
       Array.from(e.target.files).map((file) => URL.revokeObjectURL(file)) //Optional
     }
   }
@@ -512,6 +532,8 @@ const AddProduct = ({ setHeaderData }) => {
       return (<img height={100} width={100} src={img} key={index} alt="" />)
     })
   }
+
+  // console.log(galleryImages, imagesArray);
 
   const handleDate = (e, type, prop) => {
     let key
@@ -542,10 +564,10 @@ const AddProduct = ({ setHeaderData }) => {
   }
 
   // console.log(bankOffers);
-  const setImageLink = (e) => {
-    var imageLink = e.target.value
-    setImages(imageLink)
-  }
+  // const setImageLink = (e) => {
+  //   var imageLink = e.target.value
+  //   setImages(imageLink)
+  // }
 
   const setImageGalleryLink = (e) => {
     var imageLink = e.target.value
@@ -553,182 +575,19 @@ const AddProduct = ({ setHeaderData }) => {
     setGalleryImages(imageLink)
   }
 
-  const handleOpen = (e, images) => {
+  const handleOpen = (e, imagesPassed) => {
     e.preventDefault()
     setModalOpen(true)
-    setModalData(images)
+    setModalData(imagesPassed)
   }
 
-  // const expData = () => {
-  //   return (
-  //     <>
-  //       <div id='modal-header'>Hello There</div>
-  //       <div id='modal-main' >
-  //         New Body
-  //       </div>
-  //       <div id='modal-footer'>
-  //         New Footer
-  //       </div>
-  //     </>
-  //   )
-  // }
-  // console.log(containerEAN);
-  // console.log(containerOffer);
-  // console.log(containerProducts);
-
-  // const dynamicTableComp = (type) => {
-  //   switch (type) {
-  //     case 'Soundbar':
-  //       return (
-  //         <>
-  //           <h4>Product Specific Details</h4>
-  //           <div className="catelogue_Form_Group">
-  //             <input type='text' name="Product Power Output" id="Product Power Output" value={dynamicTable.powerOutput} className='input-field' placeholder='Enter Product Power Output' onChange={(value) => { handleDyanmicTableValues("powerOutput", value); handleInput("powerOutput", value) }} />
-  //             <input type='text' name="Product Channel Configuration" id="Product Channel Configuration" value={dynamicTable.channelConfiguration} className='input-field' placeholder='Enter Product Channel Configuration' onChange={(value) => { handleDyanmicTableValues("channelConfiguration", value); handleInput("channelConfiguration", value) }} />
-  //             <input type='text' name="Product Connection type" id="Product Connection type" value={dynamicTable.connectionType} className='input-field' placeholder='Enter Product Connection Type' onChange={(value) => { handleDyanmicTableValues("connectionType", value); handleInput("connectionType", value) }} />
-  //             <input type='text' name="Product Sattelite Channels" id="Product Sattelite Channels" value={dynamicTable.satteliteChannels} className='input-field' placeholder='Enter Product Sattelite Channels' onChange={(value) => { handleDyanmicTableValues("satteliteChannels", value); handleInput("satteliteChannels", value) }} />
-  //             <input type='text' name="Product Included subwoofer" id="Product Included subwoofer" value={dynamicTable.includedSubwoofer} className='input-field' placeholder='Enter Product Included Subwoofer' onChange={(value) => { handleDyanmicTableValues("includedSubwoofer", value); handleInput("includedSubwoofer", value) }} />
-  //             <input type='text' name="Product Input ports" id="Product Input ports" value={dynamicTable.inputPorts} className='input-field' placeholder='Enter Product Input ports' onChange={(value) => { handleDyanmicTableValues("inputPorts", value); handleInput("inputPorts", value) }} />
-  //           </div>
-  //         </>)
-  //     case 'TWS':
-  //       return (
-  //         <>
-  //           <h4>Product Specific Details</h4>
-  //           <div className="catelogue_Form_Group">
-  //             <input type='text' name="Product Bluetooth Version" id="Product Bluetooth Version" value={dynamicTable.bluetoothVersion} className='input-field' placeholder='Enter Product Bluetooth Version' onChange={(value) => { handleDyanmicTableValues("bluetoothVersion", value); handleInput("bluetoothVersion", value) }} />
-  //             <input type='text' name="Product Total Playback Time" id="Product Total Playback Time" value={dynamicTable.totalPlaybackTime} className='input-field' placeholder='Enter Product Total Playback Time' onChange={(value) => { handleDyanmicTableValues("totalPlaybackTime", value); handleInput("totalPlaybackTime", value) }} />
-  //             <input type='text' name="Product Quick Charge" id="Product Quick Charge" value={dynamicTable.quickCharge} className='input-field' placeholder='Enter Product Quick Charge' onChange={(value) => { handleDyanmicTableValues("quickCharge", value); handleInput("quickCharge", value) }} />
-  //           </div>
-  //         </>)
-  //     case 'Bluetooth_Neckband_Earphones':
-  //       return (
-  //         <>
-  //           <h4>Product Specific Details</h4>
-  //           <div className="catelogue_Form_Group">
-  //             <input type='text' name="Product Bluetooth Version" id="Product Bluetooth Version" value={dynamicTable.bluetoothVersion} className='input-field' placeholder='Enter Product Bluetooth Version' onChange={(value) => { handleDyanmicTableValues("bluetoothVersion", value); handleInput("bluetoothVersion", value) }} />
-  //             <input type='text' name="Product Playback Time" id="Product Playback Time" value={dynamicTable.playbackTime} className='input-field' placeholder='Enter Product Playback Time' onChange={(value) => { handleDyanmicTableValues("playbackTime", value); handleInput("playbackTime", value) }} />
-  //             <input type='text' name="Product Quick Charge" id="Product Quick Charge" value={dynamicTable.quickCharge} className='input-field' placeholder='Enter Product Quick Charge' onChange={(value) => { handleDyanmicTableValues("quickCharge", value); handleInput("quickCharge", value) }} />
-  //           </div>
-  //         </>)
-  //     case 'Bluetooth_Headphones':
-  //       return (
-  //         <>
-  //           <h4>Product Specific Details</h4>
-  //           <div className="catelogue_Form_Group">
-  //             <input type='text' name="Product Bluetooth Version" id="Product Bluetooth Version" value={dynamicTable.bluetoothVersion} className='input-field' placeholder='Enter Product Bluetooth Version' onChange={(value) => { handleDyanmicTableValues("bluetoothVersion", value); handleInput("bluetoothVersion", value) }} />
-  //             <input type='text' name="Product Playback Time" id="Product Playback Time" value={dynamicTable.playbackTime} className='input-field' placeholder='Enter Product Playback Time' onChange={(value) => { handleDyanmicTableValues("playbackTime", value); handleInput("playbackTime", value) }} />
-  //             <input type='text' name="Product Quick Charge" id="Product Quick Charge" value={dynamicTable.quickCharge} className='input-field' placeholder='Enter Product Quick Charge' onChange={(value) => { handleDyanmicTableValues("quickCharge", value); handleInput("quickCharge", value) }} />
-  //             <input type='text' name="Product Mic" id="Product Mic" value={dynamicTable.mic} className='input-field' placeholder='Enter Product Mic' onChange={(value) => { handleDyanmicTableValues("mic", value); handleInput("mic", value) }} />
-  //           </div>
-  //         </>)
-  //     case 'Wired_Headphones':
-  //       return (
-  //         <>
-  //           <h4>Product Specific Details</h4>
-  //           <div className="catelogue_Form_Group">
-  //             <input type='text' name="Product Mic" id="Product Mic" value={dynamicTable.mic} className='input-field' placeholder='Enter Product Mic' onChange={(value) => { handleDyanmicTableValues("mic", value); handleInput("mic", value) }} />
-  //             <input type='text' name="Product Wired Controls" id="Product Wired Controls" value={dynamicTable.wiredControls} className='input-field' placeholder='Enter Product Wired Controls' onChange={(value) => { handleDyanmicTableValues("wiredControls", value); handleInput("wiredControls", value) }} />
-  //             <input type='text' name="Product Weight" id="Product Weight" value={dynamicTable.weight} className='input-field' placeholder='Enter Product Weight' onChange={(value) => { handleDyanmicTableValues("weight", value); handleInput("weight", value) }} />
-  //           </div>
-  //         </>)
-  //     case 'Wired_Earphone':
-  //       return (
-  //         <>
-  //           <h4>Product Specific Details</h4>
-  //           <div className="catelogue_Form_Group">
-  //             <input type='text' name="Product Mic" id="Product Mic" value={dynamicTable.mic} className='input-field' placeholder='Enter Product Mic' onChange={(value) => { handleDyanmicTableValues("mic", value); handleInput("mic", value) }} />
-  //             <input type='text' name="Product Wired Controls" id="Product Wired Controls" value={dynamicTable.wiredControls} className='input-field' placeholder='Enter Product Wired Controls' onChange={(value) => { handleDyanmicTableValues("wiredControls", value); handleInput("wiredControls", value) }} />
-  //           </div>
-  //         </>)
-  //     case 'Powerbank':
-  //       return (
-  //         <>
-  //           <h4>Product Specific Details</h4>
-  //           <div className="catelogue_Form_Group">
-  //             <input type='text' name="Product Capacity" id="Product Capacity" value={dynamicTable.capacity} className='input-field' placeholder='Enter Product Capacity' onChange={(value) => { handleDyanmicTableValues("capacity", value); handleInput("capacity", value) }} />
-  //             <input type='text' name="Product Output Ports" id="Product Output Ports" value={dynamicTable.outputPorts} className='input-field' placeholder='Enter Product Output Ports' onChange={(value) => { handleDyanmicTableValues("outputPorts", value); handleInput("outputPorts", value) }} />
-  //             <input type='text' name="Product Fast Charging" id="Product Fast Charging" value={dynamicTable.fastCharging} className='input-field' placeholder='Enter Product Fast Charging' onChange={(value) => { handleDyanmicTableValues("fastCharging", value); handleInput("fastCharging", value) }} />
-  //           </div>
-  //         </>)
-  //     case 'Tablet':
-  //       return (
-  //         <>
-  //           <h4>Product Specific Details</h4>
-  //           <div className="catelogue_Form_Group">
-  //             <input type='text' name="Product RAM" id="Product RAM" value={dynamicTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleInput("ram", value) }} />
-  //             <input type='text' name="Product Internal Storage" id="Product Internal Storage" value={dynamicTable.internalStorage} className='input-field' placeholder='Enter Product Internal Storage' onChange={(value) => { handleDyanmicTableValues("internalStorage", value); handleInput("internalStorage", value) }} />
-  //             <input type='text' name="Product Screen Size" id="Product Screen Size" value={dynamicTable.screenSize} className='input-field' placeholder='Enter Product Screen Size' onChange={(value) => { handleDyanmicTableValues("screenSize", value); handleInput("screenSize", value) }} />
-  //             <input type='text' name="Product Screen Resolution" id="Product Screen Resolution" value={dynamicTable.screenResolution} className='input-field' placeholder='Enter Product Screen Resolution' onChange={(value) => { handleDyanmicTableValues("screenResolution", value); handleInput("screenResolution", value) }} />
-  //             <input type='text' name="Product Screen Type" id="Product Screen Type" value={dynamicTable.screenType} className='input-field' placeholder='Enter Product Screen Type' onChange={(value) => { handleDyanmicTableValues("screenType", value); handleInput("screenType", value) }} />
-  //             {/* <input type='text' name="Product Screen Type" id="Product Screen Type" value={dynamicTable.screenType} className='input-field' placeholder='Enter Product Screen Type' onChange={(value) => handleDyanmicTableValues("screenType", value)} /> */}
-  //           </div>
-  //         </>)
-  //     case 'Smart_TV':
-  //       return (
-  //         <>
-  //           <h4>Product Specific Details</h4>
-  //           <div className="catelogue_Form_Group">
-  //             <input type='text' name="Product Operating System" id="Product Operating System" value={dynamicTable.operatingSystem} className='input-field' placeholder='Enter Product Operating System' onChange={(value) => { handleDyanmicTableValues("operatingSystem", value); handleInput("operatingSystem", value) }} />
-  //             <input type='text' name="Product Screen Size" id="Product Screen Size" value={dynamicTable.screenSize} className='input-field' placeholder='Enter Product Screen Size' onChange={(value) => { handleDyanmicTableValues("screenSize", value); handleInput("screenSize", value) }} />
-  //             <input type='text' name="Product Screen Resolution" id="Product Screen Resolution" value={dynamicTable.screenResolution} className='input-field' placeholder='Enter Product Screen Resolution' onChange={(value) => { handleDyanmicTableValues("screenResolution", value); handleInput("screenResolution", value) }} />
-  //             <input type='text' name="Product Display Technology" id="Product Display Technology" value={dynamicTable.displayTechnology} className='input-field' placeholder='Enter Product Display Technology' onChange={(value) => { handleDyanmicTableValues("displayTechnology", value); handleInput("displayTechnology", value) }} />
-  //             <input type='text' name="Product Input ports" id="Product Input ports" value={dynamicTable.inputPorts} className='input-field' placeholder='Enter Product Input ports' onChange={(value) => { handleDyanmicTableValues("inputPorts", value); handleInput("inputPorts", value) }} />
-  //             <input type='text' name="Product Refresh Rate" id="Product Refresh Rate" value={dynamicTable.refreshRate} className='input-field' placeholder='Enter Product Refresh Rate' onChange={(value) => { handleDyanmicTableValues("refreshRate", value); handleInput("refreshRate", value) }} />
-  //           </div>
-  //         </>)
-  //     case 'Laptop':
-  //       return (
-  //         <>
-  //           <h4>Product Specific Details</h4>
-  //           <div className="catelogue_Form_Group">
-  //             <input type='text' name="Product RAM" id="Product RAM" value={dynamicTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleInput("ram", value) }} />
-  //             <input type='text' name="Product Internal Storage" id="Product Internal Storage" value={dynamicTable.internalStorage} className='input-field' placeholder='Enter Product Internal Storage' onChange={(value) => { handleDyanmicTableValues("internalStorage", value); handleInput("internalStorage", value) }} />
-  //             <input type='text' name="Product Screen Size" id="Product Screen Size" value={dynamicTable.screenSize} className='input-field' placeholder='Enter Product Screen Size' onChange={(value) => { handleDyanmicTableValues("screenSize", value); handleInput("screenSize", value) }} />
-  //             <input type='text' name="Product Screen Resolution" id="Product Screen Resolution" value={dynamicTable.screenResolution} className='input-field' placeholder='Enter Product Screen Resolution' onChange={(value) => { handleDyanmicTableValues("screenResolution", value); handleInput("screenResolution", value) }} />
-  //             <input type='text' name="Product Screen Type" id="Product Screen Type" value={dynamicTable.screenType} className='input-field' placeholder='Enter Product Screen Type' onChange={(value) => { handleDyanmicTableValues("screenType", value); handleInput("screenType", value) }} />
-  //             <input type='text' name="Product Graphics Card" id="Product Graphics Card" value={dynamicTable.graphicsCard} className='input-field' placeholder='Enter Product Graphics Card' onChange={(value) => { handleDyanmicTableValues("graphicsCard", value); handleInput("graphicsCard", value) }} />
-  //           </div>
-  //         </>)
-  //     case 'Wifi_Smart_Speaker':
-  //       return (
-  //         <>
-  //           <h4>Product Specific Details</h4>
-  //           <div className="catelogue_Form_Group">
-  //             <input type='text' name="Product Supported smart assistants" id="Product Supported smart assistants" value={dynamicTable.supportedSmartAssistants} className='input-field' placeholder='Enter Product Supported smart assistants' onChange={(value) => { handleDyanmicTableValues("supportedSmartAssistants", value); handleInput("supportedSmartAssistants", value) }} />
-  //             <input type='text' name="Product Power Output" id="Product Power Output" value={dynamicTable.powerOutput} className='input-field' placeholder='Enter Product Power Output' onChange={(value) => { handleDyanmicTableValues("powerOutput", value); handleInput("powerOutput", value) }} />
-  //           </div>
-  //         </>)
-  //     case 'Security_Camera':
-  //       return (
-  //         <>
-  //           <h4>Product Specific Details</h4>
-  //           <div className="catelogue_Form_Group">
-  //             <input type='text' name="Product Sensor Resolution" id="Product Sensor Resolution" value={dynamicTable.sensorResolution} className='input-field' placeholder='Enter Product Sensor Resolution' onChange={(value) => { handleDyanmicTableValues("sensorResolution", value); handleInput("sensorResolution", value) }} />
-  //           </div>
-  //         </>)
-  //     case 'Smartphone':
-  //       return (
-  //         <>
-  //           <h4>Product Specific Details</h4>
-  //           <div className="catelogue_Form_Group">
-  //             <input type='text' name="Product Color" id="Product Color" value={dynamicTable.color} className='input-field' placeholder='Enter Product Color' onChange={(value) => { handleDyanmicTableValues("color", value); handleInput("oolor", value) }} />
-  //             <input type='text' name="Product RAM" id="Product RAM" value={dynamicTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleInput("ram", value) }} />
-  //             <input type='text' name="Product ROM" id="Product ROM" value={dynamicTable.rom} className='input-field' placeholder='Enter Product ROM' onChange={(value) => { handleDyanmicTableValues("rom", value); handleInput("rom", value) }} />
-  //           </div>
-  //         </>)
-
-  //     case 'Miscellaneous':
-  //       return (
-  //         <></>
-  //       )
-
-  //     default:
-  //       return <>
-  //         <p className='alert alert-danger' >Select Product Type first</p>
-  //       </>
-  //   }
-  // }
+  useEffect(() => {
+    if (name) {
+      let text = name + '(' + dynamicTable.map(item => ` ${item},`) + ')'
+      setDynamicHeader(text)
+    }
+  }, [name, dynamicTable.length])
+  console.log(dynamicTable);
 
   const technicalDetaislComp = (type) => {
     switch (type) {
@@ -750,8 +609,8 @@ const AddProduct = ({ setHeaderData }) => {
         return (
           <>
             <input type='text' name="Product OS" id="Product OS" value={technicalDetailsTable.os} className='input-field' placeholder='Enter Product OS' onChange={(value) => handleTechnicalTableValues("os", value)} />
-            <input type='text' name="Product RAM" id="Product RAM" value={technicalDetailsTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleTechnicalTableValues("ram", value) }} />
-            <input type='text' name="Product ROM" id="Product ROM" value={technicalDetailsTable.rom} className='input-field' placeholder='Enter Product ROM' onChange={(value) => { handleDyanmicTableValues("rom", value); handleTechnicalTableValues("rom", value) }} />
+            <input type='text' name="Product RAM" id="Product RAM" value={technicalDetailsTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(e) => { setDynamicTable([...dynamicTable, e.target.value]); handleTechnicalTableValues("ram", e.target.value) }} />
+            <input type='text' name="Product ROM" id="Product ROM" value={technicalDetailsTable.rom} className='input-field' placeholder='Enter Product ROM' onChange={(e) => { setDynamicTable([...dynamicTable, e.target.value]); handleTechnicalTableValues("rom", e.target.value) }} />
             <input type='text' name="Product Wireless communication technologies" id="Product Wireless communication technologies" value={technicalDetailsTable.wirelessTech} className='input-field' placeholder='Enter Product Wireless communication technologies' onChange={(value) => handleTechnicalTableValues("wirelessTech", value)} />
             <input type='text' name="Product Connectivity technologies" id="Product Connectivity technologies" value={technicalDetailsTable.connectivityTech} className='input-field' placeholder='Enter Product Connectivity technologies' onChange={(value) => handleTechnicalTableValues("connectivityTech", value)} />
             <input type='text' name="Product GPS" id="Product GPS" value={technicalDetailsTable.gps} className='input-field' placeholder='Enter if Product has GPS' onChange={(value) => handleTechnicalTableValues("gps", value)} />
@@ -821,6 +680,16 @@ const AddProduct = ({ setHeaderData }) => {
             <input type='text' name="Product Maximum Operating Distance" id="Product Maximum Operating Distance" value={technicalDetailsTable.maximumOperatingDistance} className='input-field' placeholder='Enter Product Maximum Operating Distance' onChange={(value) => { handleTechnicalTableValues("maximumOperatingDistance", value) }} />
             <input type='text' name="Includes Rechargable Battery" id="Includes Rechargable Battery" value={technicalDetailsTable.includesRechargableBattery} className='input-field' placeholder='Enter Product Includes Rechargable Battery' onChange={(value) => { handleTechnicalTableValues("includesRechargableBattery", value) }} />
           </>)
+      case 'Bluetooth Speaker':
+        return (
+          <>
+            <input type='text' name="Product Speaker Type" id="Product Speaker Type" value={technicalDetailsTable.speakerType} className='input-field' placeholder='Enter Product Speaker Type' onChange={(value) => handleTechnicalTableValues("speakerType", value)} />
+            <input type='text' name="Product Peak Power Handling - Speakers" id="Product Peak Power Handling - Speakers" value={technicalDetailsTable.peakPowerHandlingSpeakers} className='input-field' placeholder='Enter Product Peak Power Handling - Speakers' onChange={(value) => handleTechnicalTableValues("peakPowerHandlingSpeakers", value)} />
+            <input type='text' name="Product RMS Power Range - Amplifiers" id="Product RMS Power Range - Amplifiers" value={technicalDetailsTable.RMSPowerRangeAmplifiers} className='input-field' placeholder='Enter Product RMS Power Range - Amplifiers' onChange={(value) => handleTechnicalTableValues("RMSPowerRangeAmplifiers", value)} />
+            <input type='text' name="Product Batteries" id="Product Batteries" value={technicalDetailsTable.batteries} className='input-field' placeholder='Enter Product Batteries' onChange={(value) => { handleTechnicalTableValues("batteries", value) }} />
+            <input type='text' name="Product Play Time" id="Product Play Time" value={technicalDetailsTable.playTime} className='input-field' placeholder='Enter Product Play Time' onChange={(value) => { handleTechnicalTableValues("playTime", value); handleDyanmicTableValues("playTime", value) }} />
+
+          </>)
       case 'Bluetooth Headphones':
         return (
           <>
@@ -865,7 +734,7 @@ const AddProduct = ({ setHeaderData }) => {
             <input type='text' name="Connector Type" id="Connector Type" value={technicalDetailsTable.connectorType} className='input-field' placeholder='Enter Product Connector Type' onChange={(value) => { handleTechnicalTableValues("connectorType", value); handleDyanmicTableValues("connectorType", value) }} />
             <input type='text' name="Material" id="Material" value={technicalDetailsTable.material} className='input-field' placeholder='Enter Product Material' onChange={(value) => { handleTechnicalTableValues("material", value) }} />
           </>)
-      case 'Adaptor':
+      case 'Adapter':
         return (
           <>
             <input type='text' name="Product Compatible Devices" id="Product Compatible Devices" value={technicalDetailsTable.compatibleDevices} className='input-field' placeholder='Enter Product Compatible Devices' onChange={(value) => { handleTechnicalTableValues("compatibleDevices", value) }} />
@@ -920,36 +789,59 @@ const AddProduct = ({ setHeaderData }) => {
             <input type='text' name="Product Remote Control Type" id="Product Remote Control Type" value={technicalDetailsTable.remoteControlType} className='input-field' placeholder='Enter Product Remote Control Type' onChange={(value) => handleTechnicalTableValues("remoteControlType", value)} />
             <input type='text' name="Product Display Technology" id="Product Display Technology" value={dynamicTable.displayTechnology} className='input-field' placeholder='Enter Product Display Technology' onChange={(value) => { handleTechnicalTableValues("displayTechnology", value) }} />
           </>)
-      // case 'Laptop':
-      //   return (
-      //     <>
-      //       <h4>Product Specific Details</h4>
-      //       <div className="catelogue_Form_Group">
-      //         <input type='text' name="Product RAM" id="Product RAM" value={dynamicTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleInput("ram", value) }} />
-      //         <input type='text' name="Product Internal Storage" id="Product Internal Storage" value={dynamicTable.internalStorage} className='input-field' placeholder='Enter Product Internal Storage' onChange={(value) => { handleDyanmicTableValues("internalStorage", value); handleInput("internalStorage", value) }} />
-      //         <input type='text' name="Product Screen Size" id="Product Screen Size" value={dynamicTable.screenSize} className='input-field' placeholder='Enter Product Screen Size' onChange={(value) => { handleDyanmicTableValues("screenSize", value); handleInput("screenSize", value) }} />
-      //         <input type='text' name="Product Screen Resolution" id="Product Screen Resolution" value={dynamicTable.screenResolution} className='input-field' placeholder='Enter Product Screen Resolution' onChange={(value) => { handleDyanmicTableValues("screenResolution", value); handleInput("screenResolution", value) }} />
-      //         <input type='text' name="Product Screen Type" id="Product Screen Type" value={dynamicTable.screenType} className='input-field' placeholder='Enter Product Screen Type' onChange={(value) => { handleDyanmicTableValues("screenType", value); handleInput("screenType", value) }} />
-      //         <input type='text' name="Product Graphics Card" id="Product Graphics Card" value={dynamicTable.graphicsCard} className='input-field' placeholder='Enter Product Graphics Card' onChange={(value) => { handleDyanmicTableValues("graphicsCard", value); handleInput("graphicsCard", value) }} />
-      //       </div>
-      //     </>)
-      // case 'Wifi_Smart_Speaker':
-      //   return (
-      //     <>
-      //       <h4>Product Specific Details</h4>
-      //       <div className="catelogue_Form_Group">
-      //         <input type='text' name="Product Supported smart assistants" id="Product Supported smart assistants" value={dynamicTable.supportedSmartAssistants} className='input-field' placeholder='Enter Product Supported smart assistants' onChange={(value) => { handleDyanmicTableValues("supportedSmartAssistants", value); handleInput("supportedSmartAssistants", value) }} />
-      //         <input type='text' name="Product Power Output" id="Product Power Output" value={dynamicTable.powerOutput} className='input-field' placeholder='Enter Product Power Output' onChange={(value) => { handleDyanmicTableValues("powerOutput", value); handleInput("powerOutput", value) }} />
-      //       </div>
-      //     </>)
-      // case 'Security_Camera':
-      //   return (
-      //     <>
-      //       <h4>Product Specific Details</h4>
-      //       <div className="catelogue_Form_Group">
-      //         <input type='text' name="Product Sensor Resolution" id="Product Sensor Resolution" value={dynamicTable.sensorResolution} className='input-field' placeholder='Enter Product Sensor Resolution' onChange={(value) => { handleDyanmicTableValues("sensorResolution", value); handleInput("sensorResolution", value) }} />
-      //       </div>
-      //     </>)
+      case 'Laptop':
+        return (
+          <>
+            <input type='text' name="Product Batteries" id="Product Batteries" value={technicalDetailsTable.batteries} className='input-field' placeholder='Enter Product Batteries' onChange={(value) => { handleTechnicalTableValues("batteries", value) }} />
+            <input type='text' name="Product RAM" id="Product RAM" value={technicalDetailsTable.ram} className='input-field' placeholder='Enter Product RAM' onChange={(value) => { handleDyanmicTableValues("ram", value); handleTechnicalTableValues("ram", value) }} />
+            <input type='text' name="Product Memory Storage Capacity" id="Product Memory Storage Capacity" value={technicalDetailsTable.memoryStorageCapacity} className='input-field' placeholder='Enter Product Memory Storage Capacity' onChange={(value) => { handleTechnicalTableValues("memoryStorageCapacity", value) }} />
+            <input type='text' name="Product Flash Memory Installed Size" id="Product Flash Memory Installed Size" value={technicalDetailsTable.flashMemoryInstalledSize} className='input-field' placeholder='Enter Product Flash Memory Installed Size' onChange={(value) => { handleTechnicalTableValues("flashMemoryInstalledSize", value) }} />
+            <input type='text' name="Product Ram Memory Installed Size" id="Product Ram Memory Installed Size" value={technicalDetailsTable.ramMemoryInstalledSize} className='input-field' placeholder='Enter Product Ram Memory Installed Size' onChange={(value) => { handleTechnicalTableValues("ramMemoryInstalledSize", value) }} />
+            <input type='text' name="Product Maximum Memory Supported" id="Product Maximum Memory Supported" value={technicalDetailsTable.maximumMemorySupported} className='input-field' placeholder='Enter Product Maximum Memory Supported' onChange={(value) => { handleTechnicalTableValues("maximumMemorySupported", value) }} />
+            <input type='text' name="Product Ram Memory Technology" id="Product Ram Memory Technology" value={technicalDetailsTable.ramMemoryTechnology} className='input-field' placeholder='Enter Product Ram Memory Technology' onChange={(value) => { handleTechnicalTableValues("ramMemoryTechnology", value) }} />
+            <input type='text' name="Product Hard Drive Interface" id="Product Hard Drive Interface" value={technicalDetailsTable.hardDriveInterface} className='input-field' placeholder='Enter Product Hard Drive Interface' onChange={(value) => { handleTechnicalTableValues("hardDriveInterface", value) }} />
+            <input type='text' name="Product Hard Disk Description" id="Product Hard Disk Description" value={technicalDetailsTable.hardDiskDescription} className='input-field' placeholder='Enter Product Hard Disk Description' onChange={(value) => { handleTechnicalTableValues("hardDiskDescription", value) }} />
+            <input type='text' name="Product OS" id="Product OS" value={technicalDetailsTable.os} className='input-field' placeholder='Enter Product OS' onChange={(value) => handleTechnicalTableValues("os", value)} />
+            <input type='text' name="Product Processor Brand" id="Product Processor Brand" value={technicalDetailsTable.processorBrand} className='input-field' placeholder='Enter Product Processor Brand' onChange={(value) => { handleTechnicalTableValues("processorBrand", value) }} />
+            <input type='text' name="Product Processor Speed" id="Product Processor Speed" value={technicalDetailsTable.processorSpeed} className='input-field' placeholder='Enter Product Processor Speed' onChange={(value) => { handleTechnicalTableValues("processorSpeed", value) }} />
+            <input type='text' name="Product Processor Type" id="Product Processor Type" value={technicalDetailsTable.processorType} className='input-field' placeholder='Enter Product Processor Type' onChange={(value) => { handleTechnicalTableValues("processorType", value) }} />
+            <input type='text' name="Product Processor Count" id="Product Processor Count" value={technicalDetailsTable.processorCount} className='input-field' placeholder='Enter Product Processor Count' onChange={(value) => { handleTechnicalTableValues("processorCount", value) }} />
+            <input type='text' name="Product Processor Model Number" id="Product Processor Model Number" value={technicalDetailsTable.processorModelNumber} className='input-field' placeholder='Enter Product Processor Model Number' onChange={(value) => { handleTechnicalTableValues("processorModelNumber", value) }} />
+            <input type='text' name="Product Processor Model Number" id="Product Processor Model Number" value={technicalDetailsTable.processorModelNumber} className='input-field' placeholder='Enter Product Processor Model Number' onChange={(value) => { handleTechnicalTableValues("processorModelNumber", value) }} />
+            <input type='text' name="Product Graphics Card Description" id="Product Graphics Card Description" value={technicalDetailsTable.graphicsCardDescription} className='input-field' placeholder='Enter Product Graphics Card Description' onChange={(value) => handleTechnicalTableValues("graphicsCardDescription", value)} />
+            <input type='text' name="Product Graphics RAM Type" id="Product Graphics RAM Type" value={technicalDetailsTable.graphicsRAMType} className='input-field' placeholder='Enter Product Graphics RAM Type' onChange={(value) => handleTechnicalTableValues("graphicsRAMType", value)} />
+            <input type='text' name="Product Graphics Card Interface" id="Product Graphics Card Interface" value={technicalDetailsTable.graphicsCardInterface} className='input-field' placeholder='Enter Product Graphics Card Interface' onChange={(value) => handleTechnicalTableValues("graphicsCardInterface", value)} />
+            <input type='text' name="Product Mounting Hardware" id="Product Mounting Hardware" value={technicalDetailsTable.mountingHardware} className='input-field' placeholder='Enter Product Mounting Hardware' onChange={(value) => handleTechnicalTableValues("mountingHardware", value)} />
+            <input type='text' name="Product Number Of Items" id="Product Number Of Items" value={technicalDetailsTable.numberOfItems} className='input-field' placeholder='Enter Product Number Of Items' onChange={(value) => handleTechnicalTableValues("numberOfItems", value)} />
+            <input type='text' name="Standing screen display size" id="Standing screen display size" value={technicalDetailsTable.standingScreenDisplaySize} className='input-field' placeholder='Enter Standing screen display size' onChange={(value) => handleTechnicalTableValues("standingScreenDisplaySize", value)} />
+            <input type='text' name="Product Display Type" id="Product Display Type" value={technicalDetailsTable.displayType} className='input-field' placeholder='Enter Product Display Type' onChange={(value) => handleTechnicalTableValues("displayType", value)} />
+            <input type='text' name="Product Batteries Included" id="Product Batteries Included" value={technicalDetailsTable.batteriesIncluded} className='input-field' placeholder='Enter Product Batteries Included' onChange={(value) => { handleTechnicalTableValues("batteriesIncluded", value) }} />
+            <input type='text' name="Batteries Required" id="Batteries Required" value={technicalDetailsTable.batteriesRequired} className='input-field' placeholder='Enter Product Batteries Required' onChange={(value) => { handleTechnicalTableValues("batteriesRequired", value) }} />
+            <input type='text' name="Product Battery Cell Composition" id="Product Battery Cell Composition" value={technicalDetailsTable.batteryCellComposition} className='input-field' placeholder='Enter Product Battery Cell Composition' onChange={(value) => { handleTechnicalTableValues("batteryCellComposition", value) }} />
+            <input type='text' name="Product Wireless Type" id="Product Wireless Type" value={technicalDetailsTable.wirelessType} className='input-field' placeholder='Enter Product Wireless Type' onChange={(value) => handleTechnicalTableValues("wirelessType", value)} />
+            <input type='text' name="Connector Type" id="Connector Type" value={technicalDetailsTable.connectorType} className='input-field' placeholder='Enter Product Connector Type' onChange={(value) => { handleTechnicalTableValues("connectorType", value); handleDyanmicTableValues("connectorType", value) }} />
+            <input type='text' name="Product Device interface - primary" id="Product Device interface - primary" value={technicalDetailsTable.deviceInterface} className='input-field' placeholder='Enter Product Device interface - primary' onChange={(value) => handleTechnicalTableValues("deviceInterface", value)} />
+            <input type='text' name="Product Form factor" id="Product Form factor" value={technicalDetailsTable.formFactor} className='input-field' placeholder='Enter Product Form factor' onChange={(value) => handleTechnicalTableValues("formFactor", value)} />
+          </>)
+      case 'Wifi Smart Speaker':
+        return (
+          <>
+            <input type='text' name="Product Compatible Devices" id="Product Compatible Devices" value={technicalDetailsTable.compatibleDevices} className='input-field' placeholder='Enter Product Compatible Devices' onChange={(value) => { handleTechnicalTableValues("compatibleDevices", value) }} />
+            <input type='text' name="Product Special features" id="Product Special features" value={technicalDetailsTable.spacialFeature} className='input-field' placeholder='Enter Product Special features' onChange={(value) => handleTechnicalTableValues("spacialFeature", value)} />
+            <input type='text' name="Product Mounting Hardware" id="Product Mounting Hardware" value={technicalDetailsTable.mountingHardware} className='input-field' placeholder='Enter Product Mounting Hardware' onChange={(value) => handleTechnicalTableValues("mountingHardware", value)} />
+            <input type='text' name="Product Number Of Items" id="Product Number Of Items" value={technicalDetailsTable.numberOfItems} className='input-field' placeholder='Enter Product Number Of Items' onChange={(value) => handleTechnicalTableValues("numberOfItems", value)} />
+            <input type='text' name="Product Audio Output Mode" id="Product Audio Output Mode" value={technicalDetailsTable.audioOutputMode} className='input-field' placeholder='Enter Product Audio Output Mode' onChange={(value) => handleTechnicalTableValues("audioOutputMode", value)} />
+            <input type='text' name="Product Speaker Connectivity" id="Product Speaker Connectivity" value={technicalDetailsTable.speakerConnectivity} className='input-field' placeholder='Enter Product Speaker Connectivity' onChange={(value) => { handleTechnicalTableValues("speakerConnectivity", value) }} />
+            <input type='text' name="Product Batteries Included" id="Product Batteries Included" value={technicalDetailsTable.batteriesIncluded} className='input-field' placeholder='Enter Product Batteries Included' onChange={(value) => { handleTechnicalTableValues("batteriesIncluded", value) }} />
+            <input type='text' name="Product Batteries Required" id="Product Batteries Required" value={technicalDetailsTable.batteriesRequired} className='input-field' placeholder='Enter Product Batteries Required' onChange={(value) => { handleTechnicalTableValues("batteriesIncluded", value) }} />
+            <input type='text' name="Connector Type" id="Connector Type" value={technicalDetailsTable.connectorType} className='input-field' placeholder='Enter Product Connector Type' onChange={(value) => { handleTechnicalTableValues("connectorType", value); handleDyanmicTableValues("connectorType", value) }} />
+            <input type='text' name="Product Mounting Type" id="Product Mounting Type" value={technicalDetailsTable.mountingType} className='input-field' placeholder='Enter Product Mounting Type' onChange={(value) => { handleTechnicalTableValues("mountingType", value) }} />
+          </>)
+      case 'Security Camera':
+        return (
+          <>
+            <input type='text' name="Product ASIN" id="Product ASIN" value={technicalDetailsTable.ASIN} className='input-field' placeholder='Enter Product ASIN' onChange={(value) => { handleTechnicalTableValues("ASIN", value) }} />
+          </>)
 
 
       case 'Miscellaneous':
@@ -971,7 +863,7 @@ const AddProduct = ({ setHeaderData }) => {
           <div className="catelogue_Page_Header">
             <h4 className='catelogue_Page_Heading'>Catelogue Add Product</h4>
           </div>
-          <form className="catelogue_Form" onSubmit={formSubmit}>
+          <form className="catelogue_Form" onSubmit={handleFormSubmit}>
             <fieldset className='catelogue_Fieldset' >
               {/* <Dropdown>
                 <Dropdown.Toggle id="dropdown-basic">
@@ -1052,7 +944,7 @@ const AddProduct = ({ setHeaderData }) => {
             </fieldset>
             <div className="catelogue_Form_Group">
               <h4>Dynamic Header Preview</h4>
-              {
+              {/* {
                 product.name && (
                   <p>{product.name}
                     {dynamicTable && checkDynamicTable(dynamicTable) && (
@@ -1062,16 +954,17 @@ const AddProduct = ({ setHeaderData }) => {
                     }
                   </p>
                 )
-              }
+              } */}
+              {dynamicHeader}
             </div>
             <h4 className="Catalogue_Section_Heading">Product Info</h4>
             <div className="catelogue_Form_Group">
-              <input type='text' name="Product Name" id="Product Name" value={product.name} className='input-field' placeholder='Enter Product Name' onChange={(value) => handleInput("name", value)} />
-              <input type='text' name="Product EAN" id="Product EAN" value={product.EAN} className='input-field' placeholder='Enter Product EAN' onChange={(value) => handleInput("EAN", value)} />
-              <input type='text' name="Product HSN" id="Product HSN" value={product.HSN} className='input-field' placeholder='Enter Product HSN' onChange={(value) => handleInput("HSN", value)} />
+              <input type='text' name="Product Name" id="Product Name" value={name} className='input-field' placeholder='Enter Product Name' onChange={(e) => setName(e.target.value)} />
+              <input type='text' name="Product EAN" id="Product EAN" value={ean} className='input-field' placeholder='Enter Product EAN' onChange={(e) => setEan(e.target.value)} />
+              <input type='text' name="Product HSN" id="Product HSN" value={hsn} className='input-field' placeholder='Enter Product HSN' onChange={(e) => setHsn(e.target.value)} />
             </div>
             <div className="catelogue_Form_Group">
-              <input type='text' name="Product Description" id="Product Description" value={product.description} className='input-field' placeholder='Enter Product Description' onChange={(value) => handleInput("description", value)} />
+              <input type='text' name="Product Description" id="Product Description" value={description} className='input-field' placeholder='Enter Product Description' onChange={(e) => setDescription(e.target.value)} />
               <p className="catalogue_Hint">Add "~" seperated Product Description</p>
             </div>
             <br />
@@ -1100,18 +993,18 @@ const AddProduct = ({ setHeaderData }) => {
               <input type='text' name="Product Country of Origin" id="Product Country of Origin" value={technicalDetailsTable.country} className='input-field' placeholder='Enter Product Country of Origin' onChange={(value) => handleTechnicalTableValues("country", value)} />
             </div>
             <div className="catelogue_Form_Group">
-              <input type='text' name="Product MRP" id="Product MRP" value={product.MRP} className='input-field' placeholder='Enter Product MRP' onChange={(value) => handleInput("MRP", value)} />
-              <input type='text' name="Product MOP" id="Product MOP" value={product.MOP} className='input-field' placeholder='Enter Product MOP' onChange={(value) => handleInput("MOP", value)} />
-              {
+              <input type='text' name="Product MRP" id="Product MRP" value={mrp} className='input-field' placeholder='Enter Product MRP' onChange={(e) => setMrp(e.target.value)} />
+              <input type='text' name="Product MOP" id="Product MOP" value={mop} className='input-field' placeholder='Enter Product MOP' onChange={(e) => setMop(e.target.value)} />
+              {/* {
                 matches ? (
                   <input type='tel' name="Product Stock" id="Product Stock" className='input-field' placeholder='Enter Product Stock' value={product.stock} onChange={(value) => handleInput("stock", value)} />
                 ) : (
                   <input type='number' name="Product Stock" id="Product Stock" className='input-field' placeholder='Enter Product Stock' value={product.stock} onChange={(value) => handleInput("stock", value)} />
                 )
-              }
+              } */}
             </div>
             <br />
-            <div className="catelogue_Form_Group">
+            {/* <div className="catelogue_Form_Group">
               <h4 className="Catalogue_Section_Heading">Alternate Products</h4>
               <input type='text' name="Product alternate color" id="Product alternate color" value={alternateColorProds} className='input-field' placeholder='Enter Alternate product EAN by color' onChange={(e) => setAlternateColorProds(e.target.value)} />
               <input type='text' name="Product MOP" id="Product MOP" value={alternateSpecProds} className='input-field' placeholder='Enter Alternate product EAN by spec' onChange={(e) => setAlternateSpecProds(e.target.value)} />
@@ -1124,7 +1017,7 @@ const AddProduct = ({ setHeaderData }) => {
               <input type='text' name="Product Immediate Complimentary" id="Product Immediate Complimentary" value={immediateComplimentary} className='input-field' placeholder='Enter Immediate Complimentary product EAN' onChange={(e) => setImmediateComplimentary(e.target.value)} />
               <input type='text' name="Product Later Complimentary" id="Product Later Complimentary" value={laterComplimentary} className='input-field' placeholder='Enter Later Complimentary product EAN' onChange={(e) => setLaterComplimentary(e.target.value)} />
               <p className="catalogue_Hint">Add comma Product EAN numbers</p>
-            </div>
+            </div> */}
 
             {/* <div className="catelogue_Form_Group">
               {
@@ -1139,19 +1032,19 @@ const AddProduct = ({ setHeaderData }) => {
             <br />
             <h4>Product Images</h4>
             <div className="catelogue_Form_Group">
-              {/* <input type='file' name="Product Images" multiple id="Product Images" className='input-field' placeholder='Enter Product Images URL' onChange={imageHandleChange} />
-              <p className="catalogue_Hint">Add Maximun 5 images</p> */}
-              <input type='url' name="Product Images" id="Product Images" className='input-field' placeholder='Enter Product Images URL' value={images} onChange={(e) => setImageLink(e)} />
-              <p className="catalogue_Hint">Add comma seperated Image links, Add maximum 5 Images</p>
-              <div className={'button-Container'} onClick={(e) => handleOpen(e, images)}>
+              <input type='file' name="Product Images" multiple id="Product Images" className='input-field' placeholder='Enter Product Images URL' onChange={(e) => imageHandleChange(e, setImagesArray)} />
+              <p className="catalogue_Hint">Add Maximun 5 images</p>
+              {/* <input type='url' name="Product Images" id="Product Images" className='input-field' placeholder='Enter Product Images URL' value={images} onChange={(e) => setImageLink(e)} /> */}
+              {/* <p className="catalogue_Hint">Add comma seperated Image links, Add maximum 5 Images</p> */}
+              <div className={'button-Container'} onClick={(e) => handleOpen(e, imagesArray)}>
                 <button type='submit' className='submit-button'><p>Preview Images</p></button>
               </div>
             </div>
             <div className="catelogue_Form_Group">
-              {/* <input type='file' name="Product Images" multiple id="Product Images" className='input-field' placeholder='Enter Product Images URL' onChange={imageHandleChange} />
-              <p className="catalogue_Hint">Add Maximun 5 images</p> */}
-              <input type='url' name="Product Gallery Images" id="Product Gallery Images" className='input-field' placeholder='Enter Product Gallery Images URL' value={galleryImages} onChange={(e) => setImageGalleryLink(e)} />
-              <p className="catalogue_Hint">Add comma seperated Image links</p>
+              <input type='file' name="Product Images" multiple id="Product Images" className='input-field' placeholder='Enter Product Images URL' onChange={(e) => imageHandleChange(e, setGalleryImages)} />
+              <p className="catalogue_Hint">Add Maximun 5 images</p>
+              {/* <input type='url' name="Product Gallery Images" id="Product Gallery Images" className='input-field' placeholder='Enter Product Gallery Images URL' value={galleryImages} onChange={(e) => setImageGalleryLink(e)} /> */}
+              {/* <p className="catalogue_Hint">Add comma seperated Image links</p> */}
               <div className={'button-Container'} onClick={(e) => handleOpen(e, galleryImages)}>
                 <button type='submit' className='submit-button'><p>Preview Images</p></button>
               </div>
@@ -1318,8 +1211,6 @@ const AddProduct = ({ setHeaderData }) => {
         transition={Slide}
       />
       <CatelogueModal modalShow={modalOpen} setModalShow={setModalOpen} modalData={modalData} />
-      {/* {modalData()}
-      </ModalComp> */}
     </>
   )
 }

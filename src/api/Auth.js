@@ -41,7 +41,7 @@ export const userLogin = async (contact) => {
 
   let loginResponse
 
-  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/findstore`, loginData, { headers })
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/user/login`, loginData, { headers })
     .then(res => {
       // console.log(res);
       loginResponse = res.data

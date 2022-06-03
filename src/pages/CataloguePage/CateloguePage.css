@@ -275,6 +275,38 @@
   justify-content: flex-start;
 }
 
+.offerPage_ProductList{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.offerPage_ProductList p{
+  width: 230px;
+}
+
+.offerPage_Hint{
+  margin: 0 0 1.25rem 0.5rem;
+}
+
+.offer_Section{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.offer_Section .addoffer_Input{
+  width: 100%;
+}
+
+.offer_Section .offerPage_Hint, .offer_Section .catalogue_Hint{
+  align-self: flex-start;
+}
+
 @media screen and (min-width: 768px) {
   .catelogue_Page{
     padding: 1.5rem;

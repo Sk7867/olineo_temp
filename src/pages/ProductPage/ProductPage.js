@@ -75,6 +75,7 @@ const ProductPage = ({ setHeaderData }) => {
     if (loc.state) {
       let product = loc.state.product
       if (product) {
+        console.log(product);
         // let allProductImages = Object.values(product.otherImages)
         // allProductImages.unshift(productImage1)
         getIndiProduct(product._id)
@@ -376,9 +377,10 @@ const ProductPage = ({ setHeaderData }) => {
                     <p className="product_Original_Price">
                       ₹{productData.product_price.mrp}
                     </p>
-                    <p className='product_Discount'>
-                      {productData.product_Disccount.flatDiscount.value}%
-                    </p>
+                    {productData.product_Disccount.flatDiscount && productData.product_Disccount.flatDiscount.value && (
+                      <p className='product_Discount'>
+                        {productData.product_Disccount.flatDiscount.value}%
+                      </p>)}
                     <p className="product_Availability">
                       {
                         preOrder ? ('') : (

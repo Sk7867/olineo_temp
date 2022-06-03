@@ -15,8 +15,10 @@ const ProductListItem = ({ product }) => {
       <Link to={`/product/${product.name}`} state={{ product: product }} className='productListItem_Contaier'>
         <div className="productListItem_Wrapper">
           <div className="productListItem_Image_Wrapper">
-            <img src={product.images[0]} alt="" />
-            <ProductOfferTag offer={product.discount.flatDiscount.value} />
+            {product.images.length > 0 && (
+              <img src={product.images[0]} alt="" />
+            )}
+            {/* <ProductOfferTag offer={product.discount.flatDiscount.value} /> */}
           </div>
           <div className='productListItem_Content_Wrapper'>
             <p className='productListItem_Title'>

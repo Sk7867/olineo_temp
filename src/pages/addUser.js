@@ -4,7 +4,7 @@ import HeaderBar from '../components/HeaderBar/HeaderBar'
 import { saveUser } from '../api/Auth'
 // import DatePicker from "react-datepicker";
 // import DatePicker from 'react-date-picker';
-import DatePicker from 'react-modern-calendar-datepicker';
+import DatePicker from 'react-date-picker';
 import { Slide, toast, ToastContainer } from 'react-toastify'
 import { UserDataContext } from '../Contexts/UserContext'
 
@@ -95,11 +95,18 @@ const AddUser = () => {
               <DatePicker
                 value={selectedDay}
                 onChange={setSelectedDay}
+                format='dd/MM/y'
+                className={'input-field custom-date-picker'}
+
+              />
+              {/* <DatePicker
+                value={selectedDay}
+                onChange={setSelectedDay}
                 inputPlaceholder="Date of Birth"
                 inputClassName='input-field'
 
                 shouldHighlightWeekends
-              />
+              /> */}
             </div>
             {/* <input type="date" onFocus={(e) => (e.currentTarget.type = "date")} onBlur={(e) => (e.currentTarget.type = "text")} name="Date-of-Birth" id="DOB" className='input-field' placeholder='Date of birth' value={userData.user_Birth_Date} onChange={(value) => handleInput("user_Birth_Date", value)} /> */}
             <input type="text" name="Pincode" id="pincode" maxLength={6} className='input-field' placeholder='Pin code' value={userData.user_Pin_Code} onChange={(value) => handleInput("user_Pin_Code", value)} />
