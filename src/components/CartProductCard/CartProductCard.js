@@ -15,7 +15,7 @@ const CartProductCard = ({
   const matches = useMediaQuery("(min-width:768px)")
   const [discount, setDiscount] = useState('')
   useEffect(() => {
-    if (product && product.discount.flatDiscount.value) {
+    if (product && product.discount.flatDiscount && product.discount.flatDiscount.value) {
       setDiscount(product.discount.flatDiscount.value)
     }
   }, [product])
