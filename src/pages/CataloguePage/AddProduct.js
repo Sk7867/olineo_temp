@@ -332,6 +332,82 @@ const AddProduct = ({ setHeaderData }) => {
 
   }
 
+  // const formSubmit = (
+  //   dynamicHeader,
+  //   url,
+  //   flatDiscountDetails,
+  //   comboOfferDetails,
+  //   containerDetails,
+  //   alternateProds
+  // ) => {
+
+
+  //   (imagesArray.length > 0 && galleryImages.length > 0) ? (
+  //     (loc.state) ? (
+  //       updateProductCatalogue(
+  //         product,
+  //         technicalDetailsTable,
+  //         dynamicHeader,
+  //         url,
+  //         L1Selected,
+  //         L2Selected,
+  //         L3Selected,
+  //         discountedPrice,
+  //         classificationSelected,
+  //         flatDiscountDetails,
+  //         comboOfferDetails,
+  //         containerDetails,
+  //         alternateProds,
+  //         bankOffers
+  //       )
+  //         .then(res => res ? (
+  //           // console.log(res),
+  //           toast.success('Product Added Successfully'),
+  //           setProduct({
+  //             name: '',
+  //             ID: '',
+  //             EAN: '',
+  //             description: '',
+  //             type: '',
+  //             stock: '',
+  //             weight: '',
+  //             size: '',
+  //             brand: '',
+  //             modelYear: '',
+  //           }),
+  //           nav('/catelogue-page')
+  //         ) : (
+  //           toast.error('Incomplete Data')))
+  //     ) : (
+  //       addProductCatalogue(
+  //         product,
+  //         technicalDetailsTable,
+  //         dynamicHeader,
+  //         url,
+  //         L1Selected,
+  //         L2Selected,
+  //         L3Selected,
+  //         discountedPrice,
+  //         classificationSelected,
+  //         flatDiscountDetails,
+  //         comboOfferDetails,
+  //         containerDetails,
+  //         alternateProds,
+  //         bankOffers)
+  //         .then(res => {
+  //           if (res) {
+  //             let id = res._id
+  //             console.log(id);
+  //             addProductImages(id, imagesArray)
+  //             addProductGalleryImages(id, galleryImages)
+  //           } else {
+  //             (toast.error('Incomplete Data'))
+  //           }
+  //         }))
+  //   ) : (toast.error('Incomplete Data'))
+
+  // }
+
   const handleAddInput = (e) => {
     e.preventDefault();
     setContainerEAN([...containerEAN, { productEAN: '' }])

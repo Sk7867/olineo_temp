@@ -145,15 +145,89 @@ const AddOffers = ({ setHeaderData }) => {
     setBankOffers(list)
   }
 
+  const [couponOffersHold, setCouponOffersHold] = useState({
+    couponName: '',
+    value: '',
+    upTo: '',
+    from: new Date(),
+    to: new Date()
+  })
+  const [bankOfferHold, setBankOfferHold] = useState({
+    offerName: '',
+    offerAvail: '',
+    from: '',
+    to: ''
+  })
 
   const availOffers = [
     'Discount',
-    'combo',
-    'container',
-    'coupon'
+    'Combo',
+    'Container',
+    'Coupon',
+    'Bank Offer'
   ]
 
-  // console.log(eanEntered);
+  // console.log(value);
+  useEffect(() => {
+    if (holdContainerValue) {
+      let containerArray = holdContainerValue.split(',')
+      setContOffersHold(prev => ({ ...prev, value: containerArray }))
+    }
+  }, [holdContainerValue])
+
+
+  const handleInput = (prop, prop2, prop3, e) => {
+    e.target
+      ? prop({ ...prop2, [prop3]: e.target.value })
+      : prop({ ...prop2, [prop3]: e.label })
+  }
+
+  useEffect(() => {
+    if (flatDisOffers.value) {
+      setoffers(prev => ({ ...prev, flatDiscount: flatDisOffers }))
+    }
+  }, [flatDisOffers.value, flatDisOffers])
+  useEffect(() => {
+    if (comboOffersHold.value) {
+      setoffers(prev => ({ ...prev, combo: comboOffersHold }))
+    }
+  }, [comboOffersHold.value, comboOffersHold])
+  useEffect(() => {
+    if (contOffersHold.value) {
+      setoffers(prev => ({ ...prev, conetainer: contOffersHold }))
+    }
+  }, [contOffersHold.value, contOffersHold])
+  useEffect(() => {
+    if (couponOffersHold.value) {
+      setoffers(prev => ({ ...prev, coupon: couponOffersHold }))
+    }
+  }, [couponOffersHold.value, couponOffersHold])
+
+  const handleRemoveBankOffer = (index) => {
+    let list = [...bankOffers]
+    list.splice(index, 1)
+    setBankOffers(list)
+  }
+
+  const handleAddBankOffer = (e) => {
+    e.preventDefault();
+    setBankOffers([...bankOffers, { offerName: '', offerAvail: '', from: null, to: null }])
+  }
+
+  const handleBankOffer = (e, index) => {
+    const { name, value } = e.target
+    let list = [...bankOffers]
+    list[index][name] = value
+    setBankOffers(list)
+  }
+
+  const handleBankOfferDate = (e, prop, index) => {
+    const value = e
+    let list = [...bankOffers]
+    list[index][prop] = value
+    setBankOffers(list)
+  }
+
 
   useEffect(() => {
     setHeaderData({
@@ -210,8 +284,6 @@ const AddOffers = ({ setHeaderData }) => {
       product: [...product]
     })
   }
-
-  // console.log(selectedProduct);
 
   const searchComboProduct = (e) => {
     e.preventDefault();
