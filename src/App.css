@@ -275,14 +275,18 @@ input::placeholder, textarea::placeholder{
   display: none;
 }
 
-.DatePicker{
+.custom-date-picker{
   display: block !important;
 }
 
-.DatePicker input{
-  padding: 16px; 
+.custom-date-picker input{
+  /* padding: 16px;  */
   width: 100%;
   text-align: left;
+}
+
+.custom-date-picker .react-date-picker__wrapper{
+  border: none;
 }
 
 .floating_Footer{

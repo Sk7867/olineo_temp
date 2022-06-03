@@ -11,8 +11,6 @@ export const addProductCatalogue = async (
   technicalDetailsTable,
   dynamicHeader,
   url,
-  imagesArray,
-  galleryImagesArray,
   L1Selected,
   L2Selected,
   L3Selected,
@@ -43,8 +41,6 @@ export const addProductCatalogue = async (
     brand: technicalDetailsTable.brand,
     color: technicalDetailsTable.color,
     HSN: product.HSN,
-    images: imagesArray,
-    gallery: galleryImagesArray,
     inwardDate: product.inwardDate,
     productInfo: technicalDetailsTable,
     price: {
@@ -64,22 +60,22 @@ export const addProductCatalogue = async (
 
   await axios.post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(addProductBody), { headers })
     .then(res => {
-      addProductResponse = res
+      addProductResponse = res.data.product
     })
 
   return addProductResponse
 }
 
 export const addBulkOrder = async (order) => {
-  let addProductResponse
+  let addBulkProductResponse
   // console.log(order);
 
   await axios.post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(order), { headers })
     .then(res => {
-      addProductResponse = res
+      addBulkProductResponse = res.data.data.product
     })
 
-  return addProductResponse
+  return addBulkProductResponse
 }
 
 //Delete Product From Catalogue
@@ -100,8 +96,6 @@ export const updateProductCatalogue = async (
   technicalDetailsTable,
   dynamicHeader,
   url,
-  imagesArray,
-  galleryImagesArray,
   L1Selected,
   L2Selected,
   L3Selected,
@@ -131,8 +125,6 @@ export const updateProductCatalogue = async (
     brand: technicalDetailsTable.brand,
     color: technicalDetailsTable.color,
     HSN: product.HSN,
-    images: imagesArray,
-    gallery: galleryImagesArray,
     inwardDate: product.inwardDate,
     productInfo: technicalDetailsTable,
     price: {
@@ -154,4 +146,46 @@ export const updateProductCatalogue = async (
     })
 
   return updateProductResponse
+}
+
+// Add Product Images 
+export const addProductImages = async (id, images) => {
+  let addProductImagesResponse
+  const formData = new FormData()
+
+  formData.append('image', images)
+
+  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${id}`, formData, { headers })
+    .then(res => {
+      addProductImagesResponse = res
+    })
+
+  return addProductImagesResponse
+}
+
+// Add Product Gallery Images
+export const addProductGalleryImages = async (id, images) => {
+  let addProductGalleryImagesResponse
+  const formData = new FormData()
+
+  formData.append('gallery', images)
+
+  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/gallery/${id}`, formData, { headers })
+    .then(res => {
+      addProductGalleryImagesResponse = res
+    })
+
+  return addProductGalleryImagesResponse
+}
+
+//Update Product from Add Offers Page
+export const updateProductOffers = async (product) => {
+  let updateOffersResponse
+  let productID = product._id
+  console.log(product, productID);
+  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${productID}`, JSON.stringify(product), { headers })
+    .then(res => {
+      updateOffersResponse = res
+    })
+  return updateOffersResponse
 }
