@@ -1,10 +1,10 @@
-import axios from "axios"
+import axios from "axios";
 
 const headers = {
   "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with",
-  'Content-Type': 'application/json',
-  "Access-Control-Allow-origin": "*"
-}
+  "Content-Type": "application/json",
+  "Access-Control-Allow-origin": "*",
+};
 
 export const addProductCatalogue = async (
   product,
@@ -22,7 +22,7 @@ export const addProductCatalogue = async (
   alternateProds,
   bankOffers
 ) => {
-  let addProductResponse
+  let addProductResponse;
 
   let addProductBody = {
     dynamicHeader: dynamicHeader,
@@ -46,49 +46,49 @@ export const addProductCatalogue = async (
     price: {
       mrp: product.MRP,
       mop: product.MOP,
-      discountPrice: discountedPrice
+      discountPrice: discountedPrice,
     },
     discount: {
       flatDiscount: flatDiscountDetails,
       combo: comboOfferDetails,
-      conetainer: containerDetails
+      conetainer: containerDetails,
     },
     altProduct: alternateProds,
-    offers: bankOffers
-  }
+    offers: bankOffers,
+  };
   // console.log(addProductBody);
 
-  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(addProductBody), { headers })
-    .then(res => {
-      addProductResponse = res.data.product
-    })
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(addProductBody), { headers }).then((res) => {
+    addProductResponse = res.data.product;
+  });
 
-  return addProductResponse
-}
+  return addProductResponse;
+};
 
 export const addBulkOrder = async (order) => {
-  let addBulkProductResponse
-  // console.log(order);
-
-  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(order), { headers })
-    .then(res => {
-      addBulkProductResponse = res.data.data.product
+  let addBulkProductResponse;
+  await axios
+    .post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(order), { headers })
+    .then((res) => {
+      console.log(res);
+      if (res.data.status === "success") addBulkProductResponse = res.data?.data?.product;
     })
+    .catch((err) => {
+      console.log(err);
+    });
 
-  return addBulkProductResponse
-}
+  return addBulkProductResponse;
+};
 
 //Delete Product From Catalogue
 export const deleteProductCatalogue = async (id) => {
-  let deleteProductResponse
-  await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/${id}`, { headers })
-    .then(res => {
-      deleteProductResponse = res
-    })
+  let deleteProductResponse;
+  await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/${id}`, { headers }).then((res) => {
+    deleteProductResponse = res;
+  });
 
-  return deleteProductResponse
-}
-
+  return deleteProductResponse;
+};
 
 //Update Product From Catalogue
 export const updateProductCatalogue = async (
@@ -107,7 +107,7 @@ export const updateProductCatalogue = async (
   alternateProds,
   bankOffers
 ) => {
-  let updateProductResponse
+  let updateProductResponse;
   let updateProductBody = {
     dynamicHeader: dynamicHeader,
     name: product.name,
@@ -130,62 +130,62 @@ export const updateProductCatalogue = async (
     price: {
       mrp: product.MRP,
       mop: product.MOP,
-      discountPrice: discountedPrice
+      discountPrice: discountedPrice,
     },
     discount: {
       flatDiscount: flatDiscountDetails,
       combo: comboOfferDetails,
-      conetainer: containerDetails
+      conetainer: containerDetails,
     },
     altProduct: alternateProds,
-    offers: bankOffers
-  }
-  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${product.ID}`, JSON.stringify(updateProductBody), { headers })
-    .then(res => {
-      updateProductResponse = res
-    })
+    offers: bankOffers,
+  };
+  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${product.ID}`, JSON.stringify(updateProductBody), { headers }).then((res) => {
+    updateProductResponse = res;
+  });
 
-  return updateProductResponse
-}
+  return updateProductResponse;
+};
 
-// Add Product Images 
+// Add Product Images
 export const addProductImages = async (id, images) => {
-  let addProductImagesResponse
-  const formData = new FormData()
+  let addProductImagesResponse;
 
-  formData.append('image', images)
+  const formData = new FormData();
+  for (let i = 0; i < images.length; i++) {
+    formData.append("image", images[i]);
+  }
 
-  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${id}`, formData, { headers })
-    .then(res => {
-      addProductImagesResponse = res
-    })
+  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${id}`, formData, { headers }).then((res) => {
+    addProductImagesResponse = res;
+  });
 
-  return addProductImagesResponse
-}
+  return addProductImagesResponse;
+};
 
 // Add Product Gallery Images
 export const addProductGalleryImages = async (id, images) => {
-  let addProductGalleryImagesResponse
-  const formData = new FormData()
+  let addProductGalleryImagesResponse;
+  const formData = new FormData();
 
-  formData.append('gallery', images)
+  for (let i = 0; i < images.length; i++) {
+    formData.append("gallery", images[i]);
+  }
 
-  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/gallery/${id}`, formData, { headers })
-    .then(res => {
-      addProductGalleryImagesResponse = res
-    })
+  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/gallery/${id}`, formData, { headers }).then((res) => {
+    addProductGalleryImagesResponse = res;
+  });
 
-  return addProductGalleryImagesResponse
-}
+  return addProductGalleryImagesResponse;
+};
 
 //Update Product from Add Offers Page
 export const updateProductOffers = async (product) => {
-  let updateOffersResponse
-  let productID = product._id
+  let updateOffersResponse;
+  let productID = product._id;
   console.log(product, productID);
-  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${productID}`, JSON.stringify(product), { headers })
-    .then(res => {
-      updateOffersResponse = res
-    })
-  return updateOffersResponse
-}
+  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${productID}`, JSON.stringify(product), { headers }).then((res) => {
+    updateOffersResponse = res;
+  });
+  return updateOffersResponse;
+};
