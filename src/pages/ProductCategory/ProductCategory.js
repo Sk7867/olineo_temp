@@ -211,29 +211,29 @@ const ProductCategory = ({ setHeaderData }) => {
     // console.log(elem);
   }
 
-  const filterModify = (element, heading, type) => {
-    filterArray.push(element)
-    const modifiediFilterData = filterArray.reduce((acc, cur) => {
-      // const type = cur.filter_typetype
-      // const heading = cur.filter_heading
-      console.log(heading);
-      if (type === 'Radio') {
-        if (acc[heading]) {
-          acc[heading] = cur
-        } else {
-          acc[heading] = cur
-        }
-      } else if (type === 'Checkbox') {
-        if (acc[heading]) {
-          acc[heading].push(cur)
-        } else {
-          acc[heading].push(cur)
-        }
-      }
-      return acc
-    }, {})
-    console.log(modifiediFilterData);
-  }
+  // const filterModify = (element, heading, type) => {
+  //   filterArray.push(element)
+  //   const modifiediFilterData = filterArray.reduce((acc, cur) => {
+  //     // const type = cur.filter_typetype
+  //     // const heading = cur.filter_heading
+  //     console.log(heading);
+  //     if (type === 'Radio') {
+  //       if (acc[heading]) {
+  //         acc[heading] = cur
+  //       } else {
+  //         acc[heading] = cur
+  //       }
+  //     } else if (type === 'Checkbox') {
+  //       if (acc[heading]) {
+  //         acc[heading].push(cur)
+  //       } else {
+  //         acc[heading].push(cur)
+  //       }
+  //     }
+  //     return acc
+  //   }, {})
+  //   console.log(modifiediFilterData);
+  // }
   // console.log(filterArray);
 
   return (
