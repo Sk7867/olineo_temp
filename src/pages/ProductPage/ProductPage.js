@@ -113,26 +113,27 @@ const ProductPage = ({ setHeaderData }) => {
     }
   }, [loc])
 
-  useEffect(() => {
-    if (alternateColorean.length > 0) {
-      let demo = allProducts.products.filter(item => alternateColorean.includes(item.ean))
-      if (demo !== undefined) {
-        let ind = colorAlternateProds.findIndex(obj => obj.ean === demo[0].ean)
-        if (ind === -1) {
-          setColorAlternateProds([...colorAlternateProds, demo[0]])
-        }
-      }
-    }
-    if (alternateSpecean.length > 0) {
-      let demo = allProducts.products.filter(item => alternateColorean.includes(item.ean))
-      if (demo !== undefined) {
-        let ind = specAlternateProds.findIndex(obj => obj.ean === demo[0].ean)
-        if (ind === -1) {
-          setSpecAlternateProds([...specAlternateProds, demo[0]])
-        }
-      }
-    }
-  }, [alternateColorean, alternateSpecean])
+  // useEffect(() => {
+  //   if (alternateColorean.length > 0) {
+  //     let demo = allProducts.products.filter(item => alternateColorean.includes(item.ean))
+  //     if (demo !== undefined) {
+  //       let ind = colorAlternateProds.findIndex(obj => obj.ean === demo[0].ean)
+  //       if (ind === -1) {
+  //         setColorAlternateProds([...colorAlternateProds, demo[0]])
+  //       }
+  //     }
+  //   }
+  //   if (alternateSpecean.length > 0) {
+  //     let demo = allProducts.products.filter(item => alternateColorean.includes(item.ean))
+  //     if (demo !== undefined) {
+  //       let ind = specAlternateProds.findIndex(obj => obj.ean === demo[0].ean)
+  //       if (ind === -1) {
+  //         setSpecAlternateProds([...specAlternateProds, demo[0]])
+  //       }
+  //     }
+  //   }
+  // }, [alternateColorean, alternateSpecean])
+  console.log(colorAlternateProds);
 
 
   const sec5Data = [
@@ -429,13 +430,13 @@ const ProductPage = ({ setHeaderData }) => {
                       <p>Color : <span>{productData.product_color}</span></p>
                     </div>
                     <div className="product_Alternate_Section_Body">
-                      {
+                      {/* {
                         colorAlternateProds.map((product) => (
                           product.images[0] && (
                             <AlternateProductBox key={product._id} product={product} />
                           )
                         ))
-                      }
+                      } */}
                     </div>
                     <div className="product_Alternate_Section_Footer">
                       <p>
@@ -462,11 +463,11 @@ const ProductPage = ({ setHeaderData }) => {
                       <Accordion.Body>
                         <div className="product_Offer_Cards_Container">
                           <div className="product_Offer_Cards_Wrapper">
-                            {
+                            {/* {
                               colorAlternateProds.map((product) => (
                                 <AlternateProductBox key={product.id} product={product} />
                               ))
-                            }
+                            } */}
                           </div>
                         </div>
                       </Accordion.Body>

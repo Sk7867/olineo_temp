@@ -16,6 +16,7 @@ export const addProductCatalogue = async (
   L3Selected,
   discountedPrice,
   classificationSelected,
+  advancePayment,
   flatDiscountDetails,
   comboOfferDetails,
   containerDetails,
@@ -37,6 +38,7 @@ export const addProductCatalogue = async (
     hierarchyL2: L2Selected,
     hierarchyL3: L3Selected,
     classification: classificationSelected,
+    advancePayment: advancePayment,
     modelNo: technicalDetailsTable.modelNumber,
     brand: technicalDetailsTable.brand,
     color: technicalDetailsTable.color,
@@ -68,7 +70,7 @@ export const addProductCatalogue = async (
 
 export const addBulkOrder = async (order) => {
   let addBulkProductResponse
-  // console.log(order);
+  console.log(order);
 
   await axios.post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(order), { headers })
     .then(res => {
@@ -101,6 +103,7 @@ export const updateProductCatalogue = async (
   L3Selected,
   discountedPrice,
   classificationSelected,
+  advancePayment,
   flatDiscountDetails,
   comboOfferDetails,
   containerDetails,
@@ -121,6 +124,7 @@ export const updateProductCatalogue = async (
     hierarchyL2: L2Selected,
     hierarchyL3: L3Selected,
     classification: classificationSelected,
+    advancePayment: advancePayment,
     modelNo: technicalDetailsTable.modelNumber,
     brand: technicalDetailsTable.brand,
     color: technicalDetailsTable.color,

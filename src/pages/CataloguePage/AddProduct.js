@@ -27,6 +27,7 @@ const AddProduct = ({ setHeaderData }) => {
   const [L2Selected, setL2Selected] = useState('')
   const [L3Selected, setL3Selected] = useState('')
   const [classificationSelected, setClassificationSelected] = useState('')
+  const [advancePayment, setAdvancePayment] = useState('')
   const [selectedDay, setSelectedDay] = useState(null);
   const [dynamicHeader, setDynamicHeader] = useState('')
   const [name, setName] = useState('')
@@ -184,8 +185,9 @@ const AddProduct = ({ setHeaderData }) => {
       ean: ean,
       id: id,
       description: description,
-      HSN: hsn
-
+      HSN: hsn,
+      MRP: mrp,
+      MOP: mop
     }
 
     let flatDiscountDetails = {
@@ -246,90 +248,89 @@ const AddProduct = ({ setHeaderData }) => {
       spec: specs
     }
 
-    // formSubmit(
-    //   dynamicHeader,
-    //   url,
-    //   flatDiscountDetails,
-    //   comboOfferDetails,
-    //   containerDetails,
-    //   alternateProds)
+    formSubmit(
+      product,
+      dynamicHeader,
+      url,
+      flatDiscountDetails,
+      comboOfferDetails,
+      containerDetails,
+      alternateProds)
   }
 
-  // const formSubmit = (
-  //   dynamicHeader,
-  //   url,
-  //   flatDiscountDetails,
-  //   comboOfferDetails,
-  //   containerDetails,
-  //   alternateProds
-  // ) => {
+  const formSubmit = (
+    product,
+    dynamicHeader,
+    url,
+    flatDiscountDetails,
+    comboOfferDetails,
+    containerDetails,
+    alternateProds
+  ) => {
 
 
-  //   (imagesArray.length > 0 && galleryImages.length > 0) ? (
-  //     (loc.state) ? (
-  //       updateProductCatalogue(
-  //         product,
-  //         technicalDetailsTable,
-  //         dynamicHeader,
-  //         url,
-  //         L1Selected,
-  //         L2Selected,
-  //         L3Selected,
-  //         discountedPrice,
-  //         classificationSelected,
-  //         flatDiscountDetails,
-  //         comboOfferDetails,
-  //         containerDetails,
-  //         alternateProds,
-  //         bankOffers
-  //       )
-  //         .then(res => res ? (
-  //           // console.log(res),
-  //           toast.success('Product Added Successfully'),
-  //           setProduct({
-  //             name: '',
-  //             ID: '',
-  //             EAN: '',
-  //             description: '',
-  //             type: '',
-  //             stock: '',
-  //             weight: '',
-  //             size: '',
-  //             brand: '',
-  //             modelYear: '',
-  //           }),
-  //           nav('/catelogue-page')
-  //         ) : (
-  //           toast.error('Incomplete Data')))
-  //     ) : (
-  //       addProductCatalogue(
-  //         product,
-  //         technicalDetailsTable,
-  //         dynamicHeader,
-  //         url,
-  //         L1Selected,
-  //         L2Selected,
-  //         L3Selected,
-  //         discountedPrice,
-  //         classificationSelected,
-  //         flatDiscountDetails,
-  //         comboOfferDetails,
-  //         containerDetails,
-  //         alternateProds,
-  //         bankOffers)
-  //         .then(res => {
-  //           if (res) {
-  //             let id = res._id
-  //             console.log(id);
-  //             addProductImages(id, imagesArray)
-  //             addProductGalleryImages(id, galleryImages)
-  //           } else {
-  //             (toast.error('Incomplete Data'))
-  //           }
-  //         }))
-  //   ) : (toast.error('Incomplete Data'))
+    (imagesArray.length > 0 && galleryImages.length > 0) ? (
+      (loc.state) ? (
+        updateProductCatalogue(
+          product,
+          technicalDetailsTable,
+          dynamicHeader,
+          url,
+          L1Selected,
+          L2Selected,
+          L3Selected,
+          discountedPrice,
+          classificationSelected,
+          advancePayment,
+          flatDiscountDetails,
+          comboOfferDetails,
+          containerDetails,
+          alternateProds,
+          bankOffers
+        )
+          .then(res => res ? (
+            // console.log(res),
+            toast.success('Product Added Successfully'),
+            setName(''),
+            setEan(''),
+            setId(''),
+            setDescription(''),
+            setHsn(''),
+            setMrp(''),
+            setMop(''),
+            nav('/catelogue-page')
+          ) : (
+            toast.error('Incomplete Data')))
+      ) : (
+        addProductCatalogue(
+          product,
+          technicalDetailsTable,
+          dynamicHeader,
+          url,
+          L1Selected,
+          L2Selected,
+          L3Selected,
+          discountedPrice,
+          classificationSelected,
+          advancePayment,
+          flatDiscountDetails,
+          comboOfferDetails,
+          containerDetails,
+          alternateProds,
+          bankOffers)
+          .then(res => {
+            if (res) {
+              let id = res._id
+              console.log(id);
+              addProductImages(id, imagesArray)
+              addProductGalleryImages(id, galleryImages)
+            } else {
+              (toast.error('Incomplete Data'))
+            }
+          }))
+    ) : (toast.error('Incomplete Data'))
 
-  // }
+  }
 
   const handleAddInput = (e) => {
     e.preventDefault();
@@ -453,6 +454,11 @@ const AddProduct = ({ setHeaderData }) => {
     // { value: 'Coming_Soon', label: '' },
     // { value: 'Out_Of_Stock', label: '' },
     // { value: 'Temp_Hidden', label: '' },
+  ]
+
+  const advancePaymentOptions = [
+    'Yes',
+    'No'
   ]
 
   const handleDyanmicTableValues = (prop, e) => {
@@ -941,6 +947,24 @@ const AddProduct = ({ setHeaderData }) => {
                   }
                 </Dropdown.Menu>
               </Dropdown>
+              {
+                (classificationSelected === 'Coming Soon') && (
+                  <Dropdown>
+                    <Dropdown.Toggle id="dropdown-basic">
+                      <div className="catalogue_Dropdown">
+                        {advancePayment ? (<p>{advancePayment}</p>) : (<p>Is Accepting Advance Payment?</p>)}
+                      </div>
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      {
+                        advancePaymentOptions.map((item, index) => (
+                          <Dropdown.Item key={index} value={item} onClick={() => setClassificationSelected(item)}>{item}</Dropdown.Item>
+                        ))
+                      }
+                    </Dropdown.Menu>
+                  </Dropdown>
+                )}
             </fieldset>
             <div className="catelogue_Form_Group">
               <h4>Dynamic Header Preview</h4>
