@@ -145,7 +145,6 @@ const AddOffers = ({ setHeaderData }) => {
     setBankOffers(list)
   }
 
-
   useEffect(() => {
     setHeaderData({
       header3Cond: true,

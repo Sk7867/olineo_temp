@@ -111,10 +111,11 @@ const AddUser = () => {
             {/* <input type="date" onFocus={(e) => (e.currentTarget.type = "date")} onBlur={(e) => (e.currentTarget.type = "text")} name="Date-of-Birth" id="DOB" className='input-field' placeholder='Date of birth' value={userData.user_Birth_Date} onChange={(value) => handleInput("user_Birth_Date", value)} /> */}
             <input type="text" name="Pincode" id="pincode" maxLength={6} className='input-field' placeholder='Pin code' value={userData.user_Pin_Code} onChange={(value) => handleInput("user_Pin_Code", value)} />
           </div>
-          <div className={'button-Container'}>
-            <button className='submit-button' disabled={btnDisable}><p>Continue</p></button>
-          </div>
-        </form>
+          {/* <input type="date" onFocus={(e) => (e.currentTarget.type = "date")} onBlur={(e) => (e.currentTarget.type = "text")} name="Date-of-Birth" id="DOB" className='input-field' placeholder='Date of birth' value={userData.user_Birth_Date} onChange={(value) => handleInput("user_Birth_Date", value)} /> */}
+          <input type="text" name="Pincode" id="pincode" maxLength={6} className='input-field' placeholder='Pin code' value={userData.user_Pin_Code} onChange={(value) => handleInput("user_Pin_Code", value)} />
+      </div>
+      <div className={'button-Container'}>
+        <button className='submit-button' disabled={btnDisable}><p>Continue</p></button>
       </div>
       <ToastContainer
         position="top-center"

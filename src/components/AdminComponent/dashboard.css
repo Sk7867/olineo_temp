@@ -1,0 +1,19 @@
+.dashboard_nav{
+    background: #1B325E;
+}
+.side_nav{
+    height: 100vh;
+    transition: 5s;
+}
+.dashboard_body{
+    width: 100%;
+}
+.sidenav_btb{
+    text-decoration: none;
+    color: #1B325E;
+    transition: 0.5s;
+}
+.sidenav_btb:hover{
+    color: #1B325E;
+    background-color: #1b325e60;
+}
