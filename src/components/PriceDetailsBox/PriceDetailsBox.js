@@ -1,11 +1,45 @@
-import { useState } from 'react'
+import { useState, useEffect, useContext, useRef } from 'react'
 import './PriceDetailsBox.css'
+import { UserDataContext } from '../../Contexts/UserContext'
 
-const PriceDetailsBox = ({ HideDetails }) => {
+const PriceDetailsBox = ({ HideDetails, classes }) => {
   const [showDetails, setShowDetails] = useState(true);
+  const { userCart, setUserCart, cartArray, priceBoxDetails } = useContext(UserDataContext)
 
+  let cartItemsNumber = cartArray.no_of_carts
+  var cartItemsPrice = 0
+  var totalDiscount = 0
+  var totalDeliveryCharge = 0
+  var totalAmount = 0
+
+  // useEffect(() => {
+  //   if (cartArray.no_of_carts !== 0) {
+  //     //Get Price from cart Items
+  //     userCart.forEach(item => {
+  //       cartItemsPrice += parseInt(item.price) + 2000
+  //     });
+
+  //     //Get Discounted Price
+  //     userCart.forEach(item => {
+  //       var itemDiscount
+  //       itemDiscount = parseInt(item.price)
+  //       totalDiscount += itemDiscount
+  //     });
+
+  //     //Get Delivery Charges
+  //     userCart.forEach((item, index) => {
+  //       totalDeliveryCharge += (index + 1) * 80
+  //     });
+
+  //     //Get Total Amount
+  //     totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
+  //   }
+  // }, [cartArray])
+
+
+  // console.log(cartItemsPrice);
   return (
-    <div className="cart_Price_details">
+    <div className={"cart_Price_details section_Wrapper " + (classes ? classes.containerClass : '')}>
       <div className="cart_Details_Header">
         <p>Price Details</p>
       </div>
@@ -13,23 +47,23 @@ const PriceDetailsBox = ({ HideDetails }) => {
         showDetails && (
           <div className="cart_Details_Body">
             <div className="cart_Details_Price">
-              <p>Price (2 items) </p>
-              <p>₹{`2000`}</p>
+              <p>Price ({priceBoxDetails.cartItemsNumber} items) </p>
+              <p>₹{priceBoxDetails.cartItemsPrice}</p>
             </div>
             <div className="cart_Details_Discount">
               <p>Discount</p>
-              <p>-₹{`800`}</p>
+              <p>-₹{priceBoxDetails.totalDiscount}</p>
             </div>
             <div className="cart_Details_Delivery">
               <p>Delivery Charges</p>
-              <p>₹{`80`}</p>
+              <p>₹{priceBoxDetails.totalDeliveryCharge}</p>
             </div>
           </div>
         )
       }
       <div className="cart_Details_Footer">
         <p>Total Amount</p>
-        <p>₹{`1,280`}</p>
+        <p>₹{priceBoxDetails.totalAmount}</p>
       </div>
       {
         HideDetails && (

@@ -1,7 +1,8 @@
 //
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { UserDataContext } from '../../Contexts/UserContext'
 
 //CSS
 import './Payment.css'
@@ -14,17 +15,21 @@ import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 import addIcon from '../../assets/vector/add_outline_blue.svg'
 import dashGreyIcon from '../../assets/vector/dash_grey.svg'
 
-const Payment = ({ setHeaderData }) => {
+const Payment = ({ setHeaderData, cartData }) => {
   const [giftCard, setGiftCard] = useState(false)
   const [disable, setDisable] = useState(true);
   const [paymentMethodSelected, setPaymentMethodSelected] = useState('');
   const matches = useMediaQuery("(min-width:768px)")
+  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart } = useContext(UserDataContext)
 
   useEffect(() => {
     setHeaderData({
       header3Cond: true,
       headerText: 'Payment',
       categoriesCond: false,
+      header3Store: true,
+      header3Cart: true,
+      header3Profile: true,
     })
   }, []);
 

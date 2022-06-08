@@ -1,33 +1,64 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
+import { userSignUp } from '../api/Auth'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { Slide, toast, ToastContainer } from 'react-toastify'
+import { UserDataContext } from '../Contexts/UserContext'
+
 //CSS
 // import './Signup.css'
 
-
+toast.configure()
 const Signup = ({ setLoginRedirect }) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
+  const matches = useMediaQuery("(min-width:768px)")
   const nav = useNavigate()
+  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart } = useContext(UserDataContext)
+
 
   const handleLength = (length) => {
-    if (length === 9) {
+    if ((name !== '') && (length === 10)) {
       setValidLength(true)
-    } else {
-      setValidLength(false)
+      return setBtnDisable(false)
     }
+    setValidLength(false)
+    setBtnDisable(true)
+    // if (length === 9) {
+    //   setValidLength(true)
+    // } else {
+    //   setValidLength(false)
+    // }
   }
 
-  const validateForm = () => (
-    (name !== '') && (phone !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)
-  )
+  const validateNumber = (e) => {
+    const re = /^[0-9\b]+$/;
+    if (e.target.value === '' || re.test(e.target.value)) {
+      setPhone(e.target.value)
+    }
+  }
+  // console.log(phone);
+
+  // const validateForm = () => (
+  //   (name !== '') && (name.length > 0) && (phone !== '') && (phone.length > 0) && validLength ? setBtnDisable(false) : setBtnDisable(true)
+  // )
 
   const formSubmit = (e) => {
     e.preventDefault();
-    setLoginRedirect(false)
-    nav('/otp')
+    userSignUp(phone, name)
+      .then(res => res ? (
+        setLoginRedirect(false),
+        nav('/otp'),
+        setUserContext(prev => ({
+          ...prev,
+          id: res.userId,
+          fullName: name,
+          mobileNumber: phone,
+        }))
+      ) : toast.error('Mobile Number Already Registered'))
   }
 
   const pageSwitch = (e) => {
@@ -35,7 +66,8 @@ const Signup = ({ setLoginRedirect }) => {
     nav('/login')
   }
 
-  // console.log(name);
+  // console.log(name + "-" + phone);
+  // console.log(btnDisable);
 
   return (
     <>
@@ -45,10 +77,16 @@ const Signup = ({ setLoginRedirect }) => {
           <h1 className='page-heading'>Welcome to Olineo</h1>
           <p className={'page-desc'}>Create an account</p>
         </div>
-        <form action="" className={'signup-form'} onSubmit={formSubmit} onChange={validateForm}>
+        <form action="" className={'signup-form'} onSubmit={formSubmit}>
           <div className="inputfield-Container">
             <input type="text" name="Name" id="name" className='input-field' placeholder='Name' value={name} onChange={(e) => { setName(e.target.value) }} required />
-            <input type='tel' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' maxLength={10} onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} required />
+            {
+              matches ? (
+                <input type='tel' onkeypress="return isNumberKey(event)" name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' maxLength={10} onChange={(e) => { validateNumber(e); handleLength(e.target.value.length); }} required />
+              ) : (
+                <input type='number' name="Phone" id="phone" className='input-field' value={phone} placeholder='Phone' maxLength={10} onChange={(e) => { setPhone(e.target.value); handleLength(e.target.value.length) }} required />
+              )
+            }
           </div>
           <div className={'button-Container'}>
             <button type='submit' className='submit-button' disabled={btnDisable}><p>Continue</p></button>
@@ -59,6 +97,18 @@ const Signup = ({ setLoginRedirect }) => {
           <p className='footer-Text'>By Signing In, I agree to <span>terms & conditions</span></p>
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
     </>
   )
 }

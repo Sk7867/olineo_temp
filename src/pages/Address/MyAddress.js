@@ -1,27 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { UserDataContext } from '../../Contexts/UserContext'
 
 //Images
 import addIcon from '../../assets/vector/add_outline_blue.svg'
 
 //Components
 import AddressBox from '../../components/AddressBox/AddressBox';
+import { getAddress } from '../../api/Address';
 
-const MyAddress = ({ addressList, setEditID, setProfileState, border }) => {
+const MyAddress = ({ setEditID, setProfileState, border }) => {
   const matches = useMediaQuery("(min-width:768px)")
+  const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext)
+
+  useEffect(() => {
+    getAddress()
+      .then(res => {
+        // console.log(res);
+        if (res) {
+          setUserAddress({
+            loaded: true,
+            no_of_address: res.no_of_address,
+            address: res.address
+          })
+        }
+      })
+  }, [])
 
   return (
     <>
       <div className="page_Wrapper edit_Page_Wrapper">
         {
           matches ? (
-            <div className='add_New_Address' onClick={() => setProfileState(10)}>
+            <div className='add_New_Address section_Wrapper' onClick={() => setProfileState(10)}>
               <img src={addIcon} alt="" />
               <p>Add a new address</p>
             </div>
           ) : (
-            <Link to={'/newaddress'} className='add_New_Address'>
+            <Link to={'/newaddress'} className='add_New_Address section_Wrapper'>
               <img src={addIcon} alt="" />
               <p>Add a new address</p>
             </Link>
@@ -29,7 +46,7 @@ const MyAddress = ({ addressList, setEditID, setProfileState, border }) => {
         }
         <div className='address_List'>
           {
-            addressList.map((address, index) => (
+            userAddress.address.map((address, index) => (
               <AddressBox
                 key={index}
                 address={address}

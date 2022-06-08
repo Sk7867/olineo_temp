@@ -64,6 +64,10 @@ const StoreNear = ({ setHeaderData, setStoreSelected }) => {
     },
   ]
 
+  const refreshPage = () => {
+    window.location.reload(false)
+  }
+
   return (
     <>
       <div className='page_Wrapper page_Margin_Top_Secondary'>
@@ -114,7 +118,7 @@ const StoreNear = ({ setHeaderData, setStoreSelected }) => {
                   <div className="location_Refresh">
                     <p>Refresh page after enabling the location.</p>
                     <div className="location_Refresh_Button">
-                      <button type='submit' className='submit-button' onClick={() => setUserLocation(true)}><p>Refresh</p></button>
+                      <button type='submit' className='submit-button' onClick={refreshPage}><p>Refresh</p></button>
                     </div>
                   </div>
                 </>

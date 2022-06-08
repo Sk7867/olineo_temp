@@ -12,19 +12,26 @@ import product2 from '../../assets/png/product_2.png'
 import Section2 from '../../components/Section2/Section2'
 import OrderProductCard from '../../components/OrderProductCard/OrderProductCard'
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
+import OrderSection from './OrderSection'
 
 
-const MyOrders = ({ ordersList, setHeaderData }) => {
+const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
+  const [onTheWay, setOnTheWay] = useState(true)
+  const [delivered, setDelivered] = useState(true)
+  const [cancelled, setCancelled] = useState(true)
 
   const nav = useNavigate()
 
-  // console.log(loc);
+  // console.log(onTheWay);
 
   useEffect(() => {
     setHeaderData({
       header3Cond: true,
-      headerText: 'My Orders',
+      headerText: 'My Orders ',
       categoriesCond: true,
+      header3Store: true,
+      header3Cart: true,
+      header3Profile: true,
     })
   }, []);
 
@@ -138,73 +145,33 @@ const MyOrders = ({ ordersList, setHeaderData }) => {
               <Section2
                 id={'Top-sellers-sec'}
                 heading='Suggested products'
-                productData={sec5Data}
+                productData={featureProducts}
               />
             </>
           ) : (
             <>
               <div className='desk_Page_Wrapper'>
-                <aside className="side_Section section_Wrapper" style={{ maxHeight: '150px' }}>
+                <aside className="side_Section section_Wrapper">
                   <p className="side_Section_Heading">
                     Filters
                   </p>
-                  <label htmlFor={`On the way`} className="checkbox-label checkbox-item d-flex align-items-center side_Section_Checkbox">
-                    <input type="checkbox" name="On the way" id={`On the way`} />
+                  <label htmlFor={`On the way`} className="checkbox-label checkbox-item d-flex align-items-center side_Section_Checkbox" onClick={() => { setOnTheWay(!onTheWay) }}>
+                    <input type="checkbox" name="On the way" id={`On the way`} defaultChecked={onTheWay} />
                     <span className="custom-checkmark"></span>
                     On the way
                   </label>
-                  <label htmlFor={`Delivered`} className="checkbox-label checkbox-item d-flex align-items-center side_Section_Checkbox">
-                    <input type="checkbox" name="Delivered" id={`Delivered`} />
+                  <label htmlFor={`Delivered`} className="checkbox-label checkbox-item d-flex align-items-center side_Section_Checkbox" onClick={() => { setDelivered(!delivered) }} >
+                    <input type="checkbox" name="Delivered" id={`Delivered`} defaultChecked={delivered} />
                     <span className="custom-checkmark"></span>
                     Delivered
                   </label>
+                  <label htmlFor={`Cancelled`} className="checkbox-label checkbox-item d-flex align-items-center side_Section_Checkbox" onClick={() => { setCancelled(!cancelled) }} >
+                    <input type="checkbox" name="Cancelled" id={`Cancelled`} defaultChecked={cancelled} />
+                    <span className="custom-checkmark"></span>
+                    Cancelled
+                  </label>
                 </aside>
-                <div className='order_Page_Right'>
-                  <div className='order_arriving_section'>
-                    <p className="order_Text section_Wrapper">Orders on the way</p>
-                    {
-                      ordersList.map((order, index) => (
-                        order.productDeliveryStatues === 'Arriving' ?
-                          (
-                            <OrderProductCard
-                              key={index}
-                              productName={order.productName}
-                              productArrival={order.productArrival}
-                              productDeliveryStatues={order.productDeliveryStatues}
-                              productImage={order.productImage}
-                            />
-                          ) : ('')
-                      ))
-                    }
-                    <Section2
-                      id={'Top-sellers-sec'}
-                      heading='Suggested products'
-                      productData={sec5Data}
-                    />
-                  </div>
-                  <div className="order_delivered_section">
-                    <p className="order_Text section_Wrapper">Orders delivered</p>
-                    {
-                      ordersList.map((order, index) => (
-                        order.productDeliveryStatues !== 'Arriving' ?
-                          (
-                            <OrderProductCard
-                              key={index}
-                              productName={order.productName}
-                              productArrival={order.productArrival}
-                              productDeliveryStatues={order.productDeliveryStatues}
-                              productImage={order.productImage}
-                            />
-                          ) : ('')
-                      ))
-                    }
-                  </div>
-                  <Section2
-                    id={'Top-sellers-sec'}
-                    heading='Suggested products'
-                    productData={sec5Data}
-                  />
-                </div>
+                <OrderSection ordersList={ordersList} featureProducts={featureProducts} onTheWay={onTheWay} delivered={delivered} cancelled={cancelled} />
               </div>
             </>
           )

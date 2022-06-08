@@ -1,4 +1,7 @@
-import { useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { getAddress } from '../../api/Address'
+import { UserDataContext } from '../../Contexts/UserContext'
+
 //CSS
 import './Address.css'
 
@@ -8,7 +11,9 @@ import MyAddress from './MyAddress'
 //Images
 
 
-const Address = ({ userDetails, setEditID, setHeaderData }) => {
+const Address = ({ setEditID, setHeaderData }) => {
+  const [addressData, setAddressData] = useState([])
+  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart } = useContext(UserDataContext)
   useEffect(() => {
     setHeaderData({
       header3Cond: true,
@@ -17,9 +22,23 @@ const Address = ({ userDetails, setEditID, setHeaderData }) => {
     })
   }, []);
 
+  useEffect(() => {
+    getAddress()
+      .then(res => {
+        // console.log(res);
+        if (res) {
+          setUserAddress({
+            loaded: true,
+            no_of_address: res.no_of_address,
+            address: res.address
+          })
+        }
+      })
+  }, [])
+
   return (
     <>
-      <MyAddress addressList={userDetails.delivery_Address} setEditID={setEditID} />
+      <MyAddress setEditID={setEditID} />
     </>
   )
 }

@@ -1,0 +1,296 @@
+.order_Details_Header{
+  background: #FFFFFF;
+  padding: 1rem;
+  margin: 0.75rem 0;
+}
+
+.order_Details_Header p{
+  margin: 0;
+}
+
+.header_Order_Status{
+  letter-spacing: -0.01em;
+  color: #3F8F00;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  margin: 0 0 0.375rem;
+}
+
+.header_Order_Number{
+  letter-spacing: -0.015em;
+  color: #6D747A;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+}
+
+.order_Track_Container{
+  padding: 1rem;
+  background: #FFFFFF;
+}
+
+.order_Track_Wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.order_Track_Step{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  position: relative;
+}
+
+.order_Track_Step::after, .order_Track_Step::before{
+  border-left: 2px dashed #CCCCCC;
+  width: 100%;
+  height: 100%;
+  content: '';
+  position: absolute;
+  left: 8px;
+}
+
+.order_Track_Step::before{
+  top: -45px;
+  height: 75%;
+
+}
+
+.order_Track_Step::after{
+  bottom: 30px;
+  height: 68%;
+}
+
+.order_Track_Step:first-child::before, .order_Track_Step:first-child::after {
+  display: none;
+}
+
+.order_Track_Step .step_Circle_Icon{
+  width: 18px;
+  height: 18px;
+  border: 1px solid #CCCCCC;
+  border-radius: 100%;
+}
+
+.order_Track_Step .step_Details{
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.order_Track_Step .step_Details .step_Name{
+  margin: 0;
+  letter-spacing: -0.01em;
+  color: #6D747A;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.order_Track_Step .step_Details .step_Date{
+  margin: 0;
+  letter-spacing: 0.004em;
+  color: #6D747A;
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+.step_Completed::after, .step_Completed::before{
+  border-left: 2px solid #1B325E;
+}
+
+.order_Track_Wrapper .step_Completed:last-child{
+  z-index: 100;
+}
+
+.step_Completed .step_Circle_Icon{
+  border: 1px solid #1B325E;
+  position: relative;
+}
+
+.step_Completed .step_Circle_Icon div{
+  display: block;
+  background: #1B325E;
+  height: 9px;
+  width: 9px;
+  border-radius: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.order_Track_Step.step_Completed .step_Details .step_Name{
+  color: #000000;
+}
+
+
+
+.order_Cancel_Button{
+  padding: 0.75rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #FFFFFF;
+  margin: 0 0 0.75rem;
+  text-decoration: none;
+}
+
+.order_Cancel_Button:hover p{
+  color: #3D5176;
+}
+
+.order_Cancel_Button p{
+  margin: 0;
+  color: #3D5176;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+
+/*Order Cancel CSS */
+.order_Cancel_Container{
+  margin: 0.75rem 0 8rem;
+  background: #FFFFFF;
+  padding: 0 0.875rem;
+}
+
+.order_Cancel_Container div{
+  padding: 1rem 0.125rem;
+  border-bottom: 1px solid #EBEDF0;
+}
+
+.order_Cancel_Container div:nth-last-child(2), .order_Cancel_Container div:nth-last-child(1) {
+  border: none;
+}
+
+.order_Cancel_Submit{
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  .order_Details_Wrapper{
+    max-width: 680px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .order_Details_Header{
+    margin: 1rem 0;
+    padding: 0.875rem 1rem;
+  }
+
+  .header_Order_Status{
+    margin: 0 0 0.25rem;
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 2.25rem;
+  }
+
+  .header_Order_Number{
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .order_Track_Container{
+    gap: 1.5rem 1.5rem 2.188rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .order_Track_Wrapper{
+    gap: 3.5rem;
+  }
+
+  .step_Details{
+    gap: 0.25rem;
+  }
+
+  .order_Track_Step{
+    gap: 1.5rem;
+  }
+
+  .order_Track_Step .step_Circle_Icon{
+    width: 24px;
+    height: 24px;
+  }
+
+  .order_Track_Step .step_Details .step_Name{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .order_Track_Step .step_Details .step_Date{
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .order_Track_Step::after,
+  .order_Track_Step::before{
+  border-left: 4px dashed #CCCCCC;
+  left: 10px;
+  }
+
+  .order_Track_Step::before{
+    top: -71px;
+    height: 80%;
+  }
+
+  .order_Track_Step::after{
+    bottom: 38px;
+    height: 92%;
+  }
+
+  .step_Completed::after,
+  .step_Completed::before{
+    border-left: 4px solid #1B325E;
+  }
+
+  .step_Completed .step_Circle_Icon div{
+    height: 12px;
+    width: 12px;
+  }
+
+  .order_Cancel_Button{
+    max-width: 100%;
+    padding: 0;
+    background: transparent;
+  }
+
+  .order_Cancel_Button button{
+    max-width: 100%;
+  }
+
+  .order_Cancel_Button p{
+    color: #FFFFFF;
+  }
+
+  .order_Cancel_Button:hover p{
+    color: #FFFFFF;
+  }
+
+  .order_Cancel_Container {
+    margin: 1rem 0 3.375rem;
+  }
+
+  .order_Cancel_Submit{
+    display: block;
+    margin: 1.5rem 0 1rem;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .order_Details_Wrapper{
+    max-width: 985px;
+  }
+
+  .order_Details_Header{
+    margin: 1.5rem 0 0.75rem;
+    padding: 0.75rem 1.5rem;
+  }
+}

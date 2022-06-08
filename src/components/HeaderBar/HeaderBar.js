@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 //CSS
 import './HeaderBar.css'
 //Images
@@ -16,10 +16,10 @@ const HeaderBar = ({ alternateWay, alternateLink }) => {
   return (
     <div className={'headerContainer'}>
       <div className={'headerWrapper'}>
-        <a href='/' className={'logo'}>
+        <Link to='/' className={'logo'}>
           <img src={navbarLogo} alt="" className='logo_mob' />
-          <img src={navbarLogoDesk} alt="" className='logo_tab' />
-        </a>
+          <img src={navbarLogoDesk} alt="" className='logo_tab logo_desk' />
+        </Link>
         <p className={'alternate-way'} onClick={pageSwitch}>
           {alternateWay}
         </p>

@@ -43,7 +43,7 @@ const UpdateModal = ({ showModal, setShowModal, modalData }) => {
           </div>
         </Modal.Header>
         <Modal.Body>
-          <Update number={modalData.number} oldInfo={oldInfo} newInfo={newInfo} />
+          <Update number={modalData.number} oldInfo={oldInfo} newInfo={newInfo} user_Full_Name={modalData.userName} handleClose={handleClose} />
         </Modal.Body>
       </Modal>
     </>

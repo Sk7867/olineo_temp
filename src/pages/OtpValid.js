@@ -1,22 +1,31 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect, useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar/HeaderBar'
+import { getUser, getUserPic, verifyOtp, verifyOtpLogin, verifyOtpSignup } from '../api/Auth'
+import { UserDataContext } from '../Contexts/UserContext'
+import { Slide, toast, ToastContainer } from 'react-toastify'
+import { getCartData } from '../api/Cart'
+import { getAllOrder } from '../api/OrdersApi'
 
-const OtpValid = ({ setUserLoggedIn, loginRedirect }) => {
+toast.configure()
+const OtpValid = ({ loginRedirect }) => {
   const [otp, setOtp] = useState('')
   const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
   const [seconds, setSeconds] = useState(60)
   // const [resend, setResend] = useState(true)
   const nav = useNavigate()
+  const { setUserContext, setUserCart, setCartArray, userOrderData, setUserOrderData } = useContext(UserDataContext)
 
   const handleLength = (length) => {
-    if (length === 5) {
+    if (length === 6) {
       setValidLength(true)
-    } else {
-      setValidLength(false)
+      return setBtnDisable(false)
     }
+    setValidLength(false)
+    setBtnDisable(true)
   }
+
 
   useEffect(() => {
     let timer
@@ -31,19 +40,80 @@ const OtpValid = ({ setUserLoggedIn, loginRedirect }) => {
     }
   }, [seconds])
 
-  const formSubmit = (e) => {
+  const existingUserLogin = (e) => {
     e.preventDefault();
-    if (loginRedirect) {
-      nav('/')
-      setUserLoggedIn(true)
-    } else {
-      nav('/adduser')
-    }
+    // let OTP = parseInt(otp)
+    verifyOtpLogin(otp)
+      .then(res => res ? (
+        nav('/'),
+        setUserContext(prev => ({
+          ...prev,
+          JWT: res.JWT
+        })),
+        getUser(res.JWT)
+          .then(res => {
+            if (res) {
+              let user = res
+              setUserContext(prev => ({
+                ...prev,
+                id: user._id,
+                fullName: user.fullName,
+                mobileNumber: user.mobileNumber,
+                email: user.email,
+                dob: user.dob
+              }))
+              setCartArray({
+                loaded: true,
+                cart: user.cart,
+                no_of_carts: user.cart.length
+              })
+            }
+          }),
+        getUserPic(res.JWT)
+          .then(res => {
+            if (res) {
+              setUserContext(prev => ({
+                ...prev,
+                profilePic: res
+              }))
+            }
+          }),
+        getAllOrder(res.JWT)
+          .then(res => {
+            if (res) {
+              // console.log(res);
+              setUserOrderData({
+                loaded: true,
+                no_of_orders: res.no_of_orders,
+                orders: res.orders
+              })
+            }
+          })
+        // getCartData()
+        //   .then(res => {
+        //     if (res) {
+        //       setUserCart(res)
+        //     }
+        //   })
+      ) : toast.error('OTP Expired or invalid'))
   }
 
-  const validateForm = () => (
-    (otp !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)
-  )
+  const newUserSignUp = (e) => {
+    e.preventDefault();
+    // let OTP = parseInt(otp)
+    verifyOtpSignup(otp)
+      .then(res => res ? (
+        nav('/adduser'),
+        setUserContext(prev => ({
+          ...prev,
+          JWT: res
+        }))
+      ) : toast.error('OTP Expired or invalid'))
+  }
+
+  // const validateForm = () => (
+  //   (otp !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)
+  // )
   return (
     <>
       <HeaderBar />
@@ -52,7 +122,7 @@ const OtpValid = ({ setUserLoggedIn, loginRedirect }) => {
           <h1 className='page-heading'>Confirmation code</h1>
           <p className={'page-desc'}>Please check you phone for 6-digit confimation code.</p>
         </div>
-        <form action="" className={'signup-form'} onSubmit={formSubmit} onChange={validateForm}>
+        <form action="" className={'signup-form'} onSubmit={loginRedirect ? existingUserLogin : newUserSignUp}>
           <div className="inputfield-Container">
             <div className="inputField">
               <input type='text' name="Code" id="code" className='input-field' value={otp} autoComplete='off' placeholder='Confirmation code' maxLength={6} onChange={(e) => { setOtp(e.target.value); handleLength(e.target.value.length) }} />
@@ -63,12 +133,24 @@ const OtpValid = ({ setUserLoggedIn, loginRedirect }) => {
             <button className='submit-button' type='submit' disabled={btnDisable}><p>Continue</p></button>
             {
               loginRedirect ? (
-                <p className='extra-btn'>Resend code via email</p>
+                <Link state={{ emailLogin: true }} to={'/login'} className='extra-btn'>Resend code via email</Link>
               ) : ('')
             }
           </div>
         </form>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
     </>
   )
 }

@@ -114,7 +114,7 @@
 
 .cart_Product_Image_Container{
   max-width: 122px;
-  max-height: 122px;
+  max-height: 100%;
   width: 100%;
   height: 100%;
 }
@@ -164,21 +164,21 @@
   padding: 0.5rem 1rem;
 }
 
-.cart_Card_Buttons{
+.combined_Button_Container{
   padding: 0.125rem 0 0;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.cart_Card_Buttons img{
+.combined_Button_Container img{
   max-width: 18px;
   max-height: 18px;
   width: 100%;
   height: 100%;
 }
 
-.cart_button_save, .cart_button_remove{
+.combined_Button_One, .combined_Button_Two{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -188,16 +188,16 @@
   cursor: pointer;
 }
 
-.cart_button_save{
-  border-right: 0.063rem solid #EBEDF0;
-}
-
-.cart_button_remove p, .cart_button_save p{
-  margin: 0;
+.combined_Button_One p, .combined_Button_Two p{
+margin: 0;
   color: #3D5176;
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+
+.combined_Button_One{
+  border-right: 0.063rem solid #EBEDF0;
 }
 
 .color_Red{
@@ -236,12 +236,12 @@
     width: 75%;
   }
 
-  .cart_Card_Buttons img{
+  .combined_Button_Container img{
     max-width: 20px;
     max-height: 20px;
   }
 
-  .cart_button_save p, .cart_button_remove{
+  .combined_Button_One p, .combined_Button_Two p{
     letter-spacing: -0.015em;
     font-weight: 600;
     font-size: 0.875rem;
@@ -282,16 +282,16 @@
     line-height: 1.5rem;
   }
 
-  .cart_Card_Buttons{
+  .combined_Button_Container{
     gap: 0.375rem;
     padding: 0.25rem 0 0;
   }
 
-  .cart_button_save, .cart_button_remove{
+  .combined_Button_One , .combined_Button_Two {
     padding: 0.875rem 1.875rem 0.625rem 1.125rem;
   }
 
-  .cart_Card_Buttons img{
+  .combined_Button_Container img{
     max-width: 24px;
     max-height: 24px;
   }

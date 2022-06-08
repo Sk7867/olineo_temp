@@ -18,11 +18,11 @@ import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
 import arrowLeftBlack from '../../assets/vector/arrow_left_black.svg'
 import cameraBlue from '../../assets/vector/camera_outline_blue.svg'
 
-const Sidebar = ({ sidebar, setSidebar }) => {
+const Sidebar = ({ sidebar, setSidebar, userLoggedIn, handleCategorySearch }) => {
 
   const [categoryMenu, setCategoryMenu] = useState(false)
 
-  const sidebarNav = [
+  const sidebarNav = userLoggedIn ? [
     {
       image: profileIconBlue,
       text: 'My profile',
@@ -31,7 +31,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
     {
       image: storeBlue,
       text: 'Store finder',
-      link: '/orders',
+      link: '/store-finder',
     },
     {
       image: truckIcon,
@@ -53,13 +53,24 @@ const Sidebar = ({ sidebar, setSidebar }) => {
       text: 'Choose language',
       link: '/orders',
     },
+  ] : [
+    {
+      image: storeBlue,
+      text: 'Store finder',
+      link: '/store-finder',
+    },
+    {
+      image: globeIcon,
+      text: 'Choose language',
+      link: '/orders',
+    },
   ]
 
   const sideNavContact = [
     {
       image: userIcon,
       text: 'About Us',
-      link: '/orders',
+      link: '/about-us',
     },
     {
       image: callIcon,
@@ -76,23 +87,73 @@ const Sidebar = ({ sidebar, setSidebar }) => {
   const categoryData = [
     {
       image: cameraBlue,
-      text: 'Category 1',
-      link: '/',
+      text: 'Mobiles',
+      link: 'Mobiles',
     },
     {
       image: cameraBlue,
-      text: 'Category 2',
-      link: '/',
+      text: 'Tablets',
+      link: 'Tablets',
     },
     {
       image: cameraBlue,
-      text: 'Category 3',
-      link: '/',
+      text: 'Soundbar',
+      link: 'Soundbar',
     },
     {
       image: cameraBlue,
-      text: 'Category 4',
-      link: '/',
+      text: 'Bluetooth Speaker',
+      link: 'Bluetooth Speaker',
+    },
+    {
+      image: cameraBlue,
+      text: 'TWS',
+      link: 'TWS',
+    },
+    {
+      image: cameraBlue,
+      text: 'Wired Earphones',
+      link: 'Wired Earphones',
+    },
+    {
+      image: cameraBlue,
+      text: 'Wired Headphones',
+      link: 'Wired Headphones',
+    },
+    {
+      image: cameraBlue,
+      text: 'Bluetooth Neckband',
+      link: 'Bluetooth Neckband',
+    },
+    {
+      image: cameraBlue,
+      text: 'Adaptor',
+      link: 'Adaptor',
+    },
+    {
+      image: cameraBlue,
+      text: 'Charging Cable',
+      link: 'Charging Cable',
+    },
+    {
+      image: cameraBlue,
+      text: 'Powerbank',
+      link: 'Powerbank',
+    },
+    {
+      image: cameraBlue,
+      text: 'Smart TV',
+      link: 'Smart TV',
+    },
+    {
+      image: cameraBlue,
+      text: 'Wifi Smart Speaker',
+      link: 'Wifi Smart Speaker',
+    },
+    {
+      image: cameraBlue,
+      text: 'Miscellaneous',
+      link: 'Miscellaneous',
     },
   ]
 
@@ -105,9 +166,13 @@ const Sidebar = ({ sidebar, setSidebar }) => {
           <p className="sidebar_heading">
             Welcome!
           </p>
-          <p className="sidebar_login">
-            <Link to={'/login'}>Login</Link> | <Link to={'/signup'}>Create account</Link>
-          </p>
+          {
+            userLoggedIn ? ('') : (
+              <p className="sidebar_login">
+                <Link to={'/login'}>Login</Link> | <Link to={'/signup'}>Create account</Link>
+              </p>
+            )
+          }
         </div>
         <div className="side_Nav_Container">
           <div className={`side_Nav_Wrapper ${categoryMenu ? 'menu_Slide' : ''}`}>
@@ -149,10 +214,10 @@ const Sidebar = ({ sidebar, setSidebar }) => {
             <div className="category_Menu">
               {
                 categoryData.map((item, index) => (
-                  <Link to={item.link} className="sidebar_contactlink" key={index} onClick={() => { setSidebar(false); setCategoryMenu(false) }}>
+                  <div className="sidebar_contactlink" key={index} onClick={() => { setSidebar(false); setCategoryMenu(false); handleCategorySearch(item.link) }}>
                     <img src={item.image} alt="" />
                     <p>{item.text}</p>
-                  </Link>
+                  </div>
                 ))
               }
             </div>

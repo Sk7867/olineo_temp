@@ -1,5 +1,6 @@
 import React from 'react'
 import { Carousel } from 'react-bootstrap'
+import SkeletonElement from '../Skeletons/SkeletonElement'
 // import { Carousel } from 'react-responsive-carousel';
 
 //CSS
@@ -27,7 +28,7 @@ import './Section1.css'
   <img src={item.carousel_image} alt="" />
 </div> */}
 
-const Section1 = ({ id, carouselData }) => {
+const Section1 = ({ id, carouselData, productData }) => {
   return (
     <div className='section1_contianer' id={id}>
       <Carousel
@@ -36,15 +37,14 @@ const Section1 = ({ id, carouselData }) => {
       // showThumbs={false}
       // showStatus={false}
       >
-        {
-          carouselData.map((item, index) => (
-            <Carousel.Item key={index}>
-              <img
-                className="d-block w-100 carousel_image"
-                src={item.carousel_image}
-                alt={`${index}`}
-              />
-              {/* <Carousel.Caption>
+        {(productData.no_of_products > 0) && carouselData.map((item, index) => (
+          <Carousel.Item key={index}>
+            <img
+              className="d-block w-100 carousel_image"
+              src={item.carousel_image}
+              alt={`${index}`}
+            />
+            {/* <Carousel.Caption>
                 <div className='img_caption'>
                   <p className="img_caption_text">
                     {item.carousel_name}
@@ -54,8 +54,11 @@ const Section1 = ({ id, carouselData }) => {
                   </span>
                 </div>
   </Carousel.Caption> */}
-            </Carousel.Item>
-          ))
+          </Carousel.Item>
+        ))
+        }
+        {
+          (productData.no_of_products === 0) && (<SkeletonElement type={'productBanner'} />)
         }
       </Carousel>
     </div>

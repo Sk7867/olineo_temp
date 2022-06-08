@@ -11,8 +11,8 @@ const NewAddress = ({ setHeaderData }) => {
   }, []);
   return (
     <>
-      <div className="page_Wrapper">
-        <AddressForm />
+      <div className="page_Wrapper page_Margin_Top_Secondary">
+        <AddressForm fromProfile={false} />
       </div>
     </>
   )

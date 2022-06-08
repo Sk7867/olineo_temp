@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { UserDataContext } from '../../Contexts/UserContext'
+import { getIndiProduct } from '../../api/Product'
 
 //CSS
 import './MyCart.css'
@@ -14,100 +16,47 @@ import CartProductCard from '../../components/CartProductCard/CartProductCard'
 import Section2 from '../../components/Section2/Section2'
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
+import CartSection from './CartSection'
+import { getCartData } from '../../api/Cart'
 
-const MyCart = ({ cart, cartData, setHeaderData }) => {
-
+const MyCart = ({ setHeaderData }) => {
+  const { setUserCart, userCart, allProducts, cartArray, setCartArray, } = useContext(UserDataContext)
   const nav = useNavigate()
+
+
   useEffect(() => {
     setHeaderData({
       header3Cond: true,
       headerText: 'My Cart',
       categoriesCond: true,
+      header3Store: true,
+      header3Cart: false,
+      header3Profile: true,
     })
   }, []);
 
-  const sec5Data = [
-    {
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
-    },
-    {
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
-    },
-    {
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
-    },
-    {
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
-    },
-    {
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
-    },
-    {
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
-    },
-    {
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
-    },
-    {
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
-    },
-    {
-      product_image: product2,
-      product_name: 'Item name',
-      product_price: '₹1000',
-      classes: {
-        boxClass: 'bg_pink carousel_card',
-      }
-    },
-  ]
+  useEffect(() => {
+    getCartData()
+      .then(res => {
+        if (res) {
+          setCartArray({
+            loaded: true,
+            no_of_carts: res.no_of_carts,
+            cart: res.cart
+          })
+          // console.log(res);
+        }
+      })
+  }, [])
+
+
+
 
   const pageSwitch = (e) => {
     e.preventDefault();
-    console.log(e);
+    // console.log(e);
     nav('/')
   }
-
-  let cartItemsNumber = cartData.length
 
   const breadCrumbsData = [
     {
@@ -119,15 +68,14 @@ const MyCart = ({ cart, cartData, setHeaderData }) => {
       url: ''
     },
   ]
-
-  console.log(cartData);
+  // console.log(cartData);
 
   return (
     <>
       <div className='page_Wrapper page_Margin_Top'>
         <BreadCrumbs data={breadCrumbsData} />
         {
-          cartItemsNumber === 0 ? (
+          cartArray.no_of_carts === 0 ? (
             <>
               <div className="empty_order_sec">
                 <p className='empty_order_text'>Your cart is empty</p>
@@ -136,87 +84,29 @@ const MyCart = ({ cart, cartData, setHeaderData }) => {
               <Section2
                 id={'Top-sellers-sec'}
                 heading='Top Sellers'
-                productData={sec5Data}
+                productData={allProducts}
               />
             </>
           ) : (
             <>
               <div className='desk_Page_Wrapper'>
-                <aside className="side_Section section_Wrapper" style={{ padding: '0' }}>
-                  <PriceDetailsBox HideDetails={false} />
-                </aside>
-                <div className='order_Page_Right'>
-                  <p className="cart_Text section_Wrapper">My Cart</p>
-                  <div className="cards_Container">
-                    {
-                      cartData.map((item, index) => (
-                        <CartProductCard
-                          key={index}
-                          product={item}
-                        />
-                      ))
-                    }
-                  </div>
-
-                  <div className='cart_Subtotal_Section section_Wrapper'>
-                    <p>Subtotal (2 items): <span> ₹1,280</span></p>
-                    <div className="cart_Footer_Right">
-                      <button type='submit' className='submit-button' onClick={() => nav('/delivery-option')}><p>Checkout</p></button>
-                    </div>
-                  </div>
-
-                  <div className="cart_Add_Items">
+                <aside className="side_Section" style={{ padding: '0', background: 'none' }}>
+                  <PriceDetailsBox HideDetails={false} classes={{ containerClass: '' }} />
+                  <div className="cart_Add_Items section_Wrapper">
                     <div className="add_Items_Wrapper">
                       <p>Add items worth ₹{`600`} to qualify for FREE Delivery</p>
                     </div>
                     <div className="cart_More_Items">
-                      <p>Add more items</p>
-                      <img src={arrowRight} alt="" />
+                      <button type='submit' className='submit-button'><p>Add more items</p></button>
                     </div>
                   </div>
-
-                  {/* cart price detials */}
-                  <div className={'tab_None'}>
-                    <PriceDetailsBox HideDetails={false} />
-                  </div>
-
-                  {/* cart carousel section */}
-                  <Section2
-                    id={'Top-sellers-sec'}
-                    heading='Top Sellers'
-                    productData={sec5Data}
-                  />
-
-                  {/* cart saved for later */}
-                  <div className="cart_Save_Later">
-                    <div className="save_Later_Header section_Wrapper">
-                      <p className=''>Saved for Later</p>
-                    </div>
-                    <div className="cards_Container">
-                      {
-                        cartData.map((item, index) => (
-                          <CartProductCard
-                            key={index}
-                            product={item}
-                          />
-                        ))
-                      }
-                    </div>
-                  </div>
-
-                  {/* cart floating Footer */}
-                  <div className="cart_Footer ">
-                    <div className="cart_Footer_Left">
-                      <p className="footer_Price">
-                        ₹{`1,280`}
-                      </p>
-                      <p className='footer_Left_Text'>View price details</p>
-                    </div>
-                    <div className="cart_Footer_Right">
-                      <button type='submit' className='submit-button' onClick={() => nav('/delivery-option')}><p>Checkout</p></button>
-                    </div>
-                  </div>
-                </div>
+                </aside>
+                <CartSection featureProducts={allProducts} />
+                {/* <Section2
+                  id={'Top-sellers-sec'}
+                  heading='Top Sellers'
+                  productData={allProducts}
+                /> */}
               </div>
             </>
           )
