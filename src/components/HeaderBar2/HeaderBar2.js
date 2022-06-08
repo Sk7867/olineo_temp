@@ -339,6 +339,83 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
                 )}
                 {header3Cart ? (
                   userLoggedIn ? (
+                    <div className="user_profile" onClick={() => nav('/profile')}>
+                      <p>My Profile</p>
+                      <img src={userDPPic} alt="" />
+                    </div>
+                  ) : (
+                    <>
+                      <p className='right_login'>
+                        <Link to={'/login'}>Login</Link> | <Link to={'/signup'}>Create account</Link>
+                      </p>
+                      <p className='right_login login_tab_only'>
+                        <Link to={'/login'}>Login</Link>
+                      </p>
+                    </>
+                  )
+                ) : ('')
+                }
+              </div>
+            </div>
+            <div className="searchbarWrapper">
+              <div className="searchbar_Container">
+                <input type="text" placeholder='Search...' className='searchbar' onChange={handleFilter} />
+                <div className="seachbar_Icon">
+                  <img src={searchIconBlue} alt="" />
+                </div>
+              </div>
+              {filteredData.length !== 0 && (
+                <div className="search_Results">
+                  {
+                    filteredData.slice(0, 15).map((value, index) => {
+                      return (
+                        <Link to={`/product/${value.id}`} className='search_Result_Item' key={index} >
+                          <p>{value.name}</p>
+                        </Link>
+                      )
+                    })
+                  }
+                </div>
+              )}
+            </div>
+            <div className='locationbarWrapper logo_mob' onClick={() => handleModalShow()}>
+              <img src={locationWhite} alt="" />
+              <p>Select location to see product availability</p>
+            </div>
+            {
+              categoriesCond && (
+                <div className="categories_Container">
+                  <div className="categories_Wrapper">
+                    {
+                      categoriesList.map((item, index) => (
+                        <div className="category" key={index}>
+                          <img src={item.categoryImage} alt="" />
+                          <p>{item.categoryName}</p>
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+              )
+            }
+          </header>
+      {
+        header3Cond && (
+          <header className='headerbar3_container'>
+            <div className="headerbar3_Wrapper">
+              <div className="headerbarLeft">
+                <img src={arrowLeftWhite} alt="" onClick={() => nav(-1)} className='back_Btn' />
+                <img src={logo_mob} alt="" className='nav_Logo' onClick={() => nav('/')} />
+                <p>{headerText}</p>
+              </div>
+              <div className="headerbarRight">
+                {header3Store && (
+                  <Link to={`/store-finder`} className='storeIcon'>
+                    <img src={storeWhite} alt="" />
+                  </Link>
+                )}
+                {header3Cart ? (
+                  userLoggedIn ? (
                     <Link className='cartIcon' to={'/mycart'} >
                       <img src={cartWhite} alt="" />
                     </Link>
