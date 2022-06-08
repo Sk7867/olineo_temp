@@ -60,17 +60,17 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
     {
       categoryImage: layoutDotted,
       categoryName: 'All Categories',
-      categoryLink: '',
+      categoryLink: 'all',
     },
     {
       categoryImage: mobileGreenDotted,
-      categoryName: 'Mobiles',
-      categoryLink: 'Mobiles',
+      categoryName: 'Smartphone',
+      categoryLink: 'Smartphone',
     },
     {
       categoryImage: mobileBlueDotted,
-      categoryName: 'Tablets',
-      categoryLink: 'Tablets',
+      categoryName: 'Tablet',
+      categoryLink: 'Tablet',
     },
     {
       categoryImage: mobilePinkDotted,
@@ -104,8 +104,8 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
     },
     {
       categoryImage: mobilePinkDotted,
-      categoryName: 'Adaptor',
-      categoryLink: 'Adaptor',
+      categoryName: 'Adapter',
+      categoryLink: 'Adapter',
     },
     {
       categoryImage: mobileGreenDotted,
@@ -196,7 +196,16 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
   }
 
   const handleCategorySearch = (value) => {
-    let searchTerm = 'hierarchyL2=' + value
+    let searchTerm
+    let searchURL
+    if (value !== 'all') {
+      searchTerm = 'hierarchyL2=' + value
+      searchURL = 'Category=' + value
+    } else {
+      searchTerm = ''
+      searchURL = 'Category=' + value
+    }
+    console.log(searchTerm);
     getSearchedProduct(searchTerm)
       .then(res => {
         if (res) {
@@ -205,7 +214,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
             products: res,
             no_of_products: res.length
           })
-          nav(`/${searchTerm}`)
+          nav(`/${searchURL}`)
         }
       })
   }

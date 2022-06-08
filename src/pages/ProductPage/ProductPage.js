@@ -109,26 +109,26 @@ const ProductPage = ({ setHeaderData }) => {
     }
   }, [loc]);
 
-  useEffect(() => {
-    if (alternateColorean.length > 0) {
-      let demo = allProducts.products.filter((item) => alternateColorean.includes(item.ean));
-      if (demo !== undefined) {
-        let ind = colorAlternateProds.findIndex((obj) => obj.ean === demo[0].ean);
-        if (ind === -1) {
-          setColorAlternateProds([...colorAlternateProds, demo[0]]);
-        }
-      }
-    }
-    if (alternateSpecean.length > 0) {
-      let demo = allProducts.products.filter((item) => alternateColorean.includes(item.ean));
-      if (demo !== undefined) {
-        let ind = specAlternateProds.findIndex((obj) => obj.ean === demo[0].ean);
-        if (ind === -1) {
-          setSpecAlternateProds([...specAlternateProds, demo[0]]);
-        }
-      }
-    }
-  }, [alternateColorean, alternateSpecean]);
+  // useEffect(() => {
+  //   if (alternateColorean.length > 0) {
+  //     let demo = allProducts.products.filter((item) => alternateColorean.includes(item.ean));
+  //     if (demo !== undefined) {
+  //       let ind = colorAlternateProds.findIndex((obj) => obj.ean === demo[0].ean);
+  //       if (ind === -1) {
+  //         setColorAlternateProds([...colorAlternateProds, demo[0]]);
+  //       }
+  //     }
+  //   }
+  //   if (alternateSpecean.length > 0) {
+  //     let demo = allProducts.products.filter((item) => alternateColorean.includes(item.ean));
+  //     if (demo !== undefined) {
+  //       let ind = specAlternateProds.findIndex((obj) => obj.ean === demo[0].ean);
+  //       if (ind === -1) {
+  //         setSpecAlternateProds([...specAlternateProds, demo[0]]);
+  //       }
+  //     }
+  //   }
+  // }, [alternateColorean, alternateSpecean]);
 
   const sec5Data = [
     {
@@ -241,10 +241,10 @@ const ProductPage = ({ setHeaderData }) => {
             getCartData().then((res) =>
               res
                 ? setCartArray({
-                    loaded: true,
-                    no_of_carts: res.no_of_carts,
-                    cart: res.cart,
-                  })
+                  loaded: true,
+                  no_of_carts: res.no_of_carts,
+                  cart: res.cart,
+                })
                 : ""
             ))
           : ""
@@ -325,9 +325,9 @@ const ProductPage = ({ setHeaderData }) => {
               <div className="product_Preview_Section">
                 <Carousel
                   interval={5000}
-                  // infiniteLoop
-                  // showThumbs={false}
-                  // showStatus={false}
+                // infiniteLoop
+                // showThumbs={false}
+                // showStatus={false}
                 >
                   {productData.product_image_List.map((image, index) => (
                     <Carousel.Item key={index}>
