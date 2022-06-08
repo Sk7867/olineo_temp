@@ -12,7 +12,7 @@ const ProductListItem = ({ product }) => {
 
   return (
     <>
-      <Link to={`/product/${product.name}`} state={{ product: product }} className='productListItem_Contaier'>
+      <Link to={`/product/${product.slug}`} state={{ product: product }} className='productListItem_Contaier'>
         <div className="productListItem_Wrapper">
           <div className="productListItem_Image_Wrapper">
             {product.images.length > 0 && (

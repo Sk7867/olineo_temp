@@ -56,18 +56,24 @@ const BulkUpload = ({ setHeaderData }) => {
 
         let colorAlterArray = [];
         let specAlterArray = [];
-        let newColorStr = element.colorAlter.replace(/['"]+/g, "");
-        let newSpecStr = element.specAlter.replace(/['"]+/g, "");
-        if (newColorStr.indexOf(",") > -1) {
-          colorAlterArray = newColorStr.split(",");
-        } else {
-          colorAlterArray.push(newColorStr);
+        if (element.colorAlter) {
+          let newColorStr = element.colorAlter.replace(/['"]+/g, '')
+          if (newColorStr.indexOf(',') > -1) {
+            colorAlterArray = newColorStr.split(',')
+          } else {
+            colorAlterArray.push(newColorStr)
+          }
         }
-        if (newSpecStr.indexOf(",") > -1) {
-          specAlterArray = newSpecStr.split(",");
-        } else {
-          specAlterArray.push(newSpecStr);
+
+        if (element.specAlter) {
+          let newSpecStr = element.specAlter.replace(/['"]+/g, '')
+          if (newSpecStr.indexOf(',') > -1) {
+            specAlterArray = newSpecStr.split(',')
+          } else {
+            specAlterArray.push(newSpecStr)
+          }
         }
+
         // let immediateComplimentArray = element.immediateComp.split(',')
         // let laterComplimentArray = element.laterComp.split(',')
 
@@ -132,110 +138,114 @@ const BulkUpload = ({ setHeaderData }) => {
     let dynamicArray = [];
     let dynamicArray2 = [];
     switch (elem.hierarchyL2) {
-      case "Smartphone":
-        productInfo = {
-          os: elem.os,
-          ram: elem.ram,
-          rom: elem.rom,
-          color: elem.color,
-          batteries: elem.batteries,
-          wirelessTech: elem.wirelessTech,
-          connectivityTech: elem.connectiveTech,
-          gps: elem.hasGPS,
-          spacialFeature: elem.specialFeatures,
-          displayFeatures: elem.displayFeatures,
-          displayTechnology: elem.displayTechnology,
-          colorsDisplayed: elem.colorsDisplayed,
-          otherDisplayFeatures: elem.otherDisplayFeatures,
-          deviceInterface: elem.primaryDeviceInterface,
-          cameraFeatures: elem.cameraFeatures,
-          otherCameraFeatures: elem.otherCameraFeatures,
-          audioJack: elem.audioJack,
-          formFactor: elem.formFactor,
-          batteryPowerRating: elem.batteryPowerRating,
-          productTalkTime: elem.talkTime,
-          productStandbyTime: elem.standbyTime,
-          inTheBox: elem.inTheBox,
-          importedBy: elem.importedBy,
-          country: elem.countryOrigin,
-        };
+      case 'Smartphone': productInfo = {
+        os: elem.os,
+        ram: elem.ram,
+        rom: elem.rom,
+        color: elem.color,
+        batteries: elem.batteries,
+        wirelessTech: elem.wirelessTech,
+        connectivityTech: elem.connectiveTech,
+        gps: elem.hasGPS,
+        spacialFeature: elem.specialFeatures,
+        displayFeatures: elem.displayFeatures,
+        displayTechnology: elem.displayTechnology,
+        colorsDisplayed: elem.colorsDisplayed,
+        otherDisplayFeatures: elem.otherDisplayFeatures,
+        deviceInterface: elem.primaryDeviceInterface,
+        cameraFeatures: elem.cameraFeatures,
+        otherCameraFeatures: elem.otherCameraFeatures,
+        audioJack: elem.audioJack,
+        formFactor: elem.formFactor,
+        batteryPowerRating: elem.batteryPowerRating,
+        productTalkTime: elem.talkTime,
+        productStandbyTime: elem.standbyTime,
+        inTheBox: elem.inTheBox,
+        importedBy: elem.importedBy,
+        country: elem.countryOrigin
+      }
         // url = elem.productName + '-'
-        dynamicHeader = elem.productName + "( " + elem.color + ", " + elem.ram + ", " + elem.rom + ")";
-        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, "").split(" ");
-        dynamicArray2 = dynamicArray.filter((n) => n);
-        url = dynamicArray2.join("-");
+        dynamicHeader = elem.productName + '( ' + elem.color + ', ' + elem.ram + ', ' + elem.rom + ')'
+        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dynamicArray2 = dynamicArray.filter(n => n)
+        url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
 
-      case "Adapter":
-        productInfo = {
-          compatibleDevices: elem.compatibleDevices,
-          spacialFeature: elem.specialFeatures,
-          numberOfItems: elem.numberOfItems,
-          wattage: elem.wattage,
-          powerSource: elem.powerSource,
-          batteriesIncluded: elem.batteriesIncluded,
-          batteriesRequired: elem.batteriesRequired,
-          numberOfPorts: elem.numberOfPorts,
-          totalUsbPorts: elem.totalUsbPorts,
-          connectorType: elem.connectorType,
-        };
+      case 'Adapter': productInfo = {
+        compatibleDevices: elem.compatibleDevices,
+        spacialFeature: elem.specialFeatures,
+        numberOfItems: elem.numberOfItems,
+        wattage: elem.wattage,
+        powerSource: elem.powerSource,
+        batteriesIncluded: elem.batteriesIncluded,
+        batteriesRequired: elem.batteriesRequired,
+        numberOfPorts: elem.numberOfPorts,
+        totalUsbPorts: elem.totalUsbPorts,
+        connectorType: elem.connectorType,
+        dataTransferRate: elem.dataTransferRate,
+        inTheBox: elem.inTheBox,
+      }
         // url = elem.productName + '-'
-        dynamicHeader = elem.productName + "( " + elem.wattage + ", " + elem.connectorType + ")";
-        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, "").split(" ");
-        dynamicArray2 = dynamicArray.filter((n) => n);
-        url = dynamicArray2.join("-");
+        dynamicHeader = elem.productName + '( ' + elem.wattage + ', ' + elem.connectorType + ')'
+        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dynamicArray2 = dynamicArray.filter(n => n)
+        url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
 
-      case "Tablet":
-        productInfo = {
-          os: elem.os,
-          series: elem.series,
-          ram: elem.ram,
-          rom: elem.rom,
-          color: elem.color,
-          itemHeight: elem.itemHeight,
-          itemWidth: elem.itemWidth,
-          standingScreenDisplaySize: elem.standingScreenDisplaySize,
-          connectivityTech: elem.connectiveTech,
-          screenResolution: elem.screenResolution,
-          batteries: elem.batteries,
-          processorBrand: elem.processorBrand,
-          processorSpeed: elem.processorSpeed,
-          processorCount: elem.processorCount,
-          othercameraFeatures: elem.cameraFeatures,
-          rearWebcamResolution: elem.rearWebcamResolution,
-          frontWebcamResolution: elem.frontWebcamResolution,
-          inTheBox: elem.inTheBox,
-          importedBy: elem.importedBy,
-          country: elem.countryOrigin,
-        };
+      case 'Tablet': productInfo = {
+        os: elem.os,
+        series: elem.series,
+        ram: elem.ram,
+        rom: elem.rom,
+        color: elem.color,
+        itemHeight: elem.itemHeight,
+        itemWidth: elem.itemWidth,
+        standingScreenDisplaySize: elem.standingScreenDisplaySize,
+        wirelessTech: elem.wirelessTech,
+        specialFeatures: elem.specialFeatures,
+        connectivityTech: elem.connectiveTech,
+        screenResolution: elem.screenResolution,
+        otherDisplayFeatures: elem.otherDisplayFeatures,
+        batteries: elem.batteries,
+        processorBrand: elem.processorBrand,
+        processorSpeed: elem.processorSpeed,
+        processorCount: elem.processorCount,
+        othercameraFeatures: elem.cameraFeatures,
+        rearWebcamResolution: elem.rearWebcamResolution,
+        frontWebcamResolution: elem.frontWebcamResolution,
+        batteryPowerRating: elem.batteryPowerRating,
+        formFactor: elem.formFactor,
+        inTheBox: elem.inTheBox,
+        importedBy: elem.importedBy,
+        country: elem.countryOrigin
+      }
         // url = elem.productName + '-'
-        dynamicHeader = elem.productName + "( " + elem.color + ", " + elem.ram + ", " + elem.rom + ")";
-        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, "").split(" ");
-        dynamicArray2 = dynamicArray.filter((n) => n);
-        url = dynamicArray2.join("-");
+        dynamicHeader = elem.productName + '( ' + elem.color + (elem.ram ? (', ' + elem.ram) : '') + (elem.rom ? (', ' + elem.rom) : '') + ')'
+        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dynamicArray2 = dynamicArray.filter(n => n)
+        url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
 
-      case "Wired Headphones":
-        productInfo = {
-          spacialFeature: elem.specialFeatures,
-          mountingHardware: elem.mountingHardware,
-          numberOfItems: elem.numberOfItems,
-          microphoneTechnology: elem.microphoneTechnology,
-          headphonesFormFactor: elem.headphonesFormFactor,
-          batteriesRequired: elem.batteriesRequired,
-          cableFeature: elem.cableFeature,
-          connectorType: elem.connectorType,
-          material: elem.material,
-          inTheBox: elem.inTheBox,
-          importedBy: elem.importedBy,
-          country: elem.countryOrigin,
-        };
+      case 'Wired Headphones': productInfo = {
+        hardwarePlatform: elem.hardwarePlatform,
+        spacialFeature: elem.specialFeatures,
+        mountingHardware: elem.mountingHardware,
+        numberOfItems: elem.numberOfItems,
+        microphoneFormFactor: elem.microphoneFormFactor,
+        headphonesFormFactor: elem.headphonesFormFactor,
+        batteriesRequired: elem.batteriesRequired,
+        cableFeature: elem.cableFeature,
+        connectorType: elem.connectorType,
+        material: elem.material,
+        inTheBox: elem.inTheBox,
+        importedBy: elem.importedBy,
+        country: elem.countryOrigin
+      }
         // url = elem.productName + '-'
-        dynamicHeader = elem.productName + "( " + elem.connectorType + ")";
-        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, "").split(" ");
-        dynamicArray2 = dynamicArray.filter((n) => n);
-        url = dynamicArray2.join("-");
+        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.headphonesFormFactor ? (', ' + elem.headphonesFormFactor) : '') + ')'
+        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dynamicArray2 = dynamicArray.filter(n => n)
+        url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
 
       case "Wired Earphones":
@@ -256,30 +266,49 @@ const BulkUpload = ({ setHeaderData }) => {
           country: elem.countryOrigin,
         };
         // url = elem.productName + '-'
-        dynamicHeader = elem.productName + "( " + elem.connectorType + ")";
-        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, "").split(" ");
-        dynamicArray2 = dynamicArray.filter((n) => n);
-        url = dynamicArray2.join("-");
+        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.headphonesFormFactor ? (', ' + elem.headphonesFormFactor) : '') + (elem.cableFeature ? (', ' + elem.cableFeature) : '') + (elem.compatibleDevices ? (', ' + elem.compatibleDevices) : '') + ')'
+        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dynamicArray2 = dynamicArray.filter(n => n)
+        url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
 
-      case "Bluetooth Speaker":
-        productInfo = {
-          speakerType: elem.speakerType,
-          color: elem.color,
-          playTime: elem.playTime,
-          peakPowerHandlingSpeakers: elem.peakPowerHandlingSpeakers,
-          RMSPowerRangeAmplifiers: elem.RMSPowerRangeAmplifiers,
-          batteries: elem.batteries,
-          inTheBox: elem.inTheBox,
-          importedBy: elem.importedBy,
-          country: elem.countryOrigin,
-        };
+      case 'Bluetooth Speaker': productInfo = {
+        speakerType: elem.speakerType,
+        color: elem.color,
+        playTime: elem.playTime,
+        peakPowerHandlingSpeakers: elem.peakPowerHandlingSpeakers,
+        RMSPowerRangeAmplifiers: elem.RMSPowerRangeAmplifiers,
+        batteries: elem.batteries,
+        inTheBox: elem.inTheBox,
+        importedBy: elem.importedBy,
+        country: elem.countryOrigin
+      }
         // url = elem.productName + '-'
-        dynamicHeader = elem.productName + "( " + elem.connectorType + ", " + elem.playTime + ")";
-        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, "").split(" ");
-        dynamicArray2 = dynamicArray.filter((n) => n);
-        url = dynamicArray2.join("-");
+        dynamicHeader = elem.productName + '( ' + elem.connectorType + ', ' + elem.playTime + ')'
+        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dynamicArray2 = dynamicArray.filter(n => n)
+        url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
+
+      case 'Charging Cable': productInfo = {
+        compatibleDevices: elem.compatibleDevices,
+        spacialFeature: elem.specialFeatures,
+        numberOfMemorySticks: elem.numberOfMemorySticks,
+        ACAdapterCurrent: elem.ACAdapterCurrent,
+        itemHeight: elem.itemHeight,
+        itemWidth: elem.itemWidth,
+        connectiveTech: elem.connectiveTech,
+        numberOfPorts: elem.numberOfPorts,
+        totalUsbPorts: elem.totalUsbPorts,
+        cableType: elem.cableType,
+        dataTransferRate: elem.dataTransferRate,
+        inTheBox: elem.inTheBox,
+      }
+        // url = elem.productName + '-'
+        dynamicHeader = elem.productName + '( ' + elem.wattage + ', ' + elem.connectorType + ')'
+        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dynamicArray2 = dynamicArray.filter(n => n)
+        url = dynamicArray2.join('-')
 
       default:
         break;
@@ -338,20 +367,20 @@ const BulkUpload = ({ setHeaderData }) => {
         document.getElementById("submitCsvData").innerHTML = "<p>Please Wait. Uploading Images... </p>";
         let productArray = res;
         for (const ean in imagesObject) {
-          if (imagesObject[ean].imgs.length != 0) {
+          if (imagesObject[ean].imgs.length !== 0) {
             const element = imagesObject[ean];
             let product = productArray.find((item) => {
-              return item.ean == ean;
+              return item.ean === ean;
             });
             let res = await addProductImages(product._id, element.imgs);
             console.log(res);
           }
         }
         for (const ean in galleryImagesObject) {
-          if (galleryImagesObject[ean].imgs.length != 0) {
+          if (galleryImagesObject[ean].imgs.length !== 0) {
             const element = galleryImagesObject[ean];
             let product = productArray.find((item) => {
-              return item.ean == ean;
+              return item.ean === ean;
             });
             let res = await addProductGalleryImages(product._id, element.imgs);
             console.log(res);
@@ -430,7 +459,7 @@ const BulkUpload = ({ setHeaderData }) => {
                               <button
                                 type="submit"
                                 className="submit-button"
-                                disabled={imagesObject[item[fileUploaded.eanPosition]] && imagesObject[item[fileUploaded.eanPosition]]?.imgs.length != 0 ? false : true}
+                                disabled={imagesObject[item[fileUploaded.eanPosition]] && imagesObject[item[fileUploaded.eanPosition]]?.imgs.length !== 0 ? false : true}
                                 onClick={(e) => handleOpen(e, imagesObject[item[fileUploaded.eanPosition]].imgsUrl, index)}
                               >
                                 <p>Preview Images</p>
@@ -454,7 +483,7 @@ const BulkUpload = ({ setHeaderData }) => {
                               <button
                                 type="submit"
                                 className="submit-button"
-                                disabled={galleryImagesObject[item[fileUploaded.eanPosition]] && galleryImagesObject[item[fileUploaded.eanPosition]]?.imgs.length != 0 ? false : true}
+                                disabled={galleryImagesObject[item[fileUploaded.eanPosition]] && galleryImagesObject[item[fileUploaded.eanPosition]]?.imgs.length !== 0 ? false : true}
                                 onClick={(e) => handleOpen(e, galleryImagesObject[item[fileUploaded.eanPosition]].imgsUrl)}
                               >
                                 <p>Preview Images</p>
