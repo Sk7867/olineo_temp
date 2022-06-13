@@ -12,10 +12,10 @@ const ProductListItem = ({ product }) => {
 
   return (
     <>
-      <Link to={`/product/${product.slug}`} state={{ product: product }} className='productListItem_Contaier'>
+      <Link to={`/product/${product.slug}`} className='productListItem_Contaier'>
         <div className="productListItem_Wrapper">
           <div className="productListItem_Image_Wrapper">
-            {product.images.length > 0 && (
+            {(product.images) && (product.images.length > 0) && (
               <img src={product.images[0]} alt="" />
             )}
             {/* <ProductOfferTag offer={product.discount.flatDiscount.value} /> */}
@@ -26,7 +26,7 @@ const ProductListItem = ({ product }) => {
             </p>
             <div className="productListItem_Price_Details">
               <p className='productListItem_Discounted_Price'>
-                ₹{product.price.discountPrice ? product.price.discountPrice : product.price.mop}
+                ₹{!isNaN(product.price.discountPrice) ? product.price.discountPrice : product.price.mop}
               </p>
               <p className='productListItem_Original_Price'>
                 ₹{product.price.mrp}

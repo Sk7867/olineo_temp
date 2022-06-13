@@ -71,7 +71,7 @@ export const getAllOrder = async (token) => {
     .then(res => {
       allOrderResponse = res.data.data
     })
-
+  // console.log(allOrderResponse);
   return allOrderResponse
 
 }
@@ -134,7 +134,7 @@ export const cancelOrder = async (id, query) => {
 
   let orderDeleteResponse
 
-  await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/order/${id}`, { headers }, { data: { reason: query } })
+  await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/order/${id}`, { headers }, { reason: query })
     .then(res => {
       orderDeleteResponse = res
     })

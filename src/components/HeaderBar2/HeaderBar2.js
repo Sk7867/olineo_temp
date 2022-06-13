@@ -158,7 +158,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
   const handleKeyDown = (e) => {
     let value = e.target.value
     if (e.code === 'Enter') {
-      let searchTerm = 'name=' + value
+      let searchTerm = 'search=' + value
       setSearchedQuery(value)
       getSearchedProduct(searchTerm)
         .then(res => {
@@ -169,6 +169,8 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
               products: res,
               no_of_products: res.length
             })
+            setFilteredData([])
+            setSearchedQuery('')
             nav(`/${searchTerm}`)
           }
         })

@@ -115,7 +115,7 @@ function App() {
   const [orderInit, setOrderInit] = useState({
     productId: [],
     quantity: [],
-    shippingAddressId: ''
+    shippingAddressId: '',
   })
   const [priceBoxDetails, setPriceBoxDetails] = useState({
     cartItemsNumber: 0,
@@ -340,7 +340,7 @@ function App() {
             <Route path='/home-delivery' exact element={<HomeDelivery setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />} />
             <Route path='/store-pickup' exact element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
             <Route path='/store-near-me' exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
-            <Route path='/product/:id' exact element={<ProductPage setHeaderData={setHeaderData} />} />
+            <Route path='/product/:slug' exact element={<ProductPage setHeaderData={setHeaderData} />} />
             <Route path='/:category' exact element={<ProductCategory setHeaderData={setHeaderData} />} />
             <Route path='/:category/filter' exact element={<Filter setHeaderData={setHeaderData} />} />
             <Route path='/:store/:category' exact element={<OfflineProductCategory setHeaderData={setHeaderData} />} />

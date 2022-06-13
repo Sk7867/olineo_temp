@@ -17,6 +17,11 @@ const CartProductCard = ({
   useEffect(() => {
     if (product && product.discount.flatDiscount && product.discount.flatDiscount.value) {
       setDiscount(product.discount.flatDiscount.value)
+    } else {
+      let mrp = parseInt(product.price.mrp)
+      let mop = parseInt(product.price.mop)
+      let discount = Math.floor(((mrp - mop) / mrp) * 100)
+      setDiscount(discount)
     }
   }, [product])
   return (
@@ -50,9 +55,9 @@ const CartProductCard = ({
               )
             }
           </div>
-          <div className="cart_Product_Delivery_Info">
+          {/* <div className="cart_Product_Delivery_Info">
             <p className="cart_Product_Delivery_Estimate">{product.productDeliveryExpected}</p> | <p className="cart_Product_Delivery_Charge">₹{product.productDeliveryCharge}</p>
-          </div>
+          </div> */}
           {
             !matches && (
               <p className={`cart_Product_Availability ${product.productQuantityAvailable <= 1 ? ('color_Red') : ('')}`}>{product.productAvailabilty}</p>

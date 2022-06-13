@@ -82,6 +82,7 @@ const BulkUpload = ({ setHeaderData }) => {
           hierarchyL2: element.hierarchyL2,
           hierarchyL3: element.hierarchyL3,
           classification: element.productClassification,
+          advancePayment: element.advancePayment,
           name: element.productName,
           ean: element.ean,
           type: element.hierarchyL2,
@@ -147,7 +148,7 @@ const BulkUpload = ({ setHeaderData }) => {
         wirelessTech: elem.wirelessTech,
         connectivityTech: elem.connectiveTech,
         gps: elem.hasGPS,
-        spacialFeature: elem.specialFeatures,
+        specialFeatures: elem.specialFeatures,
         displayFeatures: elem.displayFeatures,
         displayTechnology: elem.displayTechnology,
         colorsDisplayed: elem.colorsDisplayed,
@@ -161,8 +162,13 @@ const BulkUpload = ({ setHeaderData }) => {
         productTalkTime: elem.talkTime,
         productStandbyTime: elem.standbyTime,
         inTheBox: elem.inTheBox,
+        modelYear: elem.modelYear,
+        modelName: elem.modelName,
+        modelNo: elem.modelNo,
         importedBy: elem.importedBy,
-        country: elem.countryOrigin
+        country: elem.countryOrigin,
+        altSpecText: elem.altSpecText,
+        specText: elem.specText
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.color + ', ' + elem.ram + ', ' + elem.rom + ')'
@@ -173,7 +179,7 @@ const BulkUpload = ({ setHeaderData }) => {
 
       case 'Adapter': productInfo = {
         compatibleDevices: elem.compatibleDevices,
-        spacialFeature: elem.specialFeatures,
+        specialFeatures: elem.specialFeatures,
         numberOfItems: elem.numberOfItems,
         wattage: elem.wattage,
         powerSource: elem.powerSource,
@@ -183,7 +189,15 @@ const BulkUpload = ({ setHeaderData }) => {
         totalUsbPorts: elem.totalUsbPorts,
         connectorType: elem.connectorType,
         dataTransferRate: elem.dataTransferRate,
+        modelYear: elem.modelYear,
+        modelName: elem.modelName,
+        modelNo: elem.modelNo,
         inTheBox: elem.inTheBox,
+        importedBy: elem.importedBy,
+        country: elem.countryOrigin,
+        altSpecText: elem.altSpecText,
+        specText: elem.specText
+
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.wattage + ', ' + elem.connectorType + ')'
@@ -210,14 +224,19 @@ const BulkUpload = ({ setHeaderData }) => {
         processorBrand: elem.processorBrand,
         processorSpeed: elem.processorSpeed,
         processorCount: elem.processorCount,
-        othercameraFeatures: elem.cameraFeatures,
+        otherCameraFeatures: elem.cameraFeatures,
         rearWebcamResolution: elem.rearWebcamResolution,
         frontWebcamResolution: elem.frontWebcamResolution,
         batteryPowerRating: elem.batteryPowerRating,
         formFactor: elem.formFactor,
         inTheBox: elem.inTheBox,
         importedBy: elem.importedBy,
-        country: elem.countryOrigin
+        modelYear: elem.modelYear,
+        modelName: elem.modelName,
+        modelNo: elem.modelNo,
+        country: elem.countryOrigin,
+        altSpecText: elem.altSpecText,
+        specText: elem.specText
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.color + (elem.ram ? (', ' + elem.ram) : '') + (elem.rom ? (', ' + elem.rom) : '') + ')'
@@ -228,7 +247,7 @@ const BulkUpload = ({ setHeaderData }) => {
 
       case 'Wired Headphones': productInfo = {
         hardwarePlatform: elem.hardwarePlatform,
-        spacialFeature: elem.specialFeatures,
+        specialFeatures: elem.specialFeatures,
         mountingHardware: elem.mountingHardware,
         numberOfItems: elem.numberOfItems,
         microphoneFormFactor: elem.microphoneFormFactor,
@@ -239,7 +258,12 @@ const BulkUpload = ({ setHeaderData }) => {
         material: elem.material,
         inTheBox: elem.inTheBox,
         importedBy: elem.importedBy,
-        country: elem.countryOrigin
+        modelYear: elem.modelYear,
+        modelName: elem.modelName,
+        modelNo: elem.modelNo,
+        country: elem.countryOrigin,
+        altSpecText: elem.altSpecText,
+        specText: elem.specText
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.headphonesFormFactor ? (', ' + elem.headphonesFormFactor) : '') + ')'
@@ -251,10 +275,10 @@ const BulkUpload = ({ setHeaderData }) => {
       case "Wired Earphones":
         productInfo = {
           compatibleDevices: elem.compatibleDevices,
-          spacialFeature: elem.specialFeatures,
+          specialFeatures: elem.specialFeatures,
           mountingHardware: elem.mountingHardware,
           numberOfItems: elem.numberOfItems,
-          microphoneTechnology: elem.microphoneTechnology,
+          microphoneFormFactor: elem.microphoneFormFactor,
           headphonesFormFactor: elem.headphonesFormFactor,
           batteriesIncluded: elem.batteriesIncluded,
           batteriesRequired: elem.batteriesRequired,
@@ -263,7 +287,12 @@ const BulkUpload = ({ setHeaderData }) => {
           material: elem.material,
           inTheBox: elem.inTheBox,
           importedBy: elem.importedBy,
+          modelYear: elem.modelYear,
+          modelName: elem.modelName,
+          modelNo: elem.modelNo,
           country: elem.countryOrigin,
+          altSpecText: elem.altSpecText,
+          specText: elem.specText
         };
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.headphonesFormFactor ? (', ' + elem.headphonesFormFactor) : '') + (elem.cableFeature ? (', ' + elem.cableFeature) : '') + (elem.compatibleDevices ? (', ' + elem.compatibleDevices) : '') + ')'
@@ -281,10 +310,15 @@ const BulkUpload = ({ setHeaderData }) => {
         batteries: elem.batteries,
         inTheBox: elem.inTheBox,
         importedBy: elem.importedBy,
-        country: elem.countryOrigin
+        modelYear: elem.modelYear,
+        modelName: elem.modelName,
+        modelNo: elem.modelNo,
+        country: elem.countryOrigin,
+        altSpecText: elem.altSpecText,
+        specText: elem.specText
       }
         // url = elem.productName + '-'
-        dynamicHeader = elem.productName + '( ' + elem.connectorType + ', ' + elem.playTime + ')'
+        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.playTime ? (', ' + elem.playTime) : '') + ')'
         dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')
@@ -292,7 +326,7 @@ const BulkUpload = ({ setHeaderData }) => {
 
       case 'Charging Cable': productInfo = {
         compatibleDevices: elem.compatibleDevices,
-        spacialFeature: elem.specialFeatures,
+        specialFeatures: elem.specialFeatures,
         numberOfMemorySticks: elem.numberOfMemorySticks,
         ACAdapterCurrent: elem.ACAdapterCurrent,
         itemHeight: elem.itemHeight,
@@ -302,13 +336,54 @@ const BulkUpload = ({ setHeaderData }) => {
         totalUsbPorts: elem.totalUsbPorts,
         cableType: elem.cableType,
         dataTransferRate: elem.dataTransferRate,
+        wattage: elem.wattage,
+        connectorType: elem.connectorType,
+        material: elem.material,
+        modelYear: elem.modelYear,
+        modelName: elem.modelName,
+        modelNo: elem.modelNo,
         inTheBox: elem.inTheBox,
+        altSpecText: elem.altSpecText,
+        importedBy: elem.importedBy,
+        country: elem.countryOrigin,
+        specText: elem.specText
       }
         // url = elem.productName + '-'
-        dynamicHeader = elem.productName + '( ' + elem.wattage + ', ' + elem.connectorType + ')'
+        dynamicHeader = elem.productName + '( ' + elem.wattage + (elem.connectorType ? (', ' + elem.connectorType) : '') + (elem.dataTransferRate ? (',' + elem.dataTransferRate) : '') + ')'
         dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')
+        return { productInfo, url, dynamicHeader };
+
+      case 'Soundbar': productInfo = {
+        color: elem.color,
+        hardwarePlatform: elem.hardwarePlatform,
+        specialFeatures: elem.specialFeatures,
+        mountingHardware: elem.mountingHardware,
+        speakerSurroundSoundChannelConfiguration: elem.speakerSurroundSoundChannelConfiguration,
+        numberOfItems: elem.numberOfItems,
+        speakerAmplificationType: elem.speakerAmplificationType,
+        speakerConnectivity: elem.speakerConnectivity,
+        wattage: elem.wattage,
+        batteriesRequired: elem.batteriesRequired,
+        mountingType: elem.mountingType,
+        connectorType: elem.connectorType,
+        material: elem.material,
+        inTheBox: elem.inTheBox,
+        importedBy: elem.importedBy,
+        modelYear: elem.modelYear,
+        modelName: elem.modelName,
+        modelNo: elem.modelNo,
+        country: elem.countryOrigin,
+        altSpecText: elem.altSpecText,
+        specText: elem.specText
+      }
+        // url = elem.productName + '-'
+        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.wattage ? (', ' + elem.wattage) : '') + ')'
+        dynamicArray = dynamicHeader.replace(/[\(,/\)]/g, '').split(" ");
+        dynamicArray2 = dynamicArray.filter(n => n)
+        url = dynamicArray2.join('-')
+        return { productInfo, url, dynamicHeader };
 
       default:
         break;
@@ -357,7 +432,7 @@ const BulkUpload = ({ setHeaderData }) => {
     setModalOpen(true);
     setModalData(imagesPassed);
   };
-
+  console.log(fileToSend);
   const handleSubmit = async (e) => {
     e.preventDefault();
     document.getElementById("submitCsvData").disabled = true;
@@ -400,7 +475,7 @@ const BulkUpload = ({ setHeaderData }) => {
       toast.error("Excel file not uploaded!");
     }
   };
-
+  console.log(fileToSend);
   return (
     <>
       <div className="page_Wrapper page_Margin_Top_Secondary">

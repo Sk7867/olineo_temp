@@ -14,6 +14,8 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
     orderTypes,
     setOrderTypes
   } = useContext(UserDataContext)
+  const [ordersOnTheWay, setOrdersOnTheWay] = useState([])
+  const [cancelledOrders, setCancelledOrders] = useState([])
 
   let ordersNumber = userOrderData.no_of_orders
 
@@ -32,8 +34,16 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
               .then(res => {
                 let status = res.items[0].status
                 item.status = status
+                if (status === 'NOSTORETOSERVICE') {
+                  let len = ordersOnTheWay.filter(obj => obj._id === item._id)
+                  if (len.length === 0) {
+                    setOrdersOnTheWay([...ordersOnTheWay, item])
+                  }
+                }
               })
           })
+          console.log(orders);
+          orders.map((order, index) => handleOrderSegregate(order))
           setUserOrderData({
             loaded: true,
             no_of_orders: res.no_of_orders,
@@ -42,6 +52,28 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
         }
       })
   }, [])
+
+  const handleOrderSegregate = (order) => {
+    let len
+    switch (order.status) {
+      case 'CANCELLED':
+        len = cancelledOrders.filter(obj => obj._id === order._id)
+        if (len.length === 0) {
+          setCancelledOrders([...cancelledOrders, order])
+        }
+        break;
+
+      default:
+        len = ordersOnTheWay.filter(obj => obj._id === order._id)
+        if (len.length === 0) {
+          setOrdersOnTheWay([...ordersOnTheWay, order])
+        }
+        break;
+    }
+  }
+
+  console.log(cancelledOrders);
+  console.log(ordersOnTheWay);
 
   // useEffect(() => {
   //   if (userOrderData.no_of_orders > 0) {
@@ -109,7 +141,7 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
                   <div className='order_arriving_section'>
                     <p className="order_Text section_Wrapper">Orders on the way</p>
                     {
-                      orderTypes.onThewayOrders.map((order, index) => (
+                      ordersOnTheWay.map((order, index) => (
 
                         <OrderProductCard
                           key={index}
@@ -166,7 +198,7 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
                   <div className="order_delivered_section">
                     <p className="order_Text section_Wrapper">Orders Cancelled</p>
                     {
-                      orderTypes.cancelledOrders.map((order, index) => (
+                      cancelledOrders.map((order, index) => (
                         <OrderProductCard
                           key={index}
                           product={order}

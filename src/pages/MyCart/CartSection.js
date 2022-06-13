@@ -9,6 +9,7 @@ import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import Section2 from '../../components/Section2/Section2'
 import { initOrder } from '../../api/OrdersApi'
 import { getCartData, removeFromCart } from '../../api/Cart'
+import { getCoupon } from '../../api/couponApi'
 
 toast.configure()
 const CartSection = ({ featureProducts }) => {
@@ -17,8 +18,20 @@ const CartSection = ({ featureProducts }) => {
 
 
 
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, cartArray, setCartArray, orderInit, setOrderInit, priceBoxDetails } = useContext(UserDataContext)
+  const {
+    setUserCart,
+    userCart,
+    cartArray,
+    setCartArray,
+    setOrderInit,
+    priceBoxDetails } = useContext(UserDataContext)
 
+  useEffect(() => {
+    getCoupon()
+      .then(res => {
+        console.log(res);
+      })
+  }, [])
 
 
   // useEffect(() => {
