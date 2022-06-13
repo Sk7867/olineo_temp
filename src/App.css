@@ -312,6 +312,11 @@ input::placeholder, textarea::placeholder{
 .floating_Footer_Center{
   width: 100%;
 }
+.scroll_Buffer{
+  min-width: 1px;
+    min-height: 50px;
+    margin: 0 0px 0 0;
+  }
 
 @media screen and (min-width: 768px) {
   .submit-button{

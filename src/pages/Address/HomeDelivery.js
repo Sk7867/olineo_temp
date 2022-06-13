@@ -11,7 +11,7 @@ import AddressBox from '../../components/AddressBox/AddressBox';
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox';
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 import { getAddress } from '../../api/Address';
-import { completeOrder, initOrder } from '../../api/OrdersApi';
+import { completeOrder, initOrder, paymentInit } from '../../api/OrdersApi';
 import { Slide, toast, ToastContainer } from 'react-toastify'
 import { getCartData, removeFromCart } from '../../api/Cart';
 
@@ -90,30 +90,33 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
         if (res) {
           let orderId = res._id
           // console.log(orderId);
-          completeOrder(orderId)
+          paymentInit(orderId)
             .then(res => {
-              if (res) {
-                // console.log(res)
-                orderInit.productId.map(item => (
-                  removeFromCart(item)
-                    .then(res => {
-                      if (res) {
-                        setUserCart([])
-                        getCartData()
-                          .then(res => {
-                            if (res) {
-                              setCartArray({
-                                loaded: true,
-                                no_of_carts: res.no_of_carts,
-                                cart: res.cart
+              completeOrder(orderId)
+                .then(res => {
+                  if (res) {
+                    // console.log(res)
+                    orderInit.productId.map(item => (
+                      removeFromCart(item)
+                        .then(res => {
+                          if (res) {
+                            setUserCart([])
+                            getCartData()
+                              .then(res => {
+                                if (res) {
+                                  setCartArray({
+                                    loaded: true,
+                                    no_of_carts: res.no_of_carts,
+                                    cart: res.cart
+                                  })
+                                  nav('/mycart')
+                                }
                               })
-                              nav('/mycart')
-                            }
-                          })
-                      }
-                    })
-                ))
-              }
+                          }
+                        })
+                    ))
+                  }
+                })
             })
         }
       })

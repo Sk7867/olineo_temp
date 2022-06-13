@@ -15,7 +15,7 @@ toast.configure()
 const CartSection = ({ featureProducts }) => {
   const nav = useNavigate()
   const [cartProducts, setCartProducts] = useState([])
-
+  const [couponInput, setCouponInput] = useState('')
 
 
   const {
@@ -160,6 +160,14 @@ const CartSection = ({ featureProducts }) => {
       ) : (''))
   }
 
+  const handleCoupon = (e) => {
+    e.preventDefault();
+    setOrderInit(prev => ({
+      ...prev,
+      coupon: couponInput
+    }))
+  }
+
   // console.log(userCart);
 
   return (
@@ -199,6 +207,12 @@ const CartSection = ({ featureProducts }) => {
               <p>Subtotal ({priceBoxDetails.cartItemsNumber} items): <span> ₹{priceBoxDetails.totalAmount}</span></p>
               <div className="cart_Footer_Right">
                 <button type='submit' className='submit-button' onClick={handleOrderInit}><p>Checkout</p></button>
+              </div>
+            </div>
+            <div className="cart_Coupon_Section section_Wrapper">
+              <input type="text" placeholder='Add Coupon Code' className='input-field' value={couponInput} onChange={(e) => setCouponInput(e.target.value)} />
+              <div className="cart_Coupon_Button">
+                <button type='submit' className='submit-button' onClick={handleCoupon}><p>Apply Coupon</p></button>
               </div>
             </div>
 

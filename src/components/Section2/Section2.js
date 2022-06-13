@@ -26,6 +26,7 @@ const Section2 = ({ id, heading, productData, classes }) => {
           {
             (productData.no_of_products === 0) && [1, 2, 3, 4].map((n) => (<SkeletonElement type={'productBox'} key={n} />))
           }
+          <div className="scroll_Buffer"></div>
         </div>
       </div>
     </div>

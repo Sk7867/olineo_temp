@@ -116,6 +116,7 @@ function App() {
     productId: [],
     quantity: [],
     shippingAddressId: '',
+    coupon: ''
   })
   const [priceBoxDetails, setPriceBoxDetails] = useState({
     cartItemsNumber: 0,
