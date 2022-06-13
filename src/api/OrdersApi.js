@@ -140,4 +140,23 @@ export const cancelOrder = async (id, query) => {
     })
 
   return orderDeleteResponse
-} 
+}
+
+//Payment Init
+export const paymentInit = async (id) => {
+  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
+
+  const headers = {
+    "Access-Control-Allow-origin": "*",
+    'Content-Type': 'application/json',
+    "Authorization": `Bearer ${userToken}`
+  }
+
+  let paymentInitResponse
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/payment/init/${id}`, { headers })
+    .then(res => {
+      paymentInitResponse = res
+    })
+
+  return paymentInitResponse
+}

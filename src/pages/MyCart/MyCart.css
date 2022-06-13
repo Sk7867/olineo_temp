@@ -192,6 +192,18 @@
   .delivery_Option_Submit_Button button, .home_Delivery_Submit button{
     max-width: 100%;
   }
+
+  .cart_Coupon_Section {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    margin: 0 0 0.75rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .cart_Coupon_Section .cart_Coupon_Button{
+    width: 200px;
+  }
 }
 
 @media screen and (min-width: 1024px) {
