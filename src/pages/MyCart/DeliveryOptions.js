@@ -10,7 +10,7 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [selected, setSelected] = useState(null);
   const [disable, setDisable] = useState(true);
-  const { userAddress, setUserContext, setUserAddress } = useContext(UserDataContext)
+  const { userAddress, setUserContext, setUserAddress, orderInit, cartArray } = useContext(UserDataContext)
   const nav = useNavigate()
 
   useEffect(() => {
@@ -39,6 +39,8 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
       })
   }, [])
 
+  console.log(cartArray);
+
   const deliveryOptions = [
     {
       text: 'Pickup from store',
@@ -58,6 +60,8 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
   const handlePageSwitch = (pageURL) => {
     nav(pageURL);
   }
+
+  console.log(orderInit);
 
   const breadCrumbsData = [
     {

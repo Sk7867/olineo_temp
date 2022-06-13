@@ -1,13 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import { Dropdown } from 'react-bootstrap'
 import { UserDataContext } from '../../Contexts/UserContext'
 import DatePicker from 'react-date-picker';
+import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
 import { updateProductCatalogue, updateProductOffers } from '../../api/CatalogueApi';
 import { Slide, toast, ToastContainer } from 'react-toastify'
-import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
+import { addCoupon } from '../../api/couponApi';
 
 toast.configure()
 const AddOffers = ({ setHeaderData }) => {
+  const nav = useNavigate()
   const { allProducts, setAllProducts } = useContext(UserDataContext)
   const [selectedProduct, setSelectedProduct] = useState({
     loaded: false,
@@ -37,7 +40,8 @@ const AddOffers = ({ setHeaderData }) => {
     conetainer: [],
     coupon: {
       couponName: '',
-      from: null,
+      value: '',
+      upTo: '',
       to: null
     }
   })
@@ -66,22 +70,29 @@ const AddOffers = ({ setHeaderData }) => {
     couponName: '',
     value: '',
     upTo: '',
-    from: new Date(),
     to: new Date()
   })
   const [bankOfferHold, setBankOfferHold] = useState({
+    offerHeading: '',
     offerName: '',
     offerAvail: '',
+    storeId: '',
     from: '',
     to: ''
   })
+  const [offerHeadingSelected, setOfferHeadingSelected] = useState('')
 
   const availOffers = [
     'Discount',
     'Combo',
     'Container',
     'Coupon',
-    'Bank Offer'
+    'Bank/Store Offer'
+  ]
+
+  const offerHeadingOptions = [
+    'Bank Offer',
+    'Store Offer'
   ]
 
   // console.log(value);
@@ -114,11 +125,6 @@ const AddOffers = ({ setHeaderData }) => {
       setoffers(prev => ({ ...prev, conetainer: contOffersHold }))
     }
   }, [contOffersHold.value, contOffersHold])
-  useEffect(() => {
-    if (couponOffersHold.value) {
-      setoffers(prev => ({ ...prev, coupon: couponOffersHold }))
-    }
-  }, [couponOffersHold.value, couponOffersHold])
 
   const handleRemoveBankOffer = (index) => {
     let list = [...bankOffers]
@@ -128,13 +134,20 @@ const AddOffers = ({ setHeaderData }) => {
 
   const handleAddBankOffer = (e) => {
     e.preventDefault();
-    setBankOffers([...bankOffers, { offerName: '', offerAvail: '', from: null, to: null }])
+    setBankOffers([...bankOffers, { offerHeading: '', storeId: '', offerName: '', offerAvail: '', from: null, to: null }])
   }
 
   const handleBankOffer = (e, index) => {
     const { name, value } = e.target
     let list = [...bankOffers]
     list[index][name] = value
+    setBankOffers(list)
+  }
+
+  const handleBankOfferHeading = (item, index, prop) => {
+    console.log(item, index, prop);
+    let list = [...bankOffers]
+    list[index][prop] = item
     setBankOffers(list)
   }
 
@@ -160,32 +173,45 @@ const AddOffers = ({ setHeaderData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (selectedProduct.loaded) {
-      let newProductArray = selectedProduct.product.map(function (elem) {
-        let prices = elem.price
-        let existingBankOffers = elem.offers
-        if (offers.flatDiscount.value) {
-          let dis = parseInt(offers.flatDiscount.value)
-          let mop = parseInt(elem.price.mop)
-          let disPrice = Math.floor(((((dis * 0.01) * mop) - mop) * -1))
-          prices.discountPrice = disPrice
-        }
-        if (bankOffers.length > 0) {
-          existingBankOffers.push(bankOffers)
-        }
-        let item = { ...elem, discount: offers, price: prices, offers: existingBankOffers[0] }
-        return item
-      })
-      newProductArray.forEach(product => (
-        updateProductOffers(product)
-          .then(res => console.log(res))
-      ))
-      console.log(newProductArray);
+      if (couponOffersHold.value) {
+        let products = eanEntered.split(',')
+        addCoupon(couponOffersHold, products)
+          .then(res => {
+            console.log(res)
+            nav('/catelogue-page')
+          })
+      } else {
+        let newProductArray = selectedProduct.product.map(function (elem) {
+          let prices = elem.price
+          let existingBankOffers = [...elem.offers]
+          let newOffersArray
+          if (offers.flatDiscount.value) {
+            let dis = parseInt(offers.flatDiscount.value)
+            let mop = parseInt(elem.price.mop)
+            let disPrice = Math.floor(((((dis * 0.01) * mop) - mop) * -1))
+            prices.discountPrice = disPrice
+          }
+          if (bankOffers.length > 0) {
+            newOffersArray = existingBankOffers.concat(bankOffers)
+          }
+          let item = { ...elem, discount: offers, price: prices, offers: newOffersArray }
+          return item
+        })
+        newProductArray.forEach(product => (
+          updateProductOffers(product)
+            .then(res => {
+              console.log(res)
+              nav('/catelogue-page')
+            })
+        ))
+        console.log(newProductArray);
+      }
     } else {
       toast.error('Add/Search Product(s) First')
     }
   }
 
-  console.log(bankOffers);
+  console.log(couponOffersHold);
 
   const searchEAN = (e) => {
     e.preventDefault();
@@ -225,13 +251,21 @@ const AddOffers = ({ setHeaderData }) => {
   const handleDate = (e, type, key) => {
     type(prev => ({ ...prev, [key]: e }))
   }
+  // console.log(bankOffers);
+  const onlyNumberRegex = (e) => {
+    const re = /^[0-9\b]+$/;
+    if (e.target.value === '' || re.test(e.target.value)) {
+      let value = e.target.value
+      handleInput(setFlatDisOffers, flatDisOffers, 'value', value)
+    }
+  }
 
   const handleOfferType = (offerTypeSelected) => {
     switch (offerTypeSelected) {
       case 'Discount':
         return (
           <>
-            <input type='text' name="Product Offer" id="Product Offer" value={flatDisOffers.value} className='input-field' placeholder='Enter Product Discount Offer' onChange={(value) => handleInput(setFlatDisOffers, flatDisOffers, 'value', value)} />
+            <input type='text' name="Product Offer" id="Product Offer" value={flatDisOffers.value} className='input-field' placeholder='Enter Product Discount Offer' onChange={(e) => handleInput(setFlatDisOffers, flatDisOffers, 'value', value)} />
             <DatePicker
               onChange={(e) => handleDate(e, setFlatDisOffers, 'from')}
               value={flatDisOffers.from}
@@ -295,14 +329,9 @@ const AddOffers = ({ setHeaderData }) => {
       case 'Coupon':
         return (
           <>
-            <input type='text' name="Product Offer" id="Product Offer" className='input-field' placeholder='Enter Coupon Code' value={couponOffersHold.value} onChange={(value) => handleInput(setCouponOffersHold, couponOffersHold, 'value', value)} />
-            <DatePicker
-              onChange={(e) => handleDate(e, setCouponOffersHold, 'from')}
-              value={couponOffersHold.from}
-              format='dd/MM/y'
-              className={'input-field custom-date-picker'}
-            />
-            <p className='catalogue_Hint offerPage_Hint'>Enter Coupon Offer Start Date</p>
+            <input type='text' name="Coupon code" id="Coupon code" className='input-field' placeholder='Enter Coupon Code' value={couponOffersHold.couponName} onChange={(value) => { handleInput(setCouponOffersHold, couponOffersHold, 'couponName', value) }} />
+            <input type='text' name="Coupon Discount" id="Coupon Discount" className='input-field' placeholder='Enter Coupon Discount' value={couponOffersHold.value} onChange={(value) => handleInput(setCouponOffersHold, couponOffersHold, 'value', value)} />
+            <input type='text' name="Max Value" id="Max Value" className='input-field' placeholder='Enter Coupon Maximum Amount' value={couponOffersHold.upTo} onChange={(value) => handleInput(setCouponOffersHold, couponOffersHold, 'upTo', value)} />
             <DatePicker
               onChange={(e) => handleDate(e, setCouponOffersHold, 'to')}
               value={couponOffersHold.to}
@@ -313,22 +342,45 @@ const AddOffers = ({ setHeaderData }) => {
           </>
         )
 
-      case 'Bank Offer':
+      case 'Bank/Store Offer':
         return (
           <>
             <div className="addoffer_Input">
               {bankOffers && bankOffers.length > 0 && (
                 bankOffers.map((offer, index) => (
                   <>
+                    {/* <fieldset className='catelogue_Fieldset' >
+                      <Dropdown>
+                        <Dropdown.Toggle id="dropdown-basic">
+                          <div className="catalogue_Dropdown">
+                            {offerHeadingSelected ? (<p>{offerHeadingSelected}</p>) : (<p>Select Offer Type</p>)}
+                          </div>
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          {
+                            offerHeadingOptions.map((item, index) => (
+                              <Dropdown.Item key={index} name='offerHeading' value={item} onClick={() => setOfferHeadingSelected(item)} onChange={(e) => handleBankOfferHeading(item, index, 'offerHeading')}>{item}</Dropdown.Item>
+                            ))
+                          }
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </fieldset> */}
                     <div className="addoffer_Input2 bank_offer_heading">
                       <div className="input_Delete">
                         <img src={deleteIcon} alt="" onClick={() => handleRemoveBankOffer(index)} />
                       </div>
                       <p>Offer {index + 1}</p>
                     </div>
-                    <input type="text" name='offerName' id='offerName' className='input-field' placeholder='Add Offer Heading' value={offer.offerName} onChange={(e) => handleBankOffer(e, index)} />
+                    <input type="text" name='offerHeading' id='offerHeading' className='input-field' placeholder='Select Bank Offer or Store Offer' value={offer.offerHeading} onChange={(e) => handleBankOffer(e, index)} />
+                    <input type="text" name='offerName' id='offerName' className='input-field' placeholder='Add Offer Name' value={offer.offerName} onChange={(e) => handleBankOffer(e, index)} />
                     <input type="text" name='offerAvail' id='offerAvail' className='input-field' placeholder='Add Offer Conditions' value={offer.offerAvail} onChange={(e) => handleBankOffer(e, index)} />
                     <p className="catalogue_Hint">Add "~" seperated Offer Conditions</p>
+                    {
+                      bankOffers[index]['offerHeading'] === 'Store Offer' ? (
+                        <input type="text" name='storeId' id='storeId' className='input-field' placeholder='Add Store ID' value={offer.storeId} onChange={(e) => handleBankOffer(e, index)} />
+                      ) : ('')
+                    }
                     <DatePicker
                       value={bankOffers[index].from}
                       onChange={(e) => handleBankOfferDate(e, 'from', index)}

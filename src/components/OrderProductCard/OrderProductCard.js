@@ -8,8 +8,7 @@ import { getIndiProduct } from '../../api/Product'
 
 const OrderProductCard = ({ product, classes, productDeliveryStatues }) => {
   const [productData, setProductData] = useState({})
-  // console.log(product);
-
+  console.log(product);
 
   useEffect(() => {
     if (product) {
@@ -25,8 +24,6 @@ const OrderProductCard = ({ product, classes, productDeliveryStatues }) => {
       })
     }
   }, [product])
-
-  console.log(product);
 
   return (
     <>

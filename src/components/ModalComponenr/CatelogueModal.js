@@ -3,6 +3,7 @@ import { Modal } from "react-bootstrap";
 
 const CatelogueModal = ({ modalShow, setModalShow, imageData }) => {
   const handleClose = () => setModalShow(false);
+  console.log(imageData);
   return (
     <>
       <Modal show={modalShow} onHide={handleClose} backdrop="true" keyboard={false} backdropClassName="backdrop_active">

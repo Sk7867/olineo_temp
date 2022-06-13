@@ -34,7 +34,7 @@ const ProductBox = ({ card_heading, classes, product }) => {
     <>
       {
         product && (
-          <Link to={`/product/${product.slug}`} state={{ product: product }} className={'productbox_Container ' + (classes ? classes.boxClass : '')}>
+          <Link to={`/product/${product.slug}`} className={'productbox_Container ' + (classes ? classes.boxClass : '')}>
             <>
               {product.images.length > 0 && (
                 <img src={productInfo.image} alt="" />

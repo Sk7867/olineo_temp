@@ -302,7 +302,7 @@
     max-width: none;
     gap: 1.5rem;
     border: none;
-    
+    box-shadow: none;
   }
 
   .product_Side_Section .image_Preview_Side_Section{

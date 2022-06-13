@@ -189,3 +189,4 @@ export const updateProductOffers = async (product) => {
   });
   return updateOffersResponse;
 };
+

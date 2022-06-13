@@ -5,7 +5,7 @@ import './AlternateProductBox.css'
 const AlternateProductBox = ({ product, imageAndData, dataOnly }) => {
   return (
 
-    <Link to={`/product/${product.name}`} state={{ product: product }}>
+    <Link to={`/product/${product.slug}`} state={{ product: product }}>
       <label id={`product-container-${product._id}`} htmlFor={`product-check-${product._id}`} className={`checkbox-label ${product.qty > 0 ? '' : 'product_Unavailable'}`} style={{ padding: "0" }}>
         <input type="radio" name="product-box" id={`product-check-${product._id}`} />
         <span className="custom-checkmark" style={{ display: "none" }}></span>

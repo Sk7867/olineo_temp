@@ -24,7 +24,7 @@ export const getIndiProduct = async (id) => {
 
   await axios.get(`${process.env.REACT_APP_BASE_URL}/product/${id}`, { headers }).then((res) => {
     indiProductResponse = res.data.data.product;
-    console.log(indiProductResponse);
+    // console.log(indiProductResponse);
   });
 
   return indiProductResponse;

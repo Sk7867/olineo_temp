@@ -74,37 +74,37 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
         user_ph_Number: userContext.mobileNumber,
         user_Email: userContext.email,
       })
-      if (userContext.dob) {
-        if (typeof (userContext.dob) === 'string') {
-          let bdayRecieved = userContext.dob
-          let seperateDOB = bdayRecieved.split('-')
-          let yearRecieved = parseInt(seperateDOB[0])
-          let monthRecieved = parseInt(seperateDOB[1])
-          let dateRecieved = parseInt(seperateDOB[2])
-          // let dateSep = dateWhole.slice(0, 2)
-          // console.log(seperateDOB);
-          // console.log(`
-          // ${bdayRecieved}
-          //   year: ${yearRecieved},
-          //   month: ${monthRecieved},
-          //   whole date: ${dateRecieved}
+      // if (userContext.dob) {
+      //   if (typeof (userContext.dob) === 'string') {
+      //     let bdayRecieved = userContext.dob
+      //     let seperateDOB = bdayRecieved.split('-')
+      //     let yearRecieved = parseInt(seperateDOB[0])
+      //     let monthRecieved = parseInt(seperateDOB[1])
+      //     let dateRecieved = parseInt(seperateDOB[2])
+      //     // let dateSep = dateWhole.slice(0, 2)
+      //     // console.log(seperateDOB);
+      //     // console.log(`
+      //     // ${bdayRecieved}
+      //     //   year: ${yearRecieved},
+      //     //   month: ${monthRecieved},
+      //     //   whole date: ${dateRecieved}
 
-          // `);
-          setSelectedDay({
-            year: yearRecieved,
-            month: monthRecieved,
-            day: dateRecieved,
-          })
-        } else if (typeof (userContext.dob) === 'object') {
-          setSelectedDay({
-            year: userContext.dob.year,
-            month: userContext.dob.month,
-            day: userContext.dob.day,
-          })
-        }
-      } else if (userContext.dob === null) {
-        setSelectedDay(null)
-      }
+      //     // `);
+      //     setSelectedDay({
+      //       year: yearRecieved,
+      //       month: monthRecieved,
+      //       day: dateRecieved,
+      //     })
+      //   } else if (typeof (userContext.dob) === 'object') {
+      //     setSelectedDay({
+      //       year: userContext.dob.year,
+      //       month: userContext.dob.month,
+      //       day: userContext.dob.day,
+      //     })
+      //   }
+      // } else if (userContext.dob === null) {
+      //   setSelectedDay(null)
+      // }
     }
   }, [userContext]);
 
@@ -268,19 +268,17 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
               )
             }
           </div>
-          <div className='edit_input_container'>
+          {/* <div className='edit_input_container'>
             <label className='edit_input_label'>Birthday (dd/mm/yyyy)</label>
             <div>
               <DatePicker
-                value={selectedDay}
-                onChange={setSelectedDay}
-                inputPlaceholder="Date of Birth"
-                inputClassName='input-field'
-
-                shouldHighlightWeekends
+                value={bankOffers[index].from}
+                onChange={(e) => handleBankOfferDate(e, 'from', index)}
+                format='dd/MM/y'
+                className={'input-field custom-date-picker'}
               />
             </div>
-          </div>
+          </div> */}
           {
             matches && (
               <div>

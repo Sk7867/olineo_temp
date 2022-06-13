@@ -77,18 +77,18 @@ const OtpValid = ({ loginRedirect }) => {
                 profilePic: res
               }))
             }
-          }),
-        getAllOrder(res.JWT)
-          .then(res => {
-            if (res) {
-              // console.log(res);
-              setUserOrderData({
-                loaded: true,
-                no_of_orders: res.no_of_orders,
-                orders: res.orders
-              })
-            }
           })
+        // getAllOrder(res.JWT)
+        //   .then(res => {
+        //     if (res) {
+        //       // console.log(res);
+        //       setUserOrderData({
+        //         loaded: true,
+        //         no_of_orders: res.no_of_orders,
+        //         orders: res.orders
+        //       })
+        //     }
+        //   })
         // getCartData()
         //   .then(res => {
         //     if (res) {
