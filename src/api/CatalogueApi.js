@@ -183,7 +183,7 @@ export const addProductGalleryImages = async (id, images) => {
 export const updateProductOffers = async (product) => {
   let updateOffersResponse;
   let productID = product._id;
-  console.log(product, productID);
+  // console.log(product, productID);
   await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${productID}`, JSON.stringify(product), { headers }).then((res) => {
     updateOffersResponse = res;
   });

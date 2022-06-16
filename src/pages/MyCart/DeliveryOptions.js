@@ -39,7 +39,7 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
       })
   }, [])
 
-  console.log(cartArray);
+  // console.log(cartArray);
 
   const deliveryOptions = [
     {
@@ -61,7 +61,7 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
     nav(pageURL);
   }
 
-  console.log(orderInit);
+  // console.log(orderInit);
 
   const breadCrumbsData = [
     {

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAllOrder, getOrderStatus } from '../../api/OrdersApi'
+import { getIndiProduct } from '../../api/Product'
 import BankOfferModal from '../../components/ModalComponenr/BankOfferModal'
 import OrderProductCard from '../../components/OrderProductCard/OrderProductCard'
 import Section2 from '../../components/Section2/Section2'
@@ -16,7 +17,6 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
   } = useContext(UserDataContext)
   const [ordersOnTheWay, setOrdersOnTheWay] = useState([])
   const [cancelledOrders, setCancelledOrders] = useState([])
-
   let ordersNumber = userOrderData.no_of_orders
 
   const pageSwitch = (e) => {
@@ -28,52 +28,14 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
     getAllOrder()
       .then(res => {
         if (res) {
-          let orders = [...res.orders]
-          orders.forEach(item => {
-            getOrderStatus(item._id)
-              .then(res => {
-                let status = res.items[0].status
-                item.status = status
-                if (status === 'NOSTORETOSERVICE') {
-                  let len = ordersOnTheWay.filter(obj => obj._id === item._id)
-                  if (len.length === 0) {
-                    setOrdersOnTheWay([...ordersOnTheWay, item])
-                  }
-                }
-              })
-          })
-          console.log(orders);
-          orders.map((order, index) => handleOrderSegregate(order))
           setUserOrderData({
             loaded: true,
             no_of_orders: res.no_of_orders,
-            orders: orders
+            orders: res.orders
           })
         }
       })
   }, [])
-
-  const handleOrderSegregate = (order) => {
-    let len
-    switch (order.status) {
-      case 'CANCELLED':
-        len = cancelledOrders.filter(obj => obj._id === order._id)
-        if (len.length === 0) {
-          setCancelledOrders([...cancelledOrders, order])
-        }
-        break;
-
-      default:
-        len = ordersOnTheWay.filter(obj => obj._id === order._id)
-        if (len.length === 0) {
-          setOrdersOnTheWay([...ordersOnTheWay, order])
-        }
-        break;
-    }
-  }
-
-  console.log(cancelledOrders);
-  console.log(ordersOnTheWay);
 
   // useEffect(() => {
   //   if (userOrderData.no_of_orders > 0) {
@@ -114,7 +76,6 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
   //     })
   //   }
   // }, [userOrderData])
-  // console.log(userOrderData);
 
   // useEffect(() => {
   //   cancelledOrders.map(item => console.log(item))

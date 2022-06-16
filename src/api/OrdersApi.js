@@ -155,7 +155,8 @@ export const paymentInit = async (id) => {
   let paymentInitResponse
   await axios.get(`${process.env.REACT_APP_BASE_URL}/payment/init/${id}`, { headers })
     .then(res => {
-      paymentInitResponse = res
+      paymentInitResponse = res.data.link
+      console.log(paymentInitResponse);
     })
 
   return paymentInitResponse
