@@ -10,7 +10,7 @@ import BankOfferModal from '../ModalComponenr/BankOfferModal'
 const OfferCard = ({ offer }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [modalShow, setModalShow] = useState(false)
-  // console.log(toggleDescription);
+  // console.log(offer);
 
   return (
     <>
@@ -19,7 +19,7 @@ const OfferCard = ({ offer }) => {
       */  }
       <div className='offer_Card_Container'>
         <div>
-          <p className="offer_Card_Name">Bank Offer</p>
+          <p className="offer_Card_Name">{offer.offerHeading}</p>
           <p className="offer_Card_Desc">{offer.offerName}</p>
         </div>
         {

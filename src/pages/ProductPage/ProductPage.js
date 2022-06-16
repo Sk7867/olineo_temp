@@ -63,6 +63,8 @@ const ProductPage = ({ setHeaderData }) => {
   const [productBankOffers, setProductBankOffers] = useState([]);
   const [produnctSpecText, setProdunctSpecText] = useState('')
   const [discountPercent, setDiscountPercent] = useState('')
+  const [comboProductData, setComboProductData] = useState({})
+  const [allOffersData, setAllOffersData] = useState([])
 
   useEffect(() => {
     setHeaderData({
@@ -77,7 +79,6 @@ const ProductPage = ({ setHeaderData }) => {
 
   useEffect(() => {
     let searchTerm = 'slug=' + slug
-    console.log(searchTerm);
     setColorAlternateProds([])
     setAlternateColorean([])
     setSpecAlternateProds([])
@@ -127,7 +128,7 @@ const ProductPage = ({ setHeaderData }) => {
       let demo = allProducts.products.filter((item) => item.ean === ean)
       if (demo.length === 0) return null
       let item = colorAlternateProds.filter(obj => obj.ean === demo[0].ean)
-      console.log(demo);
+      // console.log(demo);
       if (item.length === 0) {
         setColorAlternateProds([...colorAlternateProds, demo[0]])
       }
@@ -141,7 +142,7 @@ const ProductPage = ({ setHeaderData }) => {
       }
     })
   }, [alternateColorean, alternateSpecean]);
-  console.log(colorAlternateProds);
+  // console.log(colorAlternateProds);
 
   // console.log(userCart);
 
@@ -156,6 +157,44 @@ const ProductPage = ({ setHeaderData }) => {
     }
   }, [productData])
 
+  useEffect(() => {
+    if (productData.product_loaded &&
+      productData.product_Discount &&
+      productData.product_Discount.combo &&
+      productData.product_Discount.combo.value
+    ) {
+      let proId = productData.product_Discount.combo.value
+      let searchTerm = 'ean=' + proId
+      getSearchedProduct(searchTerm)
+        .then(res => {
+          setComboProductData(...res)
+        })
+    }
+  }, [productData.product_loaded])
+  // console.log(comboProductData);
+
+  useEffect(() => {
+    if (Object.keys(comboProductData).length > 0) {
+      let offerId = comboProductData._id
+      let offerHeading = 'Buy one Get one'
+      let offerName = `Get ${comboProductData.name} free on Purchase of ${productData.product_name}`
+      let offer_Link = "/bank-offer"
+      let offerAvail = "Select eligible card at the time of checkout.~No promo code required to avail the offer.~New Desc,~New DEsc"
+
+      let combo_Offer = {
+        offerId: offerId,
+        offerHeading: offerHeading,
+        offerName: offerName,
+        offer_Link: offer_Link,
+        offerAvail: offerAvail
+      }
+      let offerLen = allOffersData.findIndex(obj => obj.offerId === combo_Offer.offerId)
+      if (offerLen === -1) {
+        setAllOffersData([...allOffersData, combo_Offer])
+      }
+    }
+  }, [comboProductData])
+  // console.log(allOffersData);
   const sec5Data = [
     {
       product_image: defaultImage,
@@ -261,20 +300,39 @@ const ProductPage = ({ setHeaderData }) => {
   const handleAddToCart = (id) => {
     let userToken = userContext ? userContext.JWT : "";
     if (userToken) {
-      addToCart(id).then((res) =>
-        res
-          ? (toast.success("Product Added to Cart"),
-            getCartData().then((res) =>
-              res
-                ? setCartArray({
-                  loaded: true,
-                  no_of_carts: res.no_of_carts,
-                  cart: res.cart,
-                })
-                : ""
-            ))
-          : ""
-      );
+      if (productData.product_loaded && (Object.keys(comboProductData).length > 0)) {
+        [productData.product_Id, comboProductData._id].forEach(id => {
+          addToCart(id).then((res) =>
+            res
+              ? (toast.success("Product Added to Cart"),
+                getCartData().then((res) =>
+                  res
+                    ? setCartArray({
+                      loaded: true,
+                      no_of_carts: res.no_of_carts,
+                      cart: res.cart,
+                    })
+                    : ""
+                ))
+              : ""
+          );
+        })
+      } else {
+        addToCart(id).then((res) =>
+          res
+            ? (toast.success("Product Added to Cart"),
+              getCartData().then((res) =>
+                res
+                  ? setCartArray({
+                    loaded: true,
+                    no_of_carts: res.no_of_carts,
+                    cart: res.cart,
+                  })
+                  : ""
+              ))
+            : ""
+        );
+      }
     } else {
       nav("/login");
     }
@@ -282,8 +340,8 @@ const ProductPage = ({ setHeaderData }) => {
 
   const handleOrderInit = (e) => {
     e.preventDefault();
-    let productId = [productData.product_Id]
-    let quantity = [1]
+    let productId = [productData.product_Id, comboProductData._id]
+    let quantity = [1, 1]
     setOrderInit(prev => ({
       ...prev,
       productId: productId,
@@ -291,8 +349,8 @@ const ProductPage = ({ setHeaderData }) => {
     }))
     setCartArray({
       loaded: true,
-      no_of_carts: 1,
-      cart: [productData.product_Id]
+      no_of_carts: 2,
+      cart: [productData.product_Id, comboProductData._id]
     })
     nav('/delivery-option')
     // console.log(data);
@@ -412,7 +470,7 @@ const ProductPage = ({ setHeaderData }) => {
                 <p>{preOrder ? "Deal is 40% Claimed" : `${productData.offer_Deadline}`} </p>
               </div>
               {matches ? (
-                (productBankOffers.length > 0) && (
+                (allOffersData.length > 0) && (
                   <div className="product_Offer_Section">
                     <div className="product_Offer_Header">
                       <img src={offerIconYellow} alt="" />
@@ -420,8 +478,8 @@ const ProductPage = ({ setHeaderData }) => {
                     </div>
                     <div className="product_Offer_Cards_Container">
                       <div className="product_Offer_Cards_Wrapper">
-                        {productBankOffers.map((offer, index) => (
-                          <OfferCard offer={offer} key={index} />
+                        {allOffersData.map((offer, index) => (
+                          <OfferCard offer={offer} key={offer.offerId} />
                         ))}
                       </div>
                     </div>
@@ -502,8 +560,8 @@ const ProductPage = ({ setHeaderData }) => {
                 </div>
                 <div className="product_Offer_Cards_Container">
                   <div className="product_Offer_Cards_Wrapper">
-                    {productBankOffers.map((offer, index) => (
-                      <OfferCard offer={offer} key={index} />
+                    {allOffersData.map((offer, index) => (
+                      <OfferCard offer={offer} key={offer.offerId} />
                     ))}
                   </div>
                 </div>

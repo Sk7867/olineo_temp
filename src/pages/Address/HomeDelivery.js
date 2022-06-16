@@ -92,6 +92,8 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
           // console.log(orderId);
           paymentInit(orderId)
             .then(res => {
+              let url = res
+              window.open(url, "_blank")
               completeOrder(orderId)
                 .then(res => {
                   if (res) {
@@ -109,7 +111,7 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
                                     no_of_carts: res.no_of_carts,
                                     cart: res.cart
                                   })
-                                  nav('/mycart')
+                                  nav('/orders')
                                 }
                               })
                           }

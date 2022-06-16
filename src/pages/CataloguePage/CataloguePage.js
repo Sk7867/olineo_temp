@@ -80,14 +80,14 @@ const CataloguePage = ({ setHeaderData }) => {
     if (searchText) {
       if (isNaN(searchText)) {
         let searchTerm = 'search=' + searchText
-        console.log(searchTerm);
+        // console.log(searchTerm);
         getSearchedProduct(searchTerm)
           .then(res => {
             setProductsToShow([...res])
           })
       } else {
         let searchTerm = 'ean=' + searchText
-        console.log(searchTerm);
+        // console.log(searchTerm);
         getSearchedProduct(searchTerm)
           .then(res => {
             setProductsToShow([...res])

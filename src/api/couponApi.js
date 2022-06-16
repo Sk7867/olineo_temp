@@ -21,7 +21,7 @@ export const getCoupon = async () => {
 //Add coupon to product
 export const addCoupon = async (couponOffersHold, products) => {
   let addCouponBody = {
-    couponName: couponOffersHold.couponName,
+    code: couponOffersHold.couponName,
     discount: couponOffersHold.value,
     maxAmount: couponOffersHold.upTo,
     expire: couponOffersHold.to,

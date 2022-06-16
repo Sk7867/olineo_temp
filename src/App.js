@@ -55,7 +55,7 @@ import AddProduct from './pages/CataloguePage/AddProduct';
 import AboutUs from './pages/AboutContact/AboutUs'
 import BulkUpload from './pages/CataloguePage/BulkUpload';
 import AddOffers from './pages/CataloguePage/AddOffers';
-import { getAllOrder } from './api/OrdersApi';
+import { getAllOrder, getOrderStatus } from './api/OrdersApi';
 //Push from new branch -sid
 
 function App() {
@@ -94,9 +94,10 @@ function App() {
   const [cartArray, setCartArray] = useState({
     loaded: false,
     cart: [],
+    combo_Products: [],
     no_of_carts: 0
   })
-  // console.log(cartArray);
+  console.log(cartArray);
 
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,
@@ -144,6 +145,8 @@ function App() {
     loaded: false,
     location: []
   })
+  const [productHold, setProductHold] = useState([])
+  const [productDataHold, setProductDataHold] = useState([])
 
   // console.log(userCart);
 
@@ -227,6 +230,57 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    let orders = [...userOrderData.orders]
+    orders.forEach(item => {
+      getOrderStatus(item._id)
+        .then(res => {
+          item.items = res.items
+        })
+    })
+  }, [userOrderData, userOrderData.loaded, userOrderData.no_of_orders])
+
+
+  useEffect(() => {
+    let prodHold = []
+    userOrderData.orders.forEach(order => {
+      if (order.items) {
+        let productIdArray = [...order.productId]
+        let productItemsArray = [...order.items]
+        let productItemNumberArray = [...order.item]
+        let prodPriceArray = [...order.productPrice]
+        // prodStatusArray.push(order.status)
+        // console.log(prodStatusArray)
+        let products = productIdArray.map((prod, index) => {
+          return [prod, productItemsArray.splice(0, productItemNumberArray[index]), prodPriceArray[index]]
+        })
+        prodHold.push(products)
+      }
+    })
+    setProductHold(prodHold)
+  }, [userOrderData.orders])
+
+  useEffect(() => {
+    let prodDataHold = []
+    productHold.forEach(prodLevel1 => {
+      prodLevel1.forEach(prodLevel2 => {
+        let prodId = prodLevel2[0]
+        prodLevel2[1].forEach(prodLevel3 => {
+          getIndiProduct(prodId)
+            .then(res => {
+              if (res) {
+                let proResponse = res
+                proResponse.OrderPrice = prodLevel2[2]
+                proResponse.OrderItemsArray = prodLevel3
+                prodDataHold.push(proResponse)
+              }
+            })
+        })
+      })
+    })
+    setProductDataHold(prodDataHold)
+  }, [productHold])
+
   const ordersData = [
     {
       productName: 'JBL C100SI',
@@ -250,37 +304,6 @@ function App() {
       productDeliveryStatues: 'Delivered',
     },
   ]
-
-  // const cartData = [
-  //   {
-  //     productImage: product1,
-  //     productName: 'JBL C100SI In Ear Wired Earphones with Mic',
-  //     productColor: 'Black',
-  //     productOriginalPrice: '1000',
-  //     productDiscount: '40',
-  //     productDiscountPrice: '600',
-  //     productOffersAvailable: '2 offers available',
-  //     productDeliveryExpected: 'Delivery in 6 - 7 days',
-  //     productDeliveryCharge: '40',
-  //     productAvailabilty: 'In stock',
-  //     productQuantityAvailable: '400',
-  //   },
-  //   {
-  //     productImage: product1,
-  //     productName: 'JBL C100SI In Ear Wired Earphones with Mic',
-  //     productColor: 'Black',
-  //     productOriginalPrice: '1000',
-  //     productDiscount: '40',
-  //     productDiscountPrice: '600',
-  //     productOffersAvailable: '2 offers available',
-  //     productDeliveryExpected: 'Delivery in 6 - 7 days',
-  //     productDeliveryCharge: '40',
-  //     productAvailabilty: 'Only 1 left',
-  //     productQuantityAvailable: '1',
-  //   },
-
-
-  // ]
 
   return (
     <>
