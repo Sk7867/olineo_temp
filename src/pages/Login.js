@@ -65,6 +65,7 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
     } else {
       userLogin(phone)
         .then(res => res ? (
+          alert(`${res.otp}`),
           setLoginRedirect(true),
           nav('/otp'),
           setUserContext(prev => ({

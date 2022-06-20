@@ -24,6 +24,7 @@ const CartProductCard = ({
       setDiscount(discount)
     }
   }, [product])
+  // console.log(product);
   return (
     <div className='cart_Product_Contianer section_Wrapper'>
       <div className="cart_Product_Wrapper">
@@ -37,7 +38,7 @@ const CartProductCard = ({
             </p>
             <div className="cart_Product_Price_Section">
               <p className="cart_Product_Discount_Price">
-                ₹{product.price.mop}
+                ₹{product.price.discountPrice ? product.price.discountPrice : product.price.mop}
               </p>
               <p className="cart_Product_Original_Price">
                 ₹{product.price.mrp}

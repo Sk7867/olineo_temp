@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './OrderProductCard.css'
+import { UserDataContext } from '../../Contexts/UserContext'
 
 //Images
 import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
@@ -8,13 +9,14 @@ import { getIndiProduct } from '../../api/Product'
 
 const OrderProductCard = ({ product, classes, productDeliveryStatues }) => {
   const [productData, setProductData] = useState({})
+  const { userOrderData } = useContext(UserDataContext)
   useEffect(() => {
     if (product) {
       setProductData(product)
     }
   }, [product])
 
-  console.log(productData);
+  // console.log(productData);
   return (
     <>
       <div className={`product_Container ` + (classes ? classes.boxClass : '')}>
@@ -22,7 +24,7 @@ const OrderProductCard = ({ product, classes, productDeliveryStatues }) => {
           <div className={`product_Details`}>
             <div className="order_Product_Left">
               <h4 className={`product_Name`}>
-                {productData.name}
+                {productData.itemId}
               </h4>
               <p className="order_Product_Color">
                 Color: <span>{productData.color}</span>
@@ -52,7 +54,7 @@ const OrderProductCard = ({ product, classes, productDeliveryStatues }) => {
         </div>
         {
           productDeliveryStatues === 'Arriving' && (
-            <Link to={'/order-details'} state={product} className={`product_Tracker`}>
+            <Link to={'/order-details'} state={productData} className={`product_Tracker`}>
               <p className={`product_TrackText`}>Track order</p>
               <img src={arrowRightBlue} alt="" />
             </Link>

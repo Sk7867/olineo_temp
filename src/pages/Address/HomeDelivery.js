@@ -93,7 +93,7 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
           paymentInit(orderId)
             .then(res => {
               let url = res
-              window.open(url, "_blank")
+              window.open(url)
               completeOrder(orderId)
                 .then(res => {
                   if (res) {

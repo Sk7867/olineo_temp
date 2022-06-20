@@ -56,6 +56,8 @@ import AboutUs from './pages/AboutContact/AboutUs'
 import BulkUpload from './pages/CataloguePage/BulkUpload';
 import AddOffers from './pages/CataloguePage/AddOffers';
 import { getAllOrder, getOrderStatus } from './api/OrdersApi';
+import PrivateRouteCustomer from './pages/PrivateRoute/PrivateRouteCustomer';
+import PrivateRouteSignup from './pages/PrivateRoute/PrivateRouteSignup';
 //Push from new branch -sid
 
 function App() {
@@ -97,7 +99,7 @@ function App() {
     combo_Products: [],
     no_of_carts: 0
   })
-  console.log(cartArray);
+  // console.log(cartArray);
 
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,
@@ -145,9 +147,10 @@ function App() {
     loaded: false,
     location: []
   })
-  const [productHold, setProductHold] = useState([])
-  const [productDataHold, setProductDataHold] = useState([])
-
+  const [statusesArrayHold, setStatusesArrayHold] = useState([])
+  const [itemsHold, setItemsHold] = useState([])
+  const [itemsArray, setItemsArray] = useState([])
+  const [orderDetails, setOrderDetails] = useState([])
   // console.log(userCart);
 
   useEffect(() => {
@@ -206,81 +209,62 @@ function App() {
   useEffect(() => {
     if (userCart.length > 0) {
       let productNumbers = userCart.reduce((accumulator, current) => accumulator + current.quantity, 0)
-      let productPrice = userCart.reduce((accumulator, current) => accumulator + (current.price.mop * current.quantity), 0)
-      let totalDiscount = 0
+      let productPrice = userCart.reduce((accumulator, current) => accumulator + (current.price.mrp * current.quantity), 0)
+      let totalDiscount = userCart.reduce((accumulator, current) => accumulator + ((current.price.mrp - (current.price.discountPrice ? current.price.discountPrice : current.price.mop)) * current.quantity), 0)
       let totalDeliveryCharge = 0
       let totalAmount = ((productPrice - totalDiscount) + totalDeliveryCharge)
-      setPriceBoxDetails(prev => ({ ...prev, cartItemsNumber: productNumbers, cartItemsPrice: productPrice, totalAmount: totalAmount }))
+      setPriceBoxDetails(prev => ({ ...prev, cartItemsNumber: productNumbers, cartItemsPrice: productPrice, totalAmount: totalAmount, totalDiscount: totalDiscount, totalDeliveryCharge: totalDeliveryCharge }))
     }
   }, [userCart])
 
-  //Order Filtering Function=========================
-  let orders = [...userOrderData.orders]
-  let orderNumbers = userOrderData.no_of_orders
-  useEffect(() => {
-    if (userOrderData.no_of_orders > 0) {
-      let notcancelled = userOrderData.orders.filter((item) => (item.status === 'NOSTORETOSERVICE'))
-      let delivered = userOrderData.orders.filter(item => (item.status === 'DELIVERED'))
-      let cancelled = userOrderData.orders.filter(item => (item.status === 'CANCELLED'))
-      setOrderTypes({
-        onThewayOrders: notcancelled,
-        deliveredOrders: delivered,
-        cancelledOrders: cancelled
-      })
-    }
-  }, [])
+  // console.log(priceBoxDetails);
 
+  //Order Filtering =====================================================
   useEffect(() => {
-    let orders = [...userOrderData.orders]
-    orders.forEach(item => {
+    let newStatuses = [...statusesArrayHold]
+    let newItems = [...itemsHold]
+    userOrderData.orders.forEach(item => {
       getOrderStatus(item._id)
         .then(res => {
-          item.items = res.items
+          let findStatus = statusesArrayHold.findIndex(elem => elem._id === res._id)
+          if (findStatus === -1) {
+            newStatuses.push(res)
+            newItems.push(res.items)
+            let flatArr = [].concat.apply([], newItems)
+            setItemsHold(flatArr)
+            setStatusesArrayHold(newStatuses)
+          } else {
+            setItemsHold(itemsHold)
+            setStatusesArrayHold(statusesArrayHold)
+          }
         })
     })
-  }, [userOrderData, userOrderData.loaded, userOrderData.no_of_orders])
-
-
-  useEffect(() => {
-    let prodHold = []
-    userOrderData.orders.forEach(order => {
-      if (order.items) {
-        let productIdArray = [...order.productId]
-        let productItemsArray = [...order.items]
-        let productItemNumberArray = [...order.item]
-        let prodPriceArray = [...order.productPrice]
-        // prodStatusArray.push(order.status)
-        // console.log(prodStatusArray)
-        let products = productIdArray.map((prod, index) => {
-          return [prod, productItemsArray.splice(0, productItemNumberArray[index]), prodPriceArray[index]]
-        })
-        prodHold.push(products)
-      }
-    })
-    setProductHold(prodHold)
-  }, [userOrderData.orders])
+  }, [userOrderData])
 
   useEffect(() => {
-    let prodDataHold = []
-    productHold.forEach(prodLevel1 => {
-      prodLevel1.forEach(prodLevel2 => {
-        let prodId = prodLevel2[0]
-        prodLevel2[1].forEach(prodLevel3 => {
-          getIndiProduct(prodId)
-            .then(res => {
-              if (res) {
-                let proResponse = res
-                proResponse.OrderPrice = prodLevel2[2]
-                proResponse.OrderItemsArray = prodLevel3
-                prodDataHold.push(proResponse)
-              }
-            })
-        })
+    let itemHoldArrayCopy = [...itemsHold]
+    userOrderData.orders.forEach(ord => {
+      let order = ord
+      let prodItemsNumberArray = [...order.item]
+      let prodIdsArray = [...order.productId]
+      let prodPriceArray = [...order.productPrice]
+      let itemIds = [...order.itemId]
+      prodIdsArray.forEach((prod, index) => {
+        let finalArr = []
+        finalArr.push(prod)
+        finalArr.push(prodPriceArray[index])
+        let spliceArray = itemHoldArrayCopy.splice(0, prodItemsNumberArray[index])
+        console.log(spliceArray);
+        finalArr.push(spliceArray)
+        console.log(finalArr);
+        setOrderDetails([...orderDetails, finalArr])
       })
     })
-    setProductDataHold(prodDataHold)
-  }, [productHold])
+  }, [itemsHold])
 
+  console.log(itemsHold);
+  console.log(userOrderData);
+  console.log(orderDetails);
   const ordersData = [
     {
       productName: 'JBL C100SI',
@@ -335,7 +319,9 @@ function App() {
           searchedProduct,
           setSearchedProduct,
           storeLocations,
-          setStoreLocations
+          setStoreLocations,
+          statusesArrayHold,
+          setStatusesArrayHold
         }}>
           {
             loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' ? ('') : (
@@ -345,24 +331,51 @@ function App() {
           <Routes>
             <Route path='/signup' exact element={<Signup setLoginRedirect={setLoginRedirect} />} />
             <Route path='/login' exact element={<Login setLoginRedirect={setLoginRedirect} />} />
-            <Route path='/otp' exact element={<OtpValid loginRedirect={loginRedirect} />} />
+            <Route path='/otp' exact element={<OtpValid loginRedirect={loginRedirect} />
+            } />
             <Route path='/adduser' exact element={<AddUser />} />
             <Route path='/' exact element={<Home setHeaderData={setHeaderData} allProducts={allProducts} />} />
-            <Route path='/orders' exact element={<MyOrders ordersList={ordersData} setHeaderData={setHeaderData} featureProducts={allProducts} />} />
-            <Route path='/mycart' exact element={<MyCart setHeaderData={setHeaderData} />} />
-            <Route path='/myaddress' exact element={<Address setHeaderData={setHeaderData} setEditID={setEditID} />} />
-            <Route path='/newaddress' exact element={<NewAddress setHeaderData={setHeaderData} />} />
-            <Route path='/editaddress' exact element={<EditAddress setHeaderData={setHeaderData} editID={editID} />} />
+            <Route path='/orders' exact element={
+              <MyOrders ordersList={ordersData} setHeaderData={setHeaderData} featureProducts={allProducts} />
+            } />
+            <Route path='/mycart' exact element={
+              <MyCart setHeaderData={setHeaderData} />
+            } />
+            <Route path='/myaddress' exact element={
+              <Address setHeaderData={setHeaderData} setEditID={setEditID} />
+            } />
+            <Route path='/newaddress' exact element={
+              <NewAddress setHeaderData={setHeaderData} />
+            } />
+            <Route path='/editaddress' exact element={
+              <EditAddress setHeaderData={setHeaderData} editID={editID} />
+            } />
             <Route path='/payment' exact element={<Payment setHeaderData={setHeaderData} />} />
-            <Route path='/profile' exact element={<Profile setEditID={setEditID} editID={editID} setHeaderData={setHeaderData} ordersData={ordersData} />} />
-            <Route path='/edit-account' exact element={<EditAccont setHeaderData={setHeaderData} setModalDataMobile={setModalDataMobile} />} />
-            <Route path='/update-details/number' exact element={<UpdateNumber setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
-            <Route path='/update-details/email' exact element={<UpdateEmail setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />} />
+            <Route path='/profile' exact element={
+              <Profile setEditID={setEditID} editID={editID} setHeaderData={setHeaderData} ordersData={ordersData} />
+            } />
+            <Route path='/edit-account' exact element={
+              <PrivateRouteCustomer>
+                <EditAccont setHeaderData={setHeaderData} setModalDataMobile={setModalDataMobile} />
+              </PrivateRouteCustomer>
+            } />
+            <Route path='/update-details/number' exact element={
+              <UpdateNumber setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />
+            } />
+            <Route path='/update-details/email' exact element={
+              <UpdateEmail setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />
+            } />
             <Route path='/customer-support' exact element={<CustomerSupport setHeaderData={setHeaderData} />} />
             <Route path='/write-to-us' exact element={<WriteToUS setHeaderData={setHeaderData} />} />
-            <Route path='/delivery-option' exact element={<DeliveryOptions setDeliveryOptionSelected={setDeliveryOptionSelected} setHeaderData={setHeaderData} />} />
-            <Route path='/home-delivery' exact element={<HomeDelivery setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />} />
-            <Route path='/store-pickup' exact element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
+            <Route path='/delivery-option' exact element={
+              <DeliveryOptions setDeliveryOptionSelected={setDeliveryOptionSelected} setHeaderData={setHeaderData} />
+            } />
+            <Route path='/home-delivery' exact element={
+              <HomeDelivery setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />
+            } />
+            <Route path='/store-pickup' exact element={
+              <StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />
+            } />
             <Route path='/store-near-me' exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
             <Route path='/product/:slug' exact element={<ProductPage setHeaderData={setHeaderData} />} />
             <Route path='/:category' exact element={<ProductCategory setHeaderData={setHeaderData} />} />
@@ -370,8 +383,12 @@ function App() {
             <Route path='/:store/:category' exact element={<OfflineProductCategory setHeaderData={setHeaderData} />} />
             <Route path='/bank-offer' exact element={<BankOffer setHeaderData={setHeaderData} />} />
             <Route path='/store-finder' exact element={<StoreFinder setHeaderData={setHeaderData} />} />
-            <Route path='/order-details' exact element={<OrderDetails setHeaderData={setHeaderData} />} />
-            <Route path='/order-cancel' exact element={<OrderCancel setHeaderData={setHeaderData} />} />
+            <Route path='/order-details' exact element={
+              <OrderDetails setHeaderData={setHeaderData} />
+            } />
+            <Route path='/order-cancel' exact element={
+              <OrderCancel setHeaderData={setHeaderData} />
+            } />
             <Route path='/catelogue-page' exact element={<CataloguePage setHeaderData={setHeaderData} />} />
             <Route path='/catelogue-page/add-product' exact element={<AddProduct setHeaderData={setHeaderData} />} />
             <Route path='/catelogue-page/bulk-upload' exact element={<BulkUpload setHeaderData={setHeaderData} />} />

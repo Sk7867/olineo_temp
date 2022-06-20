@@ -13,11 +13,17 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
     userOrderData,
     setUserOrderData,
     orderTypes,
-    setOrderTypes
+    setOrderTypes,
+    statusesArrayHold,
+    setStatusesArrayHold
   } = useContext(UserDataContext)
   const [ordersOnTheWay, setOrdersOnTheWay] = useState([])
   const [cancelledOrders, setCancelledOrders] = useState([])
+  const [productHold, setProductHold] = useState([])
+  const [productDataHold, setProductDataHold] = useState([])
+
   let ordersNumber = userOrderData.no_of_orders
+  const [orderLoaded, setOrderLoaded] = useState(false)
 
   const pageSwitch = (e) => {
     e.preventDefault();
@@ -28,14 +34,46 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
     getAllOrder()
       .then(res => {
         if (res) {
+          let orders = [...res.orders]
+          let newOrders = orders.filter(obj => (obj.itemId.length > 0))
           setUserOrderData({
             loaded: true,
             no_of_orders: res.no_of_orders,
-            orders: res.orders
+            orders: newOrders
           })
         }
       })
   }, [])
+
+
+  // console.log(userOrderData.orders, statusesArrayHold);
+
+
+  //Order Filtering Function=========================
+  // useEffect(() => {
+
+  // }, [orderLoaded])
+
+  // useEffect(() => {
+  //   let prodDataHold = []
+  //   productHold.forEach(prodLevel1 => {
+  //     prodLevel1.forEach(prodLevel2 => {
+  //       let prodId = prodLevel2[0]
+  //       prodLevel2[1].forEach(prodLevel3 => {
+  //         getIndiProduct(prodId)
+  //           .then(res => {
+  //             if (res) {
+  //               let proResponse = res
+  //               proResponse.OrderPrice = prodLevel2[2]
+  //               proResponse.OrderItemsArray = prodLevel3
+  //               prodDataHold.push(proResponse)
+  //             }
+  //           })
+  //       })
+  //     })
+  //   })
+  //   setProductDataHold(prodDataHold)
+  // }, [productHold])
 
   // useEffect(() => {
   //   if (userOrderData.no_of_orders > 0) {
@@ -97,13 +135,12 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
         ) : (
           <>
             <div className='order_Page_Right'>
-              {
-                onTheWay && (
-                  <div className='order_arriving_section'>
-                    <p className="order_Text section_Wrapper">Orders on the way</p>
-                    {
-                      ordersOnTheWay.map((order, index) => (
-
+              <div className='order_arriving_section'>
+                <p className="order_Text section_Wrapper">Orders on the way</p>
+                {
+                  statusesArrayHold.map((item, index) => (
+                    item.items && item.items.map((order => (
+                      (order.status === 'NOSTORETOSERVICE') ? (
                         <OrderProductCard
                           key={index}
                           product={order}
@@ -112,27 +149,27 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
                             boxClass: 'section_Wrapper'
                           }}
                         />
-                      ))
-                    }
-                    <Section2
-                      id={'Top-sellers-sec'}
-                      heading='Suggested products'
-                      productData={featureProducts}
-                      classes={{
-                        containerClass: 'section_Wrapper',
-                        boxClass: 'section_Wrapper'
-                      }}
-                    />
-                  </div>
-                )
-              }
-              {
-                delivered && (
-                  <div className="order_delivered_section">
-                    <p className="order_Text section_Wrapper">Orders delivered</p>
-                    {
-                      orderTypes.deliveredOrders.map((order, index) => (
-
+                      ) : ('')
+                    )))
+                  ))
+                }
+                <Section2
+                  id={'Top-sellers-sec'}
+                  heading='Suggested products'
+                  productData={featureProducts}
+                  classes={{
+                    containerClass: 'section_Wrapper',
+                    boxClass: 'section_Wrapper'
+                  }}
+                />
+              </div>
+              <di
+                v className="order_delivered_section">
+                <p className="order_Text section_Wrapper">Orders delivered</p>
+                {
+                  statusesArrayHold.map((item, index) => (
+                    item.items && item.items.map((order => (
+                      (order.status === 'DELIVERED') ? (
                         <OrderProductCard
                           key={index}
                           product={order}
@@ -141,47 +178,46 @@ const OrderSection = ({ ordersList, featureProducts, onTheWay, delivered, cancel
                             boxClass: 'section_Wrapper'
                           }}
                         />
-                      ))
-                    }
-                    <Section2
-                      id={'Top-sellers-sec'}
-                      heading='Suggested products'
-                      productData={featureProducts}
-                      classes={{
-                        containerClass: 'section_Wrapper',
-                      }}
-                    />
-                  </div>
-                )
-              }
-              {
-                cancelled && (
-                  <div className="order_delivered_section">
-                    <p className="order_Text section_Wrapper">Orders Cancelled</p>
-                    {
-                      cancelledOrders.map((order, index) => (
+                      ) : ('')
+                    )))
+                  ))
+                }
+                <Section2
+                  id={'Top-sellers-sec'}
+                  heading='Suggested products'
+                  productData={featureProducts}
+                  classes={{
+                    containerClass: 'section_Wrapper',
+                  }}
+                />
+              </di>
+              <div className="order_delivered_section">
+                <p className="order_Text section_Wrapper">Orders Cancelled</p>
+                {
+                  statusesArrayHold.map((item, index) => (
+                    item.items && item.items.map((order => (
+                      (order.status === 'CANCELLED') ? (
                         <OrderProductCard
                           key={index}
                           product={order}
-                          productDeliveryStatues='Cancelled'
+                          productDeliveryStatues='Delivered'
                           classes={{
                             boxClass: 'section_Wrapper'
                           }}
                         />
-                      ))
-                    }
-                    <Section2
-                      id={'Top-sellers-sec'}
-                      heading='Suggested products'
-                      productData={featureProducts}
-                      classes={{
-                        containerClass: 'section_Wrapper',
-                      }}
-                    />
-                  </div>
-                )
-              }
-
+                      ) : ('')
+                    )))
+                  ))
+                }
+                <Section2
+                  id={'Top-sellers-sec'}
+                  heading='Suggested products'
+                  productData={featureProducts}
+                  classes={{
+                    containerClass: 'section_Wrapper',
+                  }}
+                />
+              </div>
             </div>
           </>
         )

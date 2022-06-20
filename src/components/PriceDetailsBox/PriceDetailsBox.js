@@ -7,10 +7,6 @@ const PriceDetailsBox = ({ HideDetails, classes }) => {
   const { userCart, setUserCart, cartArray, priceBoxDetails } = useContext(UserDataContext)
 
   let cartItemsNumber = cartArray.no_of_carts
-  var cartItemsPrice = 0
-  var totalDiscount = 0
-  var totalDeliveryCharge = 0
-  var totalAmount = 0
 
   // useEffect(() => {
   //   if (cartArray.no_of_carts !== 0) {

@@ -50,6 +50,7 @@ const Signup = ({ setLoginRedirect }) => {
     e.preventDefault();
     userSignUp(phone, name)
       .then(res => res ? (
+        alert(`${res.otp}`),
         setLoginRedirect(false),
         nav('/otp'),
         setUserContext(prev => ({
