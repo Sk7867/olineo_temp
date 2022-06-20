@@ -145,7 +145,7 @@ const AddOffers = ({ setHeaderData }) => {
   }
 
   const handleBankOfferHeading = (item, index, prop) => {
-    console.log(item, index, prop);
+    // console.log(item, index, prop);
     let list = [...bankOffers]
     list[index][prop] = item
     setBankOffers(list)
@@ -177,7 +177,7 @@ const AddOffers = ({ setHeaderData }) => {
         let products = eanEntered.split(',')
         addCoupon(couponOffersHold, products)
           .then(res => {
-            console.log(res)
+            // console.log(res)
             nav('/catelogue-page')
           })
       } else {
@@ -199,10 +199,10 @@ const AddOffers = ({ setHeaderData }) => {
         })
         newProductArray.forEach(product => (
           updateProductOffers(product)
-            .then(res => {
-              console.log(res)
+            .then(res => res ? (
+              // console.log(res),
               nav('/catelogue-page')
-            })
+            ) : (''))
         ))
         console.log(newProductArray);
       }
@@ -211,7 +211,7 @@ const AddOffers = ({ setHeaderData }) => {
     }
   }
 
-  console.log(couponOffersHold);
+  console.log(offers);
 
   const searchEAN = (e) => {
     e.preventDefault();
@@ -256,7 +256,14 @@ const AddOffers = ({ setHeaderData }) => {
     const re = /^[0-9\b]+$/;
     if (e.target.value === '' || re.test(e.target.value)) {
       let value = e.target.value
-      handleInput(setFlatDisOffers, flatDisOffers, 'value', value)
+      setFlatDisOffers(prev => ({ ...prev, value: value }))
+    }
+  }
+
+  const removeWhiteSpace = (e) => {
+    if (e.target.value !== '') {
+      let value = e.target.value.replace(/\s/g, '')
+      setHoldContainerValue(value)
     }
   }
 
@@ -265,7 +272,7 @@ const AddOffers = ({ setHeaderData }) => {
       case 'Discount':
         return (
           <>
-            <input type='text' name="Product Offer" id="Product Offer" value={flatDisOffers.value} className='input-field' placeholder='Enter Product Discount Offer' onChange={(e) => handleInput(setFlatDisOffers, flatDisOffers, 'value', value)} />
+            <input type='text' name="Product Offer" id="Product Offer" value={flatDisOffers.value} className='input-field' placeholder='Enter Product Discount Offer' onChange={(e) => onlyNumberRegex(e)} />
             <DatePicker
               onChange={(e) => handleDate(e, setFlatDisOffers, 'from')}
               value={flatDisOffers.from}
@@ -307,7 +314,7 @@ const AddOffers = ({ setHeaderData }) => {
       case 'Container':
         return (
           <>
-            <input type='text' name="Product Offer" id="Product Offer" className='input-field' placeholder='Enter Product Product EAN for Container offer' value={holdContainerValue} onChange={(e) => setHoldContainerValue(e.target.value)} />
+            <input type='text' name="Product Offer" id="Product Offer" className='input-field' placeholder='Enter Product Product EAN for Container offer' value={holdContainerValue} onChange={(e) => removeWhiteSpace(e)} />
             <p className="catalogue_Hint">Enter comma separated EAN numbers</p>
             <DatePicker
               onChange={(e) => handleDate(e, setContOffersHold, 'from')}

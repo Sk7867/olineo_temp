@@ -144,14 +144,14 @@ const ProductPage = ({ setHeaderData }) => {
   }, [alternateColorean, alternateSpecean]);
   // console.log(colorAlternateProds);
 
-  // console.log(userCart);
+  console.log(productData);
 
   useEffect(() => {
     if (productData && productData.product_Discount.flatDiscount && productData.product_Discount.flatDiscount.value) {
       setDiscountPercent(productData.product_Discount.flatDiscount.value)
     } else {
       let mrp = parseInt(productData.product_price.mrp)
-      let mop = parseInt(productData.product_price.mop)
+      let mop = (productData.product_price.discountPrice ? parseInt(productData.product_price.discountPrice) : parseInt(productData.product_price.mop))
       let discount = Math.floor(((mrp - mop) / mrp) * 100)
       setDiscountPercent(discount)
     }
