@@ -262,9 +262,9 @@ function App() {
     })
   }, [itemsHold])
 
-  console.log(itemsHold);
-  console.log(userOrderData);
-  console.log(orderDetails);
+  // console.log(itemsHold);
+  // console.log(userOrderData);
+  // console.log(orderDetails);
   const ordersData = [
     {
       productName: 'JBL C100SI',
@@ -336,23 +336,40 @@ function App() {
             <Route path='/adduser' exact element={<AddUser />} />
             <Route path='/' exact element={<Home setHeaderData={setHeaderData} allProducts={allProducts} />} />
             <Route path='/orders' exact element={
-              <MyOrders ordersList={ordersData} setHeaderData={setHeaderData} featureProducts={allProducts} />
+              <PrivateRouteCustomer>
+                <MyOrders ordersList={ordersData} setHeaderData={setHeaderData} featureProducts={allProducts} />
+              </PrivateRouteCustomer>
+            } />
+            <Route path='/orders/:id' exact element={
+              <PrivateRouteCustomer>
+                <MyOrders ordersList={ordersData} setHeaderData={setHeaderData} featureProducts={allProducts} />
+              </PrivateRouteCustomer>
             } />
             <Route path='/mycart' exact element={
-              <MyCart setHeaderData={setHeaderData} />
+              <PrivateRouteCustomer>
+                <MyCart setHeaderData={setHeaderData} />
+              </PrivateRouteCustomer>
             } />
             <Route path='/myaddress' exact element={
-              <Address setHeaderData={setHeaderData} setEditID={setEditID} />
+              <PrivateRouteCustomer>
+                <Address setHeaderData={setHeaderData} setEditID={setEditID} />
+              </PrivateRouteCustomer>
             } />
             <Route path='/newaddress' exact element={
-              <NewAddress setHeaderData={setHeaderData} />
+              <PrivateRouteCustomer>
+                <NewAddress setHeaderData={setHeaderData} />
+              </PrivateRouteCustomer>
             } />
             <Route path='/editaddress' exact element={
-              <EditAddress setHeaderData={setHeaderData} editID={editID} />
+              <PrivateRouteCustomer>
+                <EditAddress setHeaderData={setHeaderData} editID={editID} />
+              </PrivateRouteCustomer>
             } />
             <Route path='/payment' exact element={<Payment setHeaderData={setHeaderData} />} />
             <Route path='/profile' exact element={
-              <Profile setEditID={setEditID} editID={editID} setHeaderData={setHeaderData} ordersData={ordersData} />
+              <PrivateRouteCustomer>
+                <Profile setEditID={setEditID} editID={editID} setHeaderData={setHeaderData} ordersData={ordersData} />
+              </PrivateRouteCustomer>
             } />
             <Route path='/edit-account' exact element={
               <PrivateRouteCustomer>
@@ -360,21 +377,31 @@ function App() {
               </PrivateRouteCustomer>
             } />
             <Route path='/update-details/number' exact element={
-              <UpdateNumber setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />
+              <PrivateRouteCustomer>
+                <UpdateNumber setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />
+              </PrivateRouteCustomer>
             } />
             <Route path='/update-details/email' exact element={
-              <UpdateEmail setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />
+              <PrivateRouteCustomer>
+                <UpdateEmail setHeaderData={setHeaderData} modalDataMobile={modalDataMobile} />
+              </PrivateRouteCustomer>
             } />
             <Route path='/customer-support' exact element={<CustomerSupport setHeaderData={setHeaderData} />} />
             <Route path='/write-to-us' exact element={<WriteToUS setHeaderData={setHeaderData} />} />
             <Route path='/delivery-option' exact element={
-              <DeliveryOptions setDeliveryOptionSelected={setDeliveryOptionSelected} setHeaderData={setHeaderData} />
+              <PrivateRouteCustomer>
+                <DeliveryOptions setDeliveryOptionSelected={setDeliveryOptionSelected} setHeaderData={setHeaderData} />
+              </PrivateRouteCustomer>
             } />
             <Route path='/home-delivery' exact element={
-              <HomeDelivery setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />
+              <PrivateRouteCustomer>
+                <HomeDelivery setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />
+              </PrivateRouteCustomer>
             } />
             <Route path='/store-pickup' exact element={
-              <StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />
+              <PrivateRouteCustomer>
+                <StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />
+              </PrivateRouteCustomer>
             } />
             <Route path='/store-near-me' exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
             <Route path='/product/:slug' exact element={<ProductPage setHeaderData={setHeaderData} />} />
@@ -384,10 +411,14 @@ function App() {
             <Route path='/bank-offer' exact element={<BankOffer setHeaderData={setHeaderData} />} />
             <Route path='/store-finder' exact element={<StoreFinder setHeaderData={setHeaderData} />} />
             <Route path='/order-details' exact element={
-              <OrderDetails setHeaderData={setHeaderData} />
+              <PrivateRouteCustomer>
+                <OrderDetails setHeaderData={setHeaderData} />
+              </PrivateRouteCustomer>
             } />
             <Route path='/order-cancel' exact element={
-              <OrderCancel setHeaderData={setHeaderData} />
+              <PrivateRouteCustomer>
+                <OrderCancel setHeaderData={setHeaderData} />
+              </PrivateRouteCustomer>
             } />
             <Route path='/catelogue-page' exact element={<CataloguePage setHeaderData={setHeaderData} />} />
             <Route path='/catelogue-page/add-product' exact element={<AddProduct setHeaderData={setHeaderData} />} />

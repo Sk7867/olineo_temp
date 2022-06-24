@@ -245,7 +245,7 @@ export const getUser = async (JWT) => {
 }
 
 //SAVE USER-------------------------------
-export const saveUser = async (userData) => {
+export const saveUser = async (userData, selectedDay) => {
   let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
 
   const headers = {
@@ -254,17 +254,17 @@ export const saveUser = async (userData) => {
     "Authorization": `Bearer ${userToken}`
   }
 
-  // userInfo.fullName = userData.user_Full_Name
-  // userInfo.email = userData.user_Email
-  // userInfo.dob = userBirthDate
+  let saveUserBody = {
+    fullName: userData.user_Full_Name,
+    email: userData.user_Email,
+    dob: selectedDay,
+    pincode: userData.user_Pin_Code
+  }
 
-  // userInfo.fullName = userData.user_Full_Name
-  // userInfo.mobileNumber = userData.user_ph_Number
-  // userInfo.email = userData.user_Email
-
+  console.log(saveUserBody);
   let saveUserResponse;
 
-  await axios.put(`${process.env.REACT_APP_BASE_URL}/user/updateProfile`, JSON.stringify(userData), { headers })
+  await axios.put(`${process.env.REACT_APP_BASE_URL}/user/updateProfile`, JSON.stringify(saveUserBody), { headers })
     .then(res => {
       saveUserResponse = res.data
       // window.sessionStorage.setItem("user", JSON.stringify(userInfo))
@@ -297,14 +297,22 @@ export const updateUser = async (userData) => {
 
 
   let updateUserResponse;
+  const newData = Object.keys(userData).reduce((accumulator, key) => {
+    // Copy all except emoji
+    if (key !== "profilePic") {
+      accumulator[key] = userData[key]
+    }
+    return accumulator
+  }, {})
 
-  await axios.put(`${process.env.REACT_APP_BASE_URL}/user/updateProfile`, JSON.stringify(userData), { headers })
-    .then(res => {
-      updateUserResponse = res.data
-      // window.sessionStorage.setItem("user", JSON.stringify(userInfo))
-      getUser(userToken)
-    })
-    .catch(err => console.log('Error:', err))
+  console.log(newData);
+  // await axios.put(`${process.env.REACT_APP_BASE_URL}/user/updateProfile`, JSON.stringify(newData), { headers })
+  //   .then(res => {
+  //     updateUserResponse = res.data
+  //     // window.sessionStorage.setItem("user", JSON.stringify(userInfo))
+  //     getUser(userToken)
+  //   })
+  // .catch(err => console.log('Error:', err))
 
   return updateUserResponse
 
@@ -344,10 +352,17 @@ export const saveUserPic = async (pic) => {
     "Authorization": `Bearer ${userToken}`
   }
 
+  // let newPic = {
+  //   locataion: pic
+  // }
+
   const formData = new FormData()
 
-  formData.append('userImage', pic)
 
+  formData.append('photo', pic)
+
+  console.log(pic);
+  // console.log(newPic);
   await axios.patch(`${process.env.REACT_APP_BASE_URL}/user/addphoto`, formData, { headers })
     .then(res => {
       savePicResponse = res

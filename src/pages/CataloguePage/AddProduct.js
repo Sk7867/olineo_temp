@@ -168,7 +168,7 @@ const AddProduct = ({ setHeaderData }) => {
       // }
     }
   }, [loc])
-  console.log(imagesArray, galleryImages);
+  // console.log(imagesArray, galleryImages);
 
   // useEffect(() => {
   //   if (selectedDay) {
@@ -617,7 +617,7 @@ const AddProduct = ({ setHeaderData }) => {
             <input type='text' name="Batteries Required" id="Batteries Required" value={technicalDetailsTable.batteriesRequired} className='input-field' placeholder='Enter Product Batteries Required' onChange={(value) => { handleTechnicalTableValues("batteriesRequired", value) }} />
             <input type='text' name="Includes Rechargable Battery" id="Includes Rechargable Battery" value={technicalDetailsTable.includesRechargableBattery} className='input-field' placeholder='Enter Product Includes Rechargable Battery' onChange={(value) => { handleTechnicalTableValues("includesRechargableBattery", value) }} />
             <input type='text' name="Product Wattage" id="Product Wattage" value={technicalDetailsTable.wattage} className='input-field' placeholder='Enter Product Wattage' onChange={(value) => { handleTechnicalTableValues("wattage", value); handleDyanmicTableValues("wattage", value) }} />
-            <input type='text' name="Product Alternate Spec Text" id="Product Alternate Spec Text" value={technicalDetailsTable.altSpecText} className='input-field' placeholder='Enter Product Alternate Spec Text' onChange={(value) => handleTechnicalTableValues("altSpecText", value)} />
+            <input type='text' name="Product Spec Text" id="Product Spec Text" value={technicalDetailsTable.specText} className='input-field' placeholder='Enter Product Spec Text' onChange={(value) => handleTechnicalTableValues("specText", value)} />
             <input type='text' name="Material" id="Material" value={technicalDetailsTable.material} className='input-field' placeholder='Enter Product Material' onChange={(value) => { handleTechnicalTableValues("material", value) }} />
             <input type='text' name="Product Whats in the box" id="Product Whats in the box" value={technicalDetailsTable.inTheBox} className='input-field' placeholder='Enter Product Whats in the box' onChange={(value) => handleTechnicalTableValues("inTheBox", value)} />
           </>)
@@ -643,7 +643,7 @@ const AddProduct = ({ setHeaderData }) => {
             <input type='text' name="Product Battery Power Rating" id="Product Battery Power Rating" value={technicalDetailsTable.batteryPowerRating} className='input-field' placeholder='Enter Product Battery Power Rating' onChange={(value) => handleTechnicalTableValues("batteryPowerRating", value)} />
             <input type='text' name="Product Talk Time" id="Product Talk Time" value={technicalDetailsTable.productTalkTime} className='input-field' placeholder='Enter Product Talk Time' onChange={(value) => handleTechnicalTableValues("productTalkTime", value)} />
             <input type='text' name="Product Standby Time" id="Product Standby Time" value={technicalDetailsTable.productStandbyTime} className='input-field' placeholder='Enter Product Standby Time' onChange={(value) => handleTechnicalTableValues("productStandbyTime", value)} />
-            <input type='text' name="Product Alternate Spec Text" id="Product Alternate Spec Text" value={technicalDetailsTable.altSpecText} className='input-field' placeholder='Enter Product Alternate Spec Text' onChange={(value) => handleTechnicalTableValues("altSpecText", value)} />
+            <input type='text' name="Product Spec Text" id="Product Spec Text" value={technicalDetailsTable.specText} className='input-field' placeholder='Enter Product Spec Text' onChange={(value) => handleTechnicalTableValues("specText", value)} />
             <input type='text' name="Product Whats in the box" id="Product Whats in the box" value={technicalDetailsTable.inTheBox} className='input-field' placeholder='Enter Product Whats in the box' onChange={(value) => handleTechnicalTableValues("inTheBox", value)} />
           </>)
       case 'Tablet':
@@ -669,7 +669,7 @@ const AddProduct = ({ setHeaderData }) => {
             <input type='text' name="Rear Webcam Resolution" id="Rear Webcam Resolution" value={technicalDetailsTable.rearWebcamResolution} className='input-field' placeholder='Enter Product Rear Webcam Resolution' onChange={(value) => { handleTechnicalTableValues("rearWebcamResolution", value) }} />
             <input type='text' name="Product Front Webcam Resolution" id="Product Front Webcam Resolution" value={technicalDetailsTable.frontWebcamResolution} className='input-field' placeholder='Enter Product Front Webcam Resolution' onChange={(value) => handleTechnicalTableValues("frontWebcamResolution", value)} />
             <input type='text' name="Product Battery Power Rating" id="Product Battery Power Rating" value={technicalDetailsTable.batteryPowerRating} className='input-field' placeholder='Enter Product Battery Power Rating' onChange={(value) => handleTechnicalTableValues("batteryPowerRating", value)} />
-            <input type='text' name="Product Alternate Spec Text" id="Product Alternate Spec Text" value={technicalDetailsTable.altSpecText} className='input-field' placeholder='Enter Product Alternate Spec Text' onChange={(value) => handleTechnicalTableValues("altSpecText", value)} />
+            <input type='text' name="Product Spec Text" id="Product Spec Text" value={technicalDetailsTable.specText} className='input-field' placeholder='Enter Product Spec Text' onChange={(value) => handleTechnicalTableValues("specText", value)} />
             <input type='text' name="Product Form factor" id="Product Form factor" value={technicalDetailsTable.formFactor} className='input-field' placeholder='Enter Product Form factor' onChange={(value) => handleTechnicalTableValues("formFactor", value)} />
             <input type='text' name="Product Whats in the box" id="Product Whats in the box" value={technicalDetailsTable.inTheBox} className='input-field' placeholder='Enter Product  Whats in the box' onChange={(value) => handleTechnicalTableValues("inTheBox", value)} />
           </>)
@@ -681,27 +681,46 @@ const AddProduct = ({ setHeaderData }) => {
             <input type='text' name="Product Playtime" id="Product Playtime" value={technicalDetailsTable.playtime} className='input-field' placeholder='Enter Product Playtime' onChange={(value) => { handleDyanmicTableValues("playtime", value); handleTechnicalTableValues("playtime", value) }} />
             <input type='text' name="Product Mounting Hardware" id="Product Mounting Hardware" value={technicalDetailsTable.mountingHardware} className='input-field' placeholder='Enter Product Mounting Hardware' onChange={(value) => handleTechnicalTableValues("mountingHardware", value)} />
             <input type='text' name="Product Number Of Items" id="Product Number Of Items" value={technicalDetailsTable.numberOfItems} className='input-field' placeholder='Enter Product Number Of Items' onChange={(value) => handleTechnicalTableValues("numberOfItems", value)} />
+            <input type='text' name="Product Power Source" id="Product Power Source" value={technicalDetailsTable.powerSource} className='input-field' placeholder='Enter Product Power Source' onChange={(value) => handleTechnicalTableValues("powerSource", value)} />
             <input type='text' name="Product Microphone Form Factor" id="Product Microphone Form Factor" value={technicalDetailsTable.microphoneFormFactor} className='input-field' placeholder='Enter Product Microphone Form Factor' onChange={(value) => { handleTechnicalTableValues("microphoneFormFactor", value) }} />
+            <input type='text' name="Product Microphone Technology" id="Product Microphone Technology" value={technicalDetailsTable.microphoneTech} className='input-field' placeholder='Enter Product Microphone Technology' onChange={(value) => { handleTechnicalTableValues("microphoneTech", value); handleDyanmicTableValues("microphoneTech", value) }} />
             <input type='text' name="Product Headphones Form Factor" id="Product Headphones Form Factor" value={technicalDetailsTable.headphonesFormFactor} className='input-field' placeholder='Enter Product Headphones Form Factor' onChange={(value) => { handleTechnicalTableValues("headphonesFormFactor", value) }} />
             <input type='text' name="Product Batteries Included" id="Product Batteries Included" value={technicalDetailsTable.batteriesIncluded} className='input-field' placeholder='Enter Product Batteries Included' onChange={(value) => { handleTechnicalTableValues("batteriesIncluded", value) }} />
             <input type='text' name="Product Batteries Required" id="Product Batteries Required" value={technicalDetailsTable.batteriesRequired} className='input-field' placeholder='Enter Product Batteries Required' onChange={(value) => { handleTechnicalTableValues("batteriesIncluded", value) }} />
             <input type='text' name="Product Battery Cell Composition" id="Product Battery Cell Composition" value={technicalDetailsTable.batteryCellComposition} className='input-field' placeholder='Enter Product Battery Cell Composition' onChange={(value) => { handleTechnicalTableValues("batteryCellComposition", value) }} />
             <input type='text' name="Product Cable Feature" id="Product Cable Feature" value={technicalDetailsTable.cableFeature} className='input-field' placeholder='Enter Product Cable Feature' onChange={(value) => { handleTechnicalTableValues("cableFeature", value) }} />
             <input type='text' name="Connector Type" id="Connector Type" value={technicalDetailsTable.connectorType} className='input-field' placeholder='Enter Product Connector Type' onChange={(value) => { handleTechnicalTableValues("connectorType", value); handleDyanmicTableValues("connectorType", value) }} />
+            <input type='text' name="Bluetooth Version" id="Bluetooth Version" value={technicalDetailsTable.bluetoothVersion} className='input-field' placeholder='Enter Product Bluetooth Version' onChange={(value) => { handleTechnicalTableValues("bluetoothVersion", value); handleDyanmicTableValues("bluetoothVersion", value) }} />
             <input type='text' name="Product Maximum Operating Distance" id="Product Maximum Operating Distance" value={technicalDetailsTable.maximumOperatingDistance} className='input-field' placeholder='Enter Product Maximum Operating Distance' onChange={(value) => { handleTechnicalTableValues("maximumOperatingDistance", value) }} />
-            <input type='text' name="Product Maximum Contains Liquid Contents" id="Product Maximum Contains Liquid Contents" value={technicalDetailsTable.containsLiquidContents} className='input-field' placeholder='Enter Product Maximum Contains Liquid Contents' onChange={(value) => { handleTechnicalTableValues("containsLiquidContents", value) }} />
+            <input type='text' name="Product Maximum Contains Liquid Contents" id="Product Maximum Contains Liquid Contents" value={technicalDetailsTable.containsLiquidContents} className='input-field' placeholder='Enter Product Contains Liquid Contents' onChange={(value) => { handleTechnicalTableValues("containsLiquidContents", value) }} />
             <input type='text' name="Product Includes Rechargable Battery" id="Product Includes Rechargable Battery" value={technicalDetailsTable.includesRechargableBattery} className='input-field' placeholder='Enter Product Includes Rechargable Battery' onChange={(value) => { handleTechnicalTableValues("includesRechargableBattery", value) }} />
+            <input type='text' name="Product Material" id="Product Material" value={technicalDetailsTable.includesRechargableBattery} className='input-field' placeholder='Enter Product Material' onChange={(value) => { handleTechnicalTableValues("material", value) }} />
+            <input type='text' name="Product Spec Text" id="Product Spec Text" value={technicalDetailsTable.specText} className='input-field' placeholder='Enter Product Spec Text' onChange={(value) => handleTechnicalTableValues("specText", value)} />
+            <input type='text' name="Product Whats in the box" id="Product Whats in the box" value={technicalDetailsTable.inTheBox} className='input-field' placeholder='Enter Product  Whats in the box' onChange={(value) => handleTechnicalTableValues("inTheBox", value)} />
           </>)
       case 'Bluetooth Neckband':
         return (
           <>
+            <input type='text' name="Product Batteries" id="Product Batteries" value={technicalDetailsTable.batteries} className='input-field' placeholder='Enter Product Batteries' onChange={(value) => { handleTechnicalTableValues("batteries", value) }} />
             <input type='text' name="Product Special features" id="Product Special features" value={technicalDetailsTable.spacialFeature} className='input-field' placeholder='Enter Product Special features' onChange={(value) => handleTechnicalTableValues("spacialFeature", value)} />
+            <input type='text' name="Product Playtime" id="Product Playtime" value={technicalDetailsTable.playtime} className='input-field' placeholder='Enter Product Playtime' onChange={(value) => { handleDyanmicTableValues("playtime", value); handleTechnicalTableValues("playtime", value) }} />
+            <input type='text' name="Product Wireless communication technologies" id="Product Wireless communication technologies" value={technicalDetailsTable.wirelessTech} className='input-field' placeholder='Enter Product Wireless communication technologies' onChange={(value) => handleTechnicalTableValues("wirelessTech", value)} />
+            <input type='text' name="Product Connectivity technologies" id="Product Connectivity technologies" value={technicalDetailsTable.connectivityTech} className='input-field' placeholder='Enter Product Connectivity technologies' onChange={(value) => handleTechnicalTableValues("connectivityTech", value)} />
             <input type='text' name="Product Mounting Hardware" id="Product Mounting Hardware" value={technicalDetailsTable.mountingHardware} className='input-field' placeholder='Enter Product Mounting Hardware' onChange={(value) => handleTechnicalTableValues("mountingHardware", value)} />
+            <input type='text' name="Product Other display features" id="Product Other display features" value={technicalDetailsTable.otherDisplayFeatures} className='input-field' placeholder='Enter Product Other display features' onChange={(value) => handleTechnicalTableValues("otherDisplayFeatures", value)} />
+            <input type='text' name="Product Audio Jack" id="Product Audio Jack" value={technicalDetailsTable.audioJack} className='input-field' placeholder='Enter Product Audio Jack' onChange={(value) => handleTechnicalTableValues("audioJack", value)} />
             <input type='text' name="Product Number Of Items" id="Product Number Of Items" value={technicalDetailsTable.numberOfItems} className='input-field' placeholder='Enter Product Number Of Items' onChange={(value) => handleTechnicalTableValues("numberOfItems", value)} />
             <input type='text' name="Product Microphone Form factor" id="Product Microphone Form factor" value={technicalDetailsTable.microphoneFormFactor} className='input-field' placeholder='Enter Product Microphone Form factor' onChange={(value) => handleTechnicalTableValues("microphoneFormFactor", value)} />
-            <input type='text' name="Product Headphones factor" id="Product Headphones Form factor" value={technicalDetailsTable.headphonesFormFactor} className='input-field' placeholder='Enter Product Headphones Form factor' onChange={(value) => handleTechnicalTableValues("headphonesFormFactor", value)} />
+            <input type='text' name="Product Microphone Technology" id="Product Microphone Technology" value={technicalDetailsTable.microphoneTech} className='input-field' placeholder='Enter Product Microphone Technology' onChange={(value) => { handleTechnicalTableValues("microphoneTech", value); handleDyanmicTableValues("microphoneTech", value) }} />
+            <input type='text' name="Product Headphones Form factor" id="Product Headphones Form factor" value={technicalDetailsTable.headphonesFormFactor} className='input-field' placeholder='Enter Product Headphones Form factor' onChange={(value) => handleTechnicalTableValues("headphonesFormFactor", value)} />
+            <input type='text' name="Product Power Source" id="Product Power Source" value={technicalDetailsTable.powerSource} className='input-field' placeholder='Enter Product Power Source' onChange={(value) => handleTechnicalTableValues("powerSource", value)} />
+            <input type='text' name="Product Batteries Included" id="Product Batteries Included" value={technicalDetailsTable.batteriesIncluded} className='input-field' placeholder='Enter Product Batteries Included' onChange={(value) => { handleTechnicalTableValues("batteriesIncluded", value) }} />
+            <input type='text' name="Product Batteries Required" id="Product Batteries Required" value={technicalDetailsTable.batteriesRequired} className='input-field' placeholder='Enter Product Batteries Required' onChange={(value) => { handleTechnicalTableValues("batteriesIncluded", value) }} />
+            <input type='text' name="Bluetooth Version" id="Bluetooth Version" value={technicalDetailsTable.bluetoothVersion} className='input-field' placeholder='Enter Product Bluetooth Version' onChange={(value) => { handleTechnicalTableValues("bluetoothVersion", value); handleDyanmicTableValues("bluetoothVersion", value) }} />
             <input type='text' name="Product Cable Feature" id="Product Cable Feature" value={technicalDetailsTable.cableFeature} className='input-field' placeholder='Enter Product Cable Feature' onChange={(value) => { handleTechnicalTableValues("cableFeature", value) }} />
             <input type='text' name="Connector Type" id="Connector Type" value={technicalDetailsTable.connectorType} className='input-field' placeholder='Enter Product Connector Type' onChange={(value) => { handleTechnicalTableValues("connectorType", value); handleDyanmicTableValues("connectorType", value) }} />
+            <input type='text' name="Product Maximum Operating Distance" id="Product Maximum Operating Distance" value={technicalDetailsTable.maximumOperatingDistance} className='input-field' placeholder='Enter Product Maximum Operating Distance' onChange={(value) => { handleTechnicalTableValues("maximumOperatingDistance", value) }} />
+            <input type='text' name="Product Includes Rechargable Battery" id="Product Includes Rechargable Battery" value={technicalDetailsTable.includesRechargableBattery} className='input-field' placeholder='Enter Product Includes Rechargable Battery' onChange={(value) => { handleTechnicalTableValues("includesRechargableBattery", value) }} />
             <input type='text' name="Material" id="Material" value={technicalDetailsTable.material} className='input-field' placeholder='Enter Product Material' onChange={(value) => { handleTechnicalTableValues("material", value) }} />
             <input type='text' name="Product Maximum Operating Distance" id="Product Maximum Operating Distance" value={technicalDetailsTable.maximumOperatingDistance} className='input-field' placeholder='Enter Product Maximum Operating Distance' onChange={(value) => { handleTechnicalTableValues("maximumOperatingDistance", value) }} />
             <input type='text' name="Includes Rechargable Battery" id="Includes Rechargable Battery" value={technicalDetailsTable.includesRechargableBattery} className='input-field' placeholder='Enter Product Includes Rechargable Battery' onChange={(value) => { handleTechnicalTableValues("includesRechargableBattery", value) }} />
@@ -714,7 +733,9 @@ const AddProduct = ({ setHeaderData }) => {
             <input type='text' name="Product RMS Power Range - Amplifiers" id="Product RMS Power Range - Amplifiers" value={technicalDetailsTable.RMSPowerRangeAmplifiers} className='input-field' placeholder='Enter Product RMS Power Range - Amplifiers' onChange={(value) => handleTechnicalTableValues("RMSPowerRangeAmplifiers", value)} />
             <input type='text' name="Product Batteries" id="Product Batteries" value={technicalDetailsTable.batteries} className='input-field' placeholder='Enter Product Batteries' onChange={(value) => { handleTechnicalTableValues("batteries", value) }} />
             <input type='text' name="Product Play Time" id="Product Play Time" value={technicalDetailsTable.playTime} className='input-field' placeholder='Enter Product Play Time' onChange={(value) => { handleTechnicalTableValues("playTime", value); handleDyanmicTableValues("playTime", value) }} />
-            <input type='text' name="Product Alternate Spec Text" id="Product Alternate Spec Text" value={technicalDetailsTable.altSpecText} className='input-field' placeholder='Enter Product Alternate Spec Text' onChange={(value) => handleTechnicalTableValues("altSpecText", value)} />
+            <input type='text' name="Product Spec Text" id="Product Spec Text" value={technicalDetailsTable.specText} className='input-field' placeholder='Enter Product Spec Text' onChange={(value) => handleTechnicalTableValues("specText", value)} />
+            <input type='text' name="Product Whats in the box" id="Product Whats in the box" value={technicalDetailsTable.inTheBox} className='input-field' placeholder='Enter Product  Whats in the box' onChange={(value) => handleTechnicalTableValues("inTheBox", value)} />
+            <input type='text' name="Product Spec Text" id="Product Spec Text" value={technicalDetailsTable.specText} className='input-field' placeholder='Enter Product Spec Text' onChange={(value) => handleTechnicalTableValues("specText", value)} />
             <input type='text' name="Product Whats in the box" id="Product Whats in the box" value={technicalDetailsTable.inTheBox} className='input-field' placeholder='Enter Product  Whats in the box' onChange={(value) => handleTechnicalTableValues("inTheBox", value)} />
 
           </>)
@@ -747,7 +768,7 @@ const AddProduct = ({ setHeaderData }) => {
             <input type='text' name="Product Cable Feature" id="Product Cable Feature" value={technicalDetailsTable.cableFeature} className='input-field' placeholder='Enter Product Cable Feature' onChange={(value) => { handleTechnicalTableValues("cableFeature", value) }} />
             <input type='text' name="Connector Type" id="Connector Type" value={technicalDetailsTable.connectorType} className='input-field' placeholder='Enter Product Connector Type' onChange={(value) => { handleTechnicalTableValues("connectorType", value); handleDyanmicTableValues("connectorType", value) }} />
             <input type='text' name="Material" id="Material" value={technicalDetailsTable.material} className='input-field' placeholder='Enter Product Material' onChange={(value) => { handleTechnicalTableValues("material", value) }} />
-            <input type='text' name="Product Alternate Spec Text" id="Product Alternate Spec Text" value={technicalDetailsTable.altSpecText} className='input-field' placeholder='Enter Product Alternate Spec Text' onChange={(value) => handleTechnicalTableValues("altSpecText", value)} />
+            <input type='text' name="Product Spec Text" id="Product Spec Text" value={technicalDetailsTable.specText} className='input-field' placeholder='Enter Product Spec Text' onChange={(value) => handleTechnicalTableValues("specText", value)} />
             <input type='text' name="Product Whats in the box" id="Product Whats in the box" value={technicalDetailsTable.inTheBox} className='input-field' placeholder='Enter Product  Whats in the box' onChange={(value) => handleTechnicalTableValues("inTheBox", value)} />
           </>)
       case 'Wired Earphones':
@@ -764,7 +785,7 @@ const AddProduct = ({ setHeaderData }) => {
             <input type='text' name="Product Cable Feature" id="Product Cable Feature" value={technicalDetailsTable.cableFeature} className='input-field' placeholder='Enter Product Cable Feature' onChange={(value) => { handleTechnicalTableValues("cableFeature", value) }} />
             <input type='text' name="Connector Type" id="Connector Type" value={technicalDetailsTable.connectorType} className='input-field' placeholder='Enter Product Connector Type' onChange={(value) => { handleTechnicalTableValues("connectorType", value); handleDyanmicTableValues("connectorType", value) }} />
             <input type='text' name="Material" id="Material" value={technicalDetailsTable.material} className='input-field' placeholder='Enter Product Material' onChange={(value) => { handleTechnicalTableValues("material", value) }} />
-            <input type='text' name="Product Alternate Spec Text" id="Product Alternate Spec Text" value={technicalDetailsTable.altSpecText} className='input-field' placeholder='Enter Product Alternate Spec Text' onChange={(value) => handleTechnicalTableValues("altSpecText", value)} />
+            <input type='text' name="Product Spec Text" id="Product Spec Text" value={technicalDetailsTable.specText} className='input-field' placeholder='Enter Product Spec Text' onChange={(value) => handleTechnicalTableValues("specText", value)} />
             <input type='text' name="Product Whats in the box" id="Product Whats in the box" value={technicalDetailsTable.inTheBox} className='input-field' placeholder='Enter Product  Whats in the box' onChange={(value) => handleTechnicalTableValues("inTheBox", value)} />
           </>)
       case 'Adapter':
@@ -896,7 +917,7 @@ const AddProduct = ({ setHeaderData }) => {
     }
   }
 
-  console.log(technicalDetailsTable, brand);
+  // console.log(technicalDetailsTable, brand);
 
   return (
     <>
@@ -1056,13 +1077,13 @@ const AddProduct = ({ setHeaderData }) => {
             <div className="catelogue_Form_Group">
               <input type='text' name="Product MRP" id="Product MRP" value={mrp} className='input-field' placeholder='Enter Product MRP' onChange={(e) => setMrp(e.target.value)} />
               <input type='text' name="Product MOP" id="Product MOP" value={mop} className='input-field' placeholder='Enter Product MOP' onChange={(e) => setMop(e.target.value)} />
-              {/* {
+              {
                 matches ? (
-                  <input type='tel' name="Product Stock" id="Product Stock" className='input-field' placeholder='Enter Product Stock' value={product.stock} onChange={(value) => handleInput("stock", value)} />
+                  <input type='tel' name="Product Stock" id="Product Stock" className='input-field' placeholder='Enter Product Stock' value={stock} onChange={(e) => setStock(e.target.value)} />
                 ) : (
-                  <input type='number' name="Product Stock" id="Product Stock" className='input-field' placeholder='Enter Product Stock' value={product.stock} onChange={(value) => handleInput("stock", value)} />
+                  <input type='number' name="Product Stock" id="Product Stock" className='input-field' placeholder='Enter Product Stock' value={stock} onChange={(e) => setStock(e.target.value)} />
                 )
-              } */}
+              }
             </div>
             <br />
             {/* <div className="catelogue_Form_Group">

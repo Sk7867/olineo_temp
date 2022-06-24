@@ -37,14 +37,16 @@ const Section1 = ({ id, carouselData, productData }) => {
       // showThumbs={false}
       // showStatus={false}
       >
-        {(productData.no_of_products > 0) && carouselData.map((item, index) => (
-          <Carousel.Item key={index}>
-            <img
-              className="d-block w-100 carousel_image"
-              src={item.carousel_image}
-              alt={`${index}`}
-            />
-            {/* <Carousel.Caption>
+        {
+          productData.loaded ? (
+            carouselData.map((item, index) => (
+              <Carousel.Item key={index}>
+                <img
+                  className="d-block w-100 carousel_image"
+                  src={item.carousel_image}
+                  alt={`${index}`}
+                />
+                {/* <Carousel.Caption>
                 <div className='img_caption'>
                   <p className="img_caption_text">
                     {item.carousel_name}
@@ -54,11 +56,11 @@ const Section1 = ({ id, carouselData, productData }) => {
                   </span>
                 </div>
   </Carousel.Caption> */}
-          </Carousel.Item>
-        ))
-        }
-        {
-          (productData.no_of_products === 0) && (<SkeletonElement type={'productBanner'} />)
+              </Carousel.Item>
+            ))
+          ) : (
+            <SkeletonElement type={'productBanner'} />
+          )
         }
       </Carousel>
     </div>

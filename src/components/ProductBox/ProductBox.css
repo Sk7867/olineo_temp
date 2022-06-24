@@ -11,6 +11,7 @@
   text-decoration: none;
   min-width: 150px;
   min-height: 190px;
+  position: relative;
 }
 
 .bg_blue{
@@ -23,7 +24,7 @@
 
 .carousel_card{
   min-width: 150px;
-  min-height: 216px;
+  min-height: 250px;
 }
 
 .productbox_Container img{
@@ -62,14 +63,18 @@
   /* max-height: 66px; */
   height: 100%;
   width: 100%;
+  position: absolute;
+  height: fit-content;
+  bottom: -10px;
 }
 
-.carousel_card .productbox_details{
+/* .carousel_card .productbox_details{
   transform: translate(0, 10px);
-}
+} */
 
 .grid_card .productbox_details{
-  transform: translate(0, -28px);
+  /* transform: translate(0, -28px); */
+  bottom: -80px;
 }
 
 .box_heading{
@@ -109,7 +114,7 @@
   }
   .carousel_card{
     min-width: 210px;
-    /* min-height: 296px; */
+    min-height: 296px;
   }
 
   .grid_card{
@@ -161,7 +166,7 @@
   
   .carousel_card{
     min-width: 312px;
-    min-height: 312px;
+    min-height: 350px;
   }
 
   .grid_card{
@@ -182,7 +187,7 @@
   }
   
   .carousel_card .productbox_details{
-    transform: translate(0, 12px);
+    /* transform: translate(0, 12px); */
     max-width: 264px;
   }
 

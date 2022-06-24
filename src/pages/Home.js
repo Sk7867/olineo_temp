@@ -10,7 +10,6 @@ import Section1 from '../components/Section1/Section1'
 import product1 from '../assets/png/product_1.png'
 import product2 from '../assets/png/product_2.png'
 import bannerImage from '../assets/png/hero_banner.png'
-import ScartchCardComp from '../components/ScratchCard/ScartchCard'
 import Section5 from '../components/Section5/Section5'
 
 

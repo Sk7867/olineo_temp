@@ -59,9 +59,18 @@ const AddUser = () => {
   // }
   // console.log(name, email, DOB, pinCode, phone);
 
-  const validateForm = () => (
-    (userData.user_Full_Name !== '') && (userData.user_Email !== '') && (userData.user_Pin_Code !== '') ? setBtnDisable(false) : setBtnDisable(true)
-  )
+  // const validateForm = () => (
+  //   (userData.user_Full_Name !== '') && (userData.user_Email !== '') && (userData.user_Pin_Code !== '') ? setBtnDisable(false) : setBtnDisable(true)
+  // )
+
+  useEffect(() => {
+    if ((userData.user_Full_Name !== '') && (userData.user_Email !== '') && (userData.user_Pin_Code !== '')) {
+      setBtnDisable(false)
+    } else {
+      setBtnDisable(true)
+    }
+  }, [userData])
+
 
   const formSubmit = (e) => {
     e.preventDefault();
@@ -70,9 +79,9 @@ const AddUser = () => {
       fullName: userData.user_Full_Name,
       email: userData.user_Email,
       dob: selectedDay,
-      pincode: userData.pincode
+      pincode: userData.user_Pin_Code
     }))
-    saveUser(userContext)
+    saveUser(userData, selectedDay)
       .then(res => res ? (
         nav('/'),
         toast.success('Registration Successful')
@@ -87,7 +96,7 @@ const AddUser = () => {
           <h1 className='page-heading'>Complete your profile</h1>
           <p className={'page-desc'}>And you’re good to go</p>
         </div>
-        <form action="" className={'signup-form'} onChange={validateForm} onSubmit={formSubmit}>
+        <form action="" className={'signup-form'} onSubmit={formSubmit}>
           <div className="inputfield-Container">
             <input type="text" name="Name" id="name" className='input-field' placeholder='Name' value={userData.user_Full_Name} onChange={(value) => handleInput("user_Full_Name", value)} />
             <input type="email" name="Email" id="email" className='input-field' placeholder='Email' value={userData.user_Email} onChange={(value) => handleInput("user_Email", value)} />

@@ -54,8 +54,10 @@ const BulkUpload = ({ setHeaderData }) => {
       let newArray = jsonData.map(function (element) {
         const { productInfo, url, dynamicHeader } = handleProductSort(element);
 
-        let colorAlterArray = [];
-        let specAlterArray = [];
+        let colorAlterArray = []
+        let specAlterArray = []
+        // colorAlterArray.unshift(element.ean)
+        // specAlterArray.unshift(element.ean)
         if (element.colorAlter) {
           let newColorStr = element.colorAlter.replace(/['"]+/g, '')
           if (newColorStr.indexOf(',') > -1) {
@@ -74,8 +76,11 @@ const BulkUpload = ({ setHeaderData }) => {
           }
         }
 
-        // let immediateComplimentArray = element.immediateComp.split(',')
-        // let laterComplimentArray = element.laterComp.split(',')
+        let immediateComplimentArray = element.immediateCompCategory.split(',')
+        immediateComplimentArray = immediateComplimentArray.map((prod) => {
+          return prod.trim()
+        })
+        let laterComplimentArray = element.laterCompCategory.split(',')
 
         let item = {
           hierarchyL1: element.hierarchyL1,
@@ -104,6 +109,10 @@ const BulkUpload = ({ setHeaderData }) => {
             color: colorAlterArray,
             spec: specAlterArray,
           },
+          complimentoryCatgories: {
+            immediate: immediateComplimentArray,
+            later: laterComplimentArray
+          }
         };
         return item;
       });
@@ -167,7 +176,6 @@ const BulkUpload = ({ setHeaderData }) => {
         modelNo: elem.modelNo,
         importedBy: elem.importedBy,
         country: elem.countryOrigin,
-        altSpecText: elem.altSpecText,
         specText: elem.specText
       }
         // url = elem.productName + '-'
@@ -195,7 +203,6 @@ const BulkUpload = ({ setHeaderData }) => {
         inTheBox: elem.inTheBox,
         importedBy: elem.importedBy,
         country: elem.countryOrigin,
-        altSpecText: elem.altSpecText,
         specText: elem.specText
 
       }
@@ -235,7 +242,6 @@ const BulkUpload = ({ setHeaderData }) => {
         modelName: elem.modelName,
         modelNo: elem.modelNo,
         country: elem.countryOrigin,
-        altSpecText: elem.altSpecText,
         specText: elem.specText
       }
         // url = elem.productName + '-'
@@ -262,7 +268,6 @@ const BulkUpload = ({ setHeaderData }) => {
         modelName: elem.modelName,
         modelNo: elem.modelNo,
         country: elem.countryOrigin,
-        altSpecText: elem.altSpecText,
         specText: elem.specText
       }
         // url = elem.productName + '-'
@@ -291,7 +296,6 @@ const BulkUpload = ({ setHeaderData }) => {
           modelName: elem.modelName,
           modelNo: elem.modelNo,
           country: elem.countryOrigin,
-          altSpecText: elem.altSpecText,
           specText: elem.specText
         };
         // url = elem.productName + '-'
@@ -314,7 +318,6 @@ const BulkUpload = ({ setHeaderData }) => {
         modelName: elem.modelName,
         modelNo: elem.modelNo,
         country: elem.countryOrigin,
-        altSpecText: elem.altSpecText,
         specText: elem.specText
       }
         // url = elem.productName + '-'
@@ -343,7 +346,6 @@ const BulkUpload = ({ setHeaderData }) => {
         modelName: elem.modelName,
         modelNo: elem.modelNo,
         inTheBox: elem.inTheBox,
-        altSpecText: elem.altSpecText,
         importedBy: elem.importedBy,
         country: elem.countryOrigin,
         specText: elem.specText
@@ -375,11 +377,84 @@ const BulkUpload = ({ setHeaderData }) => {
         modelName: elem.modelName,
         modelNo: elem.modelNo,
         country: elem.countryOrigin,
-        altSpecText: elem.altSpecText,
         specText: elem.specText
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.wattage ? (', ' + elem.wattage) : '') + ')'
+        dynamicArray = dynamicHeader.replace(/[\(,/\)]/g, '').split(" ");
+        dynamicArray2 = dynamicArray.filter(n => n)
+        url = dynamicArray2.join('-')
+        return { productInfo, url, dynamicHeader };
+
+      case 'TWS': productInfo = {
+        color: elem.color,
+        batteries: elem.batteries,
+        specialFeatures: elem.specialFeatures,
+        playtime: elem.playtime,
+        mountingHardware: elem.mountingHardware,
+        numberOfItems: elem.numberOfItems,
+        microphoneFormFactor: elem.microphoneFormFactor,
+        microphoneTech: elem.microphoneTech,
+        headphonesFormFactor: elem.headphonesFormFactor,
+        powerSource: elem.powerSource,
+        batteriesIncluded: elem.batteriesIncluded,
+        batteriesRequired: elem.batteriesRequired,
+        batteryCellComposition: elem.batteryCellComposition,
+        cableFeature: elem.cableFeature,
+        connectorType: elem.connectorType,
+        bluetoothVersion: elem.bluetoothVersion,
+        maximumOperatingDistance: elem.maximumOperatingDistance,
+        containsLiquidContents: elem.containsLiquidContents,
+        includesRechargableBattery: elem.includesRechargableBattery,
+        material: elem.material,
+        inTheBox: elem.inTheBox,
+        importedBy: elem.importedBy,
+        modelYear: elem.modelYear,
+        modelName: elem.modelName,
+        modelNo: elem.modelNo,
+        country: elem.countryOrigin,
+        specText: elem.specText
+      }
+        // url = elem.productName + '-'
+        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.playTime ? (', ' + elem.playTime) : '') + (elem.microphoneTech ? (', ' + elem.microphoneTech) : '') + (elem.bluetoothVersion ? (', ' + elem.bluetoothVersion) : '') + ')'
+        dynamicArray = dynamicHeader.replace(/[\(,/\)]/g, '').split(" ");
+        dynamicArray2 = dynamicArray.filter(n => n)
+        url = dynamicArray2.join('-')
+        return { productInfo, url, dynamicHeader };
+
+      case 'Bluetooth Neckband': productInfo = {
+        color: elem.color,
+        batteries: elem.batteries,
+        specialFeatures: elem.specialFeatures,
+        playtime: elem.playtime,
+        wirelessTech: elem.wirelessTech,
+        connectivityTech: elem.connectivityTech,
+        otherDisplayFeatures: elem.otherDisplayFeatures,
+        audioJack: elem.audioJack,
+        numberOfItems: elem.numberOfItems,
+        microphoneFormFactor: elem.microphoneFormFactor,
+        microphoneTech: elem.microphoneTech,
+        headphonesFormFactor: elem.headphonesFormFactor,
+        mountingHardware: elem.mountingHardware,
+        powerSource: elem.powerSource,
+        batteriesIncluded: elem.batteriesIncluded,
+        batteriesRequired: elem.batteriesRequired,
+        cableFeature: elem.cableFeature,
+        connectorType: elem.connectorType,
+        bluetoothVersion: elem.bluetoothVersion,
+        maximumOperatingDistance: elem.maximumOperatingDistance,
+        includesRechargableBattery: elem.includesRechargableBattery,
+        material: elem.material,
+        inTheBox: elem.inTheBox,
+        importedBy: elem.importedBy,
+        modelYear: elem.modelYear,
+        modelName: elem.modelName,
+        modelNo: elem.modelNo,
+        country: elem.countryOrigin,
+        specText: elem.specText
+      }
+        // url = elem.productName + '-'
+        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.playTime ? (', ' + elem.playTime) : '') + (elem.microphoneTech ? (', ' + elem.microphoneTech) : '') + (elem.bluetoothVersion ? (', ' + elem.bluetoothVersion) : '') + ')'
         dynamicArray = dynamicHeader.replace(/[\(,/\)]/g, '').split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')

@@ -13,18 +13,21 @@ const Section4 = ({ id, heading, productData, link, classes }) => {
         <Link to={link.link} className="section4_link">{link.text}</Link>
       </div>
       <div className="section4_card_container">
-        {(productData.no_of_products > 0) && productData.products.map((item, index) => (
-          (index < 4) ? (
-            <ProductBox
-              key={index}
-              card_heading={'Upto'}
-              classes={classes}
-              product={item}
-            />) : ('')
-        ))
-        }
         {
-          (productData.no_of_products === 0) && [1, 2, 3, 4].map((n) => (<SkeletonElement type={'productBox'} key={n} />))
+          productData.loaded ? (
+            productData.products.map((item, index) => (
+              (index < 4) ? (
+                <ProductBox
+                  key={index}
+                  card_heading={'Upto'}
+                  classes={classes}
+                  product={item}
+                />
+              ) : ('')
+            ))
+          ) : (
+            [1, 2, 3, 4].map((n) => (<SkeletonElement type={'productBox'} key={n} />))
+          )
         }
       </div>
       <a href={link.link} className="section4_link mob_link logo_mob">{link.text}</a>
