@@ -46,12 +46,25 @@
   letter-spacing: -0.015em;
 }
 
+.product_Box_Top_Section .product_Name{
+  color: #08090A;
+  letter-spacing: -0.01em;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-decoration: none;
+}
+
 .product_Box_Details .product_Name{
   margin: 0 0 0.125rem;
 }
 
 .product_Box_Details .product_Price{
   font-size: 1rem;
+}
+
+.alternate_link{
+  text-decoration: none;
+  color: transparent;
 }
 
 @media screen and (min-width: 768px) {
@@ -84,7 +97,7 @@
     border-radius: 0.5rem;
   }
 }
- .product_Unavailable{
-   opacity: 0.5;
-   pointer-events: none;
- }
+.product_Unavailable{
+  opacity: 0.5;
+  pointer-events: none;
+}

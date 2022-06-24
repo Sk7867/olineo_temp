@@ -201,13 +201,15 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
+      console.log(e.target.files);
       const reader = new FileReader()
       reader.onload = () => {
         if (reader.readyState === 2) {
           setNewProfilePic(reader.result);
           setUserContext(prev => ({
             ...prev,
-            profilePic: reader.result
+            profilePic: e.target.files[0],
+            profilePicUrl: reader.result
           }))
           // console.log(reader.result);
         }
@@ -228,7 +230,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
                   <div className="user_Profile_Pic"><img src={profilePic} alt="" /></div>
                   <div className='user_Camera_Icon'>
                     <img src={cameraIcon} alt="" />
-                    <input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' />
+                    <form action="" encType='multipart/form-data'><input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' /></form>
                   </div>
                 </div>
                 <p className="user_Name">

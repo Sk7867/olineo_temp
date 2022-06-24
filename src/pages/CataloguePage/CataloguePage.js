@@ -25,7 +25,7 @@ const CataloguePage = ({ setHeaderData }) => {
     let prods
     prods = [...allProducts.products]
     setProductsToShow(prods)
-  }, [allProducts.loaded])
+  }, [allProducts.loaded, allProducts])
 
 
 

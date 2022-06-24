@@ -141,13 +141,14 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
+      console.log(e.target.files[0]);
       const reader = new FileReader()
       reader.onload = () => {
         if (reader.readyState === 2) {
           setNewProfilePic(reader.result)
           setUserContext(prev => ({
             ...prev,
-            profilePic: reader.result
+            profilePic: e.target.files[0]
           }))
           // console.log(reader.result);
         }
@@ -210,8 +211,8 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
       dob: selectedDay,
       mobileNumber: displayInfo.user_ph_Number,
     }))
-    updateUser(userContext)
-      .then(res => res ? toast.success('Details Updated Successfully') : toast.error('Incomplete Data'))
+    // updateUser(userContext)
+    //   .then(res => res ? toast.success('Details Updated Successfully') : toast.error('Incomplete Data'))
     saveUserPic(userContext.profilePic)
       .then(res => console.log(res))
       .catch(err => console.log(err))
@@ -227,7 +228,7 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
                 <div className="user_Profile_Pic"><img src={profilePic} alt="" /></div>
                 <div className='user_Camera_Icon'>
                   <img src={cameraIcon} alt="" />
-                  <input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' />
+                  <form action="" encType='multipart/form-data'><input type="file" name="Profile Image" id="Profile Image" onChange={handleImageChange} className='profile_Image' accept='.jpg, .jpeg, .png' /></form>
                 </div>
               </div>
             </div>

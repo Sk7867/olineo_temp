@@ -20,7 +20,9 @@ import OfferCard from "../../components/OfferCard/OfferCard";
 import AlternateProductBox from "../../components/AlternateProductCard/AlternateProductBox";
 import { getIndiProduct, getSearchedProduct } from "../../api/Product";
 import SkeletonElement from "../../components/Skeletons/SkeletonElement";
-import ScartchCardComp from "../../components/ScratchCard/ScartchCard";
+import ScratchCardComp from "../../components/ScratchCard/ScratchCardComp";
+// import ScartchCardComp from "../../components/ScratchCard/ScartchCard";
+
 
 toast.configure();
 const ProductPage = ({ setHeaderData }) => {
@@ -58,6 +60,7 @@ const ProductPage = ({ setHeaderData }) => {
   const [colorAlternateProds, setColorAlternateProds] = useState([]);
   const [specAlternateProds, setSpecAlternateProds] = useState([]);
   const [modalShow, setModalShow] = useState(false);
+  const [scratchCardActive, setScratchCardActive] = useState(false)
   const [alternateColorean, setAlternateColorean] = useState([]);
   const [alternateSpecean, setAlternateSpecean] = useState([]);
   const [productBankOffers, setProductBankOffers] = useState([]);
@@ -111,40 +114,47 @@ const ProductPage = ({ setHeaderData }) => {
           setPreviewImageSelected(images[0]);
           setProductInfo(Object.entries(product.productInfo));
           let colorArray = [...product.altProduct.color]
-          colorArray.unshift(product.ean)
+          // colorArray.unshift(product.ean)
           let specArray = [...product.altProduct.spec];
-          specArray.unshift(product.ean)
+          // specArray.unshift(product.ean)
           colorArray = colorArray.filter((item) => item);
           specArray = specArray.filter((item) => item);
           setAlternateColorean(colorArray);
           setAlternateSpecean(specArray);
           setProductBankOffers(product.offers);
+          // setColorAlternateProds([...colorAlternateProds, product])
         }
       })
   }, [slug])
+  // console.log(alternateColorean);
 
   useEffect(() => {
-    alternateColorean.map(ean => {
-      let demo = allProducts.products.filter((item) => item.ean === ean)
-      if (demo.length === 0) return null
-      let item = colorAlternateProds.filter(obj => obj.ean === demo[0].ean)
-      // console.log(demo);
-      if (item.length === 0) {
-        setColorAlternateProds([...colorAlternateProds, demo[0]])
+    alternateColorean.forEach(ean => {
+      let ind = colorAlternateProds.findIndex(obj => obj.ean === ean)
+      if (ind === -1) {
+        // console.log(ind)
+        let searchTerm = 'ean=' + ean
+        getSearchedProduct(searchTerm)
+          .then(res => {
+            setColorAlternateProds([...colorAlternateProds, res[0]])
+          })
       }
     })
     alternateSpecean.map(ean => {
-      let demo = allProducts.products.filter((item) => item.ean === ean)
-      if (demo.length === 0) return null
-      let item = specAlternateProds.filter(obj => obj.ean === demo[0].ean)
-      if (item.length === 0) {
-        setColorAlternateProds([...specAlternateProds, demo[0]])
+      let ind = specAlternateProds.findIndex(obj => obj.ean === ean)
+      if (ind === -1) {
+        // console.log(ind)
+        let searchTerm = 'ean=' + ean
+        getSearchedProduct(searchTerm)
+          .then(res => {
+            setSpecAlternateProds([...specAlternateProds, res[0]])
+          })
       }
     })
   }, [alternateColorean, alternateSpecean]);
-  // console.log(colorAlternateProds);
+  // console.log(specAlternateProds);
 
-  console.log(productData);
+  // console.log(productData);
 
   useEffect(() => {
     if (productData && productData.product_Discount.flatDiscount && productData.product_Discount.flatDiscount.value) {
@@ -366,6 +376,14 @@ const ProductPage = ({ setHeaderData }) => {
     }
   }, [productInfo])
 
+  // useEffect(() => {
+  //   if (scratchCardActive) {
+  //     document.body.style.overflow = 'hidden';
+  //   } else {
+  //     document.body.style.overflow = 'unset';
+  //   }
+  // }, [scratchCardActive])
+
 
   return (
     <>
@@ -467,7 +485,9 @@ const ProductPage = ({ setHeaderData }) => {
               )}
 
               <div className="product_Offer_Counter">
-                <p>{preOrder ? "Deal is 40% Claimed" : `${productData.offer_Deadline}`} </p>
+                {productData.product_loaded ? (
+                  <p>{productData.product_Classification === 'Coming Soon' ? (preOrder ? ("Deal is 40% Claimed") : ('')) : `${productData.offer_Deadline}`} </p>
+                ) : (<SkeletonElement type={"productTitle"} />)}
               </div>
               {matches ? (
                 (allOffersData.length > 0) && (
@@ -493,11 +513,21 @@ const ProductPage = ({ setHeaderData }) => {
               {matches ? (
                 <>
                   <div className="product_Alternate_Section_Header">
-                    <p>
-                      Color : <span>{productData.product_color}</span>
-                    </p>
+                    {productData.product_loaded ? (
+                      <p>
+                        Color : <span>{productData.product_color}</span>
+                      </p>
+                    ) : (<SkeletonElement type={"productTitle"} />)}
                   </div>
-                  <div className="product_Alternate_Section_Body">{(colorAlternateProds.length > 0) && colorAlternateProds.map((product) => product.images[0] && <AlternateProductBox key={product._id} product={product} />)}</div>
+                  <div className="product_Alternate_Section_Body">
+                    {
+                      productData.product_loaded ? (
+                        (colorAlternateProds.length > 0) && colorAlternateProds.map((product) => product.images[0] && <AlternateProductBox key={product._id} product={product} />)
+                      ) : (
+                        <SkeletonElement type={"productTitle"} />
+                      )
+                    }
+                  </div>
                   {produnctSpecText && (
                     <>
                       <div className="product_Alternate_Section_Footer">
@@ -508,7 +538,7 @@ const ProductPage = ({ setHeaderData }) => {
                     </>
                   )}
                   <div className="product_Alternate_Footer_Cards">
-                    {(specAlternateProds.length > 0) && specAlternateProds.map((product) => product.alternate_Heading && <AlternateProductBox key={product.id} product={product} dataOnly={true} />)}
+                    {(specAlternateProds.length > 0) && specAlternateProds.map((product) => product.productInfo.specText && <AlternateProductBox key={product.id} product={product} dataOnly={true} />)}
                   </div>
                 </>
               ) : (
@@ -534,7 +564,7 @@ const ProductPage = ({ setHeaderData }) => {
             </div>
 
             <div className="product_Delivery_Section section_Wrapper">
-              <p className="product_Delivery_Details" onClick={() => setModalShow(true)}>
+              <p className="product_Delivery_Details" onClick={() => setScratchCardActive(true)}>
                 <span>Free delivery: Thursday, Feb 24 </span>
                 on orders over ₹499
               </p>
@@ -653,7 +683,8 @@ const ProductPage = ({ setHeaderData }) => {
         )}
       </div>
       <ToastContainer position="top-center" autoClose={2000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
-      <ScartchCardComp modalShow={modalShow} setModalShow={setModalShow} />
+      {/* <ScartchCardComp modalShow={modalShow} setModalShow={setModalShow} /> */}
+      <ScratchCardComp scratcCardActive={scratchCardActive} setScratchCardActive={setScratchCardActive} />
     </>
   );
 };
