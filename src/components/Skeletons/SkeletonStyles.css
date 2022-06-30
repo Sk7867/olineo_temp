@@ -1,6 +1,7 @@
 .skeleton_Wrapper{
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 .skeleton{
   background: #eeecec;

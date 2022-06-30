@@ -469,20 +469,20 @@ const ProductPage = ({ setHeaderData }) => {
                   ))}
                 </Carousel>
               </div>
-              {productData.product_loaded ? (
-                <div className="product_Price_Desc">
-                  <p className="product_Discount_Price">₹{!isNaN(productData.product_price.discountPrice) ? productData.product_price.discountPrice : productData.product_price.mop}</p>
-                  <p className="product_Original_Price">₹{productData.product_price.mrp}</p>
-
-                  <p className="product_Discount">{discountPercent}%</p>
-
-                  <p className="product_Availability">
-                    {preOrder ? "" : productData.product_Instock > 10 ? "In stock" : productData.product_Instock < 10 && productData.product_Instock >= 1 ? "Few in stock" : "Out of stock"}
-                  </p>
-                </div>
-              ) : (
-                <SkeletonElement type={"productTitle"} />
-              )}
+              <div className="product_Price_Desc">
+                {productData.product_loaded ? (
+                  <>
+                    <p className="product_Discount_Price">₹{!isNaN(productData.product_price.discountPrice) ? productData.product_price.discountPrice : productData.product_price.mop}</p>
+                    <p className="product_Original_Price">₹{productData.product_price.mrp}</p>
+                    <p className="product_Discount">{discountPercent}%</p>
+                    <p className="product_Availability">
+                      {preOrder ? "" : productData.product_Instock > 10 ? "In stock" : productData.product_Instock < 10 && productData.product_Instock >= 1 ? "Few in stock" : "Out of stock"}
+                    </p>
+                  </>
+                ) : (
+                  <SkeletonElement type={"productTitle"} />
+                )}
+              </div>
 
               <div className="product_Offer_Counter">
                 {productData.product_loaded ? (
@@ -510,76 +510,109 @@ const ProductPage = ({ setHeaderData }) => {
             </div>
 
             <div className="product_Alternate_Section section_Wrapper">
-              {matches ? (
-                <>
-                  <div className="product_Alternate_Section_Header">
+              <div className="mobile_None tab_Display_Block">
+                <div className="product_Alternate_Section_Header">
+                  {productData.product_loaded ? (
+                    <p>
+                      Color : <span>{productData.product_color}</span>
+                    </p>
+                  ) : (<SkeletonElement type={"productTitle"} />)}
+                </div>
+                <div className="product_Alternate_Section_Body">
+                  {
+                    productData.product_loaded ? (
+                      (colorAlternateProds.length > 0) && colorAlternateProds.map((product) => product.images[0] && <AlternateProductBox key={product._id} product={product} />)
+                    ) : (
+                      <div className="d-flex ">
+                        {[1, 2, 3, 4, 5].map((n) => <SkeletonElement type={"productThumbnail"} key={n} />)}
+                      </div>
+                    )
+                  }
+                </div>
+                <div className="product_Alternate_Section_Footer">
+                  <>
                     {productData.product_loaded ? (
-                      <p>
-                        Color : <span>{productData.product_color}</span>
-                      </p>
-                    ) : (<SkeletonElement type={"productTitle"} />)}
-                  </div>
-                  <div className="product_Alternate_Section_Body">
+                      produnctSpecText && (
+                        <p>
+                          Size : <span>{` ${produnctSpecText}`}</span>
+                        </p>
+                      )
+                    ) : (
+                      <div className="d-flex width-100">
+                        {[1, 2, 3, 4, 5].map((n) => <SkeletonElement type={"productTitle"} key={n} />)}
+                      </div>
+                    )}
+                  </>
+                </div>
+                <div className="product_Alternate_Footer_Cards">
+                  {
+                    productData.product_loaded ? (
+                      (specAlternateProds.length > 0) && specAlternateProds.map((product) => product.productInfo.specText && <AlternateProductBox key={product.id} product={product} dataOnly={true} />)
+                    ) : (
+                      <SkeletonElement type={"productTitle"} />
+                    )
+                  }
+                </div>
+              </div>
+
+              <Accordion className="tab_None">
+                <Accordion.Item eventKey="0">
+                  <Accordion.Header>
                     {
                       productData.product_loaded ? (
-                        (colorAlternateProds.length > 0) && colorAlternateProds.map((product) => product.images[0] && <AlternateProductBox key={product._id} product={product} />)
+                        <p>
+                          Color : <span>{productData.product_color}</span>
+                        </p>
                       ) : (
                         <SkeletonElement type={"productTitle"} />
                       )
                     }
-                  </div>
-                  {produnctSpecText && (
-                    <>
-                      <div className="product_Alternate_Section_Footer">
-                        <p>
-                          Size : <span>{` ${produnctSpecText}`}</span>
-                        </p>
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    <div className="product_Offer_Cards_Container">
+                      <div className="product_Offer_Cards_Wrapper">
+                        {(colorAlternateProds.length > 0) && colorAlternateProds.map((product) => (
+                          <AlternateProductBox key={product.id} product={product} />
+                        ))}
                       </div>
-                    </>
-                  )}
-                  <div className="product_Alternate_Footer_Cards">
-                    {(specAlternateProds.length > 0) && specAlternateProds.map((product) => product.productInfo.specText && <AlternateProductBox key={product.id} product={product} dataOnly={true} />)}
-                  </div>
-                </>
-              ) : (
-                <Accordion>
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>
-                      <p>
-                        Color : <span>{productData.product_color}</span>
-                      </p>
-                    </Accordion.Header>
-                    <Accordion.Body>
-                      <div className="product_Offer_Cards_Container">
-                        <div className="product_Offer_Cards_Wrapper">
-                          {(colorAlternateProds.length > 0) && colorAlternateProds.map((product) => (
-                            <AlternateProductBox key={product.id} product={product} />
-                          ))}
-                        </div>
-                      </div>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              )}
+                    </div>
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
             </div>
 
             <div className="product_Delivery_Section section_Wrapper">
-              <p className="product_Delivery_Details" onClick={() => setScratchCardActive(true)}>
-                <span>Free delivery: Thursday, Feb 24 </span>
-                on orders over ₹499
-              </p>
-              {!matches ? (
-                <>
-                  <p className="cart_Product_Availability product_Page_Availability">{productData.product_Classification === 'Coming Soon' ? 'Coming Soon' : 'In stock'}</p>
-                  <div className="product_Delivery_Footer submit_Button_2">
-                    <button type="submit" className="submit-button">
-                      <p>{(productData.product_Classification === 'Coming Soon') ? "Notify when product releases" : "Add to Wishlist"}</p>
-                    </button>
-                  </div>
-                </>
-              ) : (
-                ""
-              )}
+              <div className="product_Delivery_Details">
+                {
+                  productData.product_loaded ? (
+                    <p onClick={() => setScratchCardActive(true)}>
+                      <span>Free delivery: Thursday, Feb 24 </span>
+                      on orders over ₹499
+                    </p>
+                  ) : (
+                    <SkeletonElement type={"productTitle"} />
+                  )
+                }
+
+              </div>
+
+              <div className="tab_None">
+                <div className="product_Page_Availability">
+                  {
+                    productData.product_loaded ? (
+                      <p className="cart_Product_Availability">{productData.product_Classification === 'Coming Soon' ? 'Coming Soon' : 'In stock'}</p>
+                    ) : (
+                      <SkeletonElement type={"productTitle"} />
+                    )
+                  }
+                </div>
+                <div className="product_Delivery_Footer submit_Button_2">
+                  <button type="submit" className="submit-button">
+                    <p>{(productData.product_Classification === 'Coming Soon') ? "Notify when product releases" : "Add to Wishlist"}</p>
+                  </button>
+                </div>
+              </div>
+
             </div>
 
             {!matches ? (

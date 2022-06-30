@@ -94,31 +94,6 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
             .then(res => {
               let url = res
               window.open(url)
-              completeOrder(orderId)
-                .then(res => {
-                  if (res) {
-                    // console.log(res)
-                    orderInit.productId.map(item => (
-                      removeFromCart(item)
-                        .then(res => {
-                          if (res) {
-                            setUserCart([])
-                            getCartData()
-                              .then(res => {
-                                if (res) {
-                                  setCartArray({
-                                    loaded: true,
-                                    no_of_carts: res.no_of_carts,
-                                    cart: res.cart
-                                  })
-                                  nav('/orders')
-                                }
-                              })
-                          }
-                        })
-                    ))
-                  }
-                })
             })
         }
       })

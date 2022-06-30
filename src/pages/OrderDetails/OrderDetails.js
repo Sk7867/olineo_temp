@@ -13,7 +13,13 @@ import { getOrderStatus } from '../../api/OrdersApi';
 const OrderDetails = ({ setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [editAddress, setEditAddress] = useState({});
-  const [product, setProduct] = useState({})
+  const [product, setProduct] = useState({
+    order_Id: '',
+    order_Status: '',
+    name: '',
+    color: '',
+    images: []
+  })
   const loc = useLocation()
   const [orderNumber, setOrderNumber] = useState('')
   const [stepsDetails, setStepsDetails] = useState({
@@ -61,7 +67,7 @@ const OrderDetails = ({ setHeaderData }) => {
   useEffect(() => {
     if (loc && loc.state) {
       setProduct(loc.state)
-      handleOrderState(loc.state.status)
+      handleOrderState(loc.state.order_Status)
       // console.log(loc.state);
       // let orderId = loc.state._id
       // getOrderStatus(orderId)
@@ -71,6 +77,7 @@ const OrderDetails = ({ setHeaderData }) => {
       //   })
     }
   }, [loc])
+  // console.log(product);
 
   const breadCrumbsData = [
     {
@@ -416,7 +423,7 @@ const OrderDetails = ({ setHeaderData }) => {
         <div className="order_Details_Wrapper">
           <div className="order_Details_Header section_Wrapper">
             <p className='header_Order_Status'>Arriving on 25th February</p>
-            <p className='header_Order_Number'>Order Number : {product.itemId} </p>
+            <p className='header_Order_Number'>Order Number : {product.order_Id} </p>
           </div>
           <div className="order_Track_Container section_Wrapper">
             <div className="order_Track_Wrapper">

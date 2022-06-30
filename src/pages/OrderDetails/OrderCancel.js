@@ -29,9 +29,10 @@ const OrderCancel = ({ setHeaderData }) => {
 
   useEffect(() => {
     if (loc && loc.state) {
-      setProdId(loc.state._id)
+      setProdId(loc.state.order_Id)
     }
   }, [loc])
+  console.log(prodId);
 
   const breadCrumbsData = [
     {
