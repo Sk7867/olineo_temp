@@ -15,7 +15,7 @@
   width: 100%;
 }
 
-.edit_input_container input{
+.edit_input_container .input-field{
   width: 100%;
   border: 1px solid #DDE0E7;
   background: #FFFFFF;

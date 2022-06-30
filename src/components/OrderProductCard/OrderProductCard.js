@@ -6,17 +6,30 @@ import { UserDataContext } from '../../Contexts/UserContext'
 import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
 import { Link } from 'react-router-dom'
 import { getIndiProduct } from '../../api/Product'
+import { getOrderStatus } from '../../api/OrdersApi'
 
-const OrderProductCard = ({ product, classes, productDeliveryStatues }) => {
-  const [productData, setProductData] = useState({})
-  const { userOrderData } = useContext(UserDataContext)
+const OrderProductCard = ({ orderId, product, classes, productDeliveryStatues, productPrice, productStatus }) => {
+  const [productData, setProductData] = useState({
+    order_Id: '',
+    order_Status: '',
+    name: '',
+    color: '',
+    image: '',
+  })
+
   useEffect(() => {
     if (product) {
-      setProductData(product)
+      setProductData(prev => ({
+        ...prev,
+        order_Id: orderId,
+        order_Status: productStatus,
+        name: product.name,
+        color: product.color,
+        image: product.image
+      }))
     }
-  }, [product])
+  }, [product, orderId, productStatus])
 
-  // console.log(productData);
   return (
     <>
       <div className={`product_Container ` + (classes ? classes.boxClass : '')}>
@@ -24,7 +37,7 @@ const OrderProductCard = ({ product, classes, productDeliveryStatues }) => {
           <div className={`product_Details`}>
             <div className="order_Product_Left">
               <h4 className={`product_Name`}>
-                {productData.itemId}
+                {productData.name}
               </h4>
               <p className="order_Product_Color">
                 Color: <span>{productData.color}</span>
@@ -32,7 +45,7 @@ const OrderProductCard = ({ product, classes, productDeliveryStatues }) => {
             </div>
             <div className="order_Product_Center">
               <p className="order_Product_Price">
-                ₹{productData.OrderPrice}
+                ₹{productPrice}
               </p>
             </div>
             <div className="order_Product_Right">
@@ -49,7 +62,7 @@ const OrderProductCard = ({ product, classes, productDeliveryStatues }) => {
             </div>
           </div>
           <div className={`product_ImageContainer`}>
-            {/* <img src={productData.images[0]} alt="product Name" /> */}
+            <img src={productData.image} alt="product Name" />
           </div>
         </div>
         {

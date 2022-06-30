@@ -4,7 +4,7 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import { updateUser, userLogin } from '../../api/Auth';
 import { userSignUp, saveUserPic } from '../../api/Auth';
 import moment from 'moment';
-import DatePicker from 'react-modern-calendar-datepicker';
+import DatePicker from 'react-date-picker';
 import { saveUser } from '../../api/Auth';
 import { Slide, toast, ToastContainer } from 'react-toastify'
 import { UserDataContext } from '../../Contexts/UserContext'
@@ -68,11 +68,13 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
         user_Full_Name: userContext.fullName,
         user_ph_Number: userContext.mobileNumber,
         user_Email: userContext.email,
+        user_Birth_Date: userContext.dob
       })
       setSecondaryData({
         user_Full_Name: userContext.fullName,
         user_ph_Number: userContext.mobileNumber,
         user_Email: userContext.email,
+        user_Birth_Date: userContext.dob
       })
       // if (userContext.dob) {
       //   if (typeof (userContext.dob) === 'string') {
@@ -218,6 +220,11 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
       .catch(err => console.log(err))
   }
 
+  const handleDate = (e, type, key) => {
+    type(prev => ({ ...prev, [key]: e }))
+  }
+  console.log(displayInfo);
+
   return (
     <>
       <div className='page_Wrapper edit_Page_Wrapper'>
@@ -237,11 +244,11 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
         <form action="" className="profile_edit_form" onChange={validateForm} onSubmit={handleSubmit} >
           <div className='edit_input_container'>
             <label className='edit_input_label'>Name</label>
-            <input type="text" placeholder='Text' value={displayInfo.user_Full_Name} onChange={(value) => handleInput("user_Full_Name", value)} />
+            <input type="text" placeholder='Text' className='input-field' value={displayInfo.user_Full_Name} onChange={(value) => handleInput("user_Full_Name", value)} />
           </div>
           <div className='edit_input_container'>
             <label className='edit_input_label'>Phone number</label>
-            <input type="text" placeholder='Text' value={displayInfo.user_ph_Number} onChange={(value) => handleInput("user_ph_Number", value)} />
+            <input type="text" placeholder='Text' className='input-field' value={displayInfo.user_ph_Number} onChange={(value) => handleInput("user_ph_Number", value)} />
             {
               matches ? (
                 <div className='edit_input_update' onClick={() => { handleUpdate('number'); handleModal('number') }} >Update</div>
@@ -256,7 +263,7 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
           </div>
           <div className='edit_input_container'>
             <label className='edit_input_label'>Email Id</label>
-            <input type="text" placeholder='Text' value={displayInfo.user_Email} onChange={(value) => handleInput("user_Email", value)} />
+            <input type="text" placeholder='Text' className='input-field' value={displayInfo.user_Email} onChange={(value) => handleInput("user_Email", value)} />
             {
               matches ? (
                 <div className='edit_input_update' onClick={() => { handleUpdate('email'); handleModal('email') }} >Update</div>
@@ -269,17 +276,17 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
               )
             }
           </div>
-          {/* <div className='edit_input_container'>
+          <div className='edit_input_container'>
             <label className='edit_input_label'>Birthday (dd/mm/yyyy)</label>
             <div>
               <DatePicker
-                value={bankOffers[index].from}
-                onChange={(e) => handleBankOfferDate(e, 'from', index)}
+                value={displayInfo.user_Birth_Date}
+                onChange={(e) => handleDate(e, setDisplayInfo, 'user_Birth_Date')}
                 format='dd/MM/y'
                 className={'input-field custom-date-picker'}
               />
             </div>
-          </div> */}
+          </div>
           {
             matches && (
               <div>

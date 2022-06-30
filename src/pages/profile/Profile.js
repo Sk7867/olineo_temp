@@ -30,9 +30,10 @@ import CartSection from '../MyCart/CartSection';
 import OrderSection from '../MyOrders/OrderSection';
 import { getCartData } from '../../api/Cart';
 import { getIndiProduct } from '../../api/Product';
+import { getAllOrder } from '../../api/OrdersApi';
 
 
-const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
+const Profile = ({ setEditID, editID, setHeaderData }) => {
   const [profileState, setProfileState] = useState(1);
   const [profilePic, setProfilePic] = useState(null)
   const [newProfilePic, setNewProfilePic] = useState(null)
@@ -41,8 +42,26 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
   const [editAddress, setEditAddress] = useState({});
   const loc = useLocation()
   const nav = useNavigate()
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, allProducts, cartArray, setCartArray } = useContext(UserDataContext)
+  const {
+    userContext,
+    setUserContext,
+    setUserAddress,
+    setUserCart,
+    allProducts,
+    setCartArray,
+    setUserOrderData
+  } = useContext(UserDataContext)
 
+  useEffect(() => {
+    setHeaderData({
+      header3Cond: true,
+      headerText: 'Profile',
+      categoriesCond: false,
+      header3Store: true,
+      header3Cart: true,
+      header3Profile: false,
+    })
+  }, []);
   // console.log(profilePic);
 
   useEffect(() => {
@@ -84,30 +103,20 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
   }, [])
 
   useEffect(() => {
-    cartArray.cart.map((product) => (
-      getIndiProduct(product)
-        .then(res => {
-          if (res) {
-            // console.log(res);
-            let ind = userCart.findIndex(obj => obj._id === res._id)
-            if (ind === -1) {
-              setUserCart([...userCart, res])
-            }
-          }
-        })
-    ))
-  }, [cartArray])
+    getAllOrder()
+      .then(res => {
+        if (res) {
+          let orders = [...res.orders]
+          let newOrders = orders.filter(obj => (obj.itemId.length > 0))
+          setUserOrderData({
+            loaded: true,
+            no_of_orders: res.no_of_orders,
+            orders: newOrders
+          })
+        }
+      })
+  }, [])
 
-  useEffect(() => {
-    setHeaderData({
-      header3Cond: true,
-      headerText: 'Profile',
-      categoriesCond: false,
-      header3Store: true,
-      header3Cart: true,
-      header3Profile: false,
-    })
-  }, []);
 
   // useEffect(() => {
   //   userAddress.address.forEach((address) => {
@@ -188,7 +197,7 @@ const Profile = ({ setEditID, editID, setHeaderData, ordersData }) => {
   const profileStateSwitch = (profileState) => {
     switch (profileState) {
       case 1: return (<EditDetails profileDetails={false} profilePicUpdate={true} />)
-      case 2: return (<OrderSection ordersList={ordersData} featureProducts={allProducts} onTheWay={true} delivered={true} />)
+      case 2: return (<OrderSection featureProducts={allProducts} onTheWay={true} delivered={true} cancelled={true} />)
       case 3: return (<CartSection featureProducts={allProducts} />)
       case 4: return (<MyAddress setEditID={setEditID} setProfileState={setProfileState} border={true} />)
       // case 5: return (<EditDetails profileDetails={false} profilePicUpdate={true} />)

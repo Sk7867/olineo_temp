@@ -133,11 +133,6 @@ function App() {
     no_of_orders: 0,
     orders: []
   })
-  const [orderTypes, setOrderTypes] = useState({
-    onThewayOrders: [],
-    deliveredOrders: [],
-    cancelledOrders: []
-  })
   const [searchedProduct, setSearchedProduct] = useState({
     loaded: false,
     products: [],
@@ -147,10 +142,6 @@ function App() {
     loaded: false,
     location: []
   })
-  const [statusesArrayHold, setStatusesArrayHold] = useState([])
-  const [itemsHold, setItemsHold] = useState([])
-  const [itemsArray, setItemsArray] = useState([])
-  const [orderDetails, setOrderDetails] = useState([])
   // console.log(userCart);
 
   useEffect(() => {
@@ -219,52 +210,6 @@ function App() {
 
   // console.log(priceBoxDetails);
 
-  //Order Filtering =====================================================
-  useEffect(() => {
-    let newStatuses = [...statusesArrayHold]
-    let newItems = [...itemsHold]
-    userOrderData.orders.forEach(item => {
-      getOrderStatus(item._id)
-        .then(res => {
-          let findStatus = statusesArrayHold.findIndex(elem => elem._id === res._id)
-          if (findStatus === -1) {
-            newStatuses.push(res)
-            newItems.push(res.items)
-            let flatArr = [].concat.apply([], newItems)
-            setItemsHold(flatArr)
-            setStatusesArrayHold(newStatuses)
-          } else {
-            setItemsHold(itemsHold)
-            setStatusesArrayHold(statusesArrayHold)
-          }
-        })
-    })
-  }, [userOrderData])
-
-  useEffect(() => {
-    let itemHoldArrayCopy = [...itemsHold]
-    userOrderData.orders.forEach(ord => {
-      let order = ord
-      let prodItemsNumberArray = [...order.item]
-      let prodIdsArray = [...order.productId]
-      let prodPriceArray = [...order.productPrice]
-      let itemIds = [...order.itemId]
-      prodIdsArray.forEach((prod, index) => {
-        let finalArr = []
-        finalArr.push(prod)
-        finalArr.push(prodPriceArray[index])
-        let spliceArray = itemHoldArrayCopy.splice(0, prodItemsNumberArray[index])
-        console.log(spliceArray);
-        finalArr.push(spliceArray)
-        console.log(finalArr);
-        setOrderDetails([...orderDetails, finalArr])
-      })
-    })
-  }, [itemsHold])
-
-  // console.log(itemsHold);
-  // console.log(userOrderData);
-  // console.log(orderDetails);
   const ordersData = [
     {
       productName: 'JBL C100SI',
@@ -314,14 +259,10 @@ function App() {
           setPriceBoxDetails,
           userOrderData,
           setUserOrderData,
-          orderTypes,
-          setOrderTypes,
           searchedProduct,
           setSearchedProduct,
           storeLocations,
           setStoreLocations,
-          statusesArrayHold,
-          setStatusesArrayHold
         }}>
           {
             loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' ? ('') : (
@@ -336,14 +277,10 @@ function App() {
             <Route path='/adduser' exact element={<AddUser />} />
             <Route path='/' exact element={<Home setHeaderData={setHeaderData} allProducts={allProducts} />} />
             <Route path='/orders' exact element={
-              <PrivateRouteCustomer>
-                <MyOrders ordersList={ordersData} setHeaderData={setHeaderData} featureProducts={allProducts} />
-              </PrivateRouteCustomer>
+              <MyOrders setHeaderData={setHeaderData} featureProducts={allProducts} />
             } />
             <Route path='/orders/:id' exact element={
-              <PrivateRouteCustomer>
-                <MyOrders ordersList={ordersData} setHeaderData={setHeaderData} featureProducts={allProducts} />
-              </PrivateRouteCustomer>
+              <MyOrders setHeaderData={setHeaderData} featureProducts={allProducts} />
             } />
             <Route path='/mycart' exact element={
               <PrivateRouteCustomer>
@@ -368,7 +305,7 @@ function App() {
             <Route path='/payment' exact element={<Payment setHeaderData={setHeaderData} />} />
             <Route path='/profile' exact element={
               <PrivateRouteCustomer>
-                <Profile setEditID={setEditID} editID={editID} setHeaderData={setHeaderData} ordersData={ordersData} />
+                <Profile setEditID={setEditID} editID={editID} setHeaderData={setHeaderData} />
               </PrivateRouteCustomer>
             } />
             <Route path='/edit-account' exact element={

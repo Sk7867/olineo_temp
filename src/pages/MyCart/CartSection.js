@@ -33,48 +33,6 @@ const CartSection = ({ featureProducts }) => {
       })
   }, [])
 
-
-  // useEffect(() => {
-  //   if (cartArray.no_of_carts !== 0) {
-  //     //Get Price from cart Items
-  //     userCart.forEach(item => {
-  //       cartItemsPrice += parseInt(item.price) + 2000
-  //     });
-
-  //     //Get Discounted Price
-  //     userCart.forEach(item => {
-  //       var itemDiscount
-  //       itemDiscount = parseInt(item.price)
-  //       totalDiscount += itemDiscount
-  //     });
-
-  //     //Get Delivery Charges
-  //     userCart.forEach((item, index) => {
-  //       totalDeliveryCharge += (index + 1) * 80
-  //     });
-
-  //     //Get Total Amount
-  //     totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
-  //   }
-  // }, [cartArray])
-
-  // useEffect(() => {
-  //   if (userCart.length > 0) {
-  //     let helperArray = userCart.map(obj => ({ ...obj, quantity: 1 }))
-  //     setCartProducts(helperArray)
-  //     // console.log(helperArray);
-  //   }
-  // }, [userCart])
-
-  // useEffect(() => {
-  //   setUserCart(cartProducts)
-  // }, [cartProducts])
-
-
-  // console.log(userCart);
-  // console.log(cartArray);
-  // console.log(cartProducts);
-
   const handleQuantityInc = (id) => {
     let tempState = [...userCart]
     let index = userCart.findIndex(x => x._id === id)
@@ -98,30 +56,6 @@ const CartSection = ({ featureProducts }) => {
   }
 
   //ORDER INITIALIZATION CODE+++++++++++++++++++++++++++++++++++++++++
-
-  const sampleData = [
-    {
-      productID: 1,
-      productName: 'Test 1',
-      quantity: 2
-    },
-    {
-      productID: 2,
-      productName: 'Test 1',
-      quantity: 4
-    },
-    {
-      productID: 3,
-      productName: 'Test 1',
-      quantity: 6
-    },
-    {
-      productID: 9,
-      productName: 'Test 1',
-      quantity: 4
-    },
-  ]
-
   const handleOrderInit = (e) => {
     e.preventDefault();
     let productId = []
@@ -141,6 +75,7 @@ const CartSection = ({ featureProducts }) => {
     // console.log(data);
   }
 
+  //Remove Product from cart
   const handleRemoveFromCart = (id) => {
     removeFromCart(id)
       .then(res => res ? (
@@ -160,6 +95,7 @@ const CartSection = ({ featureProducts }) => {
       ) : (''))
   }
 
+  //Get Coupon Codes
   const handleCoupon = (e) => {
     e.preventDefault();
     setOrderInit(prev => ({

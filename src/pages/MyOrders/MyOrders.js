@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 //CSS
@@ -13,12 +13,18 @@ import Section2 from '../../components/Section2/Section2'
 import OrderProductCard from '../../components/OrderProductCard/OrderProductCard'
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 import OrderSection from './OrderSection'
+import { UserDataContext } from '../../Contexts/UserContext'
+import { getAllOrder } from '../../api/OrdersApi'
 
 
 const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
   const [onTheWay, setOnTheWay] = useState(true)
   const [delivered, setDelivered] = useState(true)
   const [cancelled, setCancelled] = useState(true)
+  const {
+    userOrderData,
+    setUserOrderData
+  } = useContext(UserDataContext)
 
   const nav = useNavigate()
 
@@ -34,6 +40,21 @@ const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
       header3Profile: true,
     })
   }, []);
+
+  useEffect(() => {
+    getAllOrder()
+      .then(res => {
+        if (res) {
+          let orders = [...res.orders]
+          let newOrders = orders.filter(obj => (obj.itemId.length > 0))
+          setUserOrderData({
+            loaded: true,
+            no_of_orders: res.no_of_orders,
+            orders: newOrders
+          })
+        }
+      })
+  }, [])
 
   // console.log(ordersList);
 
@@ -128,7 +149,7 @@ const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
     },
   ]
 
-  let ordersNumber = ordersList.length
+  let ordersNumber = userOrderData.no_of_orders
 
   return (
     <>
@@ -171,7 +192,7 @@ const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
                     Cancelled
                   </label>
                 </aside>
-                <OrderSection ordersList={ordersList} featureProducts={featureProducts} onTheWay={onTheWay} delivered={delivered} cancelled={cancelled} />
+                <OrderSection featureProducts={featureProducts} onTheWay={onTheWay} delivered={delivered} cancelled={cancelled} />
               </div>
             </>
           )

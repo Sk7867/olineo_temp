@@ -120,7 +120,7 @@ export const getOrderStatus = async (id) => {
 }
 
 //Cancel Order
-export const cancelOrder = async (id, query) => {
+export const cancelOrder = async (id, query, itemId) => {
   let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
 
   const headers = {
@@ -129,12 +129,16 @@ export const cancelOrder = async (id, query) => {
     "Authorization": `Bearer ${userToken}`
   }
 
+  let deleterOrderBody = {
+    reason: query,
+    itemId: itemId
+  }
 
-  // console.log(id, userToken);
+  console.log(id, query);
 
   let orderDeleteResponse
 
-  await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/order/${id}`, { headers }, { reason: query })
+  await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/order/${id}`, { reason: query }, headers)
     .then(res => {
       orderDeleteResponse = res
     })
