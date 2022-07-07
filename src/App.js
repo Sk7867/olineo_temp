@@ -142,6 +142,7 @@ function App() {
     no_of_orders: 0,
     orders: [],
   });
+  console.log(userOrderData);
   const [searchedProduct, setSearchedProduct] = useState({
     loaded: false,
     products: [],
@@ -162,6 +163,42 @@ function App() {
     let user = JSON.parse(sessionStorage.getItem("user"));
     setUserContext(user);
   }, []);
+
+  let userToken = userContext?.JWT;
+  useEffect(() => {
+    setTimeout(() => {
+      getUser(userToken).then((res) => {
+        if (res) {
+          console.log(res);
+          let user = res;
+          setUserContext((prev) => ({
+            ...prev,
+            id: user._id,
+            fullName: user.fullName,
+            mobileNumber: user.mobileNumber,
+            email: user.email,
+            dob: user.dob,
+          }));
+          setCartArray({
+            loaded: true,
+            cart: user.cart,
+            no_of_carts: user.cart.length,
+          });
+        }
+      });
+
+      getUserPic(userToken).then((res) => {
+        if (res) {
+          console.log(res);
+          setUserContext((prev) => ({
+            ...prev,
+            profilePic: res,
+          }));
+        }
+      });
+    }, 500);
+  }, [userToken]);
+  // console.log(userContext);
 
   useEffect(() => {
     let userToken = userContext ? userContext.JWT : "";

@@ -1,30 +1,32 @@
-.profile_User_Details{
+.profile_User_Details {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 1.5rem 0 1rem;
-  background: #F8F9FA;
+  background: #f8f9fa;
 }
 
-.user_Profile_Pic_Container{
+.user_Profile_Pic_Container {
   margin: 0 0 0.5rem;
   position: relative;
 }
 
-.user_Profile_Pic{
+.user_Profile_Pic {
   max-height: 120px;
   max-width: 120px;
+  aspect-ratio: 1;
 }
 
-.user_Profile_Pic img{
+.user_Profile_Pic img {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   min-width: 120px;
+  object-fit: cover;
 }
 
-.user_Camera_Icon{
+.user_Camera_Icon {
   max-width: 2rem;
   max-height: 2rem;
   position: absolute;
@@ -33,7 +35,7 @@
   cursor: pointer;
 }
 
-.profile_Image{
+.profile_Image {
   max-width: 2rem;
   max-height: 2rem;
   position: absolute;
@@ -46,114 +48,114 @@
   opacity: 0;
 }
 
-.user_Phone, .user_Mail{
+.user_Phone,
+.user_Mail {
   margin: 0.25rem 0 0;
-  color: #1B325E;
+  color: #1b325e;
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
 
-.user_Name{
+.user_Name {
   margin: 0.25rem 0 0;
   letter-spacing: -0.01em;
-  color: #1B325E;
+  color: #1b325e;
   font-weight: 600;
   font-size: 1rem;
   line-height: 1.5rem;
 }
 
-.profile_Options{
+.profile_Options {
   margin: 0 0 1rem;
   padding: 1.5rem 0.75rem;
   display: flex;
   flex-direction: column;
-  background: #FFFFFF;
+  background: #ffffff;
 }
 
-.profile_Option{
+.profile_Option {
   display: flex;
   justify-content: space-between;
   padding: 0 0.25rem 1.125rem;
   margin: 0 0 1.125rem;
-  border-bottom: 1px solid #DDE0E7;
+  border-bottom: 1px solid #dde0e7;
   cursor: pointer;
   text-decoration: none;
   color: transparent;
 }
 
-.profile_Option div{
+.profile_Option div {
   display: flex;
   gap: 0.75rem;
   align-items: center;
   justify-content: center;
 }
 
-.profile_Option p{
+.profile_Option p {
   margin: 0;
-  color: #1B325E;
+  color: #1b325e;
   font-weight: 500;
   font-size: 1rem;
   line-height: 1.5rem;
 }
 
-
-.profile_Option:last-child{
+.profile_Option:last-child {
   border: none;
   margin: 0;
   padding: 0 0.25rem;
 }
 
-.logout_Styles{
+.logout_Styles {
   border: none;
   margin: 0;
   padding: 0 0.25rem;
 }
 
-.logout_Styles p{
-  color: #C5292A;
+.logout_Styles p {
+  color: #c5292a;
 }
 
-.logout_Styles .profile_arrow{
+.logout_Styles .profile_arrow {
   display: none;
 }
 
 @media screen and (min-width: 768px) {
-  .user_Details_Mob{
+  .user_Details_Mob {
     display: none;
   }
-  .profile_Page_Wrapper{
+  .profile_Page_Wrapper {
     padding: 1.75rem 1.5rem;
     display: flex;
-    background: #FFFFFF;
+    background: #ffffff;
   }
 
-  .profile_User_Details{
+  .profile_User_Details {
     border-radius: 0.5rem;
-    border: 1px solid #DDE0E7;
+    border: 1px solid #dde0e7;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.02);
   }
 
-  .profile_Side_Section{
+  .profile_Side_Section {
     padding: 0;
     gap: 2rem;
   }
 
-  .profile_Options_Desk{
-    background: #F8F9FA;
-    border: 1px solid #DDE0E7;
+  .profile_Options_Desk {
+    background: #f8f9fa;
+    border: 1px solid #dde0e7;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.02);
   }
 }
 
 @media screen and (min-width: 1024px) {
-  .profile_Page_Wrapper{
+  .profile_Page_Wrapper {
     padding: 1.75rem 2rem;
   }
 }
 
 @media screen and (min-width: 1400px) {
-  .profile_Page_Wrapper{
+  .profile_Page_Wrapper {
     padding: 1.75rem 3.75rem;
   }
 }
