@@ -8,14 +8,17 @@ import { Link } from 'react-router-dom'
 import { getIndiProduct } from '../../api/Product'
 import { getOrderStatus } from '../../api/OrdersApi'
 
-const OrderProductCard = ({ orderId, product, classes, productDeliveryStatues, productPrice, productStatus }) => {
+const OrderProductCard = ({ orderId, itemId, product, classes, productDeliveryStatues, productPrice, productStatus }) => {
   const [productData, setProductData] = useState({
     order_Id: '',
     order_Status: '',
     name: '',
     color: '',
     image: '',
+    itemId: '',
   })
+
+  console.log(productData);
 
   useEffect(() => {
     if (product) {
@@ -25,6 +28,7 @@ const OrderProductCard = ({ orderId, product, classes, productDeliveryStatues, p
         order_Status: productStatus,
         name: product.name,
         color: product.color,
+        itemId: itemId,
         image: product.image
       }))
     }

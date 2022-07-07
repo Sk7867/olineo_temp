@@ -21,12 +21,22 @@ import AlternateProductBox from "../../components/AlternateProductCard/Alternate
 import { getIndiProduct, getSearchedProduct } from "../../api/Product";
 import SkeletonElement from "../../components/Skeletons/SkeletonElement";
 import ScratchCardComp from "../../components/ScratchCard/ScratchCardComp";
+import { addToWishlist } from "../../api/wishlistApi";
 // import ScartchCardComp from "../../components/ScratchCard/ScartchCard";
 
 
 toast.configure();
 const ProductPage = ({ setHeaderData }) => {
-  const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts, setCartArray, setOrderInit } = useContext(UserDataContext);
+  const {
+    userContext,
+    setUserContext,
+    userAddress,
+    setUserAddress,
+    userCart,
+    setUserCart,
+    allProducts,
+    setCartArray,
+    setOrderInit } = useContext(UserDataContext);
   const matches = useMediaQuery("(min-width:768px)");
   const nav = useNavigate();
   const { slug } = useParams()
@@ -68,6 +78,11 @@ const ProductPage = ({ setHeaderData }) => {
   const [discountPercent, setDiscountPercent] = useState('')
   const [comboProductData, setComboProductData] = useState({})
   const [allOffersData, setAllOffersData] = useState([])
+  const [discountTillDate, setDiscountTillDate] = useState(new Date())
+  const [days, setDays] = useState('')
+  const [hours, setHours] = useState('')
+  const [minutes, setMinutes] = useState('')
+  const [seconds, setSeconds] = useState('')
 
   useEffect(() => {
     setHeaderData({
@@ -121,7 +136,7 @@ const ProductPage = ({ setHeaderData }) => {
           specArray = specArray.filter((item) => item);
           setAlternateColorean(colorArray);
           setAlternateSpecean(specArray);
-          setProductBankOffers(product.offers);
+          setAllOffersData(product.offers);
           // setColorAlternateProds([...colorAlternateProds, product])
         }
       })
@@ -156,16 +171,64 @@ const ProductPage = ({ setHeaderData }) => {
 
   // console.log(productData);
 
+  let interval
   useEffect(() => {
     if (productData && productData.product_Discount.flatDiscount && productData.product_Discount.flatDiscount.value) {
       setDiscountPercent(productData.product_Discount.flatDiscount.value)
+      let discountToDate = new Date(productData.product_Discount.flatDiscount.to)
+      setDiscountTillDate(discountToDate)
+      interval = setInterval(() => {
+        startTimer(discountToDate)
+      }, 1000);
     } else {
       let mrp = parseInt(productData.product_price.mrp)
       let mop = (productData.product_price.discountPrice ? parseInt(productData.product_price.discountPrice) : parseInt(productData.product_price.mop))
       let discount = Math.floor(((mrp - mop) / mrp) * 100)
       setDiscountPercent(discount)
+      setDiscountTillDate(null)
     }
+    return () => { clearInterval(interval) }
   }, [productData])
+  // console.log(discountTillDate);
+
+  // useEffect(() => {
+  //   startTimer()
+  // }, [])
+
+  const startTimer = (date) => {
+    const countDownDate = date.getTime()
+    const now = new Date().getTime()
+    let countDownOn = true
+    const dist = countDownDate - now
+
+    let days = Math.floor(dist / (24 * 60 * 60 * 1000))
+    let hours = Math.floor(dist % (24 * 60 * 60 * 1000) / (1000 * 60 * 60))
+    let minutes = Math.floor(dist % (60 * 60 * 1000) / (1000 * 60))
+    let seconds = Math.floor(dist % (60 * 1000) / (1000))
+    if (days < 0) {
+      days = 0
+    }
+    if (hours < 0) {
+      hours = 0
+    }
+    if (minutes < 0) {
+      minutes = 0
+    }
+    if (seconds < 0) {
+      seconds = 0
+    }
+    if (dist < 0) {
+      //stop timer
+      clearInterval(interval.current)
+    } else {
+      // Update Timer
+      setDays(days)
+      setHours(hours)
+      setMinutes(minutes)
+      setSeconds(seconds)
+    }
+  }
+  // console.log(countDownTimer);
 
   useEffect(() => {
     if (productData.product_loaded &&
@@ -184,169 +247,73 @@ const ProductPage = ({ setHeaderData }) => {
   // console.log(comboProductData);
 
   useEffect(() => {
-    if (Object.keys(comboProductData).length > 0) {
-      let offerId = comboProductData._id
-      let offerHeading = 'Buy one Get one'
-      let offerName = `Get ${comboProductData.name} free on Purchase of ${productData.product_name}`
-      let offer_Link = "/bank-offer"
-      let offerAvail = "Select eligible card at the time of checkout.~No promo code required to avail the offer.~New Desc,~New DEsc"
+    if (comboProductData) {
+      if (Object.keys(comboProductData).length > 0) {
+        let offerId = comboProductData._id
+        let offerHeading = 'Buy one Get one'
+        let offerName = `Get ${comboProductData.name} free on Purchase of ${productData.product_name}`
+        let offer_Link = "/bank-offer"
+        let offerAvail = "Select eligible card at the time of checkout.~No promo code required to avail the offer.~New Desc,~New DEsc"
 
-      let combo_Offer = {
-        offerId: offerId,
-        offerHeading: offerHeading,
-        offerName: offerName,
-        offer_Link: offer_Link,
-        offerAvail: offerAvail
-      }
-      let offerLen = allOffersData.findIndex(obj => obj.offerId === combo_Offer.offerId)
-      if (offerLen === -1) {
-        setAllOffersData([...allOffersData, combo_Offer])
+        let combo_Offer = {
+          offerId: offerId,
+          offerHeading: offerHeading,
+          offerName: offerName,
+          offer_Link: offer_Link,
+          offerAvail: offerAvail
+        }
+        let offerLen = allOffersData.findIndex(obj => obj.offerId === combo_Offer.offerId)
+        if (offerLen === -1) {
+          setAllOffersData([...allOffersData, combo_Offer])
+        }
       }
     }
   }, [comboProductData])
   // console.log(allOffersData);
-  const sec5Data = [
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-  ];
-
-  const bankOffersData = [
-    {
-      offer_Name: "Bank offer",
-      offer_desc: "₹499 discount on ICICI Bank Credit Cards",
-      offer_Link: "/bank-offer",
-      offerAvail: ["Select eligible card at the time of checkout.", "No promo code required to avail the offer."],
-    },
-    {
-      offer_Name: "Bank offer",
-      offer_desc: "₹499 discount on HDFC Bank Credit Cards",
-      offer_Link: "/bank-offer",
-      offerAvail: ["Select eligible card at the time of checkout.", "No promo code required to avail the offer."],
-    },
-    {
-      offer_Name: "Bank offer",
-      offer_desc: "₹499 discount on SBI Bank Credit Cards",
-      offer_Link: "/bank-offer",
-      offerAvail: ["Select eligible card at the time of checkout.", "No promo code required to avail the offer."],
-    },
-    {
-      offer_Name: "Bank offer",
-      offer_desc: "₹499 discount on HDFC Bank Credit Cards",
-      offer_Link: "/bank-offer",
-      offerAvail: ["Select eligible card at the time of checkout.", "No promo code required to avail the offer."],
-    },
-  ];
 
   const handleAddToCart = (id) => {
     let userToken = userContext ? userContext.JWT : "";
     if (userToken) {
-      if (productData.product_loaded && (Object.keys(comboProductData).length > 0)) {
-        [productData.product_Id, comboProductData._id].forEach(id => {
-          addToCart(id).then((res) =>
-            res
-              ? (toast.success("Product Added to Cart"),
-                getCartData().then((res) =>
-                  res
-                    ? setCartArray({
-                      loaded: true,
-                      no_of_carts: res.no_of_carts,
-                      cart: res.cart,
-                    })
-                    : ""
-                ))
-              : ""
-          );
-        })
-      } else {
-        addToCart(id).then((res) =>
-          res
-            ? (toast.success("Product Added to Cart"),
-              getCartData().then((res) =>
-                res
-                  ? setCartArray({
-                    loaded: true,
-                    no_of_carts: res.no_of_carts,
-                    cart: res.cart,
-                  })
-                  : ""
-              ))
-            : ""
-        );
-      }
+      addToCart(id).then((res) =>
+        res
+          ? (toast.success("Product Added to Cart"),
+            getCartData().then((res) =>
+              res
+                ? setCartArray({
+                  loaded: true,
+                  no_of_carts: res.no_of_carts,
+                  cart: res.cart,
+                })
+                : ""
+            ))
+          : ""
+      );
     } else {
       nav("/login");
     }
   };
+
+  const handleAddToWishlist = (id) => {
+    let userToken = userContext ? userContext.JWT : "";
+    if (userToken) {
+      addToWishlist(id).then((res) =>
+        res
+          ? (toast.success("Product Added to Wishlist"),
+            getCartData().then((res) =>
+              res
+                ? setCartArray({
+                  loaded: true,
+                  no_of_carts: res.no_of_carts,
+                  cart: res.cart,
+                })
+                : ""
+            ))
+          : ""
+      );
+    } else {
+      nav("/login");
+    }
+  }
 
   const handleOrderInit = (e) => {
     e.preventDefault();
@@ -409,11 +376,21 @@ const ProductPage = ({ setHeaderData }) => {
               </div>
             </div>
             <div className="product_Side_Section_Buttons">
-              <div className="submit_Button_2">
-                <button type="submit" className="submit-button">
-                  <p>{productData.product_Classification === 'Coming Soon' ? "Notify when product releases" : "Add to Wishlist"}</p>
-                </button>
-              </div>
+              {
+                productData.product_Classification === 'Coming Soon' ? (
+                  <div className="submit_Button_2">
+                    <button type="submit" className="submit-button">
+                      <p>Notify when product releases</p>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="submit_Button_2" onClick={() => handleAddToWishlist(productData.product_Id)}>
+                    <button type="submit" className="submit-button">
+                      <p>Add to Wishlist</p>
+                    </button>
+                  </div>
+                )
+              }
               <div className="button_Set_2">
                 {
                   (productData.product_Classification === 'Coming Soon') ? (
@@ -486,8 +463,22 @@ const ProductPage = ({ setHeaderData }) => {
 
               <div className="product_Offer_Counter">
                 {productData.product_loaded ? (
-                  <p>{productData.product_Classification === 'Coming Soon' ? (preOrder ? ("Deal is 40% Claimed") : ('')) : `${productData.offer_Deadline}`} </p>
-                ) : (<SkeletonElement type={"productTitle"} />)}
+                  productData.product_Classification === 'Coming Soon' ? (
+                    preOrder ? (<p>Deal is 40% Claimed</p>) : ('')
+                  ) : (
+                    discountTillDate ? (
+                      // (days + hours + minutes + seconds <= 0) ? (
+                      <p>Deal ends in {days}d {hours}h {minutes}m {seconds}s</p>
+                      // ) : (<></>)
+                    ) : (<></>)
+                  )
+                ) :
+                  (<SkeletonElement type={"productTitle"} />)}
+                {/* {productData.product_loaded ? (
+                  discountTillDate ? (
+                    <p>{productData.product_Classification === 'Coming Soon' ? (preOrder ? ("Deal is 40% Claimed") : ('')) : `Deal ends in ${countDownTimer.days}d ${countDownTimer.hours}h ${countDownTimer.minutes}m ${countDownTimer.seconds}s`} </p>
+                  ) : (<></>)
+                ) : (<SkeletonElement type={"productTitle"} />)} */}
               </div>
               {matches ? (
                 (allOffersData.length > 0) && (
@@ -606,11 +597,21 @@ const ProductPage = ({ setHeaderData }) => {
                     )
                   }
                 </div>
-                <div className="product_Delivery_Footer submit_Button_2">
-                  <button type="submit" className="submit-button">
-                    <p>{(productData.product_Classification === 'Coming Soon') ? "Notify when product releases" : "Add to Wishlist"}</p>
-                  </button>
-                </div>
+                {
+                  productData.product_Classification === 'Coming Soon' ? (
+                    <div className="product_Delivery_Footer submit_Button_2">
+                      <button type="submit" className="submit-button">
+                        <p>Notify when product releases</p>
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="product_Delivery_Footer submit_Button_2" onClick={() => handleAddToWishlist(productData.product_Id)}>
+                      <button type="submit" className="submit-button">
+                        <p>Add to Wishlist</p>
+                      </button>
+                    </div>
+                  )
+                }
               </div>
 
             </div>
@@ -674,7 +675,7 @@ const ProductPage = ({ setHeaderData }) => {
               : [1, 2, 3, 4, 5].map((n) => <SkeletonElement type={"productBanner"} key={n} />)}
           </div>
         </div>
-        <Section2 id={"Top-sellers-sec"} heading="Suggested products" productData={sec5Data} />
+        <Section2 id={"Top-sellers-sec"} heading="Suggested products" productData={allProducts} />
         {/* Floating Footer */}
         {!matches && (
           <div className="floating_Footer">
@@ -683,11 +684,21 @@ const ProductPage = ({ setHeaderData }) => {
                 productData.product_Classification === 'Coming Soon' ? (
                   <>
                     <div className="floating_Footer_Center">
-                      <div className="submit_Button_2">
-                        <button type="submit" className="submit-button">
-                          <p>{(productData.product_Classification === 'Coming Soon') ? "Notify when product releases" : "Add to Wishlist"}</p>
-                        </button>
-                      </div>
+                      {
+                        productData.product_Classification === 'Coming Soon' ? (
+                          <div className="submit_Button_2">
+                            <button type="submit" className="submit-button">
+                              <p>Notify when product releases</p>
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="submit_Button_2" onClick={() => handleAddToWishlist(productData.product_Id)}>
+                            <button type="submit" className="submit-button">
+                              <p>Add to Wishlist</p>
+                            </button>
+                          </div>
+                        )
+                      }
                     </div>
                   </>
                 ) : (

@@ -24,6 +24,7 @@ const CartSection = ({ featureProducts }) => {
     cartArray,
     setCartArray,
     setOrderInit,
+    allProducts,
     priceBoxDetails } = useContext(UserDataContext)
 
   useEffect(() => {
@@ -111,15 +112,17 @@ const CartSection = ({ featureProducts }) => {
       {
         cartArray.no_of_carts === 0 ? (
           <>
-            <div className="empty_order_sec">
-              <p className='empty_order_text'>Your cart is empty</p>
-              <button type='submit' className='submit-button' onClick={() => nav('/')} ><p>Start Shopping</p></button>
+            <div className="order_Page_Right">
+              <div className="empty_order_sec">
+                <p className='empty_order_text'>Your cart is empty</p>
+                <button type='submit' className='submit-button' onClick={() => nav('/')} ><p>Start Shopping</p></button>
+              </div>
+              <Section2
+                id={'Top-sellers-sec'}
+                heading='Top Sellers'
+                productData={featureProducts}
+              />
             </div>
-            {/* <Section2
-              id={'Top-sellers-sec'}
-              heading='Top Sellers'
-              productData={featureProducts}
-            /> */}
           </>
         ) : (
           <div className='order_Page_Right'>

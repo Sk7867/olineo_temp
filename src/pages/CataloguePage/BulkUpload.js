@@ -76,11 +76,29 @@ const BulkUpload = ({ setHeaderData }) => {
           }
         }
 
-        let immediateComplimentArray = element.immediateCompCategory.split(',')
-        immediateComplimentArray = immediateComplimentArray.map((prod) => {
-          return prod.trim()
-        })
-        let laterComplimentArray = element.laterCompCategory.split(',')
+        let immediateComplimentArray = []
+        let laterComplimentArray = []
+        if (element.immediateCompCategory) {
+          if (element.immediateCompCategory.indexOf(',') > -1) {
+            let arrayHold = element.immediateCompCategory.split(',')
+            immediateComplimentArray = arrayHold.map((prod) => {
+              return prod.trim()
+            })
+          } else {
+            immediateComplimentArray.push(element.immediateCompCategory)
+          }
+        }
+
+        if (element.laterCompCategory) {
+          if (element.laterCompCategory.indexOf(',') > -1) {
+            let arrayHold = element.laterCompCategory.split(',')
+            laterComplimentArray = arrayHold.map((prod) => {
+              return prod.trim()
+            })
+          } else {
+            laterComplimentArray.push(element.laterCompCategory)
+          }
+        }
 
         let item = {
           hierarchyL1: element.hierarchyL1,
@@ -460,6 +478,43 @@ const BulkUpload = ({ setHeaderData }) => {
         url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
 
+      case 'Powerbank': productInfo = {
+        color: elem.color,
+        batteries: elem.batteries,
+        specialFeatures: elem.specialFeatures,
+        playtime: elem.playtime,
+        wirelessTech: elem.wirelessTech,
+        connectivityTech: elem.connectivityTech,
+        batteryPowerRating: elem.batteryPowerRating,
+        wattage: elem.wattage,
+        powerSource: elem.powerSource,
+        batterCapacity: elem.batterCapacity,
+        batteryCellComposition: elem.batteryCellComposition,
+        numberOfItems: elem.numberOfItems,
+        numberOfPorts: elem.numberOfPorts,
+        totalUsbPorts: elem.totalUsbPorts,
+        connectorType: elem.connectorType,
+        mountingHardware: elem.mountingHardware,
+        batteriesIncluded: elem.batteriesIncluded,
+        batteriesRequired: elem.batteriesRequired,
+        cableFeature: elem.cableFeature,
+        includesRechargableBattery: elem.includesRechargableBattery,
+        material: elem.material,
+        inTheBox: elem.inTheBox,
+        importedBy: elem.importedBy,
+        modelYear: elem.modelYear,
+        modelName: elem.modelName,
+        modelNo: elem.modelNo,
+        country: elem.countryOrigin,
+        specText: elem.specText
+      }
+        // url = elem.productName + '-'
+        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.playTime ? (', ' + elem.playTime) : '') + (elem.microphoneTech ? (', ' + elem.microphoneTech) : '') + (elem.bluetoothVersion ? (', ' + elem.bluetoothVersion) : '') + ')'
+        dynamicArray = dynamicHeader.replace(/[\(,/\)]/g, '').split(" ");
+        dynamicArray2 = dynamicArray.filter(n => n)
+        url = dynamicArray2.join('-')
+        return { productInfo, url, dynamicHeader };
+
       default:
         break;
     }
@@ -516,6 +571,7 @@ const BulkUpload = ({ setHeaderData }) => {
       if (res) {
         document.getElementById("submitCsvData").innerHTML = "<p>Please Wait. Uploading Images... </p>";
         let productArray = res;
+        console.log(productArray);
         for (const ean in imagesObject) {
           if (imagesObject[ean].imgs.length !== 0) {
             const element = imagesObject[ean];
