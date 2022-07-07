@@ -9,6 +9,7 @@ import { UserDataContext } from '../../Contexts/UserContext'
 
 const OrderSection = ({ featureProducts, onTheWay, delivered, cancelled }) => {
   const nav = useNavigate()
+  const [demo, setDemo] = useState([])
   const {
     userOrderData,
   } = useContext(UserDataContext)
@@ -20,16 +21,27 @@ const OrderSection = ({ featureProducts, onTheWay, delivered, cancelled }) => {
     nav('/')
   }
 
+  console.log(userOrderData);
   return (
     <>
       {
         ordersNumber === 0 ? (
           <>
-            <div className="empty_order_sec">
-              <p className='empty_order_text'>You have no orders</p>
-              <button type='submit' className='submit-button' onClick={pageSwitch} ><p>Start Shopping</p></button>
+            <div className="order_Page_Right">
+              <div className="empty_order_sec">
+                <p className='empty_order_text'>You have no orders</p>
+                <button type='submit' className='submit-button' onClick={pageSwitch} ><p>Start Shopping</p></button>
+              </div>
+              <Section2
+                id={'Top-sellers-sec'}
+                heading='Suggested products'
+                productData={featureProducts}
+                classes={{
+                  containerClass: 'section_Wrapper',
+                  boxClass: 'section_Wrapper'
+                }}
+              />
             </div>
-
           </>
         ) : (
           <>
@@ -40,7 +52,7 @@ const OrderSection = ({ featureProducts, onTheWay, delivered, cancelled }) => {
                   userOrderData.orders.map((order, index) => (
                     order.productId.map((prod, indx) => (
                       order.itemId.map((item, idx) => (
-                        (order.item[indx] <= idx) ? (
+                        (order.item[indx] >= idx) ? (
                           (order.itemStatus[idx] !== 'DELIVERED' && order.itemStatus[idx] !== 'CANCELLED') ? (
                             <OrderProductCard
                               key={idx}

@@ -142,7 +142,12 @@ function App() {
     loaded: false,
     location: []
   })
-  // console.log(userCart);
+  const [userWishlist, setUserWishlist] = useState({
+    loaded: false,
+    no_of_wishlist_items: 0,
+    wishlist_items: []
+  })
+  console.log(userWishlist);
 
   useEffect(() => {
     let user = JSON.parse(sessionStorage.getItem('user'))
@@ -263,6 +268,8 @@ function App() {
           setSearchedProduct,
           storeLocations,
           setStoreLocations,
+          userWishlist,
+          setUserWishlist
         }}>
           {
             loc.pathname === '/login' || loc.pathname === '/signup' || loc.pathname === '/otp' || loc.pathname === '/adduser' ? ('') : (

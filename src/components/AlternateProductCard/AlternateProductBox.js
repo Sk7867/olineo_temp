@@ -15,7 +15,7 @@ const AlternateProductBox = ({ product, imageAndData, dataOnly }) => {
       }))
     }
   }, [product])
-  console.log(productData);
+  // console.log(productData);
 
   return (
     <Link to={`/product/${productData.slug}`} className='alternate_link' >

@@ -31,6 +31,8 @@ import OrderSection from '../MyOrders/OrderSection';
 import { getCartData } from '../../api/Cart';
 import { getIndiProduct } from '../../api/Product';
 import { getAllOrder } from '../../api/OrdersApi';
+import { getAllWishlistItems } from '../../api/wishlistApi';
+import WishlistSection from '../Wishlist/WishlistSection';
 
 
 const Profile = ({ setEditID, editID, setHeaderData }) => {
@@ -49,7 +51,9 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
     setUserCart,
     allProducts,
     setCartArray,
-    setUserOrderData
+    setUserOrderData,
+    setPriceBoxDetails,
+    setUserWishlist
   } = useContext(UserDataContext)
 
   useEffect(() => {
@@ -117,17 +121,18 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
       })
   }, [])
 
-
-  // useEffect(() => {
-  //   userAddress.address.forEach((address) => {
-  //     if (address.id === editID) {
-  //       setEditAddress(address)
-  //     }
-  //   })
-  // }, [])
-
-
-
+  useEffect(() => {
+    getAllWishlistItems()
+      .then(res => {
+        if (res) {
+          setUserWishlist({
+            loaded: true,
+            no_of_wishlist_items: res.no_of_wishlist_items,
+            wishlist_items: [...res.wishlist_items]
+          })
+        }
+      })
+  }, [])
 
 
   const logOut = () => {
@@ -155,6 +160,23 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
           cart: [],
           no_of_carts: 0
         })
+        setUserOrderData({
+          loaded: false,
+          no_of_orders: 0,
+          orders: []
+        })
+        setPriceBoxDetails({
+          cartItemsNumber: 0,
+          cartItemsPrice: 0,
+          totalDiscount: 0,
+          totalDeliveryCharge: 0,
+          totalAmount: 0
+        })
+        setUserWishlist({
+          loaded: false,
+          no_of_wishlist_items: 0,
+          wishlist_items: []
+        })
       })
   }
 
@@ -168,6 +190,11 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
       image: truckIconBlue,
       title: 'My Orders',
       link: '/orders',
+    },
+    {
+      image: bookmarkIconBlue,
+      title: 'My Wishlist',
+      link: '/',
     },
     {
       image: cartIconBlue,
@@ -198,8 +225,9 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
     switch (profileState) {
       case 1: return (<EditDetails profileDetails={false} profilePicUpdate={true} />)
       case 2: return (<OrderSection featureProducts={allProducts} onTheWay={true} delivered={true} cancelled={true} />)
-      case 3: return (<CartSection featureProducts={allProducts} />)
-      case 4: return (<MyAddress setEditID={setEditID} setProfileState={setProfileState} border={true} />)
+      case 3: return (<WishlistSection />)
+      case 4: return (<CartSection featureProducts={allProducts} />)
+      case 5: return (<MyAddress setEditID={setEditID} setProfileState={setProfileState} border={true} />)
       // case 5: return (<EditDetails profileDetails={false} profilePicUpdate={true} />)
       case 10: return (<AddressForm setProfileState={setProfileState} fromProfile={true} />)
       case 11: return (<AddressForm editID={editID} addressProp={loc.state} setProfileState={setProfileState} fromProfile={true} />)
