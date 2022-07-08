@@ -88,7 +88,7 @@ const OrderSection = ({ featureProducts, onTheWay, delivered, cancelled }) => {
               {userOrderData.orders.map((order, index) =>
                 order.productId.map((prod, indx) =>
                   order.itemId.map((item, idx) =>
-                    order.item[indx] <= idx ? (
+                    order.item[indx] >= idx ? (
                       order.itemStatus[idx] === "DELIVERED" ? (
                         <OrderProductCard
                           key={idx}
@@ -125,7 +125,7 @@ const OrderSection = ({ featureProducts, onTheWay, delivered, cancelled }) => {
               {userOrderData.orders.map((order, index) =>
                 order.productId.map((prod, indx) =>
                   order.itemId.map((item, idx) =>
-                    order.item[indx] <= idx ? (
+                    order.item[indx] >= idx ? (
                       order.itemStatus[idx] === "CANCELLED" ? (
                         <OrderProductCard
                           key={idx}
