@@ -89,7 +89,7 @@ function App() {
   });
 
   useEffect(() => {
-    const token = sessionStorage.user ? JSON.parse(sessionStorage.user).JWT : "";
+    const token = JSON.parse(sessionStorage.user) ? JSON.parse(sessionStorage.user).JWT : "";
     setUserContext({
       ...userContext,
       JWT: token,
