@@ -12,7 +12,7 @@ const ProductBox = ({ card_heading, classes, product }) => {
   })
 
   useEffect(() => {
-    var handlePrice
+    var handlePrice = (product.price.discountPrice ? product.price.discountPrice : product.price.mop)
     if (product) {
       // if (product.price.discountPrice) {
       //   handlePrice = product.price.discountPrice
@@ -21,8 +21,8 @@ const ProductBox = ({ card_heading, classes, product }) => {
       // }
       setProductInfo({
         image: product.images[0],
-        name: product.name
-        // price: handlePrice
+        name: product.name,
+        price: handlePrice
       })
     }
 
@@ -34,15 +34,15 @@ const ProductBox = ({ card_heading, classes, product }) => {
     <>
       {
         product && (
-          <Link to={`/product/${product.slug}`} state={{ product: product }} className={'productbox_Container ' + (classes ? classes.boxClass : '')}>
+          <Link to={`/product/${product.slug}`} className={'productbox_Container ' + (classes ? classes.boxClass : '')}>
             <>
               {product.images.length > 0 && (
                 <img src={productInfo.image} alt="" />
               )}
               <div className="productbox_details">
                 <p className='box_heading'>{card_heading}</p>
-                {/* {product.price.mop && (<p className="box_price">₹{productInfo.price}</p>)} */}
-                {product.name && (<p className="box_itemName">{productInfo.name}</p>)}
+                {productInfo.price && (<p className="box_price">₹{productInfo.price}</p>)}
+                {productInfo.name && (<p className="box_itemName">{productInfo.name}</p>)}
               </div>
             </>
           </Link>

@@ -2,7 +2,7 @@ import { useMediaQuery } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { deleteProductCatalogue } from '../../api/CatalogueApi';
-import { getAllProducts } from '../../api/Product';
+import { getAllProducts, getSearchedProduct } from '../../api/Product';
 import MultiOfferModal from '../../components/ModalComponenr/MultiOfferModal';
 import { UserDataContext } from '../../Contexts/UserContext'
 
@@ -18,6 +18,14 @@ const CataloguePage = ({ setHeaderData }) => {
   // })
 
   const { allProducts, setAllProducts } = useContext(UserDataContext)
+  const [searchText, setSearchText] = useState('')
+  const [productsToShow, setProductsToShow] = useState([])
+
+  useEffect(() => {
+    let prods
+    prods = [...allProducts.products]
+    setProductsToShow(prods)
+  }, [allProducts.loaded, allProducts])
 
 
 
@@ -67,6 +75,32 @@ const CataloguePage = ({ setHeaderData }) => {
       ) : (''))
   }
 
+  const handleSearchProduct = (e) => {
+    e.preventDefault()
+    if (searchText) {
+      if (isNaN(searchText)) {
+        let searchTerm = 'search=' + searchText
+        // console.log(searchTerm);
+        getSearchedProduct(searchTerm)
+          .then(res => {
+            setProductsToShow([...res])
+          })
+      } else {
+        let searchTerm = 'ean=' + searchText
+        // console.log(searchTerm);
+        getSearchedProduct(searchTerm)
+          .then(res => {
+            setProductsToShow([...res])
+          })
+      }
+    } else {
+      getAllProducts()
+        .then(res => {
+          setProductsToShow(res.products)
+        })
+    }
+  }
+
   return (
     <>
       <div className='page_Wrapper page_Margin_Top_Secondary'>
@@ -85,27 +119,37 @@ const CataloguePage = ({ setHeaderData }) => {
               </Link>
             </div>
           </div>
+          <br />
+          <div className='d-flex catelogue_Search_Input'>
+            <input type="text" className='input-field' placeholder='Search EAN Number or Product Name...' onChange={(e) => setSearchText(e.target.value)} />
+            <div className={'button-Container'}>
+              <button type='submit' className='submit-button' onClick={handleSearchProduct}><p>Search Product</p></button>
+            </div>
+          </div>
+          <br />
           <div className="catelogue_Page_List">
             {
               allProducts.loaded ? (
                 (allProducts.no_of_products > 0) ? (
-                  allProducts.products.map((product, index) => (
-                    <div className="catalogue_List_Item" key={index}>
-                      <div className='catalogue_List_Content'>
-                        {product.ean && (<p>{product.ean}</p>)}
-                        {product.name && (<p>{product.name}</p>)}
-                        {/* {product.price.mop && (<p>{product.price.mop}</p>)} */}
-                      </div>
-                      <div className='catalogue_List_Buttons'>
-                        <Link to={'/catelogue-page/add-product'} state={product = { product }} className='catalogue_Edit' >
-                          Edit
-                        </Link>
-                        <div className='catalogue_Delete' onClick={() => handleDeleteProduct(product)}>
-                          Delete
+                  (productsToShow.length > 0) ? (
+                    productsToShow.map((product, index) => (
+                      <div className="catalogue_List_Item" key={index}>
+                        <div className='catalogue_List_Content'>
+                          {product.ean && (<p>{product.ean}</p>)}
+                          {product.name && (<p>{product.name}</p>)}
+                          {/* {product.price.mop && (<p>{product.price.mop}</p>)} */}
+                        </div>
+                        <div className='catalogue_List_Buttons'>
+                          <Link to={'/catelogue-page/add-product'} state={product = { product }} className='catalogue_Edit' >
+                            Edit
+                          </Link>
+                          <div className='catalogue_Delete' onClick={() => handleDeleteProduct(product)}>
+                            Delete
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))
+                    ))
+                  ) : (<div>No Such Product Exists</div>)
                 ) : (<div>No Products in Database</div>)
               ) : (
                 <div>Loading...</div>

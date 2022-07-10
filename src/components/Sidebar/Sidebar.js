@@ -87,13 +87,13 @@ const Sidebar = ({ sidebar, setSidebar, userLoggedIn, handleCategorySearch }) =>
   const categoryData = [
     {
       image: cameraBlue,
-      text: 'Mobiles',
-      link: 'Mobiles',
+      text: 'Smartphone',
+      link: 'Smartphone',
     },
     {
       image: cameraBlue,
-      text: 'Tablets',
-      link: 'Tablets',
+      text: 'Tablet',
+      link: 'Tablet',
     },
     {
       image: cameraBlue,
@@ -127,8 +127,8 @@ const Sidebar = ({ sidebar, setSidebar, userLoggedIn, handleCategorySearch }) =>
     },
     {
       image: cameraBlue,
-      text: 'Adaptor',
-      link: 'Adaptor',
+      text: 'Adapter',
+      link: 'Adapter',
     },
     {
       image: cameraBlue,

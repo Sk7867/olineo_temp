@@ -11,7 +11,11 @@ const OrderCancel = ({ setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [cancelSelected, setCancelSelected] = useState({});
   const [btnDisable, setbtnDisable] = useState(true)
-  const [prodId, setProdId] = useState('')
+  const [productData, setProductData] = useState({
+    order_Id: "",
+    order_Status: "",
+    itemId: '',
+  })
   const loc = useLocation()
   const nav = useNavigate()
   const { userOrderData, setUserOrderData } = useContext(UserDataContext)
@@ -29,9 +33,14 @@ const OrderCancel = ({ setHeaderData }) => {
 
   useEffect(() => {
     if (loc && loc.state) {
-      setProdId(loc.state._id)
+      setProductData({
+        order_Id: loc.state.order_Id,
+        order_Status: loc.state.order_Status,
+        itemId: loc.state.itemId
+      })
     }
   }, [loc])
+  console.log(productData);
 
   const breadCrumbsData = [
     {
@@ -85,9 +94,8 @@ const OrderCancel = ({ setHeaderData }) => {
 
   const handleOrderCancel = (e) => {
     e.preventDefault()
-    let id = prodId
     let query = cancelSelected.data
-    cancelOrder(id, query)
+    cancelOrder(productData.order_Id, productData.itemId, query)
       .then(res => {
         console.log(res)
       })

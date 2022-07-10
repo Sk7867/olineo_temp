@@ -1,0 +1,47 @@
+.section5_Container{
+  background: #FFFFFF;
+  /* display: flex;
+  flex-direction: column;
+  gap: 3rem; */
+  padding: 0.75rem 1rem;
+  max-width: 100%;
+    min-height: 105px;
+    overflow-y: hidden;
+    overflow-x: auto;
+    cursor: grabbing;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 1000px;
+    padding-bottom: 0.625rem;
+    cursor: auto;
+}
+
+.section5_Container::-webkit-scrollbar{
+  display: none;
+}
+
+.section5_Wrapper {
+  display: flex;
+  gap: 7rem;
+  white-space: nowrap;
+  padding: 0 0 0.625rem;
+}
+
+.section5_Wrapper .scroll_Buffer{
+transform: translateX(-45px);
+}
+
+@media screen and (min-width: 768px) {
+  .section5_Container{
+    padding: 1.5rem 2rem;
+    flex-direction: row;
+    gap: 3rem;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .section5_Container{
+    padding: 1.5rem 3.75rem;
+    gap: 4.5rem;
+  }
+}

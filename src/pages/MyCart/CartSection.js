@@ -9,58 +9,30 @@ import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import Section2 from '../../components/Section2/Section2'
 import { initOrder } from '../../api/OrdersApi'
 import { getCartData, removeFromCart } from '../../api/Cart'
+import { getCoupon } from '../../api/couponApi'
 
 toast.configure()
 const CartSection = ({ featureProducts }) => {
   const nav = useNavigate()
   const [cartProducts, setCartProducts] = useState([])
+  const [couponInput, setCouponInput] = useState('')
 
 
+  const {
+    setUserCart,
+    userCart,
+    cartArray,
+    setCartArray,
+    setOrderInit,
+    allProducts,
+    priceBoxDetails } = useContext(UserDataContext)
 
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart, cartArray, setCartArray, orderInit, setOrderInit, priceBoxDetails } = useContext(UserDataContext)
-
-
-
-  // useEffect(() => {
-  //   if (cartArray.no_of_carts !== 0) {
-  //     //Get Price from cart Items
-  //     userCart.forEach(item => {
-  //       cartItemsPrice += parseInt(item.price) + 2000
-  //     });
-
-  //     //Get Discounted Price
-  //     userCart.forEach(item => {
-  //       var itemDiscount
-  //       itemDiscount = parseInt(item.price)
-  //       totalDiscount += itemDiscount
-  //     });
-
-  //     //Get Delivery Charges
-  //     userCart.forEach((item, index) => {
-  //       totalDeliveryCharge += (index + 1) * 80
-  //     });
-
-  //     //Get Total Amount
-  //     totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
-  //   }
-  // }, [cartArray])
-
-  // useEffect(() => {
-  //   if (userCart.length > 0) {
-  //     let helperArray = userCart.map(obj => ({ ...obj, quantity: 1 }))
-  //     setCartProducts(helperArray)
-  //     // console.log(helperArray);
-  //   }
-  // }, [userCart])
-
-  // useEffect(() => {
-  //   setUserCart(cartProducts)
-  // }, [cartProducts])
-
-
-  // console.log(userCart);
-  // console.log(cartArray);
-  // console.log(cartProducts);
+  useEffect(() => {
+    getCoupon()
+      .then(res => {
+        console.log(res);
+      })
+  }, [])
 
   const handleQuantityInc = (id) => {
     let tempState = [...userCart]
@@ -85,30 +57,6 @@ const CartSection = ({ featureProducts }) => {
   }
 
   //ORDER INITIALIZATION CODE+++++++++++++++++++++++++++++++++++++++++
-
-  const sampleData = [
-    {
-      productID: 1,
-      productName: 'Test 1',
-      quantity: 2
-    },
-    {
-      productID: 2,
-      productName: 'Test 1',
-      quantity: 4
-    },
-    {
-      productID: 3,
-      productName: 'Test 1',
-      quantity: 6
-    },
-    {
-      productID: 9,
-      productName: 'Test 1',
-      quantity: 4
-    },
-  ]
-
   const handleOrderInit = (e) => {
     e.preventDefault();
     let productId = []
@@ -128,6 +76,7 @@ const CartSection = ({ featureProducts }) => {
     // console.log(data);
   }
 
+  //Remove Product from cart
   const handleRemoveFromCart = (id) => {
     removeFromCart(id)
       .then(res => res ? (
@@ -147,6 +96,15 @@ const CartSection = ({ featureProducts }) => {
       ) : (''))
   }
 
+  //Get Coupon Codes
+  const handleCoupon = (e) => {
+    e.preventDefault();
+    setOrderInit(prev => ({
+      ...prev,
+      coupon: couponInput
+    }))
+  }
+
   // console.log(userCart);
 
   return (
@@ -154,15 +112,17 @@ const CartSection = ({ featureProducts }) => {
       {
         cartArray.no_of_carts === 0 ? (
           <>
-            <div className="empty_order_sec">
-              <p className='empty_order_text'>Your cart is empty</p>
-              <button type='submit' className='submit-button' onClick={() => nav('/')} ><p>Start Shopping</p></button>
+            <div className="order_Page_Right">
+              <div className="empty_order_sec">
+                <p className='empty_order_text'>Your cart is empty</p>
+                <button type='submit' className='submit-button' onClick={() => nav('/')} ><p>Start Shopping</p></button>
+              </div>
+              <Section2
+                id={'Top-sellers-sec'}
+                heading='Top Sellers'
+                productData={featureProducts}
+              />
             </div>
-            {/* <Section2
-              id={'Top-sellers-sec'}
-              heading='Top Sellers'
-              productData={featureProducts}
-            /> */}
           </>
         ) : (
           <div className='order_Page_Right'>
@@ -186,6 +146,12 @@ const CartSection = ({ featureProducts }) => {
               <p>Subtotal ({priceBoxDetails.cartItemsNumber} items): <span> ₹{priceBoxDetails.totalAmount}</span></p>
               <div className="cart_Footer_Right">
                 <button type='submit' className='submit-button' onClick={handleOrderInit}><p>Checkout</p></button>
+              </div>
+            </div>
+            <div className="cart_Coupon_Section section_Wrapper">
+              <input type="text" placeholder='Add Coupon Code' className='input-field' value={couponInput} onChange={(e) => setCouponInput(e.target.value)} />
+              <div className="cart_Coupon_Button">
+                <button type='submit' className='submit-button' onClick={handleCoupon}><p>Apply Coupon</p></button>
               </div>
             </div>
 

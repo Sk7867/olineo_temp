@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import { Accordion, Dropdown, Carousel } from "react-bootstrap";
 import { addToCart, getCartData } from "../../api/Cart";
@@ -18,22 +18,38 @@ import Section2 from "../../components/Section2/Section2";
 import ProductInfoTable from "../../components/ProductInfoTable/ProductInfoTable";
 import OfferCard from "../../components/OfferCard/OfferCard";
 import AlternateProductBox from "../../components/AlternateProductCard/AlternateProductBox";
-import { getIndiProduct } from "../../api/Product";
+import { getIndiProduct, getSearchedProduct } from "../../api/Product";
 import SkeletonElement from "../../components/Skeletons/SkeletonElement";
-import ScartchCardComp from "../../components/ScratchCard/ScartchCard";
+import ScratchCardComp from "../../components/ScratchCard/ScratchCardComp";
+import { addToWishlist } from "../../api/wishlistApi";
+// import ScartchCardComp from "../../components/ScratchCard/ScartchCard";
+
 
 toast.configure();
 const ProductPage = ({ setHeaderData }) => {
-  const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts, setCartArray } = useContext(UserDataContext);
+  const {
+    userContext,
+    setUserContext,
+    userAddress,
+    setUserAddress,
+    userCart,
+    setUserCart,
+    allProducts,
+    setCartArray,
+    setOrderInit } = useContext(UserDataContext);
   const matches = useMediaQuery("(min-width:768px)");
-  const loc = useLocation();
   const nav = useNavigate();
+  const { slug } = useParams()
   const [seeMore, setSeeMore] = useState(false);
   const [preOrder, setPreOrder] = useState(false);
   const [previewImageSelected, setPreviewImageSelected] = useState(null);
   const [productInfo, setProductInfo] = useState([]);
   const [productData, setProductData] = useState({
     product_loaded: false,
+    product_L1: '',
+    product_L2: '',
+    product_L3: '',
+    product_Classification: '',
     product_Id: "",
     product_Heading: "",
     product_name: "",
@@ -44,7 +60,7 @@ const ProductPage = ({ setHeaderData }) => {
       mop: "",
       discountPrice: "",
     },
-    product_Disccount: {},
+    product_Discount: {},
     offer_Deadline: "Deal ends in 14h 17m 04s",
     product_Instock: 255,
     product_image_List: [],
@@ -54,10 +70,19 @@ const ProductPage = ({ setHeaderData }) => {
   const [colorAlternateProds, setColorAlternateProds] = useState([]);
   const [specAlternateProds, setSpecAlternateProds] = useState([]);
   const [modalShow, setModalShow] = useState(false);
+  const [scratchCardActive, setScratchCardActive] = useState(false)
   const [alternateColorean, setAlternateColorean] = useState([]);
   const [alternateSpecean, setAlternateSpecean] = useState([]);
   const [productBankOffers, setProductBankOffers] = useState([]);
-  // console.log(loc);
+  const [produnctSpecText, setProdunctSpecText] = useState('')
+  const [discountPercent, setDiscountPercent] = useState('')
+  const [comboProductData, setComboProductData] = useState({})
+  const [allOffersData, setAllOffersData] = useState([])
+  const [discountTillDate, setDiscountTillDate] = useState(new Date())
+  const [days, setDays] = useState('')
+  const [hours, setHours] = useState('')
+  const [minutes, setMinutes] = useState('')
+  const [seconds, setSeconds] = useState('')
 
   useEffect(() => {
     setHeaderData({
@@ -71,166 +96,180 @@ const ProductPage = ({ setHeaderData }) => {
   }, []);
 
   useEffect(() => {
-    if (loc.state) {
-      let product = loc.state.product;
-      if (product) {
-        console.log(product);
-        // let allProductImages = Object.values(product.otherImages)
-        // allProductImages.unshift(productImage1)
-        getIndiProduct(product._id).then((res) => {
-          if (res) {
-            let images = res.images;
-            let splitDesc = res.description.split("~");
-            setProductData((prev) => ({
-              ...prev,
-              product_loaded: true,
-              product_Id: res._id,
-              product_Heading: res.dynamicHeader,
-              product_name: res.name,
-              product_color: res.color,
-              product_price: res.price,
-              product_Description: splitDesc,
-              product_image_List: images,
-              product_Gallery_Image: res.gallery,
-              product_Disccount: res.discount,
-            }));
-            setPreviewImageSelected(images[0]);
-            setProductInfo(Object.entries(res.productInfo));
-            let colorArray = [...res.altProduct.color];
-            let specArray = [...res.altProduct.spec];
-            colorArray = colorArray.filter((item) => item);
-            specArray = specArray.filter((item) => item);
-            setAlternateColorean(colorArray);
-            setAlternateSpecean(specArray);
-            setProductBankOffers(res.offers);
-          }
-        });
-      }
-    }
-  }, [loc]);
+    let searchTerm = 'slug=' + slug
+    setColorAlternateProds([])
+    setAlternateColorean([])
+    setSpecAlternateProds([])
+    setAlternateSpecean([])
+    setProductBankOffers([])
+    getSearchedProduct(searchTerm)
+      .then(res => {
+        let product = res[0]
+        if (product) {
+          let images = product.images;
+          let splitDesc = product.description.split("~");
+          setProductData((prev) => ({
+            ...prev,
+            product_loaded: true,
+            product_L1: product.hierarchyL1,
+            product_L2: product.hierarchyL2,
+            product_L3: product.hierarchyL3,
+            product_Classification: product.classification,
+            product_Id: product._id,
+            product_Heading: product.dynamicHeader,
+            product_name: product.name,
+            product_color: product.color,
+            product_price: product.price,
+            product_Description: splitDesc,
+            product_image_List: images,
+            product_Gallery_Image: product.gallery,
+            product_Discount: product.discount,
+            product_Slug: product.slug
+          }));
+          setPreviewImageSelected(images[0]);
+          setProductInfo(Object.entries(product.productInfo));
+          let colorArray = [...product.altProduct.color]
+          // colorArray.unshift(product.ean)
+          let specArray = [...product.altProduct.spec];
+          // specArray.unshift(product.ean)
+          colorArray = colorArray.filter((item) => item);
+          specArray = specArray.filter((item) => item);
+          setAlternateColorean(colorArray);
+          setAlternateSpecean(specArray);
+          setAllOffersData(product.offers);
+          // setColorAlternateProds([...colorAlternateProds, product])
+        }
+      })
+  }, [slug])
+  // console.log(alternateColorean);
 
   useEffect(() => {
-    if (alternateColorean.length > 0) {
-      let demo = allProducts.products.filter((item) => alternateColorean.includes(item.ean));
-      if (demo !== undefined) {
-        let ind = colorAlternateProds.findIndex((obj) => obj.ean === demo[0].ean);
-        if (ind === -1) {
-          setColorAlternateProds([...colorAlternateProds, demo[0]]);
-        }
+    alternateColorean.forEach(ean => {
+      let ind = colorAlternateProds.findIndex(obj => obj.ean === ean)
+      if (ind === -1) {
+        // console.log(ind)
+        let searchTerm = 'ean=' + ean
+        getSearchedProduct(searchTerm)
+          .then(res => {
+            setColorAlternateProds([...colorAlternateProds, res[0]])
+          })
       }
-    }
-    if (alternateSpecean.length > 0) {
-      let demo = allProducts.products.filter((item) => alternateColorean.includes(item.ean));
-      if (demo !== undefined) {
-        let ind = specAlternateProds.findIndex((obj) => obj.ean === demo[0].ean);
-        if (ind === -1) {
-          setSpecAlternateProds([...specAlternateProds, demo[0]]);
-        }
+    })
+    alternateSpecean.map(ean => {
+      let ind = specAlternateProds.findIndex(obj => obj.ean === ean)
+      if (ind === -1) {
+        // console.log(ind)
+        let searchTerm = 'ean=' + ean
+        getSearchedProduct(searchTerm)
+          .then(res => {
+            setSpecAlternateProds([...specAlternateProds, res[0]])
+          })
       }
-    }
+    })
   }, [alternateColorean, alternateSpecean]);
+  // console.log(specAlternateProds);
 
-  const sec5Data = [
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-    {
-      product_image: defaultImage,
-      product_name: "Item name",
-      product_price: "₹1000",
-      classes: {
-        boxClass: "bg_pink carousel_card",
-      },
-    },
-  ];
+  // console.log(productData);
 
-  const bankOffersData = [
-    {
-      offer_Name: "Bank offer",
-      offer_desc: "₹499 discount on ICICI Bank Credit Cards",
-      offer_Link: "/bank-offer",
-      offerAvail: ["Select eligible card at the time of checkout.", "No promo code required to avail the offer."],
-    },
-    {
-      offer_Name: "Bank offer",
-      offer_desc: "₹499 discount on HDFC Bank Credit Cards",
-      offer_Link: "/bank-offer",
-      offerAvail: ["Select eligible card at the time of checkout.", "No promo code required to avail the offer."],
-    },
-    {
-      offer_Name: "Bank offer",
-      offer_desc: "₹499 discount on SBI Bank Credit Cards",
-      offer_Link: "/bank-offer",
-      offerAvail: ["Select eligible card at the time of checkout.", "No promo code required to avail the offer."],
-    },
-    {
-      offer_Name: "Bank offer",
-      offer_desc: "₹499 discount on HDFC Bank Credit Cards",
-      offer_Link: "/bank-offer",
-      offerAvail: ["Select eligible card at the time of checkout.", "No promo code required to avail the offer."],
-    },
-  ];
+  let interval
+  useEffect(() => {
+    if (productData && productData.product_Discount.flatDiscount && productData.product_Discount.flatDiscount.value) {
+      setDiscountPercent(productData.product_Discount.flatDiscount.value)
+      let discountToDate = new Date(productData.product_Discount.flatDiscount.to)
+      setDiscountTillDate(discountToDate)
+      interval = setInterval(() => {
+        startTimer(discountToDate)
+      }, 1000);
+    } else {
+      let mrp = parseInt(productData.product_price.mrp)
+      let mop = (productData.product_price.discountPrice ? parseInt(productData.product_price.discountPrice) : parseInt(productData.product_price.mop))
+      let discount = Math.floor(((mrp - mop) / mrp) * 100)
+      setDiscountPercent(discount)
+      setDiscountTillDate(null)
+    }
+    return () => { clearInterval(interval) }
+  }, [productData])
+  // console.log(discountTillDate);
+
+  // useEffect(() => {
+  //   startTimer()
+  // }, [])
+
+  const startTimer = (date) => {
+    const countDownDate = date.getTime()
+    const now = new Date().getTime()
+    let countDownOn = true
+    const dist = countDownDate - now
+
+    let days = Math.floor(dist / (24 * 60 * 60 * 1000))
+    let hours = Math.floor(dist % (24 * 60 * 60 * 1000) / (1000 * 60 * 60))
+    let minutes = Math.floor(dist % (60 * 60 * 1000) / (1000 * 60))
+    let seconds = Math.floor(dist % (60 * 1000) / (1000))
+    if (days < 0) {
+      days = 0
+    }
+    if (hours < 0) {
+      hours = 0
+    }
+    if (minutes < 0) {
+      minutes = 0
+    }
+    if (seconds < 0) {
+      seconds = 0
+    }
+    if (dist < 0) {
+      //stop timer
+      clearInterval(interval.current)
+    } else {
+      // Update Timer
+      setDays(days)
+      setHours(hours)
+      setMinutes(minutes)
+      setSeconds(seconds)
+    }
+  }
+  // console.log(countDownTimer);
+
+  useEffect(() => {
+    if (productData.product_loaded &&
+      productData.product_Discount &&
+      productData.product_Discount.combo &&
+      productData.product_Discount.combo.value
+    ) {
+      let proId = productData.product_Discount.combo.value
+      let searchTerm = 'ean=' + proId
+      getSearchedProduct(searchTerm)
+        .then(res => {
+          setComboProductData(...res)
+        })
+    }
+  }, [productData.product_loaded])
+  // console.log(comboProductData);
+
+  useEffect(() => {
+    if (comboProductData) {
+      if (Object.keys(comboProductData).length > 0) {
+        let offerId = comboProductData._id
+        let offerHeading = 'Buy one Get one'
+        let offerName = `Get ${comboProductData.name} free on Purchase of ${productData.product_name}`
+        let offer_Link = "/bank-offer"
+        let offerAvail = "Select eligible card at the time of checkout.~No promo code required to avail the offer.~New Desc,~New DEsc"
+
+        let combo_Offer = {
+          offerId: offerId,
+          offerHeading: offerHeading,
+          offerName: offerName,
+          offer_Link: offer_Link,
+          offerAvail: offerAvail
+        }
+        let offerLen = allOffersData.findIndex(obj => obj.offerId === combo_Offer.offerId)
+        if (offerLen === -1) {
+          setAllOffersData([...allOffersData, combo_Offer])
+        }
+      }
+    }
+  }, [comboProductData])
+  // console.log(allOffersData);
 
   const handleAddToCart = (id) => {
     let userToken = userContext ? userContext.JWT : "";
@@ -241,10 +280,10 @@ const ProductPage = ({ setHeaderData }) => {
             getCartData().then((res) =>
               res
                 ? setCartArray({
-                    loaded: true,
-                    no_of_carts: res.no_of_carts,
-                    cart: res.cart,
-                  })
+                  loaded: true,
+                  no_of_carts: res.no_of_carts,
+                  cart: res.cart,
+                })
                 : ""
             ))
           : ""
@@ -253,7 +292,65 @@ const ProductPage = ({ setHeaderData }) => {
       nav("/login");
     }
   };
-  // console.log(productBankOffers);
+
+  const handleAddToWishlist = (id) => {
+    let userToken = userContext ? userContext.JWT : "";
+    if (userToken) {
+      addToWishlist(id).then((res) =>
+        res
+          ? (toast.success("Product Added to Wishlist"),
+            getCartData().then((res) =>
+              res
+                ? setCartArray({
+                  loaded: true,
+                  no_of_carts: res.no_of_carts,
+                  cart: res.cart,
+                })
+                : ""
+            ))
+          : ""
+      );
+    } else {
+      nav("/login");
+    }
+  }
+
+  const handleOrderInit = (e) => {
+    e.preventDefault();
+    let productId = [productData.product_Id, comboProductData._id]
+    let quantity = [1, 1]
+    setOrderInit(prev => ({
+      ...prev,
+      productId: productId,
+      quantity: quantity
+    }))
+    setCartArray({
+      loaded: true,
+      no_of_carts: 2,
+      cart: [productData.product_Id, comboProductData._id]
+    })
+    nav('/delivery-option')
+    // console.log(data);
+  }
+
+  useEffect(() => {
+    if (productInfo.length > 0) {
+      productInfo.map((elem) => {
+        if (elem[0] === 'specText') {
+          setProdunctSpecText(elem[1])
+        }
+      })
+    }
+  }, [productInfo])
+
+  // useEffect(() => {
+  //   if (scratchCardActive) {
+  //     document.body.style.overflow = 'hidden';
+  //   } else {
+  //     document.body.style.overflow = 'unset';
+  //   }
+  // }, [scratchCardActive])
+
 
   return (
     <>
@@ -279,40 +376,53 @@ const ProductPage = ({ setHeaderData }) => {
               </div>
             </div>
             <div className="product_Side_Section_Buttons">
-              <div className="submit_Button_2">
-                <button type="submit" className="submit-button">
-                  <p>{preOrder ? "Notify when product releases" : "Add to Wishlist"}</p>
-                </button>
-              </div>
-              <div className="button_Set_2">
-                {preOrder ? (
-                  <div className="submit_Button_1">
+              {
+                productData.product_Classification === 'Coming Soon' ? (
+                  <div className="submit_Button_2">
                     <button type="submit" className="submit-button">
-                      <p>Pay in Advance</p>
+                      <p>Notify when product releases</p>
                     </button>
                   </div>
                 ) : (
-                  <>
-                    {userContext ? (
-                      <div className="submit_Button_3">
-                        <button type="submit" className="submit-button" onClick={() => handleAddToCart(productData.product_Id)}>
-                          <p>Add to cart</p>
+                  <div className="submit_Button_2" onClick={() => handleAddToWishlist(productData.product_Id)}>
+                    <button type="submit" className="submit-button">
+                      <p>Add to Wishlist</p>
+                    </button>
+                  </div>
+                )
+              }
+              <div className="button_Set_2">
+                {
+                  (productData.product_Classification === 'Coming Soon') ? (
+                    preOrder ? (
+                      <div className="submit_Button_1">
+                        <button type="submit" className="submit-button">
+                          <p>Pay in Advance</p>
                         </button>
                       </div>
-                    ) : (
-                      <Link to={"/login"} className="submit_Button_3">
-                        <button type="submit" className="submit-button">
-                          <p>Add to cart</p>
+                    ) : ('')) : (
+                    <>
+                      {userContext ? (
+                        <div className="submit_Button_3">
+                          <button type="submit" className="submit-button" onClick={() => handleAddToCart(productData.product_Id)}>
+                            <p>Add to cart</p>
+                          </button>
+                        </div>
+                      ) : (
+                        <Link to={"/login"} className="submit_Button_3">
+                          <button type="submit" className="submit-button">
+                            <p>Add to cart</p>
+                          </button>
+                        </Link>
+                      )}
+                      <div>
+                        <button type="submit" className="submit-button" onClick={handleOrderInit} >
+                          <p>Buy now</p>
                         </button>
-                      </Link>
-                    )}
-                    <div>
-                      <button type="submit" className="submit-button">
-                        <p>Buy now</p>
-                      </button>
-                    </div>
-                  </>
-                )}
+                      </div>
+                    </>
+                  )
+                }
               </div>
             </div>
           </aside>
@@ -325,9 +435,9 @@ const ProductPage = ({ setHeaderData }) => {
               <div className="product_Preview_Section">
                 <Carousel
                   interval={5000}
-                  // infiniteLoop
-                  // showThumbs={false}
-                  // showStatus={false}
+                // infiniteLoop
+                // showThumbs={false}
+                // showStatus={false}
                 >
                   {productData.product_image_List.map((image, index) => (
                     <Carousel.Item key={index}>
@@ -336,100 +446,174 @@ const ProductPage = ({ setHeaderData }) => {
                   ))}
                 </Carousel>
               </div>
-              {productData.product_loaded ? (
-                <div className="product_Price_Desc">
-                  <p className="product_Discount_Price">₹{productData.product_price.discountPrice ? productData.product_price.discountPrice : productData.product_price.mop}</p>
-                  <p className="product_Original_Price">₹{productData.product_price.mrp}</p>
-                  {productData.product_Disccount.flatDiscount && productData.product_Disccount.flatDiscount.value && (
-                    <p className="product_Discount">{productData.product_Disccount.flatDiscount.value}%</p>
-                  )}
-                  <p className="product_Availability">
-                    {preOrder ? "" : productData.product_Instock > 10 ? "In stock" : productData.product_Instock < 10 && productData.product_Instock >= 1 ? "Few in stock" : "Out of stock"}
-                  </p>
-                </div>
-              ) : (
-                <SkeletonElement type={"productTitle"} />
-              )}
+              <div className="product_Price_Desc">
+                {productData.product_loaded ? (
+                  <>
+                    <p className="product_Discount_Price">₹{!isNaN(productData.product_price.discountPrice) ? productData.product_price.discountPrice : productData.product_price.mop}</p>
+                    <p className="product_Original_Price">₹{productData.product_price.mrp}</p>
+                    <p className="product_Discount">{discountPercent}%</p>
+                    <p className="product_Availability">
+                      {preOrder ? "" : productData.product_Instock > 10 ? "In stock" : productData.product_Instock < 10 && productData.product_Instock >= 1 ? "Few in stock" : "Out of stock"}
+                    </p>
+                  </>
+                ) : (
+                  <SkeletonElement type={"productTitle"} />
+                )}
+              </div>
 
               <div className="product_Offer_Counter">
-                <p>{preOrder ? "Deal is 40% Claimed" : `${productData.offer_Deadline}`} </p>
+                {productData.product_loaded ? (
+                  productData.product_Classification === 'Coming Soon' ? (
+                    preOrder ? (<p>Deal is 40% Claimed</p>) : ('')
+                  ) : (
+                    discountTillDate ? (
+                      // (days + hours + minutes + seconds <= 0) ? (
+                      <p>Deal ends in {days}d {hours}h {minutes}m {seconds}s</p>
+                      // ) : (<></>)
+                    ) : (<></>)
+                  )
+                ) :
+                  (<SkeletonElement type={"productTitle"} />)}
+                {/* {productData.product_loaded ? (
+                  discountTillDate ? (
+                    <p>{productData.product_Classification === 'Coming Soon' ? (preOrder ? ("Deal is 40% Claimed") : ('')) : `Deal ends in ${countDownTimer.days}d ${countDownTimer.hours}h ${countDownTimer.minutes}m ${countDownTimer.seconds}s`} </p>
+                  ) : (<></>)
+                ) : (<SkeletonElement type={"productTitle"} />)} */}
               </div>
               {matches ? (
-                <div className="product_Offer_Section">
-                  <div className="product_Offer_Header">
-                    <img src={offerIconYellow} alt="" />
-                    <h5 className="product_Section_Heading">Offers</h5>
-                  </div>
-                  <div className="product_Offer_Cards_Container">
-                    <div className="product_Offer_Cards_Wrapper">
-                      {productBankOffers.map((offer, index) => (
-                        <OfferCard offer={offer} key={index} />
-                      ))}
+                (allOffersData.length > 0) && (
+                  <div className="product_Offer_Section">
+                    <div className="product_Offer_Header">
+                      <img src={offerIconYellow} alt="" />
+                      <h5 className="product_Section_Heading">Offers</h5>
                     </div>
-                  </div>
-                </div>
+                    <div className="product_Offer_Cards_Container">
+                      <div className="product_Offer_Cards_Wrapper">
+                        {allOffersData.map((offer, index) => (
+                          <OfferCard offer={offer} key={offer.offerId} />
+                        ))}
+                      </div>
+                    </div>
+                  </div>)
               ) : (
                 ""
               )}
             </div>
 
             <div className="product_Alternate_Section section_Wrapper">
-              {matches ? (
-                <>
-                  <div className="product_Alternate_Section_Header">
+              <div className="mobile_None tab_Display_Block">
+                <div className="product_Alternate_Section_Header">
+                  {productData.product_loaded ? (
                     <p>
                       Color : <span>{productData.product_color}</span>
                     </p>
-                  </div>
-                  <div className="product_Alternate_Section_Body">{colorAlternateProds.map((product) => product.images[0] && <AlternateProductBox key={product._id} product={product} />)}</div>
-                  <div className="product_Alternate_Section_Footer">
-                    <p>
-                      Size : <span> 4GB RAM & 64GB Storgae</span>
-                    </p>
-                  </div>
-                  <div className="product_Alternate_Footer_Cards">
-                    {specAlternateProds.map((product) => product.alternate_Heading && <AlternateProductBox key={product.id} product={product} dataOnly={true} />)}
-                  </div>
-                </>
-              ) : (
-                <Accordion>
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>
-                      <p>
-                        Color : <span>{productData.product_color}</span>
-                      </p>
-                    </Accordion.Header>
-                    <Accordion.Body>
-                      <div className="product_Offer_Cards_Container">
-                        <div className="product_Offer_Cards_Wrapper">
-                          {colorAlternateProds.map((product) => (
-                            <AlternateProductBox key={product.id} product={product} />
-                          ))}
-                        </div>
+                  ) : (<SkeletonElement type={"productTitle"} />)}
+                </div>
+                <div className="product_Alternate_Section_Body">
+                  {
+                    productData.product_loaded ? (
+                      (colorAlternateProds.length > 0) && colorAlternateProds.map((product) => product.images[0] && <AlternateProductBox key={product._id} product={product} />)
+                    ) : (
+                      <div className="d-flex ">
+                        {[1, 2, 3, 4, 5].map((n) => <SkeletonElement type={"productThumbnail"} key={n} />)}
                       </div>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              )}
+                    )
+                  }
+                </div>
+                <div className="product_Alternate_Section_Footer">
+                  <>
+                    {productData.product_loaded ? (
+                      produnctSpecText && (
+                        <p>
+                          Size : <span>{` ${produnctSpecText}`}</span>
+                        </p>
+                      )
+                    ) : (
+                      <div className="d-flex width-100">
+                        {[1, 2, 3, 4, 5].map((n) => <SkeletonElement type={"productTitle"} key={n} />)}
+                      </div>
+                    )}
+                  </>
+                </div>
+                <div className="product_Alternate_Footer_Cards">
+                  {
+                    productData.product_loaded ? (
+                      (specAlternateProds.length > 0) && specAlternateProds.map((product) => product.productInfo.specText && <AlternateProductBox key={product.id} product={product} dataOnly={true} />)
+                    ) : (
+                      <SkeletonElement type={"productTitle"} />
+                    )
+                  }
+                </div>
+              </div>
+
+              <Accordion className="tab_None">
+                <Accordion.Item eventKey="0">
+                  <Accordion.Header>
+                    {
+                      productData.product_loaded ? (
+                        <p>
+                          Color : <span>{productData.product_color}</span>
+                        </p>
+                      ) : (
+                        <SkeletonElement type={"productTitle"} />
+                      )
+                    }
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    <div className="product_Offer_Cards_Container">
+                      <div className="product_Offer_Cards_Wrapper">
+                        {(colorAlternateProds.length > 0) && colorAlternateProds.map((product) => (
+                          <AlternateProductBox key={product.id} product={product} />
+                        ))}
+                      </div>
+                    </div>
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
             </div>
 
             <div className="product_Delivery_Section section_Wrapper">
-              <p className="product_Delivery_Details" onClick={() => setModalShow(true)}>
-                <span>Free delivery: Thursday, Feb 24 </span>
-                on orders over ₹499
-              </p>
-              {!matches ? (
-                <>
-                  <p className="cart_Product_Availability product_Page_Availability">In stock</p>
-                  <div className="product_Delivery_Footer submit_Button_2">
-                    <button type="submit" className="submit-button">
-                      <p>{preOrder ? "Notify when product releases" : "Add to Wishlist"}</p>
-                    </button>
-                  </div>
-                </>
-              ) : (
-                ""
-              )}
+              <div className="product_Delivery_Details">
+                {
+                  productData.product_loaded ? (
+                    <p onClick={() => setScratchCardActive(true)}>
+                      <span>Free delivery: Thursday, Feb 24 </span>
+                      on orders over ₹499
+                    </p>
+                  ) : (
+                    <SkeletonElement type={"productTitle"} />
+                  )
+                }
+
+              </div>
+
+              <div className="tab_None">
+                <div className="product_Page_Availability">
+                  {
+                    productData.product_loaded ? (
+                      <p className="cart_Product_Availability">{productData.product_Classification === 'Coming Soon' ? 'Coming Soon' : 'In stock'}</p>
+                    ) : (
+                      <SkeletonElement type={"productTitle"} />
+                    )
+                  }
+                </div>
+                {
+                  productData.product_Classification === 'Coming Soon' ? (
+                    <div className="product_Delivery_Footer submit_Button_2">
+                      <button type="submit" className="submit-button">
+                        <p>Notify when product releases</p>
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="product_Delivery_Footer submit_Button_2" onClick={() => handleAddToWishlist(productData.product_Id)}>
+                      <button type="submit" className="submit-button">
+                        <p>Add to Wishlist</p>
+                      </button>
+                    </div>
+                  )
+                }
+              </div>
+
             </div>
 
             {!matches ? (
@@ -440,8 +624,8 @@ const ProductPage = ({ setHeaderData }) => {
                 </div>
                 <div className="product_Offer_Cards_Container">
                   <div className="product_Offer_Cards_Wrapper">
-                    {productBankOffers.map((offer, index) => (
-                      <OfferCard offer={offer} key={index} />
+                    {allOffersData.map((offer, index) => (
+                      <OfferCard offer={offer} key={offer.offerId} />
                     ))}
                   </div>
                 </div>
@@ -491,33 +675,60 @@ const ProductPage = ({ setHeaderData }) => {
               : [1, 2, 3, 4, 5].map((n) => <SkeletonElement type={"productBanner"} key={n} />)}
           </div>
         </div>
-        <Section2 id={"Top-sellers-sec"} heading="Suggested products" productData={sec5Data} />
+        <Section2 id={"Top-sellers-sec"} heading="Suggested products" productData={allProducts} />
         {/* Floating Footer */}
         {!matches && (
           <div className="floating_Footer">
             <div className="floating_Footer_Wrapper product_Page_Floating_Wrapper">
-              <div className="floating_Footer_Left">
-                {userContext ? (
-                  <p className="floater_Add_Cart" onClick={() => handleAddToCart(productData.product_Id)}>
-                    Add to cart
-                  </p>
+              {
+                productData.product_Classification === 'Coming Soon' ? (
+                  <>
+                    <div className="floating_Footer_Center">
+                      {
+                        productData.product_Classification === 'Coming Soon' ? (
+                          <div className="submit_Button_2">
+                            <button type="submit" className="submit-button">
+                              <p>Notify when product releases</p>
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="submit_Button_2" onClick={() => handleAddToWishlist(productData.product_Id)}>
+                            <button type="submit" className="submit-button">
+                              <p>Add to Wishlist</p>
+                            </button>
+                          </div>
+                        )
+                      }
+                    </div>
+                  </>
                 ) : (
-                  <Link to={"/login"} className="floater_Add_Cart">
-                    Add to cart
-                  </Link>
-                )}
-              </div>
-              <div className="floating_Footer_Right">
-                <button type="submit" className="submit-button">
-                  <p>Buy now</p>
-                </button>
-              </div>
+                  <>
+                    <div className="floating_Footer_Left">
+                      {userContext ? (
+                        <p className="floater_Add_Cart" onClick={() => handleAddToCart(productData.product_Id)}>
+                          Add to cart
+                        </p>
+                      ) : (
+                        <Link to={"/login"} className="floater_Add_Cart">
+                          Add to cart
+                        </Link>
+                      )}
+                    </div>
+                    <div className="floating_Footer_Right">
+                      <button type="submit" className="submit-button" onClick={handleOrderInit}>
+                        <p>Buy now</p>
+                      </button>
+                    </div>
+                  </>
+                )
+              }
             </div>
           </div>
         )}
       </div>
       <ToastContainer position="top-center" autoClose={2000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
-      <ScartchCardComp modalShow={modalShow} setModalShow={setModalShow} />
+      {/* <ScartchCardComp modalShow={modalShow} setModalShow={setModalShow} /> */}
+      <ScratchCardComp scratcCardActive={scratchCardActive} setScratchCardActive={setScratchCardActive} />
     </>
   );
 };
