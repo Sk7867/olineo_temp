@@ -46,6 +46,7 @@ const AddOffers = ({ setHeaderData }) => {
     }
   })
   const [bankOffers, setBankOffers] = useState([])
+  const [allOffers, setAllOffers] = useState([])
   const [holdContainerValue, setHoldContainerValue] = useState('')
 
   const [flatDisOffers, setFlatDisOffers] = useState({
@@ -356,7 +357,13 @@ const AddOffers = ({ setHeaderData }) => {
               {bankOffers && bankOffers.length > 0 && (
                 bankOffers.map((offer, index) => (
                   <>
-                    {/* <fieldset className='catelogue_Fieldset' >
+                    <div className="addoffer_Input2 bank_offer_heading">
+                      <div className="input_Delete">
+                        <img src={deleteIcon} alt="" onClick={() => handleRemoveBankOffer(index)} />
+                      </div>
+                      <p>Offer {index + 1}</p>
+                    </div>
+                    <fieldset className='catelogue_Fieldset' >
                       <Dropdown>
                         <Dropdown.Toggle id="dropdown-basic">
                           <div className="catalogue_Dropdown">
@@ -372,13 +379,7 @@ const AddOffers = ({ setHeaderData }) => {
                           }
                         </Dropdown.Menu>
                       </Dropdown>
-                    </fieldset> */}
-                    <div className="addoffer_Input2 bank_offer_heading">
-                      <div className="input_Delete">
-                        <img src={deleteIcon} alt="" onClick={() => handleRemoveBankOffer(index)} />
-                      </div>
-                      <p>Offer {index + 1}</p>
-                    </div>
+                    </fieldset>
                     <input type="text" name='offerHeading' id='offerHeading' className='input-field' placeholder='Select Bank Offer or Store Offer' value={offer.offerHeading} onChange={(e) => handleBankOffer(e, index)} />
                     <input type="text" name='offerName' id='offerName' className='input-field' placeholder='Add Offer Name' value={offer.offerName} onChange={(e) => handleBankOffer(e, index)} />
                     <input type="text" name='offerAvail' id='offerAvail' className='input-field' placeholder='Add Offer Conditions' value={offer.offerAvail} onChange={(e) => handleBankOffer(e, index)} />

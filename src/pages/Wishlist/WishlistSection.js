@@ -28,6 +28,7 @@ const WishlistSection = () => {
                 loaded: true,
                 no_of_carts: res.no_of_carts,
                 cart: res.cart,
+                combo: res.combo
               })
             }
           }),

@@ -131,7 +131,7 @@ export const cancelOrder = async (order_Id, itemId, query) => {
 
   let data = {
     reason: query,
-    itemId: itemId
+    itemId: [itemId]
   }
 
   // console.log(order_Id, data);

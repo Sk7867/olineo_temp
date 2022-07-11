@@ -11,6 +11,7 @@
   align-self: center;
   min-width: 160px;
   min-height: 148px;
+  align-self: flex-start;
 }
 
 .offer_Card_Name{

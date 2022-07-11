@@ -42,19 +42,17 @@ const MyCart = ({ setHeaderData }) => {
           setCartArray({
             loaded: true,
             no_of_carts: res.no_of_carts,
-            cart: res.cart
+            cart: res.cart,
+            combo: res.combo
           })
           // console.log(res);
         }
       })
   }, [])
 
-
-
-
+  // console.log(cartArray);
   const pageSwitch = (e) => {
     e.preventDefault();
-    // console.log(e);
     nav('/')
   }
 

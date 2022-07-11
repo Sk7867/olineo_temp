@@ -62,7 +62,7 @@ const ProductPage = ({ setHeaderData }) => {
     },
     product_Discount: {},
     offer_Deadline: "Deal ends in 14h 17m 04s",
-    product_Instock: 255,
+    product_Instock: 0,
     product_image_List: [],
     product_Gallery_Image: [],
     product_Description: [],
@@ -78,7 +78,7 @@ const ProductPage = ({ setHeaderData }) => {
   const [discountPercent, setDiscountPercent] = useState('')
   const [comboProductData, setComboProductData] = useState({})
   const [allOffersData, setAllOffersData] = useState([])
-  const [discountTillDate, setDiscountTillDate] = useState(new Date())
+  const [discountTillDate, setDiscountTillDate] = useState(null)
   const [days, setDays] = useState('')
   const [hours, setHours] = useState('')
   const [minutes, setMinutes] = useState('')
@@ -124,7 +124,8 @@ const ProductPage = ({ setHeaderData }) => {
             product_image_List: images,
             product_Gallery_Image: product.gallery,
             product_Discount: product.discount,
-            product_Slug: product.slug
+            product_Slug: product.slug,
+            product_Instock: product.qty
           }));
           setPreviewImageSelected(images[0]);
           setProductInfo(Object.entries(product.productInfo));
@@ -141,7 +142,7 @@ const ProductPage = ({ setHeaderData }) => {
         }
       })
   }, [slug])
-  // console.log(alternateColorean);
+  console.log(productData);
 
   useEffect(() => {
     alternateColorean.forEach(ean => {
@@ -176,7 +177,6 @@ const ProductPage = ({ setHeaderData }) => {
     if (productData && productData.product_Discount.flatDiscount && productData.product_Discount.flatDiscount.value) {
       setDiscountPercent(productData.product_Discount.flatDiscount.value)
       let discountToDate = new Date(productData.product_Discount.flatDiscount.to)
-      setDiscountTillDate(discountToDate)
       interval = setInterval(() => {
         startTimer(discountToDate)
       }, 1000);
@@ -220,12 +220,14 @@ const ProductPage = ({ setHeaderData }) => {
     if (dist < 0) {
       //stop timer
       clearInterval(interval.current)
+      setDiscountTillDate(null)
     } else {
       // Update Timer
       setDays(days)
       setHours(hours)
       setMinutes(minutes)
       setSeconds(seconds)
+      setDiscountTillDate(date)
     }
   }
   // console.log(countDownTimer);
@@ -276,16 +278,9 @@ const ProductPage = ({ setHeaderData }) => {
     if (userToken) {
       addToCart(id).then((res) =>
         res
-          ? (toast.success("Product Added to Cart"),
-            getCartData().then((res) =>
-              res
-                ? setCartArray({
-                  loaded: true,
-                  no_of_carts: res.no_of_carts,
-                  cart: res.cart,
-                })
-                : ""
-            ))
+          ? (
+            toast.success("Product Added to Cart")
+          )
           : ""
       );
     } else {
@@ -305,6 +300,7 @@ const ProductPage = ({ setHeaderData }) => {
                   loaded: true,
                   no_of_carts: res.no_of_carts,
                   cart: res.cart,
+                  combo: res.combo
                 })
                 : ""
             ))
@@ -327,7 +323,8 @@ const ProductPage = ({ setHeaderData }) => {
     setCartArray({
       loaded: true,
       no_of_carts: 2,
-      cart: [productData.product_Id, comboProductData._id]
+      cart: [productData.product_Id],
+      combo: [comboProductData._id],
     })
     nav('/delivery-option')
     // console.log(data);

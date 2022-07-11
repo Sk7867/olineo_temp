@@ -207,7 +207,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
       searchTerm = ''
       searchURL = 'Category=' + value
     }
-    console.log(searchTerm);
+    // console.log(searchTerm);
     getSearchedProduct(searchTerm)
       .then(res => {
         if (res) {

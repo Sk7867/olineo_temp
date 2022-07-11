@@ -34,7 +34,7 @@ const WishlistProductCard = ({ product, handleRemoveFromWishlist, handleAddToCar
     }
   }, [product])
 
-  console.log(product);
+  // console.log(product);
 
   return (
     <div className='cart_Product_Contianer section_Wrapper'>

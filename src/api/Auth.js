@@ -216,10 +216,12 @@ export const getUser = async (JWT) => {
   let getUserResponse
   let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
 
+  let token = JWT ? JWT : userToken
+
   const headers = {
     "Access-Control-Allow-origin": "*",
     'Content-Type': 'application/json',
-    "Authorization": `Bearer ${JWT}`
+    "Authorization": `Bearer ${token}`
   }
   // console.log(userToken);
 
@@ -268,7 +270,6 @@ export const saveUser = async (userData, selectedDay) => {
     .then(res => {
       saveUserResponse = res.data
       // window.sessionStorage.setItem("user", JSON.stringify(userInfo))
-      getUser(userToken)
     })
     .catch(err => console.log('Error:', err))
 
@@ -305,14 +306,14 @@ export const updateUser = async (userData) => {
     return accumulator
   }, {})
 
-  console.log(newData);
-  // await axios.put(`${process.env.REACT_APP_BASE_URL}/user/updateProfile`, JSON.stringify(newData), { headers })
-  //   .then(res => {
-  //     updateUserResponse = res.data
-  //     // window.sessionStorage.setItem("user", JSON.stringify(userInfo))
-  //     getUser(userToken)
-  //   })
-  // .catch(err => console.log('Error:', err))
+  // console.log(newData);
+  await axios.put(`${process.env.REACT_APP_BASE_URL}/user/updateProfile`, JSON.stringify(newData), { headers })
+    .then(res => {
+      updateUserResponse = res.data
+      // window.sessionStorage.setItem("user", JSON.stringify(userInfo))
+      getUser(userToken)
+    })
+    .catch(err => console.log('Error:', err))
 
   return updateUserResponse
 
