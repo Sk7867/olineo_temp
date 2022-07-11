@@ -25,12 +25,15 @@ const CartSection = ({ featureProducts }) => {
     setCartArray,
     setOrderInit,
     allProducts,
-    priceBoxDetails } = useContext(UserDataContext)
+    userComboCart,
+    setUserComboCart,
+    priceBoxDetails
+  } = useContext(UserDataContext)
 
   useEffect(() => {
     getCoupon()
       .then(res => {
-        console.log(res);
+        // console.log(res);
       })
   }, [])
 
@@ -73,21 +76,23 @@ const CartSection = ({ featureProducts }) => {
       quantity: quantity
     }))
     nav('/delivery-option')
-    // console.log(data);
   }
+  // console.log(userComboCart);
 
   //Remove Product from cart
   const handleRemoveFromCart = (id) => {
     removeFromCart(id)
       .then(res => res ? (
         setUserCart([]),
+        setUserComboCart([]),
         toast.error('Product Removed from Cart'),
         getCartData()
           .then(res => res ? (
             setCartArray({
               loaded: true,
               no_of_carts: res.no_of_carts,
-              cart: res.cart
+              cart: res.cart,
+              combo: res.combo
             })
           ) : (
             ''
@@ -106,6 +111,7 @@ const CartSection = ({ featureProducts }) => {
   }
 
   // console.log(userCart);
+  // console.log(cartArray);
 
   return (
     <>
@@ -139,6 +145,19 @@ const CartSection = ({ featureProducts }) => {
                       handleQuantityDec={handleQuantityDec}
                     />
                   ))) : ('')
+              }
+              {
+                (userComboCart.length > 0) && userComboCart ? (
+                  userComboCart.map((item, index) => (
+                    <CartProductCard
+                      key={index}
+                      product={item}
+                      comboProduct={true}
+                      handleRemoveFromCart={handleRemoveFromCart}
+                      handleQuantityInc={handleQuantityInc}
+                      handleQuantityDec={handleQuantityDec}
+                    />
+                  ))) : (<></>)
               }
             </div>
 

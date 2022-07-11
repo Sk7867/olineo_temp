@@ -10,9 +10,11 @@ import navigationBlackIcon from '../../assets/vector/navigation_black.svg'
 import phoneOutlineBlackIcon from '../../assets/vector/phone_outline_black.svg'
 import navigationArrowBlack from '../../assets/vector/navigation_arrow_black.svg'
 
-const StoreBox = ({ store, classes }) => {
-
-
+const StoreBox = ({
+  store,
+  handleCategorySearch,
+  classes
+}) => {
 
   return (
     <>
@@ -52,9 +54,9 @@ const StoreBox = ({ store, classes }) => {
             </Link>
           )}
           {store && store.open_Store_Button && (
-            <Link to={`${store.open_Store_Menu}`} className="open_Store_button">
+            <div className="open_Store_button" onClick={() => handleCategorySearch('all')}>
               <p>Open store</p>
-            </Link>
+            </div>
           )}
         </div>
       </div>

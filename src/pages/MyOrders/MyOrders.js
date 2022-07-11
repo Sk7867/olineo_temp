@@ -16,14 +16,14 @@ import { UserDataContext } from "../../Contexts/UserContext";
 import { getAllOrder } from "../../api/OrdersApi";
 
 const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
-  const [onTheWay, setOnTheWay] = useState(true);
+  const [placed, setPlaced] = useState(true);
   const [delivered, setDelivered] = useState(true);
   const [cancelled, setCancelled] = useState(true);
   const { userOrderData, setUserOrderData } = useContext(UserDataContext);
 
   const nav = useNavigate();
 
-  // console.log(onTheWay);
+  // console.log(placed);
 
   useEffect(() => {
     setHeaderData({
@@ -170,13 +170,13 @@ const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
                     type="checkbox"
                     name="on_the_way"
                     id={`on_the_way`}
-                    defaultChecked={onTheWay}
+                    defaultChecked={placed}
                     onClick={() => {
-                      setOnTheWay(!onTheWay);
+                      setPlaced(!placed);
                     }}
                   />
                   <span className="custom-checkmark"></span>
-                  On the way
+                  Placed
                 </label>
                 <label htmlFor={`Delivered`} className="checkbox-label checkbox-item d-flex align-items-center side_Section_Checkbox">
                   <input
@@ -205,7 +205,7 @@ const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
                   Cancelled
                 </label>
               </aside>
-              <OrderSection featureProducts={featureProducts} onTheWay={onTheWay} delivered={delivered} cancelled={cancelled} />
+              <OrderSection featureProducts={featureProducts} placed={placed} delivered={delivered} cancelled={cancelled} />
             </div>
           </>
         )}

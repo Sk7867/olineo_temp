@@ -17,12 +17,21 @@ import locationBlue from '../../assets/vector/location_blue.svg'
 import locationWhite from '../../assets/vector/location_white.svg'
 import locationWarningYellowIcon from '../../assets/vector/location_warning_yellow.svg'
 import { storeLocation } from '../../api/StoreApi'
+import { getSearchedProduct } from '../../api/Product'
+import { useNavigate } from 'react-router-dom'
 
 const StoreFinder = ({ setHeaderData }) => {
   const [showStore, setShowStore] = useState(false)
+  const nav = useNavigate()
   const [listOptionSelected, setListOptionSelected] = useState(true)
   const { location, locationFetch } = useGeolocation()
-  const { userLocation, setUserLocation, storeLocations, setStoreLocations } = useContext(UserDataContext)
+  const {
+    userLocation,
+    setUserLocation,
+    storeLocations,
+    setStoreLocations,
+    setSearchedProduct
+  } = useContext(UserDataContext)
   // console.log(showStore);
 
   useEffect(() => {
@@ -91,6 +100,25 @@ const StoreFinder = ({ setHeaderData }) => {
     window.location.reload(false)
   }
 
+  const handleCategorySearch = (value) => {
+    let searchTerm
+    let searchURL
+    searchTerm = ''
+    searchURL = 'Store=' + value
+
+    console.log(searchTerm);
+    getSearchedProduct(searchTerm)
+      .then(res => {
+        if (res) {
+          setSearchedProduct({
+            loaded: true,
+            products: res,
+            no_of_products: res.length
+          })
+          nav(`/${searchURL}`)
+        }
+      })
+  }
 
   return (
     <>
@@ -154,9 +182,13 @@ const StoreFinder = ({ setHeaderData }) => {
                 )}
                 {
                   storeBoxData.map((store, index) => (
-                    <StoreBox key={index} store={store} classes={{
-                      containerClasses: 'bg-white tab_Border'
-                    }} />
+                    <StoreBox
+                      key={index}
+                      store={store}
+                      handleCategorySearch={handleCategorySearch}
+                      classes={{
+                        containerClasses: 'bg-white tab_Border'
+                      }} />
                   ))
                 }
               </div>

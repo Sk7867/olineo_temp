@@ -18,7 +18,7 @@ const OrderProductCard = ({ orderId, itemId, product, classes, productDeliverySt
     itemId: '',
   })
 
-  console.log(productData);
+  // console.log(productData);
 
   useEffect(() => {
     if (product) {

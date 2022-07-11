@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { updateUser, userLogin } from "../../api/Auth";
+import { getUser, updateUser, userLogin } from "../../api/Auth";
 import { userSignUp, saveUserPic } from "../../api/Auth";
 import moment from "moment";
 import DatePicker from "react-date-picker";
@@ -67,14 +67,22 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
         user_Full_Name: userContext.fullName,
         user_ph_Number: userContext.mobileNumber,
         user_Email: userContext.email,
-        user_Birth_Date: userContext.dob,
       });
       setSecondaryData({
         user_Full_Name: userContext.fullName,
         user_ph_Number: userContext.mobileNumber,
         user_Email: userContext.email,
-        user_Birth_Date: userContext.dob,
       });
+
+      let bday = new Date(userContext.dob)
+      setDisplayInfo(prev => ({
+        ...prev,
+        user_Birth_Date: bday,
+      }))
+      setSecondaryData(prev => ({
+        ...prev,
+        user_Birth_Date: bday,
+      }))
       // if (userContext.dob) {
       //   if (typeof (userContext.dob) === 'string') {
       //     let bdayRecieved = userContext.dob
@@ -211,8 +219,8 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
       dob: selectedDay,
       mobileNumber: displayInfo.user_ph_Number,
     }));
-    // updateUser(userContext)
-    //   .then(res => res ? toast.success('Details Updated Successfully') : toast.error('Incomplete Data'))
+    updateUser(userContext, displayInfo.user_Birth_Date)
+      .then(res => res ? toast.success('Details Updated Successfully') : toast.error('Incomplete Data'))
     saveUserPic(userContext.newProfilePic)
       .then((res) => {
         console.log(res);
@@ -220,13 +228,28 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
           toast.success("Profile Updated");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+    getUser()
+      .then(res => {
+        if (res) {
+          let user = res
+          setUserContext(prev => ({
+            ...prev,
+            id: user._id,
+            fullName: user.fullName,
+            mobileNumber: user.mobileNumber,
+            email: user.email,
+            dob: user.dob,
+          }))
+        }
+      })
   };
+
 
   const handleDate = (e, type, key) => {
     type((prev) => ({ ...prev, [key]: e }));
   };
-  // console.log(displayInfo);
+  console.log(displayInfo);
 
   return (
     <>

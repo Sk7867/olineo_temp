@@ -87,19 +87,7 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
           loaded: true,
           no_of_carts: res.no_of_carts,
           cart: res.cart,
-        });
-        // console.log(res);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    getCartData().then((res) => {
-      if (res) {
-        setCartArray({
-          loaded: true,
-          no_of_carts: res.no_of_carts,
-          cart: res.cart,
+          combo: res.combo
         });
         // console.log(res);
       }
@@ -154,6 +142,7 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
       setCartArray({
         loaded: false,
         cart: [],
+        combo: [],
         no_of_carts: 0,
       });
       setUserOrderData({

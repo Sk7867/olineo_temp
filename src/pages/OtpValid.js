@@ -66,11 +66,6 @@ const OtpValid = ({ loginRedirect }) => {
                 email: user.email,
                 dob: user.dob,
               }));
-              setCartArray({
-                loaded: true,
-                cart: user.cart,
-                no_of_carts: user.cart.length,
-              });
             }
           }),
           getUserPic(res.JWT).then((res) => {
@@ -91,14 +86,22 @@ const OtpValid = ({ loginRedirect }) => {
                 orders: newOrders,
               });
             }
-          }))
-        : // getCartData()
-          //   .then(res => {
-          //     if (res) {
-          //       setUserCart(res)
-          //     }
-          //   })
-          (setLoading(false), setBtnDisable(false), toast.error("OTP Expired or invalid"))
+          }),
+          getCartData(res.JWT)
+            .then(res => {
+              if (res) {
+                setCartArray({
+                  loaded: true,
+                  no_of_carts: res.no_of_carts,
+                  cart: res.cart,
+                  combo: res.combo
+                })
+              }
+            })
+
+        )
+        :
+        (setLoading(false), setBtnDisable(false), toast.error("OTP Expired or invalid"))
     );
   };
 

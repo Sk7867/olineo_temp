@@ -3,7 +3,7 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import { useLocation, Routes, Route } from "react-router-dom";
 import { getUser, getUserPic } from "./api/Auth";
-import { getAllProducts, getIndiProduct } from "./api/Product";
+import { getAllProducts, getIndiProduct, getSearchedProduct } from "./api/Product";
 import { getCartData } from "./api/Cart";
 
 //Image
@@ -58,6 +58,7 @@ import { getAllOrder, getOrderStatus } from "./api/OrdersApi";
 import PrivateRouteCustomer from "./pages/PrivateRoute/PrivateRouteCustomer";
 import PrivateRouteSignup from "./pages/PrivateRoute/PrivateRouteSignup";
 import OrderSuccess from "./pages/MyOrders/OrderSuccess";
+import MyWishlist from "./pages/Wishlist/MyWishlist";
 //Push from new branch -sid
 
 function App() {
@@ -88,13 +89,13 @@ function App() {
     pincode: "",
   });
 
-  useEffect(() => {
-    const token = JSON.parse(sessionStorage.user) ? JSON.parse(sessionStorage.user).JWT : "";
-    setUserContext({
-      ...userContext,
-      JWT: token,
-    });
-  }, []);
+  // useEffect(() => {
+  //   const token = JSON.parse(sessionStorage.user) ? JSON.parse(sessionStorage.user).JWT : "";
+  //   setUserContext({
+  //     ...userContext,
+  //     JWT: token,
+  //   });
+  // }, []);
 
   const [userAddress, setUserAddress] = useState({
     loaded: false,
@@ -102,13 +103,14 @@ function App() {
     address: [],
   });
   const [userCart, setUserCart] = useState([]);
+  const [userComboCart, setUserComboCart] = useState([]);
   const [cartArray, setCartArray] = useState({
     loaded: false,
     cart: [],
-    combo_Products: [],
+    combo: [],
     no_of_carts: 0,
   });
-  // console.log(cartArray);
+  // console.log(userComboCart);
 
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,
@@ -142,7 +144,7 @@ function App() {
     no_of_orders: 0,
     orders: [],
   });
-  console.log(userOrderData);
+  // console.log(userOrderData);
   const [searchedProduct, setSearchedProduct] = useState({
     loaded: false,
     products: [],
@@ -157,7 +159,7 @@ function App() {
     no_of_wishlist_items: 0,
     wishlist_items: [],
   });
-  console.log(userWishlist);
+  // console.log(orderInit);
 
   useEffect(() => {
     let user = JSON.parse(sessionStorage.getItem("user"));
@@ -169,7 +171,7 @@ function App() {
     setTimeout(() => {
       getUser(userToken).then((res) => {
         if (res) {
-          console.log(res);
+          // console.log(res);
           let user = res;
           setUserContext((prev) => ({
             ...prev,
@@ -179,17 +181,12 @@ function App() {
             email: user.email,
             dob: user.dob,
           }));
-          setCartArray({
-            loaded: true,
-            cart: user.cart,
-            no_of_carts: user.cart.length,
-          });
         }
       });
 
       getUserPic(userToken).then((res) => {
         if (res) {
-          console.log(res);
+          // console.log(res);
           setUserContext((prev) => ({
             ...prev,
             profilePic: res,
@@ -229,20 +226,28 @@ function App() {
   }, []);
 
   useEffect(() => {
-    cartArray.cart.map((product) =>
-      getIndiProduct(product).then((res) => {
-        if (res) {
-          // console.log(res);
-          let ind = userCart.findIndex((obj) => obj._id === res._id);
-          if (ind === -1) {
-            res["quantity"] = 1;
-            setUserCart([...userCart, res]);
-          }
-        }
+    cartArray.cart.map((product) => {
+      let ind = userCart.findIndex((obj) => obj._id === product._id);
+      if (ind === -1) {
+        product["quantity"] = 1;
+        setUserCart([...userCart, product]);
+      }
+    });
+    if (cartArray.combo.length > 0) {
+      cartArray.combo.map((product) => {
+        // console.log(product);
+        let searchTerm = 'ean=' + product
+        getSearchedProduct(searchTerm)
+          .then(res => {
+            if (res) {
+              let product = res[0]
+              setUserComboCart([...userComboCart, product]);
+            }
+          })
       })
-    );
+    }
   }, [cartArray]);
-  // console.log(userCart);
+  // console.log(userComboCart);
 
   // Price Box Details Calculation===========================
   useEffect(() => {
@@ -324,6 +329,8 @@ function App() {
             setStoreLocations,
             userWishlist,
             setUserWishlist,
+            userComboCart,
+            setUserComboCart
           }}
         >
           {loc.pathname === "/login" || loc.pathname === "/signup" || loc.pathname === "/otp" || loc.pathname === "/adduser" ? "" : <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />}
@@ -468,6 +475,7 @@ function App() {
             <Route path="/catelogue-page/bulk-upload" exact element={<BulkUpload setHeaderData={setHeaderData} />} />
             <Route path="/catelogue-page/add-offers" exact element={<AddOffers setHeaderData={setHeaderData} />} />
             <Route path="/about-us" exact element={<AboutUs setHeaderData={setHeaderData} />} />
+            <Route path="/wishlist" exact element={<MyWishlist setHeaderData={setHeaderData} />} />
           </Routes>
           <Footer />
         </UserDataContext.Provider>

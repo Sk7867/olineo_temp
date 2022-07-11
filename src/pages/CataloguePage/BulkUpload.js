@@ -381,6 +381,7 @@ const BulkUpload = ({ setHeaderData }) => {
         specialFeatures: elem.specialFeatures,
         mountingHardware: elem.mountingHardware,
         speakerSurroundSoundChannelConfiguration: elem.speakerSurroundSoundChannelConfiguration,
+        audioOutputMode: elem.audioOutputMode,
         numberOfItems: elem.numberOfItems,
         speakerAmplificationType: elem.speakerAmplificationType,
         speakerConnectivity: elem.speakerConnectivity,

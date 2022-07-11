@@ -1,6 +1,6 @@
 //Dependencies
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link, useParams } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Accordion, Dropdown } from "react-bootstrap";
 import { UserDataContext } from "../../Contexts/UserContext";
@@ -21,6 +21,7 @@ import ProductListItem from "../../components/ProductListItem/ProductListItem";
 import FilterTag from "../../components/FilterTag/FilterTag";
 
 const ProductCategory = ({ setHeaderData }) => {
+  const { slug } = useParams()
   const [bottomSheet, setBottomSheet] = useState(false);
   const matches = useMediaQuery("(min-width:768px)");
   const nav = useNavigate();
@@ -46,7 +47,7 @@ const ProductCategory = ({ setHeaderData }) => {
     });
   }, []);
 
-  console.log(searchedProduct);
+  // console.log(searchedProduct);
 
   const breadCrumbsData = [
     {
@@ -216,7 +217,7 @@ const ProductCategory = ({ setHeaderData }) => {
     const modifiediFilterData = filterArray.reduce((acc, cur) => {
       const type = cur.filter_typetype;
       const heading = cur.filter_heading;
-      console.log(heading);
+      // console.log(heading);
       if (type === "Radio") {
         if (acc[heading]) {
           acc[heading] = cur;
@@ -232,9 +233,9 @@ const ProductCategory = ({ setHeaderData }) => {
       }
       return acc;
     }, {});
-    console.log(modifiediFilterData);
+    // console.log(modifiediFilterData);
   };
-  console.log(filterArray);
+  // console.log(filterArray);
 
   return (
     <>
@@ -278,69 +279,69 @@ const ProductCategory = ({ setHeaderData }) => {
               </div>
             </>
           ),
-          (
-            <div className="desk_Page_Wrapper">
-              <aside className="side_Section section_Wrapper pb-0">
-                <p className="side_Section_Heading m-0">Filters</p>
-                <div className="side_Section_Body">
-                  <Accordion defaultActiveKey={["0"]}>
-                    {filterListData.map((filter, index) => (
-                      <Accordion.Item eventKey={`${index}`} key={index}>
-                        <Accordion.Header>{filter.filter_heading}</Accordion.Header>
-                        <Accordion.Body>
-                          {filter.filter_type === "Radio" ? (
-                            <>
-                              {filter.filter_data.map((element, index) => (
-                                <label
-                                  htmlFor={element.data}
-                                  key={index}
-                                  className={`radiobtn-label payment_Methods_Labels`}
-                                  onClick={() => {
-                                    setFilterSelected([...filterSelected, element]);
-                                    isFilterPresent(filter);
-                                  }}
-                                >
-                                  <input type="radio" name={`filter-${filter.filter_heading}`} checked={isFilterSelected(element.data)} id={element.data} value={element.data} readOnly />
-                                  <span className="radio-custom"></span>
-                                  {element.data}
-                                </label>
-                              ))}
-                            </>
-                          ) : filter.filter_type === "Checkbox" ? (
-                            <>
-                              {filter.filter_data.map((element, index) => (
-                                <label
-                                  htmlFor={element.data}
-                                  key={index}
-                                  className="checkbox-label checkbox-item d-flex align-items-center"
-                                  onClick={() => {
-                                    setFilterSelected([...filterSelected, element]);
-                                  }}
-                                >
-                                  <input type="checkbox" name={`filter-${filter.filter_heading}`} checked={isFilterSelected(element.data)} id={element.data} value={element.data} readOnly />
-                                  <span className="custom-checkmark"></span>
-                                  {element.data}
-                                </label>
-                              ))}
-                            </>
-                          ) : (
-                            ""
-                          )}
-                        </Accordion.Body>
-                      </Accordion.Item>
+            (
+              <div className="desk_Page_Wrapper">
+                <aside className="side_Section section_Wrapper pb-0">
+                  <p className="side_Section_Heading m-0">Filters</p>
+                  <div className="side_Section_Body">
+                    <Accordion defaultActiveKey={["0"]}>
+                      {filterListData.map((filter, index) => (
+                        <Accordion.Item eventKey={`${index}`} key={index}>
+                          <Accordion.Header>{filter.filter_heading}</Accordion.Header>
+                          <Accordion.Body>
+                            {filter.filter_type === "Radio" ? (
+                              <>
+                                {filter.filter_data.map((element, index) => (
+                                  <label
+                                    htmlFor={element.data}
+                                    key={index}
+                                    className={`radiobtn-label payment_Methods_Labels`}
+                                    onClick={() => {
+                                      setFilterSelected([...filterSelected, element]);
+                                      isFilterPresent(filter);
+                                    }}
+                                  >
+                                    <input type="radio" name={`filter-${filter.filter_heading}`} checked={isFilterSelected(element.data)} id={element.data} value={element.data} readOnly />
+                                    <span className="radio-custom"></span>
+                                    {element.data}
+                                  </label>
+                                ))}
+                              </>
+                            ) : filter.filter_type === "Checkbox" ? (
+                              <>
+                                {filter.filter_data.map((element, index) => (
+                                  <label
+                                    htmlFor={element.data}
+                                    key={index}
+                                    className="checkbox-label checkbox-item d-flex align-items-center"
+                                    onClick={() => {
+                                      setFilterSelected([...filterSelected, element]);
+                                    }}
+                                  >
+                                    <input type="checkbox" name={`filter-${filter.filter_heading}`} checked={isFilterSelected(element.data)} id={element.data} value={element.data} readOnly />
+                                    <span className="custom-checkmark"></span>
+                                    {element.data}
+                                  </label>
+                                ))}
+                              </>
+                            ) : (
+                              ""
+                            )}
+                          </Accordion.Body>
+                        </Accordion.Item>
+                      ))}
+                    </Accordion>
+                  </div>
+                </aside>
+                <div className="order_Page_Right">
+                  <div className="Product_Category_Container">
+                    {searchedProduct.products.map((product, index) => (
+                      <ProductListItem key={index} product={product} />
                     ))}
-                  </Accordion>
-                </div>
-              </aside>
-              <div className="order_Page_Right">
-                <div className="Product_Category_Container">
-                  {searchedProduct.products.map((product, index) => (
-                    <ProductListItem key={index} product={product} />
-                  ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))
         ) : (
           <>
             <div className="empty_order_sec">

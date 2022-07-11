@@ -68,6 +68,10 @@ const ProductInfoTable = ({ product_Information }) => {
       case 'mountingType': return 'Mounting Type'
       case 'speakerSurroundSoundChannelConfiguration': return 'Speaker Surround Sound Channel Configuration'
       case 'importedBy': return 'Imported By'
+      case 'powerSource': return 'Power Source'
+      case 'batterCapacity': return 'Battery Capacity'
+      case 'batteryCellComposition': return 'Battery Cell Composition'
+      case 'processorBrand': return 'Processor Brand'
       default: return 'miscellaneous Info'
     }
   }
