@@ -17,7 +17,7 @@ const OtpValid = ({ loginRedirect }) => {
   const [loading, setLoading] = useState(false);
   // const [resend, setResend] = useState(true)
   const nav = useNavigate();
-  const { setUserContext, setUserCart, setCartArray, userOrderData, setUserOrderData } = useContext(UserDataContext);
+  const { setUserContext, setCartArray, userOrderData, setUserOrderData } = useContext(UserDataContext);
 
   const handleLength = (length) => {
     if (length === 6) {
@@ -87,13 +87,18 @@ const OtpValid = ({ loginRedirect }) => {
               });
             }
           }),
-          getCartData(res.JWT)
+          getCartData()
             .then(res => {
               if (res) {
+                let prod = []
+                prod = res.cart
+                prod.forEach((product) => {
+                  product["quantity"] = 1;
+                })
                 setCartArray({
                   loaded: true,
                   no_of_carts: res.no_of_carts,
-                  cart: res.cart,
+                  cart: prod,
                   combo: res.combo
                 })
               }

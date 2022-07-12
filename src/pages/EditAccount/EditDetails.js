@@ -249,7 +249,7 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
   const handleDate = (e, type, key) => {
     type((prev) => ({ ...prev, [key]: e }));
   };
-  console.log(displayInfo);
+  // console.log(displayInfo);
 
   return (
     <>

@@ -141,8 +141,8 @@ const WishlistSection = () => {
                 </div>
                 <div className="cards_Container">
                   {
-                    (userCart.length > 0) && userCart ? (
-                      userCart.map((item, index) => (
+                    (cartArray.no_of_carts > 0) ? (
+                      cartArray.cart.map((item, index) => (
                         <CartProductCard
                           key={index}
                           product={item}

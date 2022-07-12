@@ -18,7 +18,7 @@ const Signup = ({ setLoginRedirect }) => {
   const [btnDisable, setBtnDisable] = useState(true);
   const matches = useMediaQuery("(min-width:768px)");
   const nav = useNavigate();
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart } = useContext(UserDataContext);
+  const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext);
 
   const [loading, setLoading] = useState(false);
 

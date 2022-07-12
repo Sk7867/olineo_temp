@@ -106,7 +106,7 @@ const StoreFinder = ({ setHeaderData }) => {
     searchTerm = ''
     searchURL = 'Store=' + value
 
-    console.log(searchTerm);
+    // console.log(searchTerm);
     getSearchedProduct(searchTerm)
       .then(res => {
         if (res) {

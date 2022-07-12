@@ -20,7 +20,7 @@ import CartSection from './CartSection'
 import { getCartData } from '../../api/Cart'
 
 const MyCart = ({ setHeaderData }) => {
-  const { setUserCart, userCart, allProducts, cartArray, setCartArray, } = useContext(UserDataContext)
+  const { allProducts, cartArray, setCartArray, } = useContext(UserDataContext)
   const nav = useNavigate()
 
 
@@ -39,13 +39,17 @@ const MyCart = ({ setHeaderData }) => {
     getCartData()
       .then(res => {
         if (res) {
+          let prod = []
+          prod = res.cart
+          prod.forEach((product) => {
+            product["quantity"] = 1;
+          })
           setCartArray({
             loaded: true,
             no_of_carts: res.no_of_carts,
-            cart: res.cart,
+            cart: prod,
             combo: res.combo
           })
-          // console.log(res);
         }
       })
   }, [])

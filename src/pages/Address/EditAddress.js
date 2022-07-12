@@ -8,7 +8,7 @@ const EditAddress = ({ setHeaderData, editID }) => {
   const loc = useLocation()
   const [editAddress, setEditAddress] = useState({});
   const [addressData, setAddressData] = useState([])
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart } = useContext(UserDataContext)
+  const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext)
   useEffect(() => {
     setHeaderData({
       header3Cond: true,
