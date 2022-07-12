@@ -22,7 +22,7 @@ const WriteToUS = ({ setHeaderData }) => {
     email: '',
     query: '',
   })
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart } = useContext(UserDataContext)
+  const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext)
 
   useEffect(() => {
     setHeaderData({

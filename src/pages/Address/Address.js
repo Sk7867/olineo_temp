@@ -13,7 +13,7 @@ import MyAddress from './MyAddress'
 
 const Address = ({ setEditID, setHeaderData }) => {
   const [addressData, setAddressData] = useState([])
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart } = useContext(UserDataContext)
+  const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext)
   useEffect(() => {
     setHeaderData({
       header3Cond: true,

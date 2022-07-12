@@ -43,7 +43,7 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
   const [editAddress, setEditAddress] = useState({});
   const loc = useLocation();
   const nav = useNavigate();
-  const { userContext, setUserContext, setUserAddress, setUserCart, allProducts, setCartArray, setUserOrderData, setPriceBoxDetails, setUserWishlist } = useContext(UserDataContext);
+  const { userContext, setUserContext, setUserAddress, allProducts, setCartArray, setUserOrderData, setPriceBoxDetails, setUserWishlist } = useContext(UserDataContext);
 
   useEffect(() => {
     setHeaderData({
@@ -81,18 +81,23 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
   }, []);
 
   useEffect(() => {
-    getCartData().then((res) => {
-      if (res) {
-        setCartArray({
-          loaded: true,
-          no_of_carts: res.no_of_carts,
-          cart: res.cart,
-          combo: res.combo
-        });
-        // console.log(res);
-      }
-    });
-  }, []);
+    getCartData()
+      .then(res => {
+        if (res) {
+          let prod = []
+          prod = res.cart
+          prod.forEach((product) => {
+            product["quantity"] = 1;
+          })
+          setCartArray({
+            loaded: true,
+            no_of_carts: res.no_of_carts,
+            cart: prod,
+            combo: res.combo
+          })
+        }
+      })
+  }, [])
 
   useEffect(() => {
     getAllOrder().then((res) => {
@@ -138,7 +143,6 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
         no_of_address: 0,
         address: [],
       });
-      setUserCart([]);
       setCartArray({
         loaded: false,
         cart: [],

@@ -51,7 +51,7 @@ const OrderDetails = ({ setHeaderData }) => {
     },
   ])
   const nav = useNavigate()
-  const { userContext, setUserContext, userAddress, setUserAddress, userCart, setUserCart, allProducts } = useContext(UserDataContext)
+  const { userContext, setUserContext, userAddress, setUserAddress, allProducts } = useContext(UserDataContext)
 
   useEffect(() => {
     setHeaderData({
@@ -241,7 +241,7 @@ const OrderDetails = ({ setHeaderData }) => {
           let allSteps = [...orderSteps]
           let step = allSteps[1]
           step.completed = !step.completed
-          allSteps[0] = step
+          allSteps[1] = step
           setOrderSteps(allSteps)
         }
         break;

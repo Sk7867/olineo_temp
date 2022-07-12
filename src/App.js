@@ -102,7 +102,6 @@ function App() {
     no_of_address: 0,
     address: [],
   });
-  const [userCart, setUserCart] = useState([]);
   const [userComboCart, setUserComboCart] = useState([]);
   const [cartArray, setCartArray] = useState({
     loaded: false,
@@ -226,14 +225,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    cartArray.cart.map((product) => {
-      let ind = userCart.findIndex((obj) => obj._id === product._id);
-      if (ind === -1) {
-        product["quantity"] = 1;
-        setUserCart([...userCart, product]);
-      }
-    });
-    if (cartArray.combo.length > 0) {
+    if (cartArray.combo && cartArray.combo.length > 0) {
       cartArray.combo.map((product) => {
         // console.log(product);
         let searchTerm = 'ean=' + product
@@ -241,20 +233,23 @@ function App() {
           .then(res => {
             if (res) {
               let product = res[0]
-              setUserComboCart([...userComboCart, product]);
+              let ind = userComboCart.findIndex((obj) => obj._id === product._id);
+              if (ind === -1) {
+                setUserComboCart([...userComboCart, product]);
+              }
             }
           })
       })
     }
   }, [cartArray]);
-  // console.log(userComboCart);
+  // console.log(cartArray);
 
   // Price Box Details Calculation===========================
   useEffect(() => {
-    if (userCart.length > 0) {
-      let productNumbers = userCart.reduce((accumulator, current) => accumulator + current.quantity, 0);
-      let productPrice = userCart.reduce((accumulator, current) => accumulator + current.price.mrp * current.quantity, 0);
-      let totalDiscount = userCart.reduce(
+    if (cartArray.no_of_carts > 0) {
+      let productNumbers = cartArray.cart.reduce((accumulator, current) => accumulator + current.quantity, 0);
+      let productPrice = cartArray.cart.reduce((accumulator, current) => accumulator + current.price.mrp * current.quantity, 0);
+      let totalDiscount = cartArray.cart.reduce(
         (accumulator, current) => accumulator + (current.price.mrp - (current.price.discountPrice ? current.price.discountPrice : current.price.mop)) * current.quantity,
         0
       );
@@ -269,9 +264,10 @@ function App() {
         totalDeliveryCharge: totalDeliveryCharge,
       }));
     }
-  }, [userCart]);
+  }, [cartArray]);
 
-  // console.log(priceBoxDetails);
+  // console.log(cartArray);
+  // console.log(orderInit);
 
   const ordersData = [
     {
@@ -307,8 +303,7 @@ function App() {
             setUserContext,
             userAddress,
             setUserAddress,
-            userCart,
-            setUserCart,
+
             allProducts,
             setAllProducts,
             userLocation,

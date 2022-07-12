@@ -20,7 +20,7 @@ const Payment = ({ setHeaderData, cartData }) => {
   const [disable, setDisable] = useState(true);
   const [paymentMethodSelected, setPaymentMethodSelected] = useState('');
   const matches = useMediaQuery("(min-width:768px)")
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart } = useContext(UserDataContext)
+  const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext)
 
   useEffect(() => {
     setHeaderData({

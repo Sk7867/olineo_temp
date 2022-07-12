@@ -10,17 +10,22 @@ import Section2 from '../../components/Section2/Section2'
 import { initOrder } from '../../api/OrdersApi'
 import { getCartData, removeFromCart } from '../../api/Cart'
 import { getCoupon } from '../../api/couponApi'
+import { getSearchedProduct } from '../../api/Product'
 
 toast.configure()
 const CartSection = ({ featureProducts }) => {
   const nav = useNavigate()
   const [cartProducts, setCartProducts] = useState([])
   const [couponInput, setCouponInput] = useState('')
+  const [cartSuggestions, setCartSuggestions] = useState([])
+  const [cartSuggestProducts, setCartSuggestProducts] = useState({
+    loaded: false,
+    products: []
+  })
+  const [suggesProducts, setSuggesProducts] = useState([])
 
 
   const {
-    setUserCart,
-    userCart,
     cartArray,
     setCartArray,
     setOrderInit,
@@ -30,25 +35,71 @@ const CartSection = ({ featureProducts }) => {
     priceBoxDetails
   } = useContext(UserDataContext)
 
+  // useEffect(() => {
+  //   getCoupon()
+  //     .then(res => {
+  //       // console.log(res);
+  //     })
+  // }, [])
+
   useEffect(() => {
-    getCoupon()
-      .then(res => {
-        // console.log(res);
+    if (cartArray && (cartArray.no_of_carts > 0)) {
+      cartArray.cart.map((prod) => {
+        let immediatRecom = [...prod.complimentoryCatgories.immediate]
+        immediatRecom.forEach((recom) => {
+          let ind = cartSuggestions.findIndex((prod) => prod === recom)
+          if (ind === -1) {
+            setCartSuggestions([...cartSuggestions, recom])
+          }
+        })
       })
-  }, [])
+    }
+  }, [cartArray])
+
+  useEffect(() => {
+    if (cartSuggestions && (cartSuggestions.length > 0)) {
+      cartSuggestions.map((category) => {
+        let searchTerm = 'hierarchyL2=' + category
+        getSearchedProduct(searchTerm)
+          .then(res => {
+            let prod = {}
+            prod = res[0]
+            if (prod && res) {
+              setSuggesProducts([...suggesProducts, prod])
+            }
+          })
+      })
+    }
+  }, [cartSuggestions])
+  // console.log(suggesProducts);
+
+  useEffect(() => {
+    if (suggesProducts && (suggesProducts.length > 0)) {
+      setCartSuggestProducts(prev => ({
+        ...prev,
+        loaded: true,
+        products: suggesProducts
+      }))
+    }
+  }, [suggesProducts])
+  // console.log(cartSuggestProducts);
+
 
   const handleQuantityInc = (id) => {
-    let tempState = [...userCart]
-    let index = userCart.findIndex(x => x._id === id)
+    let tempState = [...cartArray.cart]
+    let index = cartArray.cart.findIndex(x => x._id === id)
     let tempElement = { ...tempState[index] }
     tempElement.quantity = tempElement.quantity + 1
     tempState[index] = tempElement
-    setUserCart(tempState)
+    setCartArray(prev => ({
+      ...prev,
+      cart: tempState
+    }))
   }
 
   const handleQuantityDec = (id) => {
-    let tempState = [...userCart]
-    let index = userCart.findIndex(x => x._id === id)
+    let tempState = [...cartArray.cart]
+    let index = cartArray.cart.findIndex(x => x._id === id)
     let tempElement = { ...tempState[index] }
     if (tempElement.quantity === 1) {
       tempElement.quantity = 1
@@ -56,7 +107,10 @@ const CartSection = ({ featureProducts }) => {
       tempElement.quantity = tempElement.quantity - 1
     }
     tempState[index] = tempElement
-    setUserCart(tempState)
+    setCartArray(prev => ({
+      ...prev,
+      cart: tempState
+    }))
   }
 
   //ORDER INITIALIZATION CODE+++++++++++++++++++++++++++++++++++++++++
@@ -64,10 +118,10 @@ const CartSection = ({ featureProducts }) => {
     e.preventDefault();
     let productId = []
     let quantity = []
-    userCart.forEach(item =>
+    cartArray.cart.forEach(item =>
       productId.push(item._id)
     )
-    userCart.forEach((item) => (
+    cartArray.cart.forEach((item) => (
       quantity.push(parseInt(item.quantity))
     ))
     setOrderInit(prev => ({
@@ -83,7 +137,6 @@ const CartSection = ({ featureProducts }) => {
   const handleRemoveFromCart = (id) => {
     removeFromCart(id)
       .then(res => res ? (
-        setUserCart([]),
         setUserComboCart([]),
         toast.error('Product Removed from Cart'),
         getCartData()
@@ -110,7 +163,6 @@ const CartSection = ({ featureProducts }) => {
     }))
   }
 
-  // console.log(userCart);
   // console.log(cartArray);
 
   return (
@@ -135,8 +187,8 @@ const CartSection = ({ featureProducts }) => {
             <p className="cart_Text section_Wrapper">My Cart</p>
             <div className="cards_Container">
               {
-                (userCart.length > 0) && userCart ? (
-                  userCart.map((item, index) => (
+                (cartArray.no_of_carts > 0) ? (
+                  cartArray.cart.map((item, index) => (
                     <CartProductCard
                       key={index}
                       product={item}
@@ -146,7 +198,7 @@ const CartSection = ({ featureProducts }) => {
                     />
                   ))) : ('')
               }
-              {
+              {/* {
                 (userComboCart.length > 0) && userComboCart ? (
                   userComboCart.map((item, index) => (
                     <CartProductCard
@@ -158,7 +210,7 @@ const CartSection = ({ featureProducts }) => {
                       handleQuantityDec={handleQuantityDec}
                     />
                   ))) : (<></>)
-              }
+              } */}
             </div>
 
             <div className='cart_Subtotal_Section section_Wrapper'>
@@ -193,7 +245,7 @@ const CartSection = ({ featureProducts }) => {
             <Section2
               id={'Top-sellers-sec'}
               heading='Top Sellers'
-              productData={featureProducts}
+              productData={cartSuggestProducts}
             />
 
             {/* cart saved for later */}
@@ -203,8 +255,8 @@ const CartSection = ({ featureProducts }) => {
               </div>
               <div className="cards_Container">
                 {
-                  (userCart.length > 0) && userCart ? (
-                    userCart.map((item, index) => (
+                  (cartArray.no_of_carts > 0) ? (
+                    cartArray.cart.map((item, index) => (
                       <CartProductCard
                         key={index}
                         product={item}

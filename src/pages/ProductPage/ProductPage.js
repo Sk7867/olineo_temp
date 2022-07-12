@@ -32,8 +32,6 @@ const ProductPage = ({ setHeaderData }) => {
     setUserContext,
     userAddress,
     setUserAddress,
-    userCart,
-    setUserCart,
     allProducts,
     setCartArray,
     setOrderInit } = useContext(UserDataContext);
@@ -44,6 +42,7 @@ const ProductPage = ({ setHeaderData }) => {
   const [preOrder, setPreOrder] = useState(false);
   const [previewImageSelected, setPreviewImageSelected] = useState(null);
   const [productInfo, setProductInfo] = useState([]);
+  const [productSecondData, setProductSecondData] = useState({})
   const [productData, setProductData] = useState({
     product_loaded: false,
     product_L1: '',
@@ -108,6 +107,7 @@ const ProductPage = ({ setHeaderData }) => {
         if (product) {
           let images = product.images;
           let splitDesc = product.description.split("~");
+          setProductSecondData(product)
           setProductData((prev) => ({
             ...prev,
             product_loaded: true,
@@ -142,7 +142,7 @@ const ProductPage = ({ setHeaderData }) => {
         }
       })
   }, [slug])
-  console.log(productData);
+  // console.log(productData);
 
   useEffect(() => {
     alternateColorean.forEach(ean => {
@@ -313,19 +313,20 @@ const ProductPage = ({ setHeaderData }) => {
 
   const handleOrderInit = (e) => {
     e.preventDefault();
-    let productId = [productData.product_Id, comboProductData._id]
-    let quantity = [1, 1]
+    let productId = [productData.product_Id]
+    let quantity = [1]
     setOrderInit(prev => ({
       ...prev,
       productId: productId,
       quantity: quantity
     }))
-    setCartArray({
+    setCartArray(prev => ({
+      ...prev,
       loaded: true,
-      no_of_carts: 2,
-      cart: [productData.product_Id],
-      combo: [comboProductData._id],
-    })
+      no_of_carts: 1,
+      cart: [productSecondData],
+      combo: [],
+    }))
     nav('/delivery-option')
     // console.log(data);
   }

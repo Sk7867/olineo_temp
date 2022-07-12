@@ -18,7 +18,7 @@ const Update = ({ number, oldInfo, newInfo, user_Full_Name, handleClose }) => {
     user_Full_Name: '',
     user_ph_Number: '',
   })
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart } = useContext(UserDataContext)
+  const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext)
 
   const validateForm = () => {
     (oldOTP !== '') && (newOTP !== '') ? setDisabled(false) : setDisabled(true)
