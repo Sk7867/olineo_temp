@@ -15,14 +15,14 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
   const [btnDisable, setBtnDisable] = useState(true);
   const matches = useMediaQuery("(min-width:768px)");
   const [emailLogin, setEmailLogin] = useState(false);
-  const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext);
+  const { setUserContext } = useContext(UserDataContext);
   const loc = useLocation();
   // console.log(loc);
 
   const [loading, setLoading] = useState(false);
 
   const nav = useNavigate();
-  console.log(phone);
+  // console.log(phone);
   useEffect(() => {
     if (loc.state) {
       if (loc.state.emailLogin) {

@@ -107,6 +107,7 @@ const ProductPage = ({ setHeaderData }) => {
         if (product) {
           let images = product.images;
           let splitDesc = product.description.split("~");
+          product["quantity"] = 1
           setProductSecondData(product)
           setProductData((prev) => ({
             ...prev,
@@ -313,23 +314,28 @@ const ProductPage = ({ setHeaderData }) => {
 
   const handleOrderInit = (e) => {
     e.preventDefault();
-    let productId = [productData.product_Id]
-    let quantity = [1]
-    setOrderInit(prev => ({
-      ...prev,
-      productId: productId,
-      quantity: quantity
-    }))
-    setCartArray(prev => ({
-      ...prev,
-      loaded: true,
-      no_of_carts: 1,
-      cart: [productSecondData],
-      combo: [],
-    }))
-    nav('/delivery-option')
-    // console.log(data);
+    let userToken = userContext ? userContext.JWT : "";
+    if (userToken) {
+      let productId = [productData.product_Id]
+      let quantity = [1]
+      setOrderInit(prev => ({
+        ...prev,
+        productId: productId,
+        quantity: quantity
+      }))
+      setCartArray(prev => ({
+        ...prev,
+        loaded: true,
+        no_of_carts: 1,
+        cart: [productSecondData],
+        combo: [],
+      }))
+      nav('/delivery-option')
+    } else {
+      nav("/login");
+    }
   }
+  // console.log(productSecondData);
 
   useEffect(() => {
     if (productInfo.length > 0) {
