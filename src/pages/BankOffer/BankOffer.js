@@ -7,9 +7,9 @@ import './BankOffer.css'
 const BankOffer = ({ setHeaderData }) => {
   const loc = useLocation()
   const [offerInfo, setOfferInfo] = useState({
-    offer_Name: '',
-    offer_desc: '',
-    offerAvail: ['']
+    offerHeading: '',
+    offerName: '',
+    offerAvail: []
   })
   useEffect(() => {
     setHeaderData({
@@ -23,9 +23,9 @@ const BankOffer = ({ setHeaderData }) => {
     if (loc.state) {
       let data = loc.state
       setOfferInfo({
-        offer_Name: data.offer_Name,
-        offer_desc: data.offer_desc,
-        offerAvail: data.offerAvail,
+        offerHeading: data.offerHeading,
+        offerName: data.offerName,
+        offerAvail: data.offerAvail.split('~'),
       })
     }
   }, [loc.state])
@@ -35,10 +35,10 @@ const BankOffer = ({ setHeaderData }) => {
       <div className='desk_Page_Wrapper'>
         <div className='bank_Offer_Container'>
           <h3 className="bank_Offer_Heading">
-            {offerInfo.offer_Name}
+            {offerInfo.offerHeading}
           </h3>
           <p className="bank_Offer_Desc">
-            {offerInfo.offer_desc}
+            {offerInfo.offerName}
           </p>
           <p className="offer_Question">
             How to avail offer?
