@@ -165,6 +165,8 @@ const BulkUpload = ({ setHeaderData }) => {
     let dynamicHeader = "";
     let dynamicArray = [];
     let dynamicArray2 = [];
+    let dyHeader = ''
+    let dyHeader1 = ''
     switch (elem.hierarchyL2) {
       case 'Smartphone': productInfo = {
         os: elem.os,
@@ -198,7 +200,9 @@ const BulkUpload = ({ setHeaderData }) => {
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.color + ', ' + elem.ram + ', ' + elem.rom + ')'
-        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dyHeader = dynamicHeader.replace(/[.]/g, '-')
+        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
+        dynamicArray = dyHeader1.split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
@@ -226,7 +230,9 @@ const BulkUpload = ({ setHeaderData }) => {
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.wattage + ', ' + elem.connectorType + ')'
-        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dyHeader = dynamicHeader.replace(/[.]/g, '-')
+        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
+        dynamicArray = dyHeader1.split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
@@ -264,7 +270,9 @@ const BulkUpload = ({ setHeaderData }) => {
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.color + (elem.ram ? (', ' + elem.ram) : '') + (elem.rom ? (', ' + elem.rom) : '') + ')'
-        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dyHeader = dynamicHeader.replace(/[.]/g, '-')
+        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
+        dynamicArray = dyHeader1.split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
@@ -290,7 +298,9 @@ const BulkUpload = ({ setHeaderData }) => {
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.headphonesFormFactor ? (', ' + elem.headphonesFormFactor) : '') + ')'
-        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dyHeader = dynamicHeader.replace(/[.]/g, '-')
+        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
+        dynamicArray = dyHeader1.split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
@@ -318,7 +328,9 @@ const BulkUpload = ({ setHeaderData }) => {
         };
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.headphonesFormFactor ? (', ' + elem.headphonesFormFactor) : '') + (elem.cableFeature ? (', ' + elem.cableFeature) : '') + (elem.compatibleDevices ? (', ' + elem.compatibleDevices) : '') + ')'
-        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dyHeader = dynamicHeader.replace(/[.]/g, '-')
+        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
+        dynamicArray = dyHeader1.split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
@@ -340,7 +352,9 @@ const BulkUpload = ({ setHeaderData }) => {
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.playTime ? (', ' + elem.playTime) : '') + ')'
-        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dyHeader = dynamicHeader.replace(/[.]/g, '-')
+        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
+        dynamicArray = dyHeader1.split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
@@ -370,7 +384,9 @@ const BulkUpload = ({ setHeaderData }) => {
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.wattage + (elem.connectorType ? (', ' + elem.connectorType) : '') + (elem.dataTransferRate ? (',' + elem.dataTransferRate) : '') + ')'
-        dynamicArray = dynamicHeader.replace(/[\(,\)]/g, '').split(" ");
+        dyHeader = dynamicHeader.replace(/[.]/g, '-')
+        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
+        dynamicArray = dyHeader1.split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
@@ -400,7 +416,9 @@ const BulkUpload = ({ setHeaderData }) => {
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.wattage ? (', ' + elem.wattage) : '') + ')'
-        dynamicArray = dynamicHeader.replace(/[\(,/\)]/g, '').split(" ");
+        dyHeader = dynamicHeader.replace(/[.]/g, '-')
+        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
+        dynamicArray = dyHeader1.split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
@@ -436,7 +454,9 @@ const BulkUpload = ({ setHeaderData }) => {
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.playTime ? (', ' + elem.playTime) : '') + (elem.microphoneTech ? (', ' + elem.microphoneTech) : '') + (elem.bluetoothVersion ? (', ' + elem.bluetoothVersion) : '') + ')'
-        dynamicArray = dynamicHeader.replace(/[\(,/\)]/g, '').split(" ");
+        dyHeader = dynamicHeader.replace(/[.]/g, '-')
+        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
+        dynamicArray = dyHeader1.split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
@@ -474,7 +494,9 @@ const BulkUpload = ({ setHeaderData }) => {
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.playTime ? (', ' + elem.playTime) : '') + (elem.microphoneTech ? (', ' + elem.microphoneTech) : '') + (elem.bluetoothVersion ? (', ' + elem.bluetoothVersion) : '') + ')'
-        dynamicArray = dynamicHeader.replace(/[\(,/\)]/g, '').split(" ");
+        dyHeader = dynamicHeader.replace(/[.]/g, '-')
+        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
+        dynamicArray = dyHeader1.split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
@@ -511,7 +533,9 @@ const BulkUpload = ({ setHeaderData }) => {
       }
         // url = elem.productName + '-'
         dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.playTime ? (', ' + elem.playTime) : '') + (elem.microphoneTech ? (', ' + elem.microphoneTech) : '') + (elem.bluetoothVersion ? (', ' + elem.bluetoothVersion) : '') + ')'
-        dynamicArray = dynamicHeader.replace(/[\(,/\)]/g, '').split(" ");
+        dyHeader = dynamicHeader.replace(/[.]/g, '-')
+        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
+        dynamicArray = dyHeader1.split(" ");
         dynamicArray2 = dynamicArray.filter(n => n)
         url = dynamicArray2.join('-')
         return { productInfo, url, dynamicHeader };
@@ -563,7 +587,7 @@ const BulkUpload = ({ setHeaderData }) => {
     setModalOpen(true);
     setModalData(imagesPassed);
   };
-  console.log(fileToSend);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     document.getElementById("submitCsvData").disabled = true;
@@ -572,7 +596,7 @@ const BulkUpload = ({ setHeaderData }) => {
       if (res) {
         document.getElementById("submitCsvData").innerHTML = "<p>Please Wait. Uploading Images... </p>";
         let productArray = res;
-        console.log(productArray);
+        // console.log(productArray);
         for (const ean in imagesObject) {
           if (imagesObject[ean].imgs.length !== 0) {
             const element = imagesObject[ean];
@@ -580,7 +604,6 @@ const BulkUpload = ({ setHeaderData }) => {
               return item.ean === ean;
             });
             let res = await addProductImages(product._id, element.imgs);
-            console.log(res);
           }
         }
         for (const ean in galleryImagesObject) {
@@ -590,7 +613,6 @@ const BulkUpload = ({ setHeaderData }) => {
               return item.ean === ean;
             });
             let res = await addProductGalleryImages(product._id, element.imgs);
-            console.log(res);
           }
         }
         document.getElementById("submitCsvData").disabled = false;
@@ -607,7 +629,7 @@ const BulkUpload = ({ setHeaderData }) => {
       toast.error("Excel file not uploaded!");
     }
   };
-  console.log(fileToSend);
+
   return (
     <>
       <div className="page_Wrapper page_Margin_Top_Secondary">

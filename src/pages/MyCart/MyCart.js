@@ -18,9 +18,10 @@ import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 import CartSection from './CartSection'
 import { getCartData } from '../../api/Cart'
+import { getSaveForLater } from '../../api/SaveForLaterApi'
 
 const MyCart = ({ setHeaderData }) => {
-  const { allProducts, cartArray, setCartArray, } = useContext(UserDataContext)
+  const { allProducts, cartArray, setCartArray, userSaveForLater, setUserSaveForLater } = useContext(UserDataContext)
   const nav = useNavigate()
 
 
@@ -54,6 +55,18 @@ const MyCart = ({ setHeaderData }) => {
       })
   }, [])
 
+  useEffect(() => {
+    getSaveForLater()
+      .then(res => {
+        setUserSaveForLater({
+          loaded: true,
+          no_of_save_for_later_items: res.no_of_save_for_later_items,
+          save_for_later_items: res.save_for_later_items
+        })
+      })
+  }, [])
+
+
   // console.log(cartArray);
   const pageSwitch = (e) => {
     e.preventDefault();
@@ -77,7 +90,7 @@ const MyCart = ({ setHeaderData }) => {
       <div className='page_Wrapper page_Margin_Top'>
         <BreadCrumbs data={breadCrumbsData} />
         {
-          cartArray.no_of_carts === 0 ? (
+          (cartArray.no_of_carts === 0) && (userSaveForLater.no_of_save_for_later_items === 0) ? (
             <>
               <div className="empty_order_sec">
                 <p className='empty_order_text'>Your cart is empty</p>

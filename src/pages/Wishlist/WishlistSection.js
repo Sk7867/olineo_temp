@@ -22,30 +22,21 @@ const WishlistSection = () => {
       .then(res => res ? (
         toast.success("Product Added to Cart"),
         getCartData()
-          .then((res) => {
+          .then(res => {
             if (res) {
+              let prod = []
+              prod = res.cart
+              prod.forEach((product) => {
+                product["quantity"] = 1;
+              })
               setCartArray({
                 loaded: true,
                 no_of_carts: res.no_of_carts,
-                cart: res.cart,
+                cart: prod,
                 combo: res.combo
               })
             }
-          }),
-        deleteFromWishlist(id)
-          .then(res => res ? (
-            toast.error('Product Removed from Wishlist'),
-            getAllWishlistItems()
-              .then(res => {
-                if (res) {
-                  setUserWishlist({
-                    loaded: true,
-                    no_of_wishlist_items: res.no_of_wishlist_items,
-                    wishlist_items: [...res.wishlist_items]
-                  })
-                }
-              })
-          ) : (''))
+          })
       ) : (''))
   }
 

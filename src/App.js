@@ -158,7 +158,12 @@ function App() {
     no_of_wishlist_items: 0,
     wishlist_items: [],
   });
-  // console.log(orderInit);
+  const [userSaveForLater, setUserSaveForLater] = useState({
+    loaded: false,
+    no_of_save_for_later_items: 0,
+    save_for_later_items: []
+  })
+  console.log(userSaveForLater);
 
   useEffect(() => {
     let user = JSON.parse(sessionStorage.getItem("user"));
@@ -231,7 +236,7 @@ function App() {
         let searchTerm = 'ean=' + product
         getSearchedProduct(searchTerm)
           .then(res => {
-            if (res) {
+            if (res.length > 0) {
               let product = res[0]
               let ind = userComboCart.findIndex((obj) => obj._id === product._id);
               if (ind === -1) {
@@ -263,11 +268,17 @@ function App() {
         totalDiscount: totalDiscount,
         totalDeliveryCharge: totalDeliveryCharge,
       }));
+    } else {
+      setPriceBoxDetails({
+        cartItemsNumber: 0,
+        cartItemsPrice: 0,
+        totalDiscount: 0,
+        totalDeliveryCharge: 0,
+        totalAmount: 0,
+      })
     }
-  }, [cartArray]);
+  }, [cartArray, cartArray.no_of_carts]);
 
-  // console.log(cartArray);
-  // console.log(orderInit);
 
   const ordersData = [
     {
@@ -325,7 +336,9 @@ function App() {
             userWishlist,
             setUserWishlist,
             userComboCart,
-            setUserComboCart
+            setUserComboCart,
+            userSaveForLater,
+            setUserSaveForLater
           }}
         >
           {loc.pathname === "/login" || loc.pathname === "/signup" || loc.pathname === "/otp" || loc.pathname === "/adduser" ? "" : <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />}
@@ -336,7 +349,6 @@ function App() {
             <Route path="/adduser" exact element={<AddUser />} />
             <Route path="/" exact element={<Home setHeaderData={setHeaderData} allProducts={allProducts} />} />
             <Route path="/orders" exact element={<MyOrders setHeaderData={setHeaderData} featureProducts={allProducts} />} />
-            <Route path="/orders/:id" exact element={<MyOrders setHeaderData={setHeaderData} featureProducts={allProducts} />} />
             <Route path="/orders/success" exact element={<OrderSuccess setHeaderData={setHeaderData} featureProducts={allProducts} />} />
             <Route
               path="/mycart"

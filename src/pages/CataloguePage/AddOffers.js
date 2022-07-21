@@ -7,15 +7,13 @@ import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
 import { updateProductCatalogue, updateProductOffers } from '../../api/CatalogueApi';
 import { Slide, toast, ToastContainer } from 'react-toastify'
 import { addCoupon } from '../../api/couponApi';
+import { getSearchedProduct } from '../../api/Product';
 
 toast.configure()
 const AddOffers = ({ setHeaderData }) => {
   const nav = useNavigate()
   const { allProducts, setAllProducts } = useContext(UserDataContext)
-  const [selectedProduct, setSelectedProduct] = useState({
-    loaded: false,
-    product: []
-  })
+  const [selectedProduct, setSelectedProduct] = useState([])
   const [eanEntered, setEanEntered] = useState('')
   const [discountGiven, setDiscountGiven] = useState(null)
   const [comboEAN, setComboEAN] = useState(null)
@@ -48,7 +46,7 @@ const AddOffers = ({ setHeaderData }) => {
   const [bankOffers, setBankOffers] = useState([])
   const [allOffers, setAllOffers] = useState([])
   const [holdContainerValue, setHoldContainerValue] = useState('')
-
+  const [productExistingOffers, setProductExistingOffers] = useState([])
   const [flatDisOffers, setFlatDisOffers] = useState({
     value: '',
     from: new Date(),
@@ -103,6 +101,31 @@ const AddOffers = ({ setHeaderData }) => {
       setContOffersHold(prev => ({ ...prev, value: containerArray }))
     }
   }, [holdContainerValue])
+
+  useEffect(() => {
+    if (selectedProduct.length > 0) {
+      console.log(selectedProduct);
+    }
+  }, [selectedProduct])
+
+  useEffect(() => {
+    if (selectedProduct.length > 0) {
+      selectedProduct.forEach(prod => {
+        let discount = prod.discount
+        setProductExistingOffers([...productExistingOffers, discount])
+      })
+    }
+  }, [selectedProduct, allOffers])
+
+  // useEffect(() => {
+  //   if (selectedProduct.length > 0 && offerTypeSelected) {
+  //     let prodOffers = [...productExistingOffers]
+  //     prodOffers.forEach(offer => {
+
+  //     })
+  //   }
+  // }, [selectedProduct, offerTypeSelected, offers])
+
 
 
   const handleInput = (prop, prop2, prop3, e) => {
@@ -173,7 +196,7 @@ const AddOffers = ({ setHeaderData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (selectedProduct.loaded) {
+    if (selectedProduct.length > 0) {
       if (couponOffersHold.value) {
         let products = eanEntered.split(',')
         addCoupon(couponOffersHold, products)
@@ -182,7 +205,7 @@ const AddOffers = ({ setHeaderData }) => {
             nav('/catelogue-page')
           })
       } else {
-        let newProductArray = selectedProduct.product.map(function (elem) {
+        let newProductArray = selectedProduct.map(function (elem) {
           let prices = elem.price
           let existingBankOffers = [...elem.offers]
           let newOffersArray
@@ -216,17 +239,24 @@ const AddOffers = ({ setHeaderData }) => {
 
   const searchEAN = (e) => {
     e.preventDefault();
-    let ean = eanEntered.split(',')
-    let product = []
-    ean.forEach(item => {
-      let demo = allProducts.products.filter((product) => product.ean === item)
-      product.push(demo[0])
-    })
-    // let product = allProducts.products.filter((product) => product.ean === eanEntered)
-    setSelectedProduct({
-      loaded: true,
-      product: [...product]
-    })
+    if (eanEntered !== '' && eanEntered) {
+      let ean = eanEntered.split(',')
+      ean.forEach(item => {
+        let searchTerm = "ean=" + item
+        getSearchedProduct(searchTerm)
+          .then(res => {
+            if (res.length > 0) {
+              let prod = res[0]
+              let ind = selectedProduct.findIndex((obj) => obj._id === prod._id);
+              if (ind === -1) {
+                setSelectedProduct([...selectedProduct, prod])
+              }
+            } else {
+              toast.error('No Such Product Exists')
+            }
+          })
+      })
+    }
   }
 
   const searchComboProduct = (e) => {
@@ -239,13 +269,11 @@ const AddOffers = ({ setHeaderData }) => {
   }
 
   const handleDiscountCalc = (priceGiven) => {
-    if (selectedProduct.loaded) {
-      if (selectedProduct.product.length > 0) {
-        let MOP = parseInt(priceGiven)
-        let price = selectedProduct.product[0].price
-        let discount = ((price - MOP) / price) * 100
-        setDiscountGiven(isNaN(discount) ? null : discount)
-      }
+    if (selectedProduct.length > 0) {
+      let MOP = parseInt(priceGiven)
+      let price = selectedProduct.product[0].price
+      let discount = ((price - MOP) / price) * 100
+      setDiscountGiven(isNaN(discount) ? null : discount)
     }
   }
 
@@ -267,6 +295,59 @@ const AddOffers = ({ setHeaderData }) => {
       setHoldContainerValue(value)
     }
   }
+
+  useEffect(() => {
+    if (selectedProduct.length > 0) {
+      if (offerTypeSelected) {
+        handleDataToBeAdded(offerTypeSelected)
+      }
+    }
+  }, [selectedProduct, offerTypeSelected])
+
+  const handleDataToBeAdded = (offerTypeSelected) => {
+    switch (offerTypeSelected) {
+      case 'Discount':
+        setoffers({
+          flatDiscount: {
+            value: '',
+            from: null,
+            to: null
+          }
+        })
+        break;
+      case 'Combo':
+        setoffers({
+          combo: {
+            value: '',
+            from: null,
+            to: null
+          }
+        })
+        break;
+      case 'Container':
+        setoffers({
+          conetainer: [],
+        })
+        break;
+      case 'Coupon':
+        setoffers({
+          coupon: {
+            couponName: '',
+            value: '',
+            upTo: '',
+            to: null
+          }
+        })
+        break;
+      case 'Bank/Store Offer':
+        setoffers({})
+        break;
+
+      default:
+        break;
+    }
+  }
+  console.log(offers);
 
   const handleOfferType = (offerTypeSelected) => {
     switch (offerTypeSelected) {
@@ -435,23 +516,29 @@ const AddOffers = ({ setHeaderData }) => {
             </div>
           </form>
           <br />
-          <fieldset className='catelogue_Fieldset' >
-            <Dropdown>
-              <Dropdown.Toggle id="dropdown-basic">
-                <div className="catalogue_Dropdown">
-                  {offerTypeSelected ? (<p>{offerTypeSelected}</p>) : (<p>Select Offer Type</p>)}
-                </div>
-              </Dropdown.Toggle>
+          <>
+            {
+              selectedProduct.length > 0 && (
+                <fieldset className='catelogue_Fieldset' >
+                  <Dropdown>
+                    <Dropdown.Toggle id="dropdown-basic">
+                      <div className="catalogue_Dropdown">
+                        {offerTypeSelected ? (<p>{offerTypeSelected}</p>) : (<p>Select Offer Type</p>)}
+                      </div>
+                    </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                {
-                  availOffers.map((item, index) => (
-                    <Dropdown.Item key={index} value={item} onClick={() => setOfferTypeSelected(item)}>{item}</Dropdown.Item>
-                  ))
-                }
-              </Dropdown.Menu>
-            </Dropdown>
-          </fieldset>
+                    <Dropdown.Menu>
+                      {
+                        availOffers.map((item, index) => (
+                          <Dropdown.Item key={index} value={item} onClick={() => setOfferTypeSelected(item)}>{item}</Dropdown.Item>
+                        ))
+                      }
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </fieldset>
+              )
+            }
+          </>
           <div className="offer_Section">
             {
               handleOfferType(offerTypeSelected)
@@ -468,7 +555,7 @@ const AddOffers = ({ setHeaderData }) => {
           <br />
           <div className='offerPage_ProductList'>
             {
-              selectedProduct.loaded && (
+              selectedProduct.length > 0 && (
                 <>
                   <div className="catalogue_List_Item">
                     <div className='catalogue_List_Content'>
@@ -478,7 +565,7 @@ const AddOffers = ({ setHeaderData }) => {
                       <p>Product MOP</p>
                     </div>
                   </div>
-                  {selectedProduct.product.map((product, index) => (
+                  {selectedProduct.map((product, index) => (
                     <div className="catalogue_List_Item" key={index}>
                       <div className='catalogue_List_Content'>
                         {product.ean && (<p>{product.ean}</p>)}

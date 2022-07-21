@@ -8,15 +8,22 @@ import CartProductCard from '../../components/CartProductCard/CartProductCard'
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import Section2 from '../../components/Section2/Section2'
 import { initOrder } from '../../api/OrdersApi'
-import { getCartData, removeFromCart } from '../../api/Cart'
-import { getCoupon } from '../../api/couponApi'
+import { addToCart, getCartData, removeFromCart } from '../../api/Cart'
+import { checkCoupon, getCoupon } from '../../api/couponApi'
 import { getSearchedProduct } from '../../api/Product'
+import { addSaveForLaterItem, deleteSaveForLaterItem, getSaveForLater } from '../../api/SaveForLaterApi'
+import { deleteAllWishlistItems } from '../../api/wishlistApi'
 
 toast.configure()
 const CartSection = ({ featureProducts }) => {
   const nav = useNavigate()
   const [cartProducts, setCartProducts] = useState([])
+  const [couponApplicable, setCouponApplicable] = useState({
+    loaded: false,
+    applicable: false
+  })
   const [couponInput, setCouponInput] = useState('')
+  const [couponDetails, setCouponDetails] = useState({})
   const [cartSuggestions, setCartSuggestions] = useState([])
   const [cartSuggestProducts, setCartSuggestProducts] = useState({
     loaded: false,
@@ -32,15 +39,10 @@ const CartSection = ({ featureProducts }) => {
     allProducts,
     userComboCart,
     setUserComboCart,
-    priceBoxDetails
+    priceBoxDetails,
+    userSaveForLater,
+    setUserSaveForLater
   } = useContext(UserDataContext)
-
-  // useEffect(() => {
-  //   getCoupon()
-  //     .then(res => {
-  //       // console.log(res);
-  //     })
-  // }, [])
 
   useEffect(() => {
     if (cartArray && (cartArray.no_of_carts > 0)) {
@@ -62,16 +64,30 @@ const CartSection = ({ featureProducts }) => {
         let searchTerm = 'hierarchyL2=' + category
         getSearchedProduct(searchTerm)
           .then(res => {
-            let prod = {}
-            prod = res[0]
-            if (prod && res) {
-              setSuggesProducts([...suggesProducts, prod])
+            if (res.length > 0) {
+              let prod = {}
+              prod = res[0]
+              if (prod && res) {
+                setSuggesProducts([...suggesProducts, prod])
+              }
             }
           })
       })
     }
   }, [cartSuggestions])
   // console.log(suggesProducts);
+
+  useEffect(() => {
+    getSaveForLater()
+      .then(res => {
+        setUserSaveForLater({
+          loaded: true,
+          no_of_save_for_later_items: res.no_of_save_for_later_items,
+          save_for_later_items: res.save_for_later_items
+        })
+      })
+  }, [])
+
 
   useEffect(() => {
     if (suggesProducts && (suggesProducts.length > 0)) {
@@ -116,20 +132,24 @@ const CartSection = ({ featureProducts }) => {
   //ORDER INITIALIZATION CODE+++++++++++++++++++++++++++++++++++++++++
   const handleOrderInit = (e) => {
     e.preventDefault();
-    let productId = []
-    let quantity = []
-    cartArray.cart.forEach(item =>
-      productId.push(item._id)
-    )
-    cartArray.cart.forEach((item) => (
-      quantity.push(parseInt(item.quantity))
-    ))
-    setOrderInit(prev => ({
-      ...prev,
-      productId: productId,
-      quantity: quantity
-    }))
-    nav('/delivery-option')
+    if (cartArray.no_of_carts > 0) {
+      let productId = []
+      let quantity = []
+      cartArray.cart.forEach(item =>
+        productId.push(item._id)
+      )
+      cartArray.cart.forEach((item) => (
+        quantity.push(parseInt(item.quantity))
+      ))
+      setOrderInit(prev => ({
+        ...prev,
+        productId: productId,
+        quantity: quantity
+      }))
+      nav('/delivery-option')
+    } else {
+      toast.error('Add Product To Cart')
+    }
   }
   // console.log(userComboCart);
 
@@ -140,35 +160,153 @@ const CartSection = ({ featureProducts }) => {
         setUserComboCart([]),
         toast.error('Product Removed from Cart'),
         getCartData()
-          .then(res => res ? (
-            setCartArray({
-              loaded: true,
-              no_of_carts: res.no_of_carts,
-              cart: res.cart,
-              combo: res.combo
-            })
-          ) : (
-            ''
-          )
-          )
+          .then(res => {
+            if (res) {
+              let prod = []
+              prod = res.cart
+              prod.forEach((product) => {
+                product["quantity"] = 1;
+              })
+              setCartArray({
+                loaded: true,
+                no_of_carts: res.no_of_carts,
+                cart: prod,
+                combo: res.combo
+              })
+            }
+          })
       ) : (''))
   }
 
   //Get Coupon Codes
   const handleCoupon = (e) => {
     e.preventDefault();
-    setOrderInit(prev => ({
-      ...prev,
-      coupon: couponInput
-    }))
+    if (couponInput !== '') {
+      checkCoupon(couponInput)
+        .then(res => {
+          if (res && res.data && (res.data.status === 'success')) {
+            let coupon = res.data.data.coupon
+            let couponProducts = [...coupon.products]
+            let cartProductsEan = [...cartArray.cart]
+            let searchCart = cartProductsEan.find(elem => elem.ean === couponProducts[0])
+            console.log(searchCart);
+            if (searchCart) {
+              toast.success('Coupon is Applicable')
+            } else {
+              toast.error('Coupon Not Applicable')
+            }
+          } else {
+            toast.error('Enter Valid Coupon Code')
+          }
+        }
+        )
+    } else {
+      toast.error('Enter Coupon Code')
+    }
   }
 
+  const handleAddItemToSaveForLater = (id) => {
+    addSaveForLaterItem(id)
+      .then(res => res ? (
+        toast.success('Item Added To Save For Later'),
+        removeFromCart(id)
+          .then(res => res ? (
+            setUserComboCart([]),
+            toast.error('Product Removed from Cart'),
+            getCartData()
+              .then(res => {
+                if (res) {
+                  let prod = []
+                  prod = res.cart
+                  prod.forEach((product) => {
+                    product["quantity"] = 1;
+                  })
+                  setCartArray({
+                    loaded: true,
+                    no_of_carts: res.no_of_carts,
+                    cart: prod,
+                    combo: res.combo
+                  })
+                }
+              })
+          ) : ('')),
+        getSaveForLater()
+          .then(res => {
+            setUserSaveForLater({
+              loaded: true,
+              no_of_save_for_later_items: res.no_of_save_for_later_items,
+              save_for_later_items: res.save_for_later_items
+            })
+          })
+      ) : (
+        toast.error('Something Went Wrong. Please Try Again Later')
+      ))
+  }
+
+  const handleAddToCart = (id) => {
+    addToCart(id)
+      .then(res => res ? (
+        toast.success("Product Added to Cart"),
+        deleteSaveForLaterItem(id)
+          .then(res => {
+            console.log(res);
+            getSaveForLater()
+              .then(res => {
+                setUserSaveForLater({
+                  loaded: true,
+                  no_of_save_for_later_items: res.no_of_save_for_later_items,
+                  save_for_later_items: res.save_for_later_items
+                })
+              })
+          }),
+        getCartData()
+          .then(res => {
+            if (res) {
+              let prod = []
+              prod = res.cart
+              prod.forEach((product) => {
+                product["quantity"] = 1;
+              })
+              setCartArray({
+                loaded: true,
+                no_of_carts: res.no_of_carts,
+                cart: prod,
+                combo: res.combo
+              })
+            }
+          })
+      ) : (
+        toast.success("Something Went Wrong")
+      ))
+  }
   // console.log(cartArray);
+
+  const handleRemoveFromSaveForLater = (id) => {
+    deleteSaveForLaterItem(id)
+      .then(res => res ? (
+        toast.success('Product Removed from save for later'),
+        getSaveForLater()
+          .then(res => {
+            setUserSaveForLater({
+              loaded: true,
+              no_of_save_for_later_items: res.no_of_save_for_later_items,
+              save_for_later_items: res.save_for_later_items
+            })
+          })
+      ) : (
+        toast.error('Something Went Wrong')
+      ))
+  }
+
+  const pageSwitch = (e) => {
+    e.preventDefault();
+    nav("/");
+  };
 
   return (
     <>
       {
-        cartArray.no_of_carts === 0 ? (
+        (cartArray.no_of_carts === 0) && (userSaveForLater.no_of_save_for_later_items === 0) ? (
           <>
             <div className="order_Page_Right">
               <div className="empty_order_sec">
@@ -195,8 +333,18 @@ const CartSection = ({ featureProducts }) => {
                       handleRemoveFromCart={handleRemoveFromCart}
                       handleQuantityInc={handleQuantityInc}
                       handleQuantityDec={handleQuantityDec}
+                      handleAddItemToSaveForLater={handleAddItemToSaveForLater}
+                      handleAddToCart={handleAddToCart}
+                      handleRemoveFromSaveForLater={handleRemoveFromSaveForLater}
                     />
-                  ))) : ('')
+                  ))) : (
+                  <div className="empty_order_sec">
+                    <p className="empty_order_text">Your cart is empty</p>
+                    <button type="submit" className="submit-button" onClick={pageSwitch}>
+                      <p>Start Shopping</p>
+                    </button>
+                  </div>
+                )
               }
               {/* {
                 (userComboCart.length > 0) && userComboCart ? (
@@ -208,6 +356,9 @@ const CartSection = ({ featureProducts }) => {
                       handleRemoveFromCart={handleRemoveFromCart}
                       handleQuantityInc={handleQuantityInc}
                       handleQuantityDec={handleQuantityDec}
+                      handleAddItemToSaveForLater={handleAddItemToSaveForLater}
+                      handleAddToCart={handleAddToCart}
+                      handleRemoveFromSaveForLater={handleRemoveFromSaveForLater}
                     />
                   ))) : (<></>)
               } */}
@@ -255,16 +406,27 @@ const CartSection = ({ featureProducts }) => {
               </div>
               <div className="cards_Container">
                 {
-                  (cartArray.no_of_carts > 0) ? (
-                    cartArray.cart.map((item, index) => (
+                  (userSaveForLater.no_of_save_for_later_items > 0) ? (
+                    userSaveForLater.save_for_later_items.map((item, index) => (
                       <CartProductCard
                         key={index}
                         product={item}
+                        saveForLaterItem={true}
                         handleQuantityInc={handleQuantityInc}
                         handleQuantityDec={handleQuantityDec}
                         handleRemoveFromCart={handleRemoveFromCart}
+                        handleAddItemToSaveForLater={handleAddItemToSaveForLater}
+                        handleAddToCart={handleAddToCart}
+                        handleRemoveFromSaveForLater={handleRemoveFromSaveForLater}
                       />
-                    ))) : ('')
+                    ))) : (
+                    <div className="empty_order_sec">
+                      <p className="empty_order_text">Your Save for later is empty</p>
+                      <button type="submit" className="submit-button" onClick={pageSwitch}>
+                        <p>Start Shopping</p>
+                      </button>
+                    </div>
+                  )
                 }
               </div>
             </div>

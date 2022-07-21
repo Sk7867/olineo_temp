@@ -33,6 +33,7 @@ import { getIndiProduct } from "../../api/Product";
 import { getAllOrder } from "../../api/OrdersApi";
 import { getAllWishlistItems } from "../../api/wishlistApi";
 import WishlistSection from "../Wishlist/WishlistSection";
+import { getSaveForLater } from "../../api/SaveForLaterApi";
 
 const Profile = ({ setEditID, editID, setHeaderData }) => {
   const [profileState, setProfileState] = useState(1);
@@ -43,7 +44,17 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
   const [editAddress, setEditAddress] = useState({});
   const loc = useLocation();
   const nav = useNavigate();
-  const { userContext, setUserContext, setUserAddress, allProducts, setCartArray, setUserOrderData, setPriceBoxDetails, setUserWishlist } = useContext(UserDataContext);
+  const {
+    userContext,
+    setUserContext,
+    setUserAddress,
+    allProducts,
+    setCartArray,
+    setUserOrderData,
+    setPriceBoxDetails,
+    setUserWishlist,
+    setUserSaveForLater
+  } = useContext(UserDataContext);
 
   useEffect(() => {
     setHeaderData({
@@ -96,6 +107,17 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
             combo: res.combo
           })
         }
+      })
+  }, [])
+
+  useEffect(() => {
+    getSaveForLater()
+      .then(res => {
+        setUserSaveForLater({
+          loaded: true,
+          no_of_save_for_later_items: res.no_of_save_for_later_items,
+          save_for_later_items: res.save_for_later_items
+        })
       })
   }, [])
 

@@ -18,6 +18,23 @@ export const getCoupon = async () => {
   return getCouponResponse
 }
 
+export const checkCoupon = async (code) => {
+  let checkCouponRes
+
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/coupon/${code}`, { headers })
+    .then(res => {
+      checkCouponRes = res
+    })
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+      }
+    })
+
+  return checkCouponRes
+}
+
 //Add coupon to product
 export const addCoupon = async (couponOffersHold, products) => {
   let addCouponBody = {

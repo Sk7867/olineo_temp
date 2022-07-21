@@ -8,9 +8,18 @@ import addIcon from '../../assets/vector/add_outline_blue.svg'
 import deleteIconBlack from '../../assets/vector/delete_outline_black.svg'
 import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
 import saveLaterIcon from '../../assets/vector/save_later_outline.svg'
+import addToCartIcon from '../../assets/vector/cart_outline_blue.svg'
 
 const CartProductCard = ({
-  product, handleQuantityInc, handleQuantityDec, handleRemoveFromCart, comboProduct = false
+  product,
+  handleQuantityInc,
+  handleQuantityDec,
+  handleRemoveFromCart,
+  comboProduct = false,
+  saveForLaterItem = false,
+  handleAddItemToSaveForLater,
+  handleAddToCart,
+  handleRemoveFromSaveForLater
 }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [discount, setDiscount] = useState('')
@@ -46,6 +55,7 @@ const CartProductCard = ({
       }))
     }
   }, [product])
+  console.log(saveForLaterItem);
 
   useEffect(() => {
     if (product && product.discount.flatDiscount && product.discount.flatDiscount.value) {
@@ -103,7 +113,7 @@ const CartProductCard = ({
             <img src={prodData.image} alt="" />
           </div>
           {
-            !comboProduct ? (
+            !comboProduct && !saveForLaterItem ? (
               <div className="cart_Product_Counter_Container">
                 <div className='counter_Icon_Container' onClick={() => handleQuantityDec(prodData.id)} >
                   <img src={deleteIconBlack} alt="Delete" />
@@ -120,14 +130,36 @@ const CartProductCard = ({
       {
         !comboProduct ? (
           <div className='combined_Button_Container'>
-            <div className="combined_Button_One">
-              <img src={saveLaterIcon} alt="Save For Later" />
-              <p>Save for Later</p>
-            </div>
-            <div className="combined_Button_Two" onClick={() => handleRemoveFromCart(prodData.id)} >
-              <img src={deleteIcon} alt="Save For Later" />
-              <p>Remove</p>
-            </div>
+            <>
+              {
+                saveForLaterItem ? (
+                  <div className="combined_Button_One" onClick={() => handleAddToCart(prodData.id)}>
+                    <img src={addToCartIcon} alt="Add To Cart" />
+                    <p>Add To Cart</p>
+                  </div>
+                ) : (
+                  <div className="combined_Button_One" onClick={() => handleAddItemToSaveForLater(prodData.id)}>
+                    <img src={saveLaterIcon} alt="Save For Later" />
+                    <p>Save for Later</p>
+                  </div>
+                )
+              }
+            </>
+            <>
+              {
+                saveForLaterItem ? (
+                  <div className="combined_Button_Two" onClick={() => handleRemoveFromSaveForLater(prodData.id)} >
+                    <img src={deleteIcon} alt="Remove Save For later Item" />
+                    <p>Remove</p>
+                  </div>
+                ) : (
+                  <div className="combined_Button_Two" onClick={() => handleRemoveFromCart(prodData.id)} >
+                    <img src={deleteIcon} alt="Remove Cart Item" />
+                    <p>Remove</p>
+                  </div>
+                )
+              }
+            </>
           </div>
         ) : (<></>)
       }
