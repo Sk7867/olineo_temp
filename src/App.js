@@ -163,7 +163,6 @@ function App() {
     no_of_save_for_later_items: 0,
     save_for_later_items: []
   })
-  console.log(userSaveForLater);
 
   useEffect(() => {
     let user = JSON.parse(sessionStorage.getItem("user"));
