@@ -81,7 +81,7 @@ const ProductInfoTable = ({ product_Information }) => {
         <tbody>
           {
             product_Information.map((elem, index) => (
-              elem[1] && (elem[0] !== 'specText') ? (
+              elem[1] && (elem[0] !== 'specText') && (elem[0] !== 'dynamicValues') ? (
                 <tr className='product_Table_Row' key={index}>
                   <td className='product_Table_Key'>{handleTableKeys(elem[0])}</td>
                   <td className='product_Table_Value'>{elem[1]}{elem[0] === 'weight' ? '' : ''}</td>

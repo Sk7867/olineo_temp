@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
@@ -7,16 +7,29 @@ import './Pickup.css'
 
 //Images
 import searchBlueIcon from '../../assets/vector/search_blue.svg'
+import locationWarningYellowIcon from '../../assets/vector/location_warning_yellow.svg'
 
 //Components
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import StoreBox from '../../components/StoreBox/StoreBox'
+import useGeolocation from '../../hooks/useGeolocation'
+import { UserDataContext } from '../../Contexts/UserContext'
 
 const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
   const matches = useMediaQuery("(min-width:768px)")
+  const [disable, setDisable] = useState(true);
   const [nearStore, setNearStore] = useState(false)
+  const [showStore, setShowStore] = useState(false)
   const nav = useNavigate()
+  const { location, locationFetch } = useGeolocation()
+  const {
+    userLocation,
+    setUserLocation,
+    storeLocations,
+    setStoreLocations,
+    setSearchedProduct
+  } = useContext(UserDataContext)
 
   useEffect(() => {
     setHeaderData({
@@ -25,6 +38,12 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
       categoriesCond: false,
     })
   }, []);
+
+  const handleStoreSelectButton = () => {
+    locationFetch();
+  }
+
+  console.log(location);
 
   const breadCrumbsData = [
     {
@@ -41,7 +60,48 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
     },
   ]
 
+  const refreshPage = () => {
+    window.location.reload(false)
+  }
 
+  useEffect(() => {
+    if (location.loaded && location.error) {
+      setShowStore(false)
+    } else if (location.loaded && location.coordinates) {
+      setShowStore(true)
+      setUserLocation(location)
+
+    }
+  }, [location])
+
+  const storeBoxData = [
+    {
+      id: 1,
+      store_Name: 'Store Name',
+      store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
+      store_Timing: 'Mon - Sun 10 AM - 10 PM',
+      store_Contact: [
+        '3098098767',
+        '3764735623',
+      ],
+      store_Map_Link: '#',
+      open_Store_Button: false,
+      open_Store_Menu: '/store1/category1'
+    },
+    {
+      id: 2,
+      store_Name: 'Store Name',
+      store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
+      store_Timing: 'Mon - Sun 10 AM - 10 PM',
+      store_Contact: [
+        '3098098767',
+        '3764735623',
+      ],
+      store_Map_Link: '#',
+      open_Store_Button: false,
+      open_Store_Menu: '/store1/category1'
+    },
+  ]
 
   return (
     <>
@@ -52,19 +112,77 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
             <PriceDetailsBox HideDetails={false} />
           </aside>
           <div className='order_Page_Right'>
-            <div className="pickup_Search_Bar_Container section_Wrapper">
-              <div className='pickup_Search_Bar'>
-                <input type="text" name="Store Search" id="" className='searchbar store_Search_Bar' placeholder={`Enter PIN code/Store name`} />
-                <img src={searchBlueIcon} alt="" />
-              </div>
-            </div>
-            <div className="store_Page_Separtor">
-              <span className='hr_Line'></span>
-              <p>OR</p>
-            </div>
-            <div className='near_Store_Button'>
-              <button type='submit' className='submit-button' onClick={() => nav('/store-near-me')}><p>Show stores near me</p></button>
-            </div>
+            <>
+              {
+                location && location.loaded && (location.error) ? (
+                  <>
+                    <p className="cart_Text section_Wrapper">Stores near me</p>
+                    <div className="location_Alert">
+                      <img src={locationWarningYellowIcon} alt="" />
+                      <p>Enable location from browser setting to locate stores near your location.</p>
+                    </div>
+                    <div className="location_Refresh">
+                      <p>Refresh page after enabling the location.</p>
+                      <div className="location_Refresh_Button">
+                        <button type='submit' className='submit-button' onClick={refreshPage}><p>Refresh</p></button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  showStore && !location.error ? (
+                    <>
+                      <p className="cart_Text section_Wrapper">Stores near me</p>
+                      <div className="store_Search_List">
+                        {
+                          storeBoxData.map((store, index) => (
+                            <div className='store_Seach_Option' key={index}>
+                              <label htmlFor={store.id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setStoreSelected(store.id); setDisable(false) }}>
+                                <input type="radio" name='Store Option' id={store.id} value={store.id} />
+                                <span className="radio-custom"></span>
+                                <StoreBox store={store} />
+                              </label>
+                            </div>
+                          ))
+                        }
+                      </div>
+                      {
+                        matches && (
+                          <div className='delivery_Option_Submit_Button'>
+                            <button type='submit' className='submit-button ' disabled={disable}><p>Continue</p></button>
+                          </div>
+                        )
+                      }
+                      {
+                        !matches && (
+                          <div className="address_Footer">
+                            <button type='submit' className='submit-button' disabled={disable} ><p>Continue</p></button>
+                          </div>
+                        )
+                      }
+                    </>
+                  ) : (
+                    <>
+                      <div className="pickup_Search_Bar_Container section_Wrapper">
+                        <div className='pickup_Search_Bar'>
+                          <input type="text" name="Store Search" id="" className='searchbar store_Search_Bar' placeholder={`Enter PIN code/Store name`} />
+                          <img src={searchBlueIcon} alt="" />
+                        </div>
+                      </div>
+                      <div className="store_Page_Separtor">
+                        <span className='hr_Line'></span>
+                        <p>OR</p>
+                      </div>
+                      <div className='near_Store_Button'>
+                        <button type='submit' className='submit-button' onClick={handleStoreSelectButton}><p>Show stores near me</p></button>
+                      </div>
+                    </>
+                  )
+                )
+              }
+            </>
+            {
+
+            }
           </div>
         </div>
       </div>

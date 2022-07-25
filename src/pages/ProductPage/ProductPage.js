@@ -129,7 +129,7 @@ const ProductPage = ({ setHeaderData }) => {
             product_Instock: product.qty
           }));
           setPreviewImageSelected(images[0]);
-          setProductInfo(Object.entries(product.productInfo));
+          setProductInfo(Object.entries(product.productInfo.technicalDetailsTable));
           let colorArray = [...product.altProduct.color]
           // colorArray.unshift(product.ean)
           let specArray = [...product.altProduct.spec];

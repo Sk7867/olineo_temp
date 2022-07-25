@@ -167,382 +167,115 @@ const BulkUpload = ({ setHeaderData }) => {
     let dynamicArray2 = [];
     let dyHeader = ''
     let dyHeader1 = ''
-    switch (elem.hierarchyL2) {
-      case 'Smartphone': productInfo = {
+    productInfo = {
+      technicalDetailsTable: {
         os: elem.os,
         ram: elem.ram,
         rom: elem.rom,
+        series: elem.series,
         color: elem.color,
+        itemHeight: elem.itemHeight,
+        itemWidth: elem.itemWidth,
+        standingScreenDisplaySize: elem.standingScreenDisplaySize,
         batteries: elem.batteries,
+        hardwarePlatform: elem.hardwarePlatform,
         wirelessTech: elem.wirelessTech,
         connectivityTech: elem.connectiveTech,
+        bluetoothVersion: elem.bluetoothVersion,
+        numberOfItems: elem.numberOfItems,
         gps: elem.hasGPS,
+        processorBrand: elem.processorBrand,
+        processorSpeed: elem.processorSpeed,
+        processorCount: elem.processorCount,
+        compatibleDevices: elem.compatibleDevices,
         specialFeatures: elem.specialFeatures,
+        mountingHardware: elem.mountingHardware,
+        mountingType: elem.mountingType,
         displayFeatures: elem.displayFeatures,
+        screenResolution: elem.screenResolution,
         displayTechnology: elem.displayTechnology,
         colorsDisplayed: elem.colorsDisplayed,
         otherDisplayFeatures: elem.otherDisplayFeatures,
         deviceInterface: elem.primaryDeviceInterface,
         cameraFeatures: elem.cameraFeatures,
         otherCameraFeatures: elem.otherCameraFeatures,
-        audioJack: elem.audioJack,
-        formFactor: elem.formFactor,
-        batteryPowerRating: elem.batteryPowerRating,
-        productTalkTime: elem.talkTime,
-        productStandbyTime: elem.standbyTime,
-        inTheBox: elem.inTheBox,
-        modelYear: elem.modelYear,
-        modelName: elem.modelName,
-        modelNo: elem.modelNo,
-        importedBy: elem.importedBy,
-        country: elem.countryOrigin,
-        specText: elem.specText
-      }
-        // url = elem.productName + '-'
-        dynamicHeader = elem.productName + '( ' + elem.color + ', ' + elem.ram + ', ' + elem.rom + ')'
-        dyHeader = dynamicHeader.replace(/[.]/g, '-')
-        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
-        dynamicArray = dyHeader1.split(" ");
-        dynamicArray2 = dynamicArray.filter(n => n)
-        url = dynamicArray2.join('-')
-        return { productInfo, url, dynamicHeader };
-
-      case 'Adapter': productInfo = {
-        compatibleDevices: elem.compatibleDevices,
-        specialFeatures: elem.specialFeatures,
-        numberOfItems: elem.numberOfItems,
-        wattage: elem.wattage,
-        powerSource: elem.powerSource,
-        batteriesIncluded: elem.batteriesIncluded,
-        batteriesRequired: elem.batteriesRequired,
-        numberOfPorts: elem.numberOfPorts,
-        totalUsbPorts: elem.totalUsbPorts,
-        connectorType: elem.connectorType,
-        dataTransferRate: elem.dataTransferRate,
-        modelYear: elem.modelYear,
-        modelName: elem.modelName,
-        modelNo: elem.modelNo,
-        inTheBox: elem.inTheBox,
-        importedBy: elem.importedBy,
-        country: elem.countryOrigin,
-        specText: elem.specText
-
-      }
-        // url = elem.productName + '-'
-        dynamicHeader = elem.productName + '( ' + elem.wattage + ', ' + elem.connectorType + ')'
-        dyHeader = dynamicHeader.replace(/[.]/g, '-')
-        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
-        dynamicArray = dyHeader1.split(" ");
-        dynamicArray2 = dynamicArray.filter(n => n)
-        url = dynamicArray2.join('-')
-        return { productInfo, url, dynamicHeader };
-
-      case 'Tablet': productInfo = {
-        os: elem.os,
-        series: elem.series,
-        ram: elem.ram,
-        rom: elem.rom,
-        color: elem.color,
-        itemHeight: elem.itemHeight,
-        itemWidth: elem.itemWidth,
-        standingScreenDisplaySize: elem.standingScreenDisplaySize,
-        wirelessTech: elem.wirelessTech,
-        specialFeatures: elem.specialFeatures,
-        connectivityTech: elem.connectiveTech,
-        screenResolution: elem.screenResolution,
-        otherDisplayFeatures: elem.otherDisplayFeatures,
-        batteries: elem.batteries,
-        processorBrand: elem.processorBrand,
-        processorSpeed: elem.processorSpeed,
-        processorCount: elem.processorCount,
-        otherCameraFeatures: elem.cameraFeatures,
-        rearWebcamResolution: elem.rearWebcamResolution,
-        frontWebcamResolution: elem.frontWebcamResolution,
-        batteryPowerRating: elem.batteryPowerRating,
-        formFactor: elem.formFactor,
-        inTheBox: elem.inTheBox,
-        importedBy: elem.importedBy,
-        modelYear: elem.modelYear,
-        modelName: elem.modelName,
-        modelNo: elem.modelNo,
-        country: elem.countryOrigin,
-        specText: elem.specText
-      }
-        // url = elem.productName + '-'
-        dynamicHeader = elem.productName + '( ' + elem.color + (elem.ram ? (', ' + elem.ram) : '') + (elem.rom ? (', ' + elem.rom) : '') + ')'
-        dyHeader = dynamicHeader.replace(/[.]/g, '-')
-        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
-        dynamicArray = dyHeader1.split(" ");
-        dynamicArray2 = dynamicArray.filter(n => n)
-        url = dynamicArray2.join('-')
-        return { productInfo, url, dynamicHeader };
-
-      case 'Wired Headphones': productInfo = {
-        hardwarePlatform: elem.hardwarePlatform,
-        specialFeatures: elem.specialFeatures,
-        mountingHardware: elem.mountingHardware,
-        numberOfItems: elem.numberOfItems,
-        microphoneFormFactor: elem.microphoneFormFactor,
-        headphonesFormFactor: elem.headphonesFormFactor,
-        batteriesRequired: elem.batteriesRequired,
-        cableFeature: elem.cableFeature,
-        connectorType: elem.connectorType,
-        material: elem.material,
-        inTheBox: elem.inTheBox,
-        importedBy: elem.importedBy,
-        modelYear: elem.modelYear,
-        modelName: elem.modelName,
-        modelNo: elem.modelNo,
-        country: elem.countryOrigin,
-        specText: elem.specText
-      }
-        // url = elem.productName + '-'
-        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.headphonesFormFactor ? (', ' + elem.headphonesFormFactor) : '') + ')'
-        dyHeader = dynamicHeader.replace(/[.]/g, '-')
-        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
-        dynamicArray = dyHeader1.split(" ");
-        dynamicArray2 = dynamicArray.filter(n => n)
-        url = dynamicArray2.join('-')
-        return { productInfo, url, dynamicHeader };
-
-      case "Wired Earphones":
-        productInfo = {
-          compatibleDevices: elem.compatibleDevices,
-          specialFeatures: elem.specialFeatures,
-          mountingHardware: elem.mountingHardware,
-          numberOfItems: elem.numberOfItems,
-          microphoneFormFactor: elem.microphoneFormFactor,
-          headphonesFormFactor: elem.headphonesFormFactor,
-          batteriesIncluded: elem.batteriesIncluded,
-          batteriesRequired: elem.batteriesRequired,
-          cableFeature: elem.cableFeature,
-          connectorType: elem.connectorType,
-          material: elem.material,
-          inTheBox: elem.inTheBox,
-          importedBy: elem.importedBy,
-          modelYear: elem.modelYear,
-          modelName: elem.modelName,
-          modelNo: elem.modelNo,
-          country: elem.countryOrigin,
-          specText: elem.specText
-        };
-        // url = elem.productName + '-'
-        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.headphonesFormFactor ? (', ' + elem.headphonesFormFactor) : '') + (elem.cableFeature ? (', ' + elem.cableFeature) : '') + (elem.compatibleDevices ? (', ' + elem.compatibleDevices) : '') + ')'
-        dyHeader = dynamicHeader.replace(/[.]/g, '-')
-        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
-        dynamicArray = dyHeader1.split(" ");
-        dynamicArray2 = dynamicArray.filter(n => n)
-        url = dynamicArray2.join('-')
-        return { productInfo, url, dynamicHeader };
-
-      case 'Bluetooth Speaker': productInfo = {
         speakerType: elem.speakerType,
-        color: elem.color,
         playTime: elem.playTime,
         peakPowerHandlingSpeakers: elem.peakPowerHandlingSpeakers,
         RMSPowerRangeAmplifiers: elem.RMSPowerRangeAmplifiers,
-        batteries: elem.batteries,
-        inTheBox: elem.inTheBox,
-        importedBy: elem.importedBy,
-        modelYear: elem.modelYear,
-        modelName: elem.modelName,
-        modelNo: elem.modelNo,
-        country: elem.countryOrigin,
-        specText: elem.specText
-      }
-        // url = elem.productName + '-'
-        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.playTime ? (', ' + elem.playTime) : '') + ')'
-        dyHeader = dynamicHeader.replace(/[.]/g, '-')
-        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
-        dynamicArray = dyHeader1.split(" ");
-        dynamicArray2 = dynamicArray.filter(n => n)
-        url = dynamicArray2.join('-')
-        return { productInfo, url, dynamicHeader };
-
-      case 'Charging Cable': productInfo = {
-        compatibleDevices: elem.compatibleDevices,
-        specialFeatures: elem.specialFeatures,
-        numberOfMemorySticks: elem.numberOfMemorySticks,
-        ACAdapterCurrent: elem.ACAdapterCurrent,
-        itemHeight: elem.itemHeight,
-        itemWidth: elem.itemWidth,
-        connectiveTech: elem.connectiveTech,
-        numberOfPorts: elem.numberOfPorts,
-        totalUsbPorts: elem.totalUsbPorts,
-        cableType: elem.cableType,
-        dataTransferRate: elem.dataTransferRate,
-        wattage: elem.wattage,
-        connectorType: elem.connectorType,
-        material: elem.material,
-        modelYear: elem.modelYear,
-        modelName: elem.modelName,
-        modelNo: elem.modelNo,
-        inTheBox: elem.inTheBox,
-        importedBy: elem.importedBy,
-        country: elem.countryOrigin,
-        specText: elem.specText
-      }
-        // url = elem.productName + '-'
-        dynamicHeader = elem.productName + '( ' + elem.wattage + (elem.connectorType ? (', ' + elem.connectorType) : '') + (elem.dataTransferRate ? (',' + elem.dataTransferRate) : '') + ')'
-        dyHeader = dynamicHeader.replace(/[.]/g, '-')
-        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
-        dynamicArray = dyHeader1.split(" ");
-        dynamicArray2 = dynamicArray.filter(n => n)
-        url = dynamicArray2.join('-')
-        return { productInfo, url, dynamicHeader };
-
-      case 'Soundbar': productInfo = {
-        color: elem.color,
-        hardwarePlatform: elem.hardwarePlatform,
-        specialFeatures: elem.specialFeatures,
-        mountingHardware: elem.mountingHardware,
         speakerSurroundSoundChannelConfiguration: elem.speakerSurroundSoundChannelConfiguration,
         audioOutputMode: elem.audioOutputMode,
-        numberOfItems: elem.numberOfItems,
         speakerAmplificationType: elem.speakerAmplificationType,
         speakerConnectivity: elem.speakerConnectivity,
-        wattage: elem.wattage,
-        batteriesRequired: elem.batteriesRequired,
-        mountingType: elem.mountingType,
-        connectorType: elem.connectorType,
-        material: elem.material,
-        inTheBox: elem.inTheBox,
-        importedBy: elem.importedBy,
-        modelYear: elem.modelYear,
-        modelName: elem.modelName,
-        modelNo: elem.modelNo,
-        country: elem.countryOrigin,
-        specText: elem.specText
-      }
-        // url = elem.productName + '-'
-        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.wattage ? (', ' + elem.wattage) : '') + ')'
-        dyHeader = dynamicHeader.replace(/[.]/g, '-')
-        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
-        dynamicArray = dyHeader1.split(" ");
-        dynamicArray2 = dynamicArray.filter(n => n)
-        url = dynamicArray2.join('-')
-        return { productInfo, url, dynamicHeader };
-
-      case 'TWS': productInfo = {
-        color: elem.color,
-        batteries: elem.batteries,
-        specialFeatures: elem.specialFeatures,
-        playtime: elem.playtime,
-        mountingHardware: elem.mountingHardware,
-        numberOfItems: elem.numberOfItems,
+        rearWebcamResolution: elem.rearWebcamResolution,
+        frontWebcamResolution: elem.frontWebcamResolution,
         microphoneFormFactor: elem.microphoneFormFactor,
-        microphoneTech: elem.microphoneTech,
         headphonesFormFactor: elem.headphonesFormFactor,
-        powerSource: elem.powerSource,
+        microphoneTech: elem.microphoneTech,
+        audioJack: elem.audioJack,
+        formFactor: elem.formFactor,
+        batteryPowerRating: elem.batteryPowerRating,
         batteriesIncluded: elem.batteriesIncluded,
         batteriesRequired: elem.batteriesRequired,
         batteryCellComposition: elem.batteryCellComposition,
-        cableFeature: elem.cableFeature,
-        connectorType: elem.connectorType,
-        bluetoothVersion: elem.bluetoothVersion,
-        maximumOperatingDistance: elem.maximumOperatingDistance,
         containsLiquidContents: elem.containsLiquidContents,
         includesRechargableBattery: elem.includesRechargableBattery,
-        material: elem.material,
-        inTheBox: elem.inTheBox,
-        importedBy: elem.importedBy,
-        modelYear: elem.modelYear,
-        modelName: elem.modelName,
-        modelNo: elem.modelNo,
-        country: elem.countryOrigin,
-        specText: elem.specText
-      }
-        // url = elem.productName + '-'
-        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.playTime ? (', ' + elem.playTime) : '') + (elem.microphoneTech ? (', ' + elem.microphoneTech) : '') + (elem.bluetoothVersion ? (', ' + elem.bluetoothVersion) : '') + ')'
-        dyHeader = dynamicHeader.replace(/[.]/g, '-')
-        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
-        dynamicArray = dyHeader1.split(" ");
-        dynamicArray2 = dynamicArray.filter(n => n)
-        url = dynamicArray2.join('-')
-        return { productInfo, url, dynamicHeader };
-
-      case 'Bluetooth Neckband': productInfo = {
-        color: elem.color,
-        batteries: elem.batteries,
-        specialFeatures: elem.specialFeatures,
-        playtime: elem.playtime,
-        wirelessTech: elem.wirelessTech,
-        connectivityTech: elem.connectivityTech,
-        otherDisplayFeatures: elem.otherDisplayFeatures,
-        audioJack: elem.audioJack,
-        numberOfItems: elem.numberOfItems,
-        microphoneFormFactor: elem.microphoneFormFactor,
-        microphoneTech: elem.microphoneTech,
-        headphonesFormFactor: elem.headphonesFormFactor,
-        mountingHardware: elem.mountingHardware,
-        powerSource: elem.powerSource,
-        batteriesIncluded: elem.batteriesIncluded,
-        batteriesRequired: elem.batteriesRequired,
-        cableFeature: elem.cableFeature,
-        connectorType: elem.connectorType,
-        bluetoothVersion: elem.bluetoothVersion,
-        maximumOperatingDistance: elem.maximumOperatingDistance,
-        includesRechargableBattery: elem.includesRechargableBattery,
-        material: elem.material,
-        inTheBox: elem.inTheBox,
-        importedBy: elem.importedBy,
-        modelYear: elem.modelYear,
-        modelName: elem.modelName,
-        modelNo: elem.modelNo,
-        country: elem.countryOrigin,
-        specText: elem.specText
-      }
-        // url = elem.productName + '-'
-        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.playTime ? (', ' + elem.playTime) : '') + (elem.microphoneTech ? (', ' + elem.microphoneTech) : '') + (elem.bluetoothVersion ? (', ' + elem.bluetoothVersion) : '') + ')'
-        dyHeader = dynamicHeader.replace(/[.]/g, '-')
-        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
-        dynamicArray = dyHeader1.split(" ");
-        dynamicArray2 = dynamicArray.filter(n => n)
-        url = dynamicArray2.join('-')
-        return { productInfo, url, dynamicHeader };
-
-      case 'Powerbank': productInfo = {
-        color: elem.color,
-        batteries: elem.batteries,
-        specialFeatures: elem.specialFeatures,
-        playtime: elem.playtime,
-        wirelessTech: elem.wirelessTech,
-        connectivityTech: elem.connectivityTech,
-        batteryPowerRating: elem.batteryPowerRating,
-        wattage: elem.wattage,
-        powerSource: elem.powerSource,
-        batterCapacity: elem.batterCapacity,
-        batteryCellComposition: elem.batteryCellComposition,
-        numberOfItems: elem.numberOfItems,
-        numberOfPorts: elem.numberOfPorts,
         totalUsbPorts: elem.totalUsbPorts,
-        connectorType: elem.connectorType,
-        mountingHardware: elem.mountingHardware,
-        batteriesIncluded: elem.batteriesIncluded,
-        batteriesRequired: elem.batteriesRequired,
+        numberOfPorts: elem.numberOfPorts,
         cableFeature: elem.cableFeature,
-        includesRechargableBattery: elem.includesRechargableBattery,
+        powerSource: elem.powerSource,
+        connectorType: elem.connectorType,
+        cableType: elem.cableType,
+        numberOfMemorySticks: elem.numberOfMemorySticks,
+        ACAdapterCurrent: elem.ACAdapterCurrent,
+        maximumOperatingDistance: elem.maximumOperatingDistance,
         material: elem.material,
+        wattage: elem.wattage,
+        productTalkTime: elem.talkTime,
+        productStandbyTime: elem.standbyTime,
+        dataTransferRate: elem.dataTransferRate,
         inTheBox: elem.inTheBox,
-        importedBy: elem.importedBy,
         modelYear: elem.modelYear,
         modelName: elem.modelName,
         modelNo: elem.modelNo,
+        importedBy: elem.importedBy,
         country: elem.countryOrigin,
-        specText: elem.specText
+        specText: elem.specText,
+      },
+      dynamicValues: {
+        os: elem.os,
+        ram: elem.ram,
+        rom: elem.rom,
+        color: elem.color,
+        bluetoothVersion: elem.bluetoothVersion,
+        speakerConnectivity: elem.speakerConnectivity,
+        connectorType: elem.connectorType,
+        compatibleDevices: elem.compatibleDevices,
+        wattage: elem.wattage,
+        playTime: elem.playTime,
+        microphoneTech: elem.microphoneTech,
       }
-        // url = elem.productName + '-'
-        dynamicHeader = elem.productName + '( ' + elem.connectorType + (elem.color ? (', ' + elem.color) : '') + (elem.playTime ? (', ' + elem.playTime) : '') + (elem.microphoneTech ? (', ' + elem.microphoneTech) : '') + (elem.bluetoothVersion ? (', ' + elem.bluetoothVersion) : '') + ')'
-        dyHeader = dynamicHeader.replace(/[.]/g, '-')
-        dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
-        dynamicArray = dyHeader1.split(" ");
-        dynamicArray2 = dynamicArray.filter(n => n)
-        url = dynamicArray2.join('-')
-        return { productInfo, url, dynamicHeader };
-
-      default:
-        break;
     }
+
+    dynamicHeader = elem.productName +
+      '( ' + elem.color + (elem.color ? (', ' + elem.color) : '')
+      + (elem.ram ? (', ' + elem.ram) : '')
+      + (elem.rom ? (', ' + elem.rom) : '')
+      + (elem.bluetoothVersion ? (', ' + elem.bluetoothVersion) : '')
+      + (elem.speakerConnectivity ? (', ' + elem.speakerConnectivity) : '')
+      + (elem.connectorType ? (', ' + elem.connectorType) : '')
+      + (elem.compatibleDevices ? (', ' + elem.compatibleDevices) : '')
+      + (elem.wattage ? (', ' + elem.wattage) : '')
+      + (elem.playtime ? (', ' + elem.playtime) : '')
+      + (elem.microphoneTech ? (', ' + elem.microphoneTech) : '')
+      + ')'
+
+    dyHeader = dynamicHeader.replace(/[.]/g, '-')
+    dyHeader1 = dyHeader.replace(/[\(,\)]/g, '')
+    dynamicArray = dyHeader1.split(" ");
+    dynamicArray2 = dynamicArray.filter(n => n)
+    url = dynamicArray2.join('-')
+    return { productInfo, url, dynamicHeader };
   };
 
   const imageHandleChange = (e, type, eanNum) => {

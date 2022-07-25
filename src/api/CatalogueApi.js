@@ -18,7 +18,8 @@ export const addProductCatalogue = async (
   alternateSpecArray,
   slug,
   immediateComplimentaryArray,
-  laterComplimentaryArray
+  laterComplimentaryArray,
+  dynamicTable
 ) => {
   let addProductResponse;
 
@@ -34,12 +35,15 @@ export const addProductCatalogue = async (
     hierarchyL2: L2Selected,
     hierarchyL3: L3Selected,
     classification: classificationSelected,
-    productInfo: technicalDetailsTable,
+    productInfo: {
+      technicalDetailsTable,
+      dynamicTable
+    },
     modelNo: technicalDetailsTable.modelNo,
     brand: prodPreviewData.brand,
     color: prodPreviewData.color,
     HSN: prodPreviewData.HSN,
-    inwardDate: prodPreviewData.inwardDate,
+    // inwardDate: prodPreviewData.inwardDate,
     price: {
       mrp: prodPreviewData.price.mrp,
       mop: prodPreviewData.price.mop,
@@ -53,7 +57,7 @@ export const addProductCatalogue = async (
       later: laterComplimentaryArray
     }
   };
-  // console.log(addProductBody);
+  console.log(addProductBody);
 
   await axios.post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(addProductBody), { headers })
     .then((res) => {
@@ -65,10 +69,10 @@ export const addProductCatalogue = async (
 
 export const addBulkOrder = async (order) => {
   let addBulkProductResponse;
+  console.log(order)
   await axios
     .post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(order), { headers })
     .then((res) => {
-      console.log(res);
       if (res.data.status === "success") addBulkProductResponse = res.data?.data?.product;
     })
     .catch((err) => {
@@ -101,7 +105,8 @@ export const updateProductCatalogue = async (
   alternateSpecArray,
   slug,
   immediateComplimentaryArray,
-  laterComplimentaryArray
+  laterComplimentaryArray,
+  dynamicTable
 ) => {
   let updateProductResponse;
   let updateProductBody = {
@@ -116,12 +121,15 @@ export const updateProductCatalogue = async (
     hierarchyL2: L2Selected,
     hierarchyL3: L3Selected,
     classification: classificationSelected,
-    productInfo: technicalDetailsTable,
+    productInfo: {
+      technicalDetailsTable,
+      dynamicTable
+    },
     modelNo: technicalDetailsTable.modelNo,
     brand: prodPreviewData.brand,
     color: prodPreviewData.color,
     HSN: prodPreviewData.HSN,
-    inwardDate: prodPreviewData.inwardDate,
+    // inwardDate: prodPreviewData.inwardDate,
     price: {
       mrp: prodPreviewData.price.mrp,
       mop: prodPreviewData.price.mop,
@@ -135,6 +143,7 @@ export const updateProductCatalogue = async (
       later: laterComplimentaryArray
     }
   };
+  console.log(prodPreviewData.id);
   await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${prodPreviewData.id}`, JSON.stringify(updateProductBody), { headers }).then((res) => {
     updateProductResponse = res;
   });

@@ -437,18 +437,18 @@ function App() {
               path="/home-delivery"
               exact
               element={
-                <PrivateRouteCustomer>
-                  <HomeDelivery setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />
-                </PrivateRouteCustomer>
+
+                <HomeDelivery setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />
+
               }
             />
             <Route
               path="/store-pickup"
               exact
               element={
-                <PrivateRouteCustomer>
-                  <StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />
-                </PrivateRouteCustomer>
+
+                <StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />
+
               }
             />
             <Route path="/store-near-me" exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
