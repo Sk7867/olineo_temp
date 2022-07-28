@@ -1,0 +1,366 @@
+.catelogue_Pagee{
+    margin: 1rem 0 0;
+    background: #FFFFFF;
+    padding: 1rem 1.5rem;
+  }
+  
+  .catelogue_Page_Header{
+    margin: 0 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+  
+  .catelogue_Header_Buttons{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .catelogue_Page_Heading{
+    margin: 0;
+    color: #08090A;
+    font-weight: 600;
+    font-size: 1.5rem;
+    line-height: 2.25rem;
+  }
+  
+  .catelogue_Form{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .catelogue_Form_Group{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .catelogue_Page_Header .button-Container{
+    min-width: 120px;
+    margin: 0 10px 0  0;
+  }
+  
+  .catelogue_Page_List{
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+  }
+  
+  .catalogue_List_Item{
+    display: flex;
+    padding: 0.5rem;
+    border: 1px solid #EBEDF0;
+    border-radius: 0.25rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .catalogue_List_Item p{
+    margin: 0;
+    color: #08090A;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  .catalogue_List_Item p:first-of-type{
+    width: 160px;
+  }
+  
+  .catalogue_List_Content, .catalogue_List_Buttons{
+    display: flex;
+  }
+  
+  .catalogue_List_Content{
+    gap: 0.75rem;
+  }
+  
+  .catalogue_List_Buttons{
+    gap: 0.5rem;
+  }
+  
+  .catalogue_Edit, .catalogue_Delete{
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: #FFFFFF;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
+  
+  .catalogue_Edit{
+    background: #3D5176 ;
+  }
+  
+  .catalogue_Edit:hover{
+    color: #FFFFFF;
+  }
+  
+  .catalogue_Delete{
+    background: red;
+  }
+  
+  .catalogue_Hint{
+    margin: 0 0 0 0.5rem;
+    color: #5f6368;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.125rem;
+  }
+  
+  .catelogue_Fieldset{
+    /* padding: 0.75rem 0; */
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    flex-flow: wrap;
+  }
+  
+  .catelogue_Fieldset .dropdown .dropdown-toggle {
+    background: transparent !important;
+    border: 1px solid #CED4DA !important;
+    box-shadow: none !important;
+  }
+  
+  .catelogue_Fieldset .dropdown .dropdown-toggle::after {
+    border: none;
+    display: none;
+  }
+  
+  .catelogue_Fieldset .dropdown .dropdown-toggle:hover {
+    background: transparent;
+    border: 1px solid #CED4DA;
+  }
+  
+  .catelogue_Fieldset .show>.btn.btn-primary.dropdown-toggle:focus {
+    box-shadow: none;
+    background: transparent;
+    border: 1px solid #CED4DA;
+  }
+  
+  .catelogue_Fieldset .show>.dropdown-toggle.btn.btn-primary:focus,
+  .catelogue_Fieldset .show>.dropdown-toggle.btn.btn-primary:focus-visible {
+    box-shadow: none;
+    background: transparent;
+    border: 1px solid #CED4DA;
+  }
+  
+  .catalogue_Dropdown {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .catalogue_Dropdown span,
+  .catalogue_Dropdown p {
+    color: #6D747A;
+    margin: 0;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+  }
+  
+  .catalogue_Dropdown p {
+    color: #08090A;
+  }
+  
+  .catelogue_Product_Search{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem
+  }
+  
+  .catelogue_Product_Search .button-Container button{
+    max-width: 95%;
+  }
+  
+  .catelog_Product_Info{
+    display: flex;
+    gap: 1.5rem;
+    justify-content: space-between;
+    margin: 1rem 0;
+  }
+  
+  .catelog_Product_Info .product_Info_Left{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .catelog_Product_Info .product_Info_Left p {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+  }
+  
+  .catelog_Product_Info .product_Info_Right{
+    max-width: 100px;
+    max-height: 100px;
+  }
+  
+  .catelog_Product_Info .product_Info_Right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* .catelogue_Product_Search > *{
+    width: 50%;
+  } */
+  
+  .addoffer_Input{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .addoffer_Input p{
+    margin: 0;
+  }
+  
+  .addoffer_Input .addoffer_Input2 {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .Catalogue_Section_Heading{
+    margin: 0;
+  }
+  
+  .catalogue_Image_Preview{
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .input_Delete{
+    display: flex;
+    justify-content: flex-end;
+    cursor: pointer;
+  }
+  
+  .input_Delete img{
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+  }
+  
+  .addoffer_Container p{
+    margin: 0.5rem 0;
+  }
+  
+  .catelogue_Table{
+    overflow-x: scroll;
+  }
+  
+  .catelogue_Table thead, .catelogue_Table tr, .catelogue_Table td, .catelogue_Table th{
+    padding: 0.5rem;
+    border: 1px solid black;
+    white-space: nowrap;
+  }
+  
+  .DatePicker__calendarContainer{
+    z-index: 200;
+  }
+  
+  .addoffer_Input .addoffer_Input2.bank_offer_heading{
+    justify-content: flex-start;
+  }
+  
+  @media screen and (min-width: 768px) {
+    .catelogue_Pagee{
+      padding: 1.5rem;
+      max-width: 680px;
+      width: 100%;
+      margin: 2rem auto;
+    }
+  
+    .catelogue_Page_Header .button-Container {
+      min-width: 220px;
+    }
+  
+    .catalogue_List_Item {
+      padding: 0.75rem 1rem;
+    }
+  
+    .catalogue_List_Content {
+      gap: 1rem;
+    }
+  
+    .catalogue_List_Buttons {
+      gap: 1rem;
+    }
+  
+    .catalogue_List_Item p {
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
+  
+    .catalogue_List_Item p:first-of-type {
+      width: 230px;
+    }
+  
+    .catalogue_Edit,
+    .catalogue_Delete {
+      font-size: 1rem;
+      line-height: 1.5rem;
+      padding: 0.75rem 1.25rem;
+    }
+  
+    .catelogue_Product_Search {
+      flex-direction: row;
+    }
+  
+    .catelogue_Product_Search input.input-field, .addoffer_Input .addoffer_Input2.input-field{
+      max-width: 60%;
+    }
+  
+    .catelogue_Product_Search .button-Container, .addoffer_Input .addoffer_Input2 .button-Container{
+      width: 35%;
+    }
+  
+    .catelog_Product_Info .product_Info_Left {
+      gap: 1rem;
+    }
+  
+    .catelog_Product_Info .product_Info_Left p {
+      font-size: 1rem;
+    }
+  
+    .catelog_Product_Info .product_Info_Right {
+      max-width: 200px;
+      max-height: 200px;
+    }
+  
+  .addoffer_Input .addoffer_Input2 {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  
+      .input_Delete {
+        align-items: center;
+        justify-content: center;
+      }
+  
+      .catelogue_Product_Search .addoffer_Input2 {
+        width: 100%;
+      }
+  
+      .catelogue_Product_Search .addoffer_Input2 .input-field{
+        max-width: 100%;
+      }
+  }
+  
+  @media screen and (min-width: 1024px) {
+    .catelogue_Pagee{
+      max-width: 980px;
+    }
+  }

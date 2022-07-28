@@ -132,18 +132,18 @@ const CataloguePage = ({ setHeaderData }) => {
               allProducts.loaded ? (
                 (allProducts.no_of_products > 0) ? (
                   (productsToShow.length > 0) ? (
-                    productsToShow.map((product, index) => (
+                    productsToShow.map((item, index) => (
                       <div className="catalogue_List_Item" key={index}>
                         <div className='catalogue_List_Content'>
-                          {product.ean && (<p>{product.ean}</p>)}
-                          {product.name && (<p>{product.name}</p>)}
+                          {item.ean && (<p>{item.ean}</p>)}
+                          {item.name && (<p>{item.name}</p>)}
                           {/* {product.price.mop && (<p>{product.price.mop}</p>)} */}
                         </div>
                         <div className='catalogue_List_Buttons'>
-                          <Link to={'/catelogue-page/add-product'} state={product = { product }} className='catalogue_Edit' >
+                          <Link to={'/catelogue-page/add-product'} state={item = { item }} className='catalogue_Edit' >
                             Edit
                           </Link>
-                          <div className='catalogue_Delete' onClick={() => handleDeleteProduct(product)}>
+                          <div className='catalogue_Delete' onClick={() => handleDeleteProduct(item)}>
                             Delete
                           </div>
                         </div>

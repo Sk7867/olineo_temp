@@ -59,7 +59,16 @@ import PrivateRouteCustomer from "./pages/PrivateRoute/PrivateRouteCustomer";
 import PrivateRouteSignup from "./pages/PrivateRoute/PrivateRouteSignup";
 import OrderSuccess from "./pages/MyOrders/OrderSuccess";
 import MyWishlist from "./pages/Wishlist/MyWishlist";
-//Push from new branch -sid
+import Dashboard from './pages/Dashboard/Dashboard';
+import DashboardProducts from './pages/Dashboard/DashboardProducts';
+import DashBoardHome from './pages/Dashboard/DashBoardHome';
+import DashboardDiscount from './pages/Dashboard/DashboardDiscount';
+import DashboardAddDiscount from './pages/Dashboard/DashboardAddDiscount';
+import DashboardOrders from './pages/Dashboard/DashboardOrders';
+import DashboardAlluser from './pages/Dashboard/DashboardAlluser';
+import DashboardAddProduct from './pages/Dashboard/DashboardAddProduct';
+import Quirys from './pages/Dashboard/Quirys';
+import Payments from './pages/Dashboard/Payments';
 
 function App() {
   const [loginRedirect, setLoginRedirect] = useState(false);
@@ -340,7 +349,25 @@ function App() {
             setUserSaveForLater
           }}
         >
-          {loc.pathname === "/login" || loc.pathname === "/signup" || loc.pathname === "/otp" || loc.pathname === "/adduser" ? "" : <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />}
+          {
+            loc.pathname === '/login' ||
+              loc.pathname === "/signup" ||
+              loc.pathname === "/otp" ||
+              loc.pathname === "/adduser" ||
+              loc.pathname === '/admin-home' ||
+              loc.pathname === '/admin-add-product' ||
+              loc.pathname === '/admin-discounts' ||
+              loc.pathname === '/admin-add-discount' ||
+              loc.pathname === '/admin-orders' ||
+              loc.pathname === '/admin' ||
+              loc.pathname === '/admin-products' ||
+              loc.pathname === '/admin-alluser' ||
+              loc.pathname === '/admin-query' ||
+              loc.pathname === '/admin-payments'
+              ? ('') : (
+                <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />
+              )
+          }
           <Routes>
             <Route path="/signup" exact element={<Signup setLoginRedirect={setLoginRedirect} />} />
             <Route path="/login" exact element={<Login setLoginRedirect={setLoginRedirect} />} />
@@ -482,8 +509,30 @@ function App() {
             <Route path="/catelogue-page/add-offers" exact element={<AddOffers setHeaderData={setHeaderData} />} />
             <Route path="/about-us" exact element={<AboutUs setHeaderData={setHeaderData} />} />
             <Route path="/wishlist" exact element={<MyWishlist setHeaderData={setHeaderData} />} />
+            <Route element={<Dashboard />} >
+              <Route exact path='/admin-home' element={<DashBoardHome />} />
+              <Route exact path='/admin-products' element={<DashboardProducts />} />
+              <Route exact path='/admin-add-product' element={<DashboardAddProduct setHeaderData={setHeaderData} />} />
+              <Route exact path='/admin-discounts' element={<DashboardDiscount />} />
+              <Route exact path='/admin-add-discount' element={<DashboardAddDiscount />} />
+              <Route exact path='/admin-orders' element={<DashboardOrders />} />
+              <Route exact path='/admin-alluser' element={<DashboardAlluser />} />
+              <Route exact path='/admin-query' element={<Quirys />} />
+              <Route exact path='/admin-payments' element={<Payments />} />
+            </Route>
           </Routes>
-          <Footer />
+          {
+            loc.pathname === '/admin' ||
+              loc.pathname === '/admin-home' ||
+              loc.pathname === '/admin-add-product' ||
+              loc.pathname === '/admin-discounts' ||
+              loc.pathname === '/admin-add-discount' ||
+              loc.pathname === '/admin-orders' ||
+              loc.pathname === '/admin-products' ||
+              loc.pathname === '/admin-alluser' ||
+              loc.pathname === '/admin-query' ||
+              loc.pathname === '/admin-payments'
+              ? null : <Footer />}
         </UserDataContext.Provider>
       </div>
     </>

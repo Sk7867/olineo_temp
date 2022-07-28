@@ -19,7 +19,6 @@ export const addProductCatalogue = async (
   slug,
   immediateComplimentaryArray,
   laterComplimentaryArray,
-  dynamicTable
 ) => {
   let addProductResponse;
 
@@ -35,10 +34,7 @@ export const addProductCatalogue = async (
     hierarchyL2: L2Selected,
     hierarchyL3: L3Selected,
     classification: classificationSelected,
-    productInfo: {
-      technicalDetailsTable,
-      dynamicTable
-    },
+    productInfo: technicalDetailsTable,
     modelNo: technicalDetailsTable.modelNo,
     brand: prodPreviewData.brand,
     color: prodPreviewData.color,
@@ -106,7 +102,6 @@ export const updateProductCatalogue = async (
   slug,
   immediateComplimentaryArray,
   laterComplimentaryArray,
-  dynamicTable
 ) => {
   let updateProductResponse;
   let updateProductBody = {
@@ -121,10 +116,7 @@ export const updateProductCatalogue = async (
     hierarchyL2: L2Selected,
     hierarchyL3: L3Selected,
     classification: classificationSelected,
-    productInfo: {
-      technicalDetailsTable,
-      dynamicTable
-    },
+    productInfo: technicalDetailsTable,
     modelNo: technicalDetailsTable.modelNo,
     brand: prodPreviewData.brand,
     color: prodPreviewData.color,
