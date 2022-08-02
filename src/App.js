@@ -69,6 +69,8 @@ import DashboardAlluser from './pages/Dashboard/DashboardAlluser';
 import DashboardAddProduct from './pages/Dashboard/DashboardAddProduct';
 import Quirys from './pages/Dashboard/Quirys';
 import Payments from './pages/Dashboard/Payments';
+import DashboardShop from "./pages/Dashboard/DashBoardShop";
+import DashboardAddShop from "./pages/Dashboard/DashboardAddShop";
 
 function App() {
   const [loginRedirect, setLoginRedirect] = useState(false);
@@ -287,7 +289,7 @@ function App() {
     }
   }, [cartArray, cartArray.no_of_carts]);
 
-
+  // console.log(orderInit);
   const ordersData = [
     {
       productName: "JBL C100SI",
@@ -356,12 +358,14 @@ function App() {
               loc.pathname === "/adduser" ||
               loc.pathname === '/admin-home' ||
               loc.pathname === '/admin-add-product' ||
+              loc.pathname === '/admin-add-shop' ||
               loc.pathname === '/admin-discounts' ||
               loc.pathname === '/admin-add-discount' ||
               loc.pathname === '/admin-orders' ||
               loc.pathname === '/admin' ||
               loc.pathname === '/admin-products' ||
               loc.pathname === '/admin-alluser' ||
+              loc.pathname === '/admin-shops' ||
               loc.pathname === '/admin-query' ||
               loc.pathname === '/admin-payments'
               ? ('') : (
@@ -513,10 +517,12 @@ function App() {
               <Route exact path='/admin-home' element={<DashBoardHome />} />
               <Route exact path='/admin-products' element={<DashboardProducts />} />
               <Route exact path='/admin-add-product' element={<DashboardAddProduct setHeaderData={setHeaderData} />} />
+              <Route exact path='/admin-add-shop' element={<DashboardAddShop />} />
               <Route exact path='/admin-discounts' element={<DashboardDiscount />} />
               <Route exact path='/admin-add-discount' element={<DashboardAddDiscount />} />
               <Route exact path='/admin-orders' element={<DashboardOrders />} />
               <Route exact path='/admin-alluser' element={<DashboardAlluser />} />
+              <Route exact path='/admin-shops' element={<DashboardShop />} />
               <Route exact path='/admin-query' element={<Quirys />} />
               <Route exact path='/admin-payments' element={<Payments />} />
             </Route>
@@ -527,9 +533,11 @@ function App() {
               loc.pathname === '/admin-add-product' ||
               loc.pathname === '/admin-discounts' ||
               loc.pathname === '/admin-add-discount' ||
+              loc.pathname === '/admin-add-shop' ||
               loc.pathname === '/admin-orders' ||
               loc.pathname === '/admin-products' ||
               loc.pathname === '/admin-alluser' ||
+              loc.pathname === '/admin-shops' ||
               loc.pathname === '/admin-query' ||
               loc.pathname === '/admin-payments'
               ? null : <Footer />}

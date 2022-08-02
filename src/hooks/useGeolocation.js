@@ -7,10 +7,6 @@ const useGeolocation = () => {
     coordinates: { lat: '', lng: '' }
   });
 
-
-  // useEffect(() => {
-  // }, [])
-
   const locationFetch = () => {
     const onSuccess = (location) => {
       setLocation({
@@ -21,6 +17,7 @@ const useGeolocation = () => {
         }
       })
       storeLocation(location)
+      // getUserAddress(location)
     }
 
     const onError = error => {
@@ -38,6 +35,28 @@ const useGeolocation = () => {
     }
     navigator.geolocation.getCurrentPosition(onSuccess, onError)
   }
+
+  // const getUserAddress = (location) => {
+  //   var lat = location.coords.latitude
+  //   var lng = location.coords.longitude
+
+  //   var latlng = new window.google.maps.LatLng(lat, lng);
+  //   // This is making the Geocode request
+  //   var geocoder = new window.google.maps.Geocoder();
+
+  //   geocoder.geocode({ 'latLng': latlng }, (results, status) => {
+  //     console.log(results);
+  //     if (status !== window.google.maps.GeocoderStatus.OK) {
+  //       alert(status);
+  //     }
+  //     // This is checking to see if the Geoeode Status is OK before proceeding
+  //     if (status == window.google.maps.GeocoderStatus.OK) {
+  //       console.log(results);
+  //       var address = (results[0].formatted_address);
+  //       console.log(address);
+  //     }
+  //   });
+  // }
 
 
   return { location, locationFetch }

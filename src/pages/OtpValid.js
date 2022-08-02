@@ -158,7 +158,7 @@ const OtpValid = ({ loginRedirect }) => {
               />
             </div>
             <p className={`resend-btn ${seconds === 0 ? "" : "btn-disable"}`} type="resend">
-              {seconds === 0 ? "Resend Code" : seconds}
+              {seconds === 0 ? "Resend Code" : `${seconds} sec`}
             </p>
           </div>
           <div className={"button-Container"}>

@@ -120,6 +120,10 @@
   text-decoration: none;
 }
 
+.extra-btn:hover{
+  color: #1b325e;
+}
+
 button:disabled {
   opacity: 0.5;
   pointer-events: none;

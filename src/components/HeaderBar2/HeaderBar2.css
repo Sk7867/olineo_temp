@@ -292,6 +292,12 @@
     gap: 0.5rem;
   }
 
+  .headerbarLeft_Inner{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
   .headerbarCenter{
     display: flex;
     flex-direction: column;
@@ -453,7 +459,7 @@
   }
 
   .headerbarLeft{
-    justify-content: center;
+    justify-content: space-around;
   }
 }
 
@@ -463,6 +469,10 @@
   }
 
   .headerbarLeft{
+    gap: 1.5rem;
+  }
+
+  .headerbarLeft_Inner{
     gap: 1.5rem;
   }
 

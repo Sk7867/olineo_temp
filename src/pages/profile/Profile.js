@@ -344,7 +344,7 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
                 {profileOptions.map((option, index) =>
                   option.logout ? (
                     <div
-                      className={`profile_Option ${option.title === "Logout" ? "logout_Styles" : ""}`}
+                      className={`profile_Option ${option.title === "Logout" ? "logout_Styles --selected" : ""}`}
                       key={index}
                       onClick={() => {
                         logOut();
@@ -358,7 +358,7 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
                       <img src={arrowRightBlue} alt="" className="profile_arrow" />
                     </div>
                   ) : (
-                    <div className={`profile_Option `} key={index} onClick={() => setProfileState(index + 1)}>
+                    <div className={`profile_Option ${(profileState - 1) === index ? '--selected' : ''}`} key={index} onClick={() => setProfileState(index + 1)}>
                       <div>
                         <img src={option.image} alt="" />
                         <p>{option.title}</p>

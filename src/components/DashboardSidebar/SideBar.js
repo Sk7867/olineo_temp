@@ -13,6 +13,7 @@ import {
   faPercent,
   faCartArrowDown,
   faMoneyBill,
+  faShop
 } from "@fortawesome/free-solid-svg-icons";
 import SubMenu from "./SubMenu";
 import { Nav, Button } from "react-bootstrap";
@@ -96,6 +97,12 @@ const SideBar = ({ isOpen, toggle }) => {
           <Link className="dash_sidebar_a nav-link" to="/admin-alluser">
             <FontAwesomeIcon icon={faUser} className="mr-2" />
             All Users
+          </Link>
+        </Nav.Item>
+        <Nav.Item className="">
+          <Link className="dash_sidebar_a nav-link" to="/admin-shops">
+            <FontAwesomeIcon icon={faShop} className="mr-2" />
+            Shops
           </Link>
         </Nav.Item>
 

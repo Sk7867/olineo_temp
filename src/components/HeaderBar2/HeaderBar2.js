@@ -228,14 +228,16 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
       <header className={`headerbarContainer ${header3Cond ? ('header2_tab') : ''}`}>
         <div className="headerbarWrapper">
           <div className="headerbarLeft">
-            <div className="hamburger" onClick={() => setSidebar(true)}>
-              <img src={hamburger} alt="" />
+            <div className='headerbarLeft_Inner'>
+              <div className="hamburger" onClick={() => setSidebar(true)}>
+                <img src={hamburger} alt="" />
+              </div>
+              <Link to={'/'} className="navLogo">
+                <img src={logo_mob} alt="" className='logo_mob' />
+                <img src={logo_desk} alt="" className='logo_desk' />
+                <img src={logo_tab} alt="" className='logo_tab' />
+              </Link>
             </div>
-            <Link to={'/'} className="navLogo">
-              <img src={logo_mob} alt="" className='logo_mob' />
-              <img src={logo_desk} alt="" className='logo_desk' />
-              <img src={logo_tab} alt="" className='logo_tab' />
-            </Link>
             <div className="left_location" onClick={() => handleModalShow()}>
               <img src={locationWhite} alt="" />
               <p>Select location</p>
@@ -264,14 +266,14 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
           </div>
           <div className="headerbarRight">
 
-            <Link to={`/store-finder`} className='storeIcon'>
-              <p>Find Store</p>
-              <img src={storeWhite} alt="" />
-            </Link>
             <div className='cartIcon' onClick={() => { userLoggedIn ? nav('/mycart') : nav('/login') }}>
               <img src={cartWhite} alt="" />
               <p>Cart</p>
             </div>
+            <Link to={`/store-finder`} className='storeIcon'>
+              <p>Find Store</p>
+              <img src={storeWhite} alt="" />
+            </Link>
             {
               userLoggedIn ? (
                 <div className="user_profile" onClick={() => nav('/profile')}>

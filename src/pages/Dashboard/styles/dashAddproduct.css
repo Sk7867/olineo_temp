@@ -259,6 +259,7 @@
   
   .catelogue_Table{
     overflow-x: scroll;
+    padding: 10px;
   }
   
   .catelogue_Table thead, .catelogue_Table tr, .catelogue_Table td, .catelogue_Table th{
