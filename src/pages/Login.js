@@ -5,7 +5,7 @@ import CircleLoading from "../components/CircleLoading";
 import { userLogin, userLoginEmail } from "../api/Auth";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { UserDataContext } from "../Contexts/UserContext";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 toast.configure();
 const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
@@ -163,7 +163,6 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
           </p>
         </div>
       </div>
-      <ToastContainer position="top-center" autoClose={5000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
     </>
   );
 };

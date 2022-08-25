@@ -41,3 +41,20 @@ export const getSearchedProduct = async (query) => {
 
   return indiProductResponse;
 };
+
+//Get Product Serviceability
+export const getProductServiceability = async (zip, prodArray) => {
+  let productServiceabilityRes
+
+  let serviceBody = {
+    location: zip,
+    items: prodArray
+  }
+
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/order/checkServiceability/`, JSON.stringify(serviceBody), { headers })
+    .then(res => {
+      productServiceabilityRes = res.data.data.items
+    })
+
+  return productServiceabilityRes
+}

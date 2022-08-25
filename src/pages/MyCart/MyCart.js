@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { UserDataContext } from '../../Contexts/UserContext'
-import { getIndiProduct } from '../../api/Product'
 
 //CSS
 import './MyCart.css'
@@ -21,7 +20,13 @@ import { getCartData } from '../../api/Cart'
 import { getSaveForLater } from '../../api/SaveForLaterApi'
 
 const MyCart = ({ setHeaderData }) => {
-  const { allProducts, cartArray, setCartArray, userSaveForLater, setUserSaveForLater } = useContext(UserDataContext)
+  const {
+    allProducts,
+    cartArray,
+    setCartArray,
+    userSaveForLater,
+    setUserSaveForLater,
+  } = useContext(UserDataContext)
   const nav = useNavigate()
 
 
@@ -66,8 +71,6 @@ const MyCart = ({ setHeaderData }) => {
       })
   }, [])
 
-
-  // console.log(cartArray);
   const pageSwitch = (e) => {
     e.preventDefault();
     nav('/')
@@ -83,7 +86,6 @@ const MyCart = ({ setHeaderData }) => {
       url: ''
     },
   ]
-  // console.log(cartData);
 
   return (
     <>

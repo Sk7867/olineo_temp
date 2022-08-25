@@ -22,8 +22,8 @@ const AboutUs = ({ setHeaderData }) => {
       headerText: 'About Us',
       categoriesCond: false,
       header3Store: false,
-      header3Cart: false,
-      header3Profile: false,
+      header3Cart: true,
+      header3Profile: true,
     })
   }, []);
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { updateMobileNumber, verifyOtp, verifyOtpLogin, verifyOtpSignup } from '../../api/Auth';
 import { saveUser } from '../../api/Auth';
-import { Slide, toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { UserDataContext } from '../../Contexts/UserContext'
 
 toast.configure()
@@ -66,7 +66,7 @@ const Update = ({ number, oldInfo, newInfo, user_Full_Name, handleClose }) => {
               <p className='update_Info_Details'>Enter OTP sent to {oldInfo} </p>
               <div className='edit_input_container'>
                 <label className='edit_input_label'>Enter OTP</label>
-                <input type="text" placeholder='Enter OTP' name='old OTP' autoComplete='off' autoCorrect='off' value={oldOTP} onChange={(e) => setOldOTP(e.target.value)} />
+                <input type="text" className='input-field' placeholder='Enter OTP' name='old OTP' autoComplete='off' autoCorrect='off' value={oldOTP} onChange={(e) => setOldOTP(e.target.value)} />
                 <span className='edit_input_update'>Resend</span>
               </div>
               <p className="otp_Alternate">Send OTP using {number ? ('Email') : ('Phone')}</p>
@@ -75,7 +75,7 @@ const Update = ({ number, oldInfo, newInfo, user_Full_Name, handleClose }) => {
               <p className='update_Info_Details'>Enter OTP sent to {newInfo} </p>
               <div className='edit_input_container'>
                 <label className='edit_input_label'>Enter OTP</label>
-                <input type="text" placeholder='Enter OTP' name='new OTP' autoComplete='off' autoCorrect='off' value={newOTP} onChange={(e) => setNewOTP(e.target.value)} />
+                <input type="text" className='input-field' placeholder='Enter OTP' name='new OTP' autoComplete='off' autoCorrect='off' value={newOTP} onChange={(e) => setNewOTP(e.target.value)} />
                 <span className='edit_input_update'>Resend</span>
               </div>
             </div>
@@ -85,18 +85,6 @@ const Update = ({ number, oldInfo, newInfo, user_Full_Name, handleClose }) => {
           <button type='submit' className='submit-button' onClick={() => { handleSubmit(); handleClose() }} disabled={disabled}>{matches ? (<p>Update</p>) : (<p>SAVE DETAILS</p>)}</button>
         </div>
       </div>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        transition={Slide}
-      />
     </>
   )
 };

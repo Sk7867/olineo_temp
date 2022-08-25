@@ -30,6 +30,10 @@
   display: none;
 }
 
+.logo_desk_1200{
+  display: none;
+}
+
 .logo_tab{
   display: none;
 }
@@ -69,10 +73,6 @@
     max-height: 44px;
   }
 
-  .logo_tab{
-    display: none;
-  }
-
   .logo_desk{
     display: block;
   }
@@ -81,4 +81,15 @@
     font-size: 18px;
     line-height: 24px;
   }
+}
+
+@media screen and (min-width: 1200px) {
+
+  .logo_tab{
+    display: none;
+  }
+
+  .logo_desk_1200 {
+      display: block;
+    }
 }

@@ -28,20 +28,23 @@ import mobileBlueDotted from '../../assets/vector/mobile_blue_dotted.svg'
 import arrowLeftWhite from '../../assets/vector/arrow_left_white.svg'
 import searchIconBlue from '../../assets/vector/search_blue.svg'
 import { getSearchedProduct } from '../../api/Product'
+import { useMediaQuery } from '@mui/material'
 
 
 const HeaderBar2 = ({ userLoggedIn, headerData }) => {
+  const matches768 = useMediaQuery("(min-width:768px)")
+  const matches910 = useMediaQuery("(min-width:910px)")
+  const matches1290 = useMediaQuery("(min-width:1290px)")
   const [modalShow, setModalShow] = useState(false)
   const [sidebar, setSidebar] = useState(false)
   const [userDPPic, setUserDPPic] = useState({ locataion: '' })
   const [filteredData, setFilteredData] = useState([])
   const [searchedQuery, setSearchedQuery] = useState('')
   const [manualQuery, setManualQuery] = useState('')
+  const [userZip, setUserZip] = useState('')
   const nav = useNavigate()
   const { header3Cond, headerText, categoriesCond, header3Store, header3Cart, header3Profile } = headerData
-  const { userContext, allProducts, searchedProduct, setSearchedProduct } = useContext(UserDataContext)
-  // console.log(headerData);
-  // console.log(allProducts);
+  const { userContext, allProducts, searchedProduct, setSearchedProduct, userDefaultAddress, setUserDefaultAddress } = useContext(UserDataContext)
 
   const handleModalShow = () => {
     setModalShow(true)
@@ -53,7 +56,6 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
     } else {
       setUserDPPic(userDefaultDP)
     }
-
   }, [userContext])
 
   const categoriesList = [
@@ -79,33 +81,18 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
     },
     {
       categoryImage: mobileGreenDotted,
-      categoryName: 'Bluetooth Speaker',
-      categoryLink: 'Bluetooth Speaker',
-    },
-    {
-      categoryImage: mobileBlueDotted,
       categoryName: 'TWS',
       categoryLink: 'TWS',
     },
     {
-      categoryImage: mobilePinkDotted,
-      categoryName: 'Wired Earphones',
-      categoryLink: 'Wired Earphones',
-    },
-    {
-      categoryImage: mobileGreenDotted,
-      categoryName: 'Wired Headphones',
-      categoryLink: 'Wired Headphones',
-    },
-    {
       categoryImage: mobileBlueDotted,
-      categoryName: 'Bluetooth Neckband',
-      categoryLink: 'Bluetooth Neckband',
-    },
-    {
-      categoryImage: mobilePinkDotted,
       categoryName: 'Adapter',
       categoryLink: 'Adapter',
+    },
+    {
+      categoryImage: mobilePinkDotted,
+      categoryName: 'Powerbank',
+      categoryLink: 'Powerbank',
     },
     {
       categoryImage: mobileGreenDotted,
@@ -114,18 +101,32 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
     },
     {
       categoryImage: mobileBlueDotted,
-      categoryName: 'Powerbank',
-      categoryLink: 'Powerbank',
-    },
-    {
-      categoryImage: mobilePinkDotted,
       categoryName: 'Smart TV',
       categoryLink: 'Smart TV',
     },
     {
-      categoryImage: mobileGreenDotted,
+      categoryImage: mobilePinkDotted,
       categoryName: 'Wifi Smart Speaker',
       categoryLink: 'Wifi Smart Speaker',
+    },
+    {
+      categoryImage: mobileGreenDotted,
+      categoryName: 'Bluetooth Speaker',
+      categoryLink: 'Bluetooth Speaker',
+    },
+    {
+      categoryImage: mobileBlueDotted,
+      categoryName: 'Wired Earphones',
+      categoryLink: 'Wired Earphones',
+    },
+    {
+      categoryImage: mobilePinkDotted,
+      categoryName: 'Wired Headphones',
+      categoryLink: 'Wired Headphones',
+    }, {
+      categoryImage: mobileGreenDotted,
+      categoryName: 'Bluetooth Neckband',
+      categoryLink: 'Bluetooth Neckband',
     },
     {
       categoryImage: mobileBlueDotted,
@@ -153,7 +154,6 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
       setSearchedQuery(searchWord)
     }
   }
-  // console.log(filteredData);
 
   const handleKeyDown = (e) => {
     let value = e.target.value
@@ -163,7 +163,6 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
       getSearchedProduct(searchTerm)
         .then(res => {
           if (res) {
-            // console.log(res);
             setSearchedProduct({
               loaded: true,
               products: res,
@@ -186,7 +185,6 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
     getSearchedProduct(searchTerm)
       .then(res => {
         if (res) {
-          // console.log(res);
           setSearchedProduct({
             loaded: true,
             products: res,
@@ -207,7 +205,6 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
       searchTerm = ''
       searchURL = 'Category=' + value
     }
-    // console.log(searchTerm);
     getSearchedProduct(searchTerm)
       .then(res => {
         if (res) {
@@ -221,8 +218,6 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
       })
   }
 
-  // console.log(searchedProduct);
-
   return (
     <>
       <header className={`headerbarContainer ${header3Cond ? ('header2_tab') : ''}`}>
@@ -234,13 +229,25 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
               </div>
               <Link to={'/'} className="navLogo">
                 <img src={logo_mob} alt="" className='logo_mob' />
-                <img src={logo_desk} alt="" className='logo_desk' />
+                <img src={logo_desk} alt="" className='logo_desk_1200' />
                 <img src={logo_tab} alt="" className='logo_tab' />
               </Link>
             </div>
             <div className="left_location" onClick={() => handleModalShow()}>
               <img src={locationWhite} alt="" />
-              <p>Select location</p>
+              {
+                userDefaultAddress.loaded ? (<>
+                  {
+                    userDefaultAddress.no_of_address === 0 ? (<>
+                      <p>Enter Default Address</p>
+                    </>) : (<>
+                      <p>{userDefaultAddress.address.city}, {userDefaultAddress.address.zip}</p>
+                    </>)
+                  }
+                </>) : (<>
+                  <p>{matches768 && matches910 && (<span>Select</span>)} <span>location</span></p>
+                </>)
+              }
             </div>
           </div>
           <div className="headerbarCenter">
@@ -271,7 +278,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
               <p>Cart</p>
             </div>
             <Link to={`/store-finder`} className='storeIcon'>
-              <p>Find Store</p>
+              <p>{matches768 && matches910 && (<span>Find</span>)} <span>Store</span></p>
               <img src={storeWhite} alt="" />
             </Link>
             {
@@ -283,11 +290,11 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
               ) : (
                 <>
                   <p className='right_login'>
-                    <Link to={'/login'}>Login</Link> | <Link to={'/signup'}>Create account</Link>
+                    <Link to={'/login'}>Login</Link> {matches768 && matches1290 && (<span>| <Link to={'/signup'}>Create account</Link></span>)}
                   </p>
-                  <p className='right_login login_tab_only'>
+                  {/* <p className='right_login login_tab_only'>
                     <Link to={'/login'}>Login</Link>
-                  </p>
+                  </p> */}
                 </>
               )
             }
@@ -371,11 +378,11 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
                   ) : (
                     <>
                       <p className='right_login'>
-                        <Link to={'/login'}>Login</Link> | <Link to={'/signup'}>Create account</Link>
+                        <Link to={'/login'}>Login</Link> {matches768 && matches1290 && (<span>| <Link to={'/signup'}>Create account</Link></span>)}
                       </p>
-                      <p className='right_login login_tab_only'>
+                      {/* <p className='right_login login_tab_only'>
                         <Link to={'/login'}>Login</Link>
-                      </p>
+                      </p> */}
                     </>
                   )
                 ) : ('')

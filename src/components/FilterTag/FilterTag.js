@@ -1,26 +1,17 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import './FilterTag.css'
 //Images
 import closeBlueBtn from '../../assets/vector/close_outline_blue.svg'
+import { UserDataContext } from '../../Contexts/UserContext';
 
-const FilterTag = ({ filterSelected, setFilterSelected }) => {
-  // console.log(filter);
-
-  const removeFilter = (id) => {
-    let newArray = filterSelected.filter(item => item.id !== id)
-    setFilterSelected(newArray)
-  }
+const FilterTag = ({ filter, handleDeletFilter }) => {
 
   return (
     <>
-      {
-        filterSelected.map((filter) => (
-          <div className='filterTag_Container' id={filter.id} key={filter.id}>
-            <p>{filter.data}</p>
-            <img src={closeBlueBtn} alt="" onClick={() => removeFilter(filter.id)} />
-          </div>
-        ))
-      }
+      <div className='filterTag_Container' id={filter.id} key={filter.id}>
+        <p>{filter.data}</p>
+        <img src={closeBlueBtn} alt="" onClick={() => handleDeletFilter(filter)} />
+      </div>
     </>
   )
 }

@@ -5,7 +5,7 @@ import { saveUser } from "../api/Auth";
 // import DatePicker from "react-datepicker";
 // import DatePicker from 'react-date-picker';
 import DatePicker from "react-date-picker";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { UserDataContext } from "../Contexts/UserContext";
 import CircleLoading from "../components/CircleLoading";
 
@@ -136,7 +136,6 @@ const AddUser = () => {
           </div>
         </form>
       </div>
-      <ToastContainer position="top-center" autoClose={5000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
     </>
   );
 };

@@ -9,6 +9,7 @@ import deleteIconBlack from '../../assets/vector/delete_outline_black.svg'
 import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
 import saveLaterIcon from '../../assets/vector/save_later_outline.svg'
 import addToCartIcon from '../../assets/vector/cart_outline_blue.svg'
+import SkeletonElement from '../Skeletons/SkeletonElement'
 
 const CartProductCard = ({
   product,
@@ -19,12 +20,14 @@ const CartProductCard = ({
   saveForLaterItem = false,
   handleAddItemToSaveForLater,
   handleAddToCart,
-  handleRemoveFromSaveForLater
+  handleRemoveFromSaveForLater,
+  deliveryEstDays
 }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [discount, setDiscount] = useState('')
   const [prodData, setProdData] = useState({
     id: '',
+    ean: '',
     name: '',
     color: '',
     price: {
@@ -37,13 +40,21 @@ const CartProductCard = ({
     productQuantityAvailable: '',
     productAvailabilty: '',
     image: '',
-    quantity: ''
+    quantity: '',
+    deliveryEst: {
+      days: '',
+      amount: '',
+      loaded: false,
+      msg: '',
+      error: false
+    }
   })
   useEffect(() => {
     if (product) {
       setProdData(prev => ({
         ...prev,
         id: product._id,
+        ean: product.ean,
         name: product.name,
         color: product.color,
         price: product.price,
@@ -55,11 +66,10 @@ const CartProductCard = ({
       }))
     }
   }, [product])
-  console.log(saveForLaterItem);
 
   useEffect(() => {
     if (product && product.discount.flatDiscount && product.discount.flatDiscount.value) {
-      setDiscount(product.discount.flatDiscount.value)
+      setProdData(prev => ({ ...prev, discount: product.discount.flatDiscount.value }))
     } else {
       let mrp = parseInt(product.price.mrp)
       let mop = parseInt(product.price.mop)
@@ -67,7 +77,39 @@ const CartProductCard = ({
       setProdData(prev => ({ ...prev, discount: discount }))
     }
   }, [product])
-  // console.log(prodData);
+
+  useEffect(() => {
+    var prodDelDay
+    var prodDelPrice
+    if (prodData && prodData.id && deliveryEstDays && deliveryEstDays.loaded) {
+      let prodDelEst = deliveryEstDays.value.find((obj) => obj.skuId === prodData.ean)
+      if (prodDelEst && prodDelEst.deliverymodes.length > 0) {
+        prodDelPrice = prodDelEst.deliverymodes[0].deliveryCost.value
+        let time = prodDelEst.deliverymodes[0].deliveryTime
+        prodDelDay = Math.floor(parseInt(time) / 24)
+        setProdData((prev) => ({
+          ...prev,
+          deliveryEst: {
+            loaded: true,
+            amount: prodDelPrice,
+            days: prodDelDay,
+            msg: '',
+            error: false
+          }
+        }))
+      } else {
+        setProdData((prev) => ({
+          ...prev,
+          deliveryEst: {
+            loaded: true,
+            error: true,
+            msg: 'Product Not Available'
+          }
+        }))
+      }
+    }
+  }, [deliveryEstDays])
+
   return (
     <div className='cart_Product_Contianer section_Wrapper'>
       <div className={`cart_Product_Wrapper ${comboProduct ? 'border-0' : ''}`}>
@@ -99,9 +141,27 @@ const CartProductCard = ({
               )
             }
           </div>
-          {/* <div className="cart_Product_Delivery_Info">
-            <p className="cart_Product_Delivery_Estimate">{product.productDeliveryExpected}</p> | <p className="cart_Product_Delivery_Charge">₹{product.productDeliveryCharge}</p>
-          </div> */}
+          <div className="cart_Product_Delivery_Info">
+            {
+              prodData.deliveryEst.loaded ? (
+                <>
+                  {
+                    prodData.deliveryEst.error ? (
+                      <>
+                        <p className="cart_Product_Delivery_Estimate">{prodData.deliveryEst.msg}</p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="cart_Product_Delivery_Estimate">Delivery in {prodData.deliveryEst.days} days</p> | <p className="cart_Product_Delivery_Charge">₹{prodData.deliveryEst.amount}</p>
+                      </>
+                    )
+                  }
+                </>
+              ) : (
+                <></>
+              )
+            }
+          </div>
           {
             !matches && (
               <p className={`cart_Product_Availability ${prodData.productQuantityAvailable <= 1 ? ('color_Red') : ('')}`}>{prodData.productAvailabilty}</p>

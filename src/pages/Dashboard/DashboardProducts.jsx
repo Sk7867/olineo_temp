@@ -66,13 +66,22 @@ function DashboardProducts(props) {
       <div className="container">
         <div className="d-flex justify-content-between">
           <h3>Products</h3>
-          <Button
-            className="btn-sm"
-            onClick={() => nav("/admin-add-product")}
-            style={{ marginBottom: 20 }}
-          >
-            Add product
-          </Button>
+          <div className="d-flex flex-row" style={{ gap: '10px' }}>
+            <Button
+              className="btn-sm"
+              onClick={() => nav("/admin-add-product")}
+              style={{ marginBottom: 20 }}
+            >
+              Add product
+            </Button>
+            <Button
+              className="btn-sm"
+              onClick={() => nav("/admin-add-product-csv")}
+              style={{ marginBottom: 20 }}
+            >
+              Add CSV File
+            </Button>
+          </div>
         </div>
         <div className="table-responsive">
           <table className="table table-hover">

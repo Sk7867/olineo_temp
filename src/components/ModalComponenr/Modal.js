@@ -61,6 +61,7 @@ const ModalComp = ({ modalShow, setModalShow, userLoggedIn }) => {
         backdrop="true"
         keyboard={false}
         backdropClassName='backdrop_active'
+        className={`${userLoggedIn ? 'pincode_Modal' : 'location_Modal'}`}
       >
         <Modal.Header closeButton>
           {

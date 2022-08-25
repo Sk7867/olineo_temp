@@ -6,20 +6,20 @@ import './styles/dashAddproduct.css'
 //Images
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import AddProductSection from '../CataloguePage/AddProductSection';
+import BulkUploadSection from '../CataloguePage/BulkUploadSection';
 
-const DashboardAddProduct = () => {
+const DashboardAddProductCsvFile = () => {
 
   return (
     <>
-      <div className="container">
+      <div className='container'>
         <Link to="/admin-products">
           <FontAwesomeIcon icon={faChevronLeft} /> Products
         </Link>
-        <AddProductSection />
+        <BulkUploadSection />
       </div>
     </>
   )
 }
 
-export default DashboardAddProduct
+export default DashboardAddProductCsvFile

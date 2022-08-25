@@ -5,7 +5,7 @@ import { UserDataContext } from '../../Contexts/UserContext'
 import DatePicker from 'react-date-picker';
 import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
 import { updateProductCatalogue, updateProductOffers } from '../../api/CatalogueApi';
-import { Slide, toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { addCoupon } from '../../api/couponApi';
 import { getSearchedProduct } from '../../api/Product';
 
@@ -536,18 +536,6 @@ const AddOffers = ({ setHeaderData }) => {
           </div>
         </div>
       </div>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        transition={Slide}
-      />
     </>
   )
 }

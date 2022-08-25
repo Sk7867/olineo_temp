@@ -130,20 +130,21 @@ export const cancelOrder = async (order_Id, itemId, query) => {
   }
 
   let data = {
-    reason: query,
-    itemId: [itemId]
+    orderId: order_Id,
+    itemId: [itemId],
+    reason: query
   }
 
-  // console.log(order_Id, data);
+  console.log(data);
 
   let orderDeleteResponse
 
-  await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/order/${order_Id}`, { headers, data })
-    .then(res => {
-      orderDeleteResponse = res
-    })
+  // await axios.post(`${process.env.REACT_APP_BASE_URL}/product/order/`, JSON.stringify(data), { headers })
+  //   .then(res => {
+  //     orderDeleteResponse = res
+  //   })
 
-  return orderDeleteResponse
+  // return orderDeleteResponse
 }
 
 //Payment Init

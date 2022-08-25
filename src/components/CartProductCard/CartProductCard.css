@@ -231,7 +231,7 @@ margin: 0;
   }
 
   .cart_product_card{
-    justify-content: flex-start;
+    /* justify-content: flex-start; */
     gap: 1.5rem;
     width: 75%;
   }
@@ -275,6 +275,13 @@ margin: 0;
   .cart_Product_Discount_Price, .cart_Product_Original_Price, .cart_Product_Discount{
     font-size: 1.25rem;
     line-height: 1.75rem;
+  }
+
+  .cart_Product_Delivery_Estimate {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: #08090A;
   }
 
   .cart_Product_Offers, .cart_Product_Availability{

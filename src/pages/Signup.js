@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar/HeaderBar";
 import { userSignUp } from "../api/Auth";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { UserDataContext } from "../Contexts/UserContext";
 import CircleLoading from "../components/CircleLoading";
 
@@ -154,7 +154,6 @@ const Signup = ({ setLoginRedirect }) => {
           </p>
         </div>
       </div>
-      <ToastContainer position="top-center" autoClose={5000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { writeToUS } from '../../api/CustomerSupport';
-import { Slide, toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { UserDataContext } from '../../Contexts/UserContext'
 
 //CSS
@@ -81,18 +81,6 @@ const WriteToUS = ({ setHeaderData }) => {
         </form>
       </div>
     </div>
-    <ToastContainer
-      position="top-center"
-      autoClose={5000}
-      hideProgressBar
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      transition={Slide}
-    />
   </>;
 };
 

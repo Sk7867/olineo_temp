@@ -4,7 +4,7 @@ import { useMediaQuery } from "@mui/material";
 import { Accordion, Dropdown, Carousel } from "react-bootstrap";
 import { addToCart, getCartData } from "../../api/Cart";
 import { UserDataContext } from "../../Contexts/UserContext";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 //CSS
 import "./ProductPage.css";
@@ -18,11 +18,10 @@ import Section2 from "../../components/Section2/Section2";
 import ProductInfoTable from "../../components/ProductInfoTable/ProductInfoTable";
 import OfferCard from "../../components/OfferCard/OfferCard";
 import AlternateProductBox from "../../components/AlternateProductCard/AlternateProductBox";
-import { getIndiProduct, getSearchedProduct } from "../../api/Product";
+import { getIndiProduct, getProductServiceability, getSearchedProduct } from "../../api/Product";
 import SkeletonElement from "../../components/Skeletons/SkeletonElement";
 import ScratchCardComp from "../../components/ScratchCard/ScratchCardComp";
 import { addToWishlist } from "../../api/wishlistApi";
-// import ScartchCardComp from "../../components/ScratchCard/ScartchCard";
 
 
 toast.configure();
@@ -34,7 +33,10 @@ const ProductPage = ({ setHeaderData }) => {
     setUserAddress,
     allProducts,
     setCartArray,
-    setOrderInit } = useContext(UserDataContext);
+    setOrderInit,
+    userDefaultAddress,
+    setUserDefaultAddress
+  } = useContext(UserDataContext);
   const matches = useMediaQuery("(min-width:768px)");
   const nav = useNavigate();
   const { slug } = useParams()
@@ -50,6 +52,7 @@ const ProductPage = ({ setHeaderData }) => {
     product_L3: '',
     product_Classification: '',
     product_Id: "",
+    product_Ean: "",
     product_Heading: "",
     product_name: "",
     product_color: "",
@@ -82,6 +85,11 @@ const ProductPage = ({ setHeaderData }) => {
   const [hours, setHours] = useState('')
   const [minutes, setMinutes] = useState('')
   const [seconds, setSeconds] = useState('')
+  const [userZipcode, setUserZipcode] = useState('')
+  const [deliveryEstDays, setDeliveryEstDays] = useState({
+    loaded: false,
+    value: ''
+  })
 
   useEffect(() => {
     setHeaderData({
@@ -117,6 +125,7 @@ const ProductPage = ({ setHeaderData }) => {
             product_L3: product.hierarchyL3,
             product_Classification: product.classification,
             product_Id: product._id,
+            product_Ean: product.ean,
             product_Heading: product.dynamicHeader,
             product_name: product.name,
             product_color: product.color,
@@ -143,13 +152,11 @@ const ProductPage = ({ setHeaderData }) => {
         }
       })
   }, [slug])
-  // console.log(productData);
 
   useEffect(() => {
     alternateColorean.forEach(ean => {
       let ind = colorAlternateProds.findIndex(obj => obj.ean === ean)
       if (ind === -1) {
-        // console.log(ind)
         let searchTerm = 'ean=' + ean
         getSearchedProduct(searchTerm)
           .then(res => {
@@ -160,7 +167,6 @@ const ProductPage = ({ setHeaderData }) => {
     alternateSpecean.map(ean => {
       let ind = specAlternateProds.findIndex(obj => obj.ean === ean)
       if (ind === -1) {
-        // console.log(ind)
         let searchTerm = 'ean=' + ean
         getSearchedProduct(searchTerm)
           .then(res => {
@@ -169,9 +175,6 @@ const ProductPage = ({ setHeaderData }) => {
       }
     })
   }, [alternateColorean, alternateSpecean]);
-  // console.log(specAlternateProds);
-
-  // console.log(productData);
 
   let interval
   useEffect(() => {
@@ -190,11 +193,30 @@ const ProductPage = ({ setHeaderData }) => {
     }
     return () => { clearInterval(interval) }
   }, [productData])
-  // console.log(discountTillDate);
 
-  // useEffect(() => {
-  //   startTimer()
-  // }, [])
+  useEffect(() => {
+    if (userDefaultAddress.loaded && (userDefaultAddress.no_of_address > 0) && productData.product_loaded) {
+      let prodArray = [
+        {
+          skuId: productData.product_Ean,
+          quantity: 1
+        }
+      ]
+
+      getProductServiceability(userDefaultAddress.address.zip, prodArray)
+        .then(res => {
+          if (res) {
+            let del = res[0].deliverymodes[1]
+            let delTime = del.deliveryTime
+            let delTimeInDays = Math.floor(delTime / 24)
+            setDeliveryEstDays({
+              loaded: true,
+              value: delTimeInDays
+            })
+          }
+        })
+    }
+  }, [userZipcode, productData])
 
   const startTimer = (date) => {
     const countDownDate = date.getTime()
@@ -231,7 +253,6 @@ const ProductPage = ({ setHeaderData }) => {
       setDiscountTillDate(date)
     }
   }
-  // console.log(countDownTimer);
 
   useEffect(() => {
     if (productData.product_loaded &&
@@ -247,7 +268,6 @@ const ProductPage = ({ setHeaderData }) => {
         })
     }
   }, [productData.product_loaded])
-  // console.log(comboProductData);
 
   useEffect(() => {
     if (comboProductData) {
@@ -272,7 +292,6 @@ const ProductPage = ({ setHeaderData }) => {
       }
     }
   }, [comboProductData])
-  // console.log(allOffersData);
 
   const handleAddToCart = (id) => {
     let userToken = userContext ? userContext.JWT : "";
@@ -335,7 +354,6 @@ const ProductPage = ({ setHeaderData }) => {
       nav("/login");
     }
   }
-  // console.log(productSecondData);
 
   useEffect(() => {
     if (productInfo.length > 0) {
@@ -346,15 +364,6 @@ const ProductPage = ({ setHeaderData }) => {
       })
     }
   }, [productInfo])
-
-  // useEffect(() => {
-  //   if (scratchCardActive) {
-  //     document.body.style.overflow = 'hidden';
-  //   } else {
-  //     document.body.style.overflow = 'unset';
-  //   }
-  // }, [scratchCardActive])
-
 
   return (
     <>
@@ -579,14 +588,23 @@ const ProductPage = ({ setHeaderData }) => {
             <div className="product_Delivery_Section section_Wrapper">
               <div className="product_Delivery_Details">
                 {
-                  productData.product_loaded ? (
-                    <p onClick={() => setScratchCardActive(true)}>
-                      <span>Free delivery: Thursday, Feb 24 </span>
-                      on orders over ₹499
+                  userContext && userContext.JWT ? (
+                    <>
+                      {
+                        deliveryEstDays.loaded ? (
+                          <p onClick={() => setScratchCardActive(true)}>
+                            Delivery In <span>{deliveryEstDays.value} Days</span>
+                          </p>
+                        ) : (
+                          <SkeletonElement type={"productTitle"} />
+                        )
+                      }
+                    </>
+                  ) : (<>
+                    <p>
+                      Enter Pincode
                     </p>
-                  ) : (
-                    <SkeletonElement type={"productTitle"} />
-                  )
+                  </>)
                 }
 
               </div>
@@ -730,8 +748,6 @@ const ProductPage = ({ setHeaderData }) => {
           </div>
         )}
       </div>
-      <ToastContainer position="top-center" autoClose={2000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
-      {/* <ScartchCardComp modalShow={modalShow} setModalShow={setModalShow} /> */}
       <ScratchCardComp scratcCardActive={scratchCardActive} setScratchCardActive={setScratchCardActive} />
     </>
   );

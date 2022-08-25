@@ -3,10 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar/HeaderBar";
 import { getUser, getUserPic, verifyOtp, verifyOtpLogin, verifyOtpSignup } from "../api/Auth";
 import { UserDataContext } from "../Contexts/UserContext";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { getCartData } from "../api/Cart";
 import { getAllOrder } from "../api/OrdersApi";
 import CircleLoading from "../components/CircleLoading";
+import { getAddress } from "../api/Address";
 
 toast.configure();
 const OtpValid = ({ loginRedirect }) => {
@@ -17,7 +18,7 @@ const OtpValid = ({ loginRedirect }) => {
   const [loading, setLoading] = useState(false);
   // const [resend, setResend] = useState(true)
   const nav = useNavigate();
-  const { setUserContext, setCartArray, userOrderData, setUserOrderData } = useContext(UserDataContext);
+  const { setUserContext, setCartArray, userOrderData, setUserOrderData, setUserAddress } = useContext(UserDataContext);
 
   const handleLength = (length) => {
     if (length === 6) {
@@ -102,8 +103,18 @@ const OtpValid = ({ loginRedirect }) => {
                   combo: res.combo
                 })
               }
+            }),
+          getAddress(res.JWT)
+            .then(res => {
+              // console.log(res);
+              if (res) {
+                setUserAddress({
+                  loaded: true,
+                  no_of_address: res.no_of_address,
+                  address: res.address
+                })
+              }
             })
-
         )
         :
         (setLoading(false), setBtnDisable(false), toast.error("OTP Expired or invalid"))
@@ -182,7 +193,6 @@ const OtpValid = ({ loginRedirect }) => {
           </div>
         </form>
       </div>
-      <ToastContainer position="top-center" autoClose={5000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
     </>
   );
 };

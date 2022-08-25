@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import Section2 from '../../components/Section2/Section2'
 import WishlistProductCard from '../../components/WishlistProductCard/WishlistProductCard'
 import { UserDataContext } from '../../Contexts/UserContext'
-import { Slide, toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { deleteFromWishlist, getAllWishlistItems } from '../../api/wishlistApi'
 import { useNavigate } from 'react-router-dom'
 import { addToCart, getCartData } from '../../api/Cart'
@@ -166,18 +166,6 @@ const WishlistSection = () => {
           </div>
         )
       }
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        transition={Slide}
-      />
     </>
   )
 }

@@ -3,8 +3,9 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import { useLocation, Routes, Route } from "react-router-dom";
 import { getUser, getUserPic } from "./api/Auth";
-import { getAllProducts, getIndiProduct, getSearchedProduct } from "./api/Product";
+import { getAllProducts, getIndiProduct, getProductServiceability, getSearchedProduct } from "./api/Product";
 import { getCartData } from "./api/Cart";
+import { Slide, ToastContainer } from "react-toastify";
 
 //Image
 import product3 from "./assets/png/product_3.png";
@@ -71,6 +72,8 @@ import Quirys from './pages/Dashboard/Quirys';
 import Payments from './pages/Dashboard/Payments';
 import DashboardShop from "./pages/Dashboard/DashBoardShop";
 import DashboardAddShop from "./pages/Dashboard/DashboardAddShop";
+import Cancellation from "./pages/Dashboard/Cancellation";
+import DashboardAddProductCsvFile from "./pages/Dashboard/DashboardAddProductCsvFile";
 
 function App() {
   const [loginRedirect, setLoginRedirect] = useState(false);
@@ -99,14 +102,6 @@ function App() {
     dob: null,
     pincode: "",
   });
-
-  // useEffect(() => {
-  //   const token = JSON.parse(sessionStorage.user) ? JSON.parse(sessionStorage.user).JWT : "";
-  //   setUserContext({
-  //     ...userContext,
-  //     JWT: token,
-  //   });
-  // }, []);
 
   const [userAddress, setUserAddress] = useState({
     loaded: false,
@@ -174,10 +169,26 @@ function App() {
     no_of_save_for_later_items: 0,
     save_for_later_items: []
   })
+  const [userDefaultAddress, setUserDefaultAddress] = useState({
+    loaded: false,
+    address: {},
+    no_of_address: 0
+  })
+  const [deliveryEstDays, setDeliveryEstDays] = useState({
+    loaded: false,
+    value: []
+  })
 
   useEffect(() => {
     let user = JSON.parse(sessionStorage.getItem("user"));
     setUserContext(user);
+  }, []);
+
+  useEffect(() => {
+    let cartData = JSON.parse(sessionStorage.getItem("cart"));
+    if (cartData) {
+      setCartArray(cartData)
+    }
   }, []);
 
   let userToken = userContext?.JWT;
@@ -230,6 +241,10 @@ function App() {
   }, [userContext]);
 
   useEffect(() => {
+    sessionStorage.setItem("cart", JSON.stringify(cartArray));
+  }, [cartArray]);
+
+  useEffect(() => {
     getAllProducts().then((res) => {
       setAllProducts({
         loaded: true,
@@ -238,6 +253,22 @@ function App() {
       });
     });
   }, []);
+
+  useEffect(() => {
+    if (userContext && userContext.JWT) {
+      getAddress()
+        .then(res => {
+          if (res) {
+            setUserAddress({
+              loaded: true,
+              no_of_address: res.no_of_address,
+              address: res.address
+            })
+          }
+        })
+    }
+  }, [userContext])
+
 
   useEffect(() => {
     if (cartArray.combo && cartArray.combo.length > 0) {
@@ -287,32 +318,54 @@ function App() {
         totalAmount: 0,
       })
     }
-  }, [cartArray, cartArray.no_of_carts]);
+  }, [cartArray]);
 
-  // console.log(orderInit);
-  const ordersData = [
-    {
-      productName: "JBL C100SI",
-      productArrival: "Arriving Dec 31 - Jan 04",
-      productDeliveryStatues: "Arriving",
-      productPrice: "600",
-      productImage: product3,
-    },
-    {
-      productName: "JBL C100SI",
-      productArrival: "Delivered on Sun, Dec 26th ‘21",
-      productPrice: "600",
-      productImage: product3,
-      productDeliveryStatues: "Delivered",
-    },
-    {
-      productName: "JBL C100SI",
-      productArrival: "Delivered on Sun, Dec 26th ‘21",
-      productPrice: "600",
-      productImage: product3,
-      productDeliveryStatues: "Delivered",
-    },
-  ];
+  useEffect(() => {
+    if (userAddress && userAddress.loaded) {
+      if (userAddress.no_of_address === 0) {
+        setUserDefaultAddress({
+          loaded: true,
+          address: {},
+          no_of_address: 0
+        })
+      } else if (userAddress.no_of_address === 1) {
+        setUserDefaultAddress({
+          loaded: true,
+          address: userAddress.address[0],
+          no_of_address: 1
+        })
+      } else if (userAddress.no_of_address > 1) {
+        let useAdd = userAddress.address.filter(add => add.isDefault === true)
+        setUserDefaultAddress({
+          loaded: true,
+          address: useAdd[0],
+          no_of_address: 1
+        })
+      }
+    }
+  }, [userAddress])
+
+  //Get Product Delivery Estimate in cart
+  useEffect(() => {
+    if (cartArray && (cartArray.no_of_carts > 0) && userDefaultAddress.loaded) {
+      let itemArray = cartArray.cart.map((item) => {
+        let itemObj = {
+          skuId: item.ean,
+          quantity: item.quantity
+        }
+        return itemObj
+      })
+      getProductServiceability(userDefaultAddress.address.zip, itemArray)
+        .then(res => {
+          if (res) {
+            setDeliveryEstDays({
+              loaded: true,
+              value: res
+            })
+          }
+        })
+    }
+  }, [cartArray, userDefaultAddress])
 
   return (
     <>
@@ -348,7 +401,11 @@ function App() {
             userComboCart,
             setUserComboCart,
             userSaveForLater,
-            setUserSaveForLater
+            setUserSaveForLater,
+            userDefaultAddress,
+            setUserDefaultAddress,
+            deliveryEstDays,
+            setDeliveryEstDays
           }}
         >
           {
@@ -358,6 +415,7 @@ function App() {
               loc.pathname === "/adduser" ||
               loc.pathname === '/admin-home' ||
               loc.pathname === '/admin-add-product' ||
+              loc.pathname === '/admin-add-product-csv' ||
               loc.pathname === '/admin-add-shop' ||
               loc.pathname === '/admin-discounts' ||
               loc.pathname === '/admin-add-discount' ||
@@ -367,7 +425,8 @@ function App() {
               loc.pathname === '/admin-alluser' ||
               loc.pathname === '/admin-shops' ||
               loc.pathname === '/admin-query' ||
-              loc.pathname === '/admin-payments'
+              loc.pathname === '/admin-payments' ||
+              loc.pathname === '/admin-cancellation'
               ? ('') : (
                 <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />
               )
@@ -485,6 +544,7 @@ function App() {
             <Route path="/store-near-me" exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
             <Route path="/product/:slug" exact element={<ProductPage setHeaderData={setHeaderData} />} />
             <Route path="/:category" exact element={<ProductCategory setHeaderData={setHeaderData} />} />
+            <Route path="/:category/f/:slug" exact element={<ProductCategory setHeaderData={setHeaderData} />} />
             <Route path="/:category/filter" exact element={<Filter setHeaderData={setHeaderData} />} />
             <Route path="/:store/:category" exact element={<OfflineProductCategory setHeaderData={setHeaderData} />} />
             <Route path="/bank-offer" exact element={<BankOffer setHeaderData={setHeaderData} />} />
@@ -516,7 +576,8 @@ function App() {
             <Route element={<Dashboard />} >
               <Route exact path='/admin-home' element={<DashBoardHome />} />
               <Route exact path='/admin-products' element={<DashboardProducts />} />
-              <Route exact path='/admin-add-product' element={<DashboardAddProduct setHeaderData={setHeaderData} />} />
+              <Route exact path='/admin-add-product' element={<DashboardAddProduct />} />
+              <Route exact path='/admin-add-product-csv' element={<DashboardAddProductCsvFile />} />
               <Route exact path='/admin-add-shop' element={<DashboardAddShop />} />
               <Route exact path='/admin-discounts' element={<DashboardDiscount />} />
               <Route exact path='/admin-add-discount' element={<DashboardAddDiscount />} />
@@ -525,12 +586,14 @@ function App() {
               <Route exact path='/admin-shops' element={<DashboardShop />} />
               <Route exact path='/admin-query' element={<Quirys />} />
               <Route exact path='/admin-payments' element={<Payments />} />
+              <Route exact path='/admin-cancellation' element={<Cancellation />} />
             </Route>
           </Routes>
           {
             loc.pathname === '/admin' ||
               loc.pathname === '/admin-home' ||
               loc.pathname === '/admin-add-product' ||
+              loc.pathname === '/admin-add-product-csv' ||
               loc.pathname === '/admin-discounts' ||
               loc.pathname === '/admin-add-discount' ||
               loc.pathname === '/admin-add-shop' ||
@@ -539,10 +602,12 @@ function App() {
               loc.pathname === '/admin-alluser' ||
               loc.pathname === '/admin-shops' ||
               loc.pathname === '/admin-query' ||
-              loc.pathname === '/admin-payments'
+              loc.pathname === '/admin-payments' ||
+              loc.pathname === '/admin-cancellation'
               ? null : <Footer />}
         </UserDataContext.Provider>
       </div>
+      <ToastContainer position="top-center" autoClose={5000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
     </>
   );
 }

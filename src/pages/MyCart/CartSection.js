@@ -1,23 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { UserDataContext } from '../../Contexts/UserContext'
-import { Slide, toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 
 //Components
 import CartProductCard from '../../components/CartProductCard/CartProductCard'
 import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import Section2 from '../../components/Section2/Section2'
-import { initOrder } from '../../api/OrdersApi'
 import { addToCart, getCartData, removeFromCart } from '../../api/Cart'
-import { checkCoupon, getCoupon } from '../../api/couponApi'
+import { checkCoupon } from '../../api/couponApi'
 import { getSearchedProduct } from '../../api/Product'
 import { addSaveForLaterItem, deleteSaveForLaterItem, getSaveForLater } from '../../api/SaveForLaterApi'
-import { deleteAllWishlistItems } from '../../api/wishlistApi'
 
 toast.configure()
 const CartSection = ({ featureProducts }) => {
   const nav = useNavigate()
-  const [cartProducts, setCartProducts] = useState([])
   const [couponApplicable, setCouponApplicable] = useState({
     loaded: false,
     applicable: false
@@ -31,17 +28,15 @@ const CartSection = ({ featureProducts }) => {
   })
   const [suggesProducts, setSuggesProducts] = useState([])
 
-
   const {
     cartArray,
     setCartArray,
     setOrderInit,
-    allProducts,
-    userComboCart,
     setUserComboCart,
     priceBoxDetails,
     userSaveForLater,
-    setUserSaveForLater
+    setUserSaveForLater,
+    deliveryEstDays
   } = useContext(UserDataContext)
 
   useEffect(() => {
@@ -75,19 +70,6 @@ const CartSection = ({ featureProducts }) => {
       })
     }
   }, [cartSuggestions])
-  // console.log(suggesProducts);
-
-  useEffect(() => {
-    getSaveForLater()
-      .then(res => {
-        setUserSaveForLater({
-          loaded: true,
-          no_of_save_for_later_items: res.no_of_save_for_later_items,
-          save_for_later_items: res.save_for_later_items
-        })
-      })
-  }, [])
-
 
   useEffect(() => {
     if (suggesProducts && (suggesProducts.length > 0)) {
@@ -98,7 +80,6 @@ const CartSection = ({ featureProducts }) => {
       }))
     }
   }, [suggesProducts])
-  // console.log(cartSuggestProducts);
 
 
   const handleQuantityInc = (id) => {
@@ -151,7 +132,6 @@ const CartSection = ({ featureProducts }) => {
       toast.error('Add Product To Cart')
     }
   }
-  // console.log(userComboCart);
 
   //Remove Product from cart
   const handleRemoveFromCart = (id) => {
@@ -189,7 +169,6 @@ const CartSection = ({ featureProducts }) => {
             let couponProducts = [...coupon.products]
             let cartProductsEan = [...cartArray.cart]
             let searchCart = cartProductsEan.find(elem => elem.ean === couponProducts[0])
-            console.log(searchCart);
             if (searchCart) {
               toast.success('Coupon is Applicable')
             } else {
@@ -249,7 +228,6 @@ const CartSection = ({ featureProducts }) => {
         toast.success("Product Added to Cart"),
         deleteSaveForLaterItem(id)
           .then(res => {
-            console.log(res);
             getSaveForLater()
               .then(res => {
                 setUserSaveForLater({
@@ -279,7 +257,6 @@ const CartSection = ({ featureProducts }) => {
         toast.success("Something Went Wrong")
       ))
   }
-  // console.log(cartArray);
 
   const handleRemoveFromSaveForLater = (id) => {
     deleteSaveForLaterItem(id)
@@ -336,6 +313,7 @@ const CartSection = ({ featureProducts }) => {
                       handleAddItemToSaveForLater={handleAddItemToSaveForLater}
                       handleAddToCart={handleAddToCart}
                       handleRemoveFromSaveForLater={handleRemoveFromSaveForLater}
+                      deliveryEstDays={deliveryEstDays}
                     />
                   ))) : (
                   <div className="empty_order_sec">
@@ -451,18 +429,6 @@ const CartSection = ({ featureProducts }) => {
           </div>
         )
       }
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        transition={Slide}
-      />
     </>
 
   )

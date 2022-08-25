@@ -20,7 +20,6 @@ export const getSaveForLater = async () => {
     .then(res => {
       if (res) {
         getSFLRes = res.data.data
-        console.log(getSFLRes);
       }
     })
     .catch(err => console.log('Error:', err))
@@ -41,7 +40,6 @@ export const addSaveForLaterItem = async (id) => {
     .then(res => {
       if (res) {
         addSFLRes = res
-        console.log(addSFLRes);
       }
     })
     .catch(err => console.log('Error:', err))
@@ -62,7 +60,6 @@ export const deleteSaveForLaterItem = async (id) => {
   await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/saveforlater/${id}`, { headers })
     .then(res => {
       deleteSFLRes = res
-      console.log(deleteSFLRes);
     })
 
   return deleteSFLRes
@@ -81,7 +78,6 @@ export const deleteSaveForLaterAllItems = async () => {
   await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/saveforlater`, { headers })
     .then(res => {
       deleteSFLALLRes = res
-      console.log(deleteSFLALLRes);
     })
 
   return deleteSFLALLRes

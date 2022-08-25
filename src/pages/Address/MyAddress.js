@@ -8,7 +8,7 @@ import addIcon from '../../assets/vector/add_outline_blue.svg'
 
 //Components
 import AddressBox from '../../components/AddressBox/AddressBox';
-import { getAddress } from '../../api/Address';
+import { deleteAddress, getAddress, setAddressDefault } from '../../api/Address';
 
 const MyAddress = ({ setEditID, setProfileState, border }) => {
   const matches = useMediaQuery("(min-width:768px)")
@@ -27,6 +27,38 @@ const MyAddress = ({ setEditID, setProfileState, border }) => {
         }
       })
   }, [])
+
+  const handleDeleteAddress = (id) => {
+    deleteAddress(id)
+      .then(res => {
+        getAddress()
+          .then(res => {
+            if (res) {
+              setUserAddress({
+                loaded: true,
+                no_of_address: res.no_of_address,
+                address: res.address
+              })
+            }
+          })
+      })
+  }
+
+  const handleSetAsDefaultAddress = (id) => {
+    setAddressDefault(id)
+      .then(res => {
+        getAddress()
+          .then(res => {
+            if (res) {
+              setUserAddress({
+                loaded: true,
+                no_of_address: res.no_of_address,
+                address: res.address
+              })
+            }
+          })
+      })
+  }
 
   return (
     <>
@@ -53,6 +85,8 @@ const MyAddress = ({ setEditID, setProfileState, border }) => {
                 setEditID={setEditID}
                 setProfileState={setProfileState}
                 border={border}
+                handleDeleteAddress={handleDeleteAddress}
+                handleSetAsDefaultAddress={handleSetAsDefaultAddress}
               />
             ))
           }

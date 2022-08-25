@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { sliderClasses, useMediaQuery } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Slide, toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { addProductCatalogue, addProductGalleryImages, addProductImages, updateProductCatalogue } from '../../api/CatalogueApi';
 import { UserDataContext } from '../../Contexts/UserContext'
 
@@ -1281,19 +1281,6 @@ const AddProductSection = () => {
           </div>
         </form>
       </div>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        transition={Slide}
-      />
-      {/* <CatelogueModal modalShow={modalOpen} setModalShow={setModalOpen} imageData={modalData} /> */}
       <CommonModal
         modalShow={modalOpen}
         setModalShow={setModalOpen}

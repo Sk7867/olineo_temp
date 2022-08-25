@@ -12,7 +12,7 @@ import PriceDetailsBox from "../../components/PriceDetailsBox/PriceDetailsBox";
 import BreadCrumbs from "../../components/BreadCrumbs/BreadCrumbs";
 import { getAddress } from "../../api/Address";
 import { completeOrder, initOrder, paymentInit } from "../../api/OrdersApi";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { getCartData, removeFromCart } from "../../api/Cart";
 
 toast.configure();
@@ -114,7 +114,7 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
                     >
                       <input type="radio" name="Delivery Address" id={address.id} value={address.id} />
                       <span className="radio-custom"></span>
-                      <AddressBox setEditID={setEditID} address={address} deleteOption={false} border={false} fullWidth={true} />
+                      <AddressBox setEditID={setEditID} address={address} deleteOption={false} defaultOption={false} border={false} fullWidth={true} />
                     </label>
                   </div>
                 ))
@@ -143,7 +143,6 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
           </div>
         </div>
       </div>
-      <ToastContainer position="top-center" autoClose={5000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
     </>
   );
 };

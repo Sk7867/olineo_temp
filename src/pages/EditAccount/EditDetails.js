@@ -6,7 +6,7 @@ import { userSignUp, saveUserPic } from "../../api/Auth";
 import moment from "moment";
 import DatePicker from "react-date-picker";
 import { saveUser } from "../../api/Auth";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { UserDataContext } from "../../Contexts/UserContext";
 
 //Images
@@ -364,7 +364,6 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
         </div>
       </div>
       {matches && <UpdateModal showModal={showModal} setShowModal={setShowModal} modalData={modalData} />}
-      <ToastContainer position="top-center" autoClose={5000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
     </>
   );
 };

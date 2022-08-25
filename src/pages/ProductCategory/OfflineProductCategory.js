@@ -1,8 +1,9 @@
 //Dependencies
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { Accordion, Dropdown } from 'react-bootstrap'
+import { UserDataContext } from "../../Contexts/UserContext";
 
 //CSS
 import './ProductCategory.css'
@@ -18,17 +19,20 @@ import sortOutlineGrey from '../../assets/vector/sort_outline_grey.svg'
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 import ProductListItem from '../../components/ProductListItem/ProductListItem'
 import FilterTag from '../../components/FilterTag/FilterTag'
+import { getSearchedProduct } from '../../api/Product';
 
 
 const OfflineProductCategory = ({ setHeaderData }) => {
   const [bottomSheet, setBottomSheet] = useState(false)
   const matches = useMediaQuery("(min-width:768px)")
   const [offlineOffersSelected, setOfflineOffersSelected] = useState(true)
+  const nav = useNavigate();
   // const [priceSortSelected, setPriceSortSelected] = useState(0)
   // const [radioFilterSelected, setRadioFilterSelected] = useState({})
   // const [priceFilter, setPriceFilter] = useState(-1)
   // const [checkboxFilter, setCheckboxFilter] = useState({})
   const [filterSelected, setFilterSelected] = useState([])
+  const { searchedProduct, setSearchedProduct } = useContext(UserDataContext);
   // console.log(filterSelected)
   useEffect(() => {
     setHeaderData({
@@ -40,6 +44,86 @@ const OfflineProductCategory = ({ setHeaderData }) => {
       header3Profile: true,
     })
   }, []);
+
+  const handleAll = (resp) => {
+    if (filterSelected?.some(res => res.type === resp.type)) {
+      for (var i = 0; i < filterSelected?.length; i++) {
+        if (filterSelected[i]?.type === resp.type && filterSelected[i]?.data !== resp.data) {
+          filterSelected?.splice(i, 1);
+          i--;
+        }
+      }
+    }
+    else {
+      filterSelected.push(resp)
+    }
+    setFilterSelected([...filterSelected], [filterSelected]);
+  }
+  const handleAll2 = (resp) => {
+    if (filterSelected?.some(res => res.data === resp.data)) {
+      for (var i = 0; i < filterSelected?.length; i++) {
+        if (filterSelected[i]?.data === resp.data) {
+          filterSelected?.splice(i, 1);
+          i--;
+        }
+      }
+      console.log(true);
+    }
+    else {
+      filterSelected.push(resp)
+    }
+    setFilterSelected([...filterSelected], [filterSelected]);
+  }
+  const handleDeletFilter = (e) => {
+    if (filterSelected?.some(res => res.data === e.data)) {
+      for (var i = 0; i < filterSelected?.length; i++) {
+        if (filterSelected[i]?.data === e.data) {
+          filterSelected?.splice(i, 1);
+          i--;
+        }
+      }
+      console.log(true);
+    }
+    else {
+      filterSelected.push(e)
+    }
+    setFilterSelected([...filterSelected], [filterSelected]);
+
+  }
+
+  React.useEffect(() => {
+    const params = new URLSearchParams();
+    filterSelected.forEach(value => {
+      if (value.type === 'price') {
+        params.append(`${value.searchQ}`, value.Qdata);
+        params.append(`${value?.searchQ2}`, value?.Qdata2);
+      }
+      if (value.type === 'brand') {
+        params.append('brand', value.data);
+      }
+      if (value.type === 'Category') {
+        params.append('hierarchyL2', value.data);
+      }
+      if (value.type === 'Offer') {
+        params.append('discount.flatDiscount.value[gte]', value.Qdata);
+      }
+    });
+
+    getSearchedProduct(params)
+      .then(res => {
+        console.log(res);
+        setSearchedProduct(
+          {
+            loaded: true,
+            products: res,
+            no_of_products: res.length
+          }
+        );
+        if (res.length === 0) {
+          setFilterSelected([])
+        }
+      })
+  }, [filterSelected, setSearchedProduct])
 
   const breadCrumbsData = [
     {
@@ -182,149 +266,167 @@ const OfflineProductCategory = ({ setHeaderData }) => {
     },
   ]
 
-  return (
-    <>
-      <div className='page_Wrapper page_Margin_Top'>
-        <BreadCrumbs data={breadCrumbsData} />
-        {
-          matches ? (
-            <div className='filter_Sort_Header'>
-              <div className='filter_Section_Header'>
-                <FilterTag filterSelected={filterSelected} setFilterSelected={setFilterSelected} />
-              </div>
-              <div className='offers_Sort_Header'>
-                <div className='offers_Toggle_Header'>
-                  <div className="offers_Toggle_Container">
-                    <p className={`${offlineOffersSelected ? 'offer_Selected' : ''}`} onClick={() => setOfflineOffersSelected(true)}>Offline Offers</p>
-                    <p className={`${offlineOffersSelected ? '' : 'offer_Selected'}`} onClick={() => setOfflineOffersSelected(false)}>Online Offers</p>
-                  </div>
-                </div>
-                <div className="sort_Section_Header">
-                  <Dropdown>
-                    <Dropdown.Toggle id="dropdown-basic">
-                      <div className="sort_Container">
-                        <span>Sort by:</span>
-                        <p>Price Low to High</p>
-                        <img src={sortOutlineGrey} alt="" />
-                      </div>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">Price Low to High</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">Price High to Low</Dropdown.Item>
-                      <Dropdown.Item href="#/action-3">Remove</Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
+  return (<>
+
+    <div className="page_Wrapper page_Margin_Top">
+      <BreadCrumbs data={breadCrumbsData} />
+      {searchedProduct.no_of_products > 0 ? (
+        <>
+          <div className="filter_Sort_Header mobile_None">
+            <div className="filter_Section_Header">
+              {filterSelected?.map(res => (
+                <FilterTag
+                  filter={res}
+                  handleDeletFilter={handleDeletFilter}
+                />
+              ))}
+            </div>
+            <div className='offers_Sort_Header'>
+              <div className='offers_Toggle_Header'>
+                <div className="offers_Toggle_Container">
+                  <p className={`${offlineOffersSelected ? 'offer_Selected' : ''}`} onClick={() => setOfflineOffersSelected(true)}>Offline Offers</p>
+                  <p className={`${offlineOffersSelected ? '' : 'offer_Selected'}`} onClick={() => setOfflineOffersSelected(false)}>Online Offers</p>
                 </div>
               </div>
             </div>
-          ) : ('')
-        }
-        {
-          !matches ? (<>
-            <div className='tab_None header_Sort_Container combined_Button_Container'>
-              <div className='header_Sort_Button combined_Button_One' onClick={() => setBottomSheet(true)}>
+            <div className="sort_Section_Header">
+              <Dropdown>
+                <Dropdown.Toggle id="dropdown-basic">
+                  <div className="sort_Container">
+                    <span>Sort by:</span>
+                    <p>Price Low to High</p>
+                    <img src={sortOutlineGrey} alt="" />
+                  </div>
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Price Low to High</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Price High to Low</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Remove</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </div>
+          <>
+            <div className="tab_None header_Sort_Container combined_Button_Container">
+              <div className="header_Sort_Button combined_Button_One" onClick={() => setBottomSheet(true)}>
                 <img src={sortOutlineBlue} alt="" />
                 <p>Sort</p>
               </div>
-              <Link to={'/category1/filter'} state={filterListData} className='header_Filter_Button combined_Button_Two'>
+              <Link to={"/category1/filter"} state={filterListData} className="header_Filter_Button combined_Button_Two">
                 <img src={filterOutlineBlue} alt="" />
                 <p>Filter</p>
               </Link>
             </div>
-            <div className='offers_Toggle_Header'>
-              <div className="offers_Toggle_Container">
-                <p className={`${offlineOffersSelected ? 'offer_Selected' : ''}`} onClick={() => setOfflineOffersSelected(true)}>Offline Offers</p>
-                <p className={`${offlineOffersSelected ? '' : 'offer_Selected'}`} onClick={() => setOfflineOffersSelected(false)}>Online Offers</p>
-              </div>
-            </div>
-          </>) : ('')
-        }
-        <div className='desk_Page_Wrapper'>
-          <aside className="side_Section section_Wrapper pb-0">
-            <p className="side_Section_Heading m-0">
-              Filters
-            </p>
-            <div className="side_Section_Body">
-              <Accordion defaultActiveKey={['0']} alwaysOpen>
-                {
-                  filterListData.map((filter, index) => (
-                    <Accordion.Item eventKey={`${index}`} key={index}>
-                      <Accordion.Header>{filter.filter_heading}</Accordion.Header>
-                      <Accordion.Body>
-                        {
-                          filter.filter_type === 'Radio' ? (
+          </>
+          <>
+            <div className="desk_Page_Wrapper">
+              <aside className="side_Section section_Wrapper pb-0">
+                <p className="side_Section_Heading m-0">Filters</p>
+                <div className="side_Section_Body">
+                  <Accordion defaultActiveKey={["0"]}>
+                    {filterListData.map((filter, index) => (
+                      <Accordion.Item eventKey={`${index}`} key={index}>
+                        <Accordion.Header>{filter.filter_heading}</Accordion.Header>
+                        <Accordion.Body>
+                          {filter.filter_type === "Radio" ? (
                             <>
-                              {
-                                filter.filter_data.map((element, index) => (
-                                  <label htmlFor={element.data} key={index} className={`radiobtn-label payment_Methods_Labels`} onClick={() => setFilterSelected([...filterSelected, element])} >
-                                    <input type="radio" name={`filter-${filter.filter_heading}`} id={element.data} value={element.data} />
-                                    <span className="radio-custom"></span>{element.data}
-                                  </label>
-                                ))
-                              }
+                              {filter.filter_data.map((element, index) => (
+                                <label
+                                  htmlFor={element.data}
+                                  key={index}
+                                  className={`radiobtn-label payment_Methods_Labels`}
+                                  onClick={() => {
+                                    handleAll(element)
+                                  }}
+                                >
+                                  <input type="radio" name={`filter-${filter.filter_heading}`} checked={filterSelected?.some(res => res.type === element.type && res.data === element.data)} id={element.data} value={element.data} readOnly />
+                                  <span className="radio-custom"></span>
+                                  {element.data}
+                                </label>
+                              ))}
+                            </>
+                          ) : filter.filter_type === "Checkbox" ? (
+                            <>
+                              {filter.filter_data.map((element, index) => (
+                                <label
+                                  htmlFor={element.data}
+                                  key={index}
+                                  className="checkbox-label checkbox-item d-flex align-items-center"
+                                  onClick={() => {
+                                    handleAll2(element)
+                                  }}
+                                >
+                                  <input type="checkbox" name={`filter-${filter.filter_heading}`} checked={filterSelected?.some(res => res.data === element.data)} id={element.data} value={element.data} readOnly />
+                                  <span className="custom-checkmark"></span>
+                                  {element.data}
+                                </label>
+                              ))}
                             </>
                           ) : (
-                            filter.filter_type === 'Checkbox' ? (
-                              <>
-                                {
-                                  filter.filter_data.map((element, index) => (
-                                    <label htmlFor={element.data} key={index} className="checkbox-label checkbox-item d-flex align-items-center" onClick={() => setFilterSelected([...filterSelected, element])} >
-                                      <input type="checkbox" name={`filter-${filter.filter_heading}`} id={element.data} value={element.data} />
-                                      <span className="custom-checkmark"></span>
-                                      {element.data}
-                                    </label>
-                                  ))
-                                }
-                              </>
-                            ) : ('')
-                          )
-                        }
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  ))
-                }
-              </Accordion>
+                            ""
+                          )}
+                        </Accordion.Body>
+                      </Accordion.Item>
+                    ))}
+                  </Accordion>
+                </div>
+              </aside>
+              <div className="order_Page_Right">
+                <div className="Product_Category_Container">
+                  {searchedProduct.products.map((product, index) => (
+                    <ProductListItem key={index} product={product} />
+                  ))}
+                </div>
+              </div>
             </div>
-          </aside>
-          <div className='order_Page_Right'>
-            <div className="Product_Category_Container">
-              {
-                products.map((product, index) => (
-                  <ProductListItem key={index} product={product} />
-                ))
-              }
-            </div>
+          </>
+        </>
+      ) : (
+        <>
+          <div className="empty_order_sec">
+            <p className="empty_order_text">No Product Found</p>
+            <button type="submit" className="submit-button" onClick={() => nav("/")}>
+              <p>Back To Home</p>
+            </button>
+          </div>
+          {/* <Section2
+              id={'Top-sellers-sec'}
+              heading='Top Sellers'
+              productData={featureProducts}
+            /> */}
+        </>
+      )}
+    </div>
+
+    {!matches ? (
+      <>
+        <div className={`bottom_Sheet_Backdrop ${bottomSheet ? "active" : ""}`} onClick={() => setBottomSheet(false)}>
+          {" "}
+        </div>
+        <div className={`bottom_Sheet ${bottomSheet ? "active" : ""}`}>
+          <div className="bottom_Sheet_Header">
+            <p className="bottom_Sheet_Heading">Sort by</p>
+            <img src={closeOutlineGrey} className="bottom_Sheet_Close_Btn" alt="" onClick={() => setBottomSheet(false)} />
+          </div>
+          <div className="bottom_Sheet_Body">
+            <label htmlFor={`price-low-high`} className={`radiobtn-label price_Sort_Labels `}>
+              <input type="radio" name="price" id={`price`} value={`price-low-high`} />
+              <span className="radio-custom"></span>
+              {`Price Low to High`}
+            </label>
+            <label htmlFor={`price-high-low`} className={`radiobtn-label price_Sort_Labels `}>
+              <input type="radio" name="price" id={`price`} value={`price-high-low`} />
+              <span className="radio-custom"></span>
+              {`Price High to Low`}
+            </label>
           </div>
         </div>
-      </div>
-
-      {
-        !matches ? (
-          <>
-            <div className={`bottom_Sheet_Backdrop ${bottomSheet ? 'active' : ('')}`} onClick={() => setBottomSheet(false)}> </div>
-            <div className={`bottom_Sheet ${bottomSheet ? 'active' : ''}`}>
-              <div className="bottom_Sheet_Header">
-                <p className="bottom_Sheet_Heading">Sort by</p>
-                <img src={closeOutlineGrey} className='bottom_Sheet_Close_Btn' alt="" onClick={() => setBottomSheet(false)} />
-              </div>
-              <div className="bottom_Sheet_Body">
-                <label htmlFor={`price-low-high`} className={`radiobtn-label price_Sort_Labels `} >
-                  <input type="radio" name='price' id={`price`} value={`price-low-high`} />
-                  <span className="radio-custom"></span>{`Price Low to High`}
-                </label>
-                <label htmlFor={`price-high-low`} className={`radiobtn-label price_Sort_Labels `} >
-                  <input type="radio" name='price' id={`price`} value={`price-high-low`} />
-                  <span className="radio-custom"></span>{`Price High to Low`}
-                </label>
-              </div>
-            </div>
-
-          </>
-        ) : ('')
-      }
-
-    </>
-  )
+      </>
+    ) : (
+      ""
+    )}
+  </>)
 }
 
 export default OfflineProductCategory
