@@ -115,7 +115,6 @@ function App() {
     combo: [],
     no_of_carts: 0,
   });
-  // console.log(userComboCart);
 
   const [modalDataMobile, setModalDataMobile] = useState({
     number: null,
@@ -149,7 +148,6 @@ function App() {
     no_of_orders: 0,
     orders: [],
   });
-  // console.log(userOrderData);
   const [searchedProduct, setSearchedProduct] = useState({
     loaded: false,
     products: [],
@@ -178,6 +176,7 @@ function App() {
     loaded: false,
     value: []
   })
+  const [deliveryCharges, setDeliveryCharges] = useState('')
 
   useEffect(() => {
     let user = JSON.parse(sessionStorage.getItem("user"));
@@ -193,34 +192,33 @@ function App() {
 
   let userToken = userContext?.JWT;
   useEffect(() => {
-    setTimeout(() => {
-      getUser(userToken).then((res) => {
-        if (res) {
-          // console.log(res);
-          let user = res;
-          setUserContext((prev) => ({
-            ...prev,
-            id: user._id,
-            fullName: user.fullName,
-            mobileNumber: user.mobileNumber,
-            email: user.email,
-            dob: user.dob,
-          }));
-        }
-      });
+    if (userToken) {
+      setTimeout(() => {
+        getUser(userToken).then((res) => {
+          if (res) {
+            let user = res;
+            setUserContext((prev) => ({
+              ...prev,
+              id: user._id,
+              fullName: user.fullName,
+              mobileNumber: user.mobileNumber,
+              email: user.email,
+              dob: user.dob,
+            }));
+          }
+        });
 
-      getUserPic(userToken).then((res) => {
-        if (res) {
-          // console.log(res);
-          setUserContext((prev) => ({
-            ...prev,
-            profilePic: res,
-          }));
-        }
-      });
-    }, 500);
+        getUserPic(userToken).then((res) => {
+          if (res) {
+            setUserContext((prev) => ({
+              ...prev,
+              profilePic: res,
+            }));
+          }
+        });
+      }, 500);
+    }
   }, [userToken]);
-  // console.log(userContext);
 
   useEffect(() => {
     let userToken = userContext ? userContext.JWT : "";
@@ -230,11 +228,6 @@ function App() {
       setUserLoggedIn(false);
     }
   }, [userContext]);
-
-  // useEffect(() => {
-  //   getUserPic()
-  //     .then(res => console.log(res))
-  // }, [])
 
   useEffect(() => {
     sessionStorage.setItem("user", JSON.stringify(userContext));
@@ -273,7 +266,6 @@ function App() {
   useEffect(() => {
     if (cartArray.combo && cartArray.combo.length > 0) {
       cartArray.combo.map((product) => {
-        // console.log(product);
         let searchTerm = 'ean=' + product
         getSearchedProduct(searchTerm)
           .then(res => {
@@ -288,7 +280,6 @@ function App() {
       })
     }
   }, [cartArray]);
-  // console.log(cartArray);
 
   // Price Box Details Calculation===========================
   useEffect(() => {
@@ -299,7 +290,7 @@ function App() {
         (accumulator, current) => accumulator + (current.price.mrp - (current.price.discountPrice ? current.price.discountPrice : current.price.mop)) * current.quantity,
         0
       );
-      let totalDeliveryCharge = 0;
+      let totalDeliveryCharge = deliveryCharges;
       let totalAmount = productPrice - totalDiscount + totalDeliveryCharge;
       setPriceBoxDetails((prev) => ({
         ...prev,
@@ -318,7 +309,22 @@ function App() {
         totalAmount: 0,
       })
     }
-  }, [cartArray]);
+  }, [cartArray, deliveryCharges]);
+
+  //Calculate delivery total delivery charges of all items in cart
+  useEffect(() => {
+    let totalDelPrice = 0
+    if (deliveryEstDays && deliveryEstDays.loaded && (deliveryEstDays.value.length > 0)) {
+      deliveryEstDays.value.forEach((order) => {
+        if (order.deliverymodes.length > 0) {
+          let delPrice = (parseInt(order.deliverymodes[0].deliveryCost.value) + 40)
+          totalDelPrice = totalDelPrice + delPrice
+        }
+      })
+    }
+    setDeliveryCharges(totalDelPrice)
+  }, [deliveryEstDays])
+
 
   useEffect(() => {
     if (userAddress && userAddress.loaded) {
@@ -345,28 +351,6 @@ function App() {
     }
   }, [userAddress])
 
-  //Get Product Delivery Estimate in cart
-  useEffect(() => {
-    if (cartArray && (cartArray.no_of_carts > 0) && userDefaultAddress.loaded) {
-      let itemArray = cartArray.cart.map((item) => {
-        let itemObj = {
-          skuId: item.ean,
-          quantity: item.quantity
-        }
-        return itemObj
-      })
-      getProductServiceability(userDefaultAddress.address.zip, itemArray)
-        .then(res => {
-          if (res) {
-            setDeliveryEstDays({
-              loaded: true,
-              value: res
-            })
-          }
-        })
-    }
-  }, [cartArray, userDefaultAddress])
-
   return (
     <>
       <ScrollToTop />
@@ -377,7 +361,6 @@ function App() {
             setUserContext,
             userAddress,
             setUserAddress,
-
             allProducts,
             setAllProducts,
             userLocation,
@@ -405,7 +388,9 @@ function App() {
             userDefaultAddress,
             setUserDefaultAddress,
             deliveryEstDays,
-            setDeliveryEstDays
+            setDeliveryEstDays,
+            deliveryCharges,
+            setDeliveryCharges
           }}
         >
           {

@@ -21,7 +21,7 @@ const CartProductCard = ({
   handleAddItemToSaveForLater,
   handleAddToCart,
   handleRemoveFromSaveForLater,
-  deliveryEstDays
+  deliveryEstDays,
 }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [discount, setDiscount] = useState('')

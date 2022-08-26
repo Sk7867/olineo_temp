@@ -29,7 +29,7 @@ import AddressForm from "../../components/AddressForm/AddressForm";
 import CartSection from "../MyCart/CartSection";
 import OrderSection from "../MyOrders/OrderSection";
 import { getCartData } from "../../api/Cart";
-import { getIndiProduct } from "../../api/Product";
+import { getIndiProduct, getProductServiceability } from "../../api/Product";
 import { getAllOrder } from "../../api/OrdersApi";
 import { getAllWishlistItems } from "../../api/wishlistApi";
 import WishlistSection from "../Wishlist/WishlistSection";
@@ -237,7 +237,7 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
       case 1:
         return <EditDetails profileDetails={false} profilePicUpdate={true} />;
       case 2:
-        return <OrderSection featureProducts={allProducts} onTheWay={true} delivered={true} cancelled={true} />;
+        return <OrderSection featureProducts={allProducts} placed={true} delivered={true} cancelled={true} />;
       case 3:
         return <WishlistSection />;
       case 4:

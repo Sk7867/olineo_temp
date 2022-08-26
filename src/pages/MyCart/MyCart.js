@@ -63,11 +63,13 @@ const MyCart = ({ setHeaderData }) => {
   useEffect(() => {
     getSaveForLater()
       .then(res => {
-        setUserSaveForLater({
-          loaded: true,
-          no_of_save_for_later_items: res.no_of_save_for_later_items,
-          save_for_later_items: res.save_for_later_items
-        })
+        if (res) {
+          setUserSaveForLater({
+            loaded: true,
+            no_of_save_for_later_items: res.no_of_save_for_later_items,
+            save_for_later_items: res.save_for_later_items
+          })
+        }
       })
   }, [])
 

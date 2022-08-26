@@ -206,13 +206,15 @@ const ProductPage = ({ setHeaderData }) => {
       getProductServiceability(userDefaultAddress.address.zip, prodArray)
         .then(res => {
           if (res) {
-            let del = res[0].deliverymodes[1]
-            let delTime = del.deliveryTime
-            let delTimeInDays = Math.floor(delTime / 24)
-            setDeliveryEstDays({
-              loaded: true,
-              value: delTimeInDays
-            })
+            if (res[0].deliverymodes.length > 0) {
+              let del = res[0].deliverymodes[1]
+              let delTime = del.deliveryTime
+              let delTimeInDays = Math.floor(delTime / 24)
+              setDeliveryEstDays({
+                loaded: true,
+                value: delTimeInDays
+              })
+            }
           }
         })
     }

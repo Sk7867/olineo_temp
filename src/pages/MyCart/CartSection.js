@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserDataContext } from '../../Contexts/UserContext'
 import { toast } from 'react-toastify'
@@ -9,12 +9,13 @@ import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import Section2 from '../../components/Section2/Section2'
 import { addToCart, getCartData, removeFromCart } from '../../api/Cart'
 import { checkCoupon } from '../../api/couponApi'
-import { getSearchedProduct } from '../../api/Product'
+import { getProductServiceability, getSearchedProduct } from '../../api/Product'
 import { addSaveForLaterItem, deleteSaveForLaterItem, getSaveForLater } from '../../api/SaveForLaterApi'
 
 toast.configure()
 const CartSection = ({ featureProducts }) => {
   const nav = useNavigate()
+  const mounted = useRef(false)
   const [couponApplicable, setCouponApplicable] = useState({
     loaded: false,
     applicable: false
@@ -36,7 +37,10 @@ const CartSection = ({ featureProducts }) => {
     priceBoxDetails,
     userSaveForLater,
     setUserSaveForLater,
-    deliveryEstDays
+    deliveryEstDays,
+    userDefaultAddress,
+    setDeliveryEstDays,
+    deliveryCharges,
   } = useContext(UserDataContext)
 
   useEffect(() => {
@@ -279,6 +283,35 @@ const CartSection = ({ featureProducts }) => {
     e.preventDefault();
     nav("/");
   };
+
+  useEffect(() => {
+    mounted.current = true
+    return () => {
+      mounted.current = false
+    }
+  }, [])
+
+  //Get Product Delivery Estimate in cart
+  useEffect(() => {
+    if (cartArray && (cartArray.no_of_carts > 0) && userDefaultAddress.loaded) {
+      let itemArray = cartArray.cart.map((item) => {
+        let itemObj = {
+          skuId: item.ean,
+          quantity: item.quantity
+        }
+        return itemObj
+      })
+      getProductServiceability(userDefaultAddress.address.zip, itemArray)
+        .then(res => {
+          if (res) {
+            setDeliveryEstDays({
+              loaded: true,
+              value: res
+            })
+          }
+        })
+    }
+  }, [cartArray, userDefaultAddress, mounted.current])
 
   return (
     <>
