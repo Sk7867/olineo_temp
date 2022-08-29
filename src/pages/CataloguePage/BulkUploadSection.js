@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx/xlsx.mjs";
 import { addBulkOrder, addProductCatalogue, addProductGalleryImages, addProductImages } from "../../api/CatalogueApi";
 import CatelogueModal from "../../components/ModalComponenr/CatelogueModal";
@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 toast.configure();
 const BulkUploadSection = () => {
   const nav = useNavigate();
+  const loc = useLocation()
 
   const [fileUploaded, setfileUploaded] = useState({
     loaded: false,
@@ -147,7 +148,6 @@ const BulkUploadSection = () => {
       setFileToSend([]);
     }
   };
-  console.log(fileUploaded);
 
   const handleProductSort = (elem) => {
     let productInfo = {};
@@ -296,6 +296,8 @@ const BulkUploadSection = () => {
     setModalData(imagesPassed);
   };
 
+  console.log(loc);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     document.getElementById("submitCsvData").disabled = true;
@@ -327,7 +329,11 @@ const BulkUploadSection = () => {
         document.getElementById("submitCsvData").innerHTML = "<p>Uploaded successfully!</p>";
         setTimeout(() => {
           document.getElementById("submitCsvData").innerHTML = "<p>Submit</p>";
-          nav("/catelogue-page");
+          if (loc.pathname === '/admin-add-product-csv') {
+            nav('/admin-products')
+          } else {
+            nav("/catelogue-page");
+          }
         }, 1200);
       } else {
         document.getElementById("submitCsvData").disabled = false;

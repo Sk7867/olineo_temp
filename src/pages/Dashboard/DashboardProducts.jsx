@@ -24,11 +24,9 @@ function DashboardProducts(props) {
   //set the loader and get products
   useEffect(() => {
     setLoader(true);
-    console.log("jjj");
     //the function to get products
     (async () => {
       getAllProducts().then((res) => {
-        console.log(res?.products);
         setAllProducts(res.products);
         setLoader(false);
       });

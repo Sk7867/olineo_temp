@@ -15,7 +15,7 @@ export const getAdminAllOrder = async () => {
   await axios.get(`${process.env.REACT_APP_BASE_URL}/product/admin/order`, { headers })
     .then(res => {
       allOrderResponse = res.data.data
-      console.log(allOrderResponse);
+      // console.log(allOrderResponse);
     })
     .catch(err => console.log(err));
 
