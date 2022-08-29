@@ -2,6 +2,7 @@ import React from 'react'
 import './ProductInfoTable.css'
 
 const ProductInfoTable = ({ product_Information }) => {
+  console.log(product_Information)
 
   const handleTableKeys = (elem) => {
     switch (elem) {

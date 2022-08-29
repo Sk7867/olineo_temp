@@ -683,10 +683,11 @@ const ProductPage = ({ setHeaderData }) => {
             </div>
 
             {/* Product Information Table */}
-            <div className="productPage_Table section_Wrapper">
-              <h5 className="product_Section_Heading">Product Information</h5>
-              <ProductInfoTable product_Information={productInfo} />
-            </div>
+            {productInfo.length > 0 && (
+              <div className="productPage_Table section_Wrapper">
+                <h5 className="product_Section_Heading">Product Information</h5>
+                <ProductInfoTable product_Information={productInfo} />
+              </div>)}
           </div>
         </div>
 

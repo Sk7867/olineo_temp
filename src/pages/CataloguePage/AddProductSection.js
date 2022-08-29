@@ -236,6 +236,8 @@ const AddProductSection = () => {
   //     : setProduct({ ...product, [prop]: e.label })
   // }
 
+  console.log(update);
+
   const handleFormPreview = (e) => {
     e.preventDefault();
     let product = {

@@ -159,7 +159,7 @@ function DashboardAddShop() {
                           {item.map((itm, index) => (
                             <td key={index}>{itm}</td>
                           ))}
-                          <td>
+                          {/* <td>
                             <form action="" encType="multipart/form-data">
                               <input
                                 type="file"
@@ -184,7 +184,7 @@ function DashboardAddShop() {
                                 <p>Preview Images</p>
                               </button>
                             </div>
-                          </td>
+                          </td> */}
                         </tr>
                       )
                     )}
