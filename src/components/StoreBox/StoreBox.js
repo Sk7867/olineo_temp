@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 //CSS
@@ -16,44 +16,77 @@ const StoreBox = ({
   classes
 }) => {
 
+  const [storeData, setStoreData] = useState({
+    store_Name: '',
+    store_Address: '',
+    store_Timing: '',
+    store_Contact: '',
+    store_Map_Link: '',
+  })
+
+  const [storeStatusOen, setstoreStatusOpen] = useState(false)
+
+  useEffect(() => {
+    if (store) {
+      setStoreData(prev => ({
+        ...prev,
+        store_Name: store.fc_name,
+        store_Address: store.street_name,
+        store_Contact: store.contact_no
+      }))
+    }
+  }, [store])
+
+  // useEffect(() => {
+  //   if (store) {
+  //     let storeOpeningHours = store.opening_hours + '.' + store.opening_mins
+  //     console.log(storeOpeningHours);
+  //     if (parseInt(storeOpeningHours) > 12) {
+
+  //     }
+  //   }
+  // }, [store])
+
+
+
   return (
     <>
       <div className={`storebox_Container ${classes && classes.containerClasses ? (classes.containerClasses) : ('')}`}>
         <div className="storebox_Wrapper">
-          {store && store.store_Name && (<p className="store_Name">{store.store_Name}</p>)}
-          {store && store.store_Address && (<p className="store_Address">{store.store_Address}</p>)}
-          {store && store.store_Timing && (
+          {storeData && storeData.store_Name && (<p className="store_Name">{storeData.store_Name}</p>)}
+          {storeData && storeData.store_Address && (<p className="store_Address">{storeData.store_Address}</p>)}
+          {storeData && storeData.store_Timing && (
             <div className='store_Timing'>
               <img src={clockBlackIcon} alt="" />
-              <p>{store.store_Timing}</p>
-            </div>
-          )}
-          {store && store.store_Contact && (
-            <div className='store_Contact'>
-              <img src={phoneOutlineBlackIcon} alt="" />
-              {
-                store.store_Contact.map((contact, index) => (
-                  <p key={index}>{contact}</p>
-                ))
-              }
+              <p>{storeData.store_Timing}</p>
               <div className="store_Status">
                 <p>open</p>
               </div>
             </div>
           )}
-          {store && store.store_Distance && (
-            <div className="store_Distance">
-              <img src={navigationBlackIcon} alt="" />
-              <p>{store.store_Distance}</p>
+          {storeData && storeData.store_Contact && (
+            <div className='store_Contact'>
+              <img src={phoneOutlineBlackIcon} alt="" />
+              {
+                // storeData.store_Contact.map((contact, index) => (
+                <a href={`tel:${storeData.store_Contact}`}>{storeData.store_Contact}</a>
+                // ))
+              }
             </div>
           )}
-          {store && store.store_Map_Link && (
-            <Link to={store.store_Map_Link} target='_blank' className="store_Map_Link">
+          {storeData && storeData.store_Distance && (
+            <div className="store_Distance">
+              <img src={navigationBlackIcon} alt="" />
+              <p>{storeData.store_Distance}</p>
+            </div>
+          )}
+          {storeData && storeData.store_Map_Link && (
+            <Link to={storeData.store_Map_Link} target='_blank' className="store_Map_Link">
               <img src={navigationArrowBlack} alt="" />
               <p>Show on map</p>
             </Link>
           )}
-          {store && store.open_Store_Button && (
+          {storeData && storeData.open_Store_Button && (
             <div className="open_Store_button" onClick={() => handleCategorySearch('all')}>
               <p>Open store</p>
             </div>

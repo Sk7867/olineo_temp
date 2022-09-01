@@ -15,6 +15,8 @@ import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import StoreBox from '../../components/StoreBox/StoreBox'
 import useGeolocation from '../../hooks/useGeolocation'
 import { UserDataContext } from '../../Contexts/UserContext'
+import { getStoreLocation } from '../../api/StoreApi'
+import Loader from '../../components/Loader/Loader'
 
 const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
   const matches = useMediaQuery("(min-width:768px)")
@@ -30,6 +32,7 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
     setStoreLocations,
     setSearchedProduct
   } = useContext(UserDataContext)
+  const [showLoader, setShowLoader] = useState(false)
 
   useEffect(() => {
     setHeaderData({
@@ -103,6 +106,24 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
     },
   ]
 
+  const handleEnterClick = (e) => {
+    let value = e.target.value
+    if (e.code === 'Enter') {
+      setShowLoader(true)
+      let pinSearchTerm = 'pincode=' + value
+      getStoreLocation(pinSearchTerm)
+        .then(res => res ? (
+          setStoreLocations({
+            loaded: true,
+            no_of_stores: res.no_of_stores,
+            stores: res.stores
+          }),
+          setShowStore(true),
+          setShowLoader(false)
+        ) : (''))
+    }
+  }
+
   return (
     <>
       <div className='page_Wrapper page_Margin_Top_Secondary'>
@@ -129,15 +150,15 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
                     </div>
                   </>
                 ) : (
-                  showStore && !location.error ? (
+                  showStore && !location.error && !showLoader ? (
                     <>
                       <p className="cart_Text section_Wrapper">Stores near me</p>
                       <div className="store_Search_List">
                         {
-                          storeBoxData.map((store, index) => (
+                          storeLocations.stores.map((store, index) => (
                             <div className='store_Seach_Option' key={index}>
-                              <label htmlFor={store.id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setStoreSelected(store.id); setDisable(false) }}>
-                                <input type="radio" name='Store Option' id={store.id} value={store.id} />
+                              <label htmlFor={store._id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setStoreSelected(store.id); setDisable(false) }}>
+                                <input type="radio" name='Store Option' id={store._id} value={store._id} />
                                 <span className="radio-custom"></span>
                                 <StoreBox store={store} />
                               </label>
@@ -164,25 +185,38 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
                     <>
                       <div className="pickup_Search_Bar_Container section_Wrapper">
                         <div className='pickup_Search_Bar'>
-                          <input type="text" name="Store Search" id="" className='searchbar store_Search_Bar' placeholder={`Enter PIN code/Store name`} />
+                          <input type="text" name="Store Search" id="" className='searchbar store_Search_Bar' onKeyDown={handleEnterClick} placeholder={`Enter PIN code/Store name`} />
                           <img src={searchBlueIcon} alt="" />
                         </div>
                       </div>
-                      <div className="store_Page_Separtor">
-                        <span className='hr_Line'></span>
-                        <p>OR</p>
-                      </div>
-                      <div className='near_Store_Button'>
-                        <button type='submit' className='submit-button' onClick={handleStoreSelectButton}><p>Show stores near me</p></button>
-                      </div>
+                      {
+                        showLoader ? (
+                          <>
+                            <div className='store_Pick_Loader'>
+                              <div>
+                                <Loader />
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          !showStore && (
+                            <>
+                              <div className="store_Page_Separtor">
+                                <span className='hr_Line'></span>
+                                <p>OR</p>
+                              </div>
+                              <div className='near_Store_Button'>
+                                <button type='submit' className='submit-button' onClick={handleStoreSelectButton}><p>Show stores near me</p></button>
+                              </div>
+                            </>
+                          )
+                        )
+                      }
                     </>
                   )
                 )
               }
             </>
-            {
-
-            }
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ import deleteIcon from '../../assets/vector/delete_outline_blue.svg'
 import { Link } from 'react-router-dom'
 
 const AddressBox = ({
+  classes,
   address,
   setEditID,
   setProfileState,
@@ -25,7 +26,7 @@ const AddressBox = ({
   const matches = useMediaQuery("(min-width:768px)")
 
   return (
-    <div className={`address section_Wrapper ${!border ? ('border-0') : ('')} ${fullWidth ? 'w-100' : ''}  `}>
+    <div className={`address section_Wrapper ${!border ? ('border-0') : ('')} ${fullWidth ? 'w-100' : ''} ${classes ? classes.boxWrapperClass : ''} `}>
       <div className='address_Box'>
 
         <div className="address_Box_Wrapper">
@@ -33,9 +34,13 @@ const AddressBox = ({
           <p>{address.address_line1}, {address.city}, {address.state} - {address.zip}</p>
           <p>{address.phone}</p>
         </div>
-        <div className={`address_Default_Button ${address.isDefault ? 'disable' : ''}`} onClick={() => handleSetAsDefaultAddress(address._id)}>
-          <button type='submit' className='submit-button'><p>Set As Default</p></button>
-        </div>
+        {
+          defaultOption && (
+            <div className={`address_Default_Button ${address.isDefault ? 'disable' : ''}`} onClick={() => handleSetAsDefaultAddress(address._id)}>
+              <button type='submit' className='submit-button'><p>Set As Default</p></button>
+            </div>
+          )
+        }
 
         <div className="address_Box_Footer">
           {

@@ -114,7 +114,17 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
                     >
                       <input type="radio" name="Delivery Address" id={address.id} value={address.id} />
                       <span className="radio-custom"></span>
-                      <AddressBox setEditID={setEditID} address={address} deleteOption={false} defaultOption={false} border={false} fullWidth={true} />
+                      <AddressBox
+                        setEditID={setEditID}
+                        address={address}
+                        deleteOption={false}
+                        defaultOption={false}
+                        border={false}
+                        fullWidth={true}
+                        classes={{
+                          boxWrapperClass: 'ms-1'
+                        }}
+                      />
                     </label>
                   </div>
                 ))

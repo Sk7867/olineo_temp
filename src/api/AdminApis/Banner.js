@@ -9,17 +9,17 @@ export const getAdminBanner = async () => {
     'Content-Type': 'application/json',
   }
 
-  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/banner`, { headers })
-    .then(res => {
-      getAdminBannerRes = res
-      console.log(res);
-    })
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/banner`, { headers }).then(res => {
+    getAdminBannerRes = res.data.data
+  })
 
   return getAdminBannerRes
 }
 
-export const addBannerImage = (image) => {
+export const addBannerImage = async (image) => {
   let addBannerImageRes
+
+  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
 
   const headers = {
     "Access-Control-Allow-origin": "*",

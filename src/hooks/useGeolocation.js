@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { storeLocation } from '../api/StoreApi';
 
 const useGeolocation = () => {
   const [location, setLocation] = useState({
@@ -16,7 +15,6 @@ const useGeolocation = () => {
           lng: location.coords.longitude,
         }
       })
-      storeLocation(location)
       // getUserAddress(location)
     }
 

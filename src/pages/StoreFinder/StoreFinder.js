@@ -16,9 +16,10 @@ import categoryOutlineBlue from '../../assets/vector/category_outline_blue.svg'
 import locationBlue from '../../assets/vector/location_blue.svg'
 import locationWhite from '../../assets/vector/location_white.svg'
 import locationWarningYellowIcon from '../../assets/vector/location_warning_yellow.svg'
-import { storeLocation } from '../../api/StoreApi'
 import { getSearchedProduct } from '../../api/Product'
 import { useNavigate } from 'react-router-dom'
+import { getStoreLocation } from '../../api/StoreApi'
+import Loader from '../../components/Loader/Loader'
 
 const StoreFinder = ({ setHeaderData }) => {
   const [showStore, setShowStore] = useState(false)
@@ -33,6 +34,7 @@ const StoreFinder = ({ setHeaderData }) => {
     setSearchedProduct
   } = useContext(UserDataContext)
   // console.log(showStore);
+  const [showLoader, setShowLoader] = useState(false)
 
   useEffect(() => {
     setHeaderData({
@@ -53,34 +55,34 @@ const StoreFinder = ({ setHeaderData }) => {
     { lat: 19, lng: 73 },
   ]
 
-  const storeBoxData = [
-    {
-      id: 1,
-      store_Name: 'Store Name',
-      store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
-      store_Timing: 'Mon - Sun 10 AM - 10 PM',
-      store_Contact: [
-        '3098098767',
-        '3764735623',
-      ],
-      store_Map_Link: '#',
-      open_Store_Button: true,
-      open_Store_Menu: '/store1/category1'
-    },
-    {
-      id: 2,
-      store_Name: 'Store Name',
-      store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
-      store_Timing: 'Mon - Sun 10 AM - 10 PM',
-      store_Contact: [
-        '3098098767',
-        '3764735623',
-      ],
-      store_Map_Link: '#',
-      open_Store_Button: true,
-      open_Store_Menu: '/store1/category1'
-    },
-  ]
+  // const storeBoxData = [
+  //   {
+  //     id: 1,
+  //     store_Name: 'Store Name',
+  //     store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
+  //     store_Timing: 'Mon - Sun 10 AM - 10 PM',
+  //     store_Contact: [
+  //       '3098098767',
+  //       '3764735623',
+  //     ],
+  //     store_Map_Link: '#',
+  //     open_Store_Button: true,
+  //     open_Store_Menu: '/store1/category1'
+  //   },
+  //   {
+  //     id: 2,
+  //     store_Name: 'Store Name',
+  //     store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
+  //     store_Timing: 'Mon - Sun 10 AM - 10 PM',
+  //     store_Contact: [
+  //       '3098098767',
+  //       '3764735623',
+  //     ],
+  //     store_Map_Link: '#',
+  //     open_Store_Button: true,
+  //     open_Store_Menu: '/store1/category1'
+  //   },
+  // ]
 
   const handleStoreSelectButton = () => {
     locationFetch();
@@ -90,9 +92,7 @@ const StoreFinder = ({ setHeaderData }) => {
     if (location.loaded && location.error) {
       setShowStore(false)
     } else if (location.loaded && location.coordinates) {
-      setShowStore(true)
       setUserLocation(location)
-
     }
   }, [location])
 
@@ -120,6 +120,24 @@ const StoreFinder = ({ setHeaderData }) => {
       })
   }
 
+  const handleEnterClick = (e) => {
+    let value = e.target.value
+    if (e.code === 'Enter') {
+      setShowLoader(true)
+      let pinSearchTerm = 'pincode=' + value
+      getStoreLocation(pinSearchTerm)
+        .then(res => res ? (
+          setStoreLocations({
+            loaded: true,
+            no_of_stores: res.no_of_stores,
+            stores: res.stores
+          }),
+          setShowStore(true),
+          setShowLoader(false)
+        ) : (''))
+    }
+  }
+
   return (
     <>
       <div className='page_Wrapper page_Margin_Top_Secondary' style={{ padding: 0 }}>
@@ -145,24 +163,38 @@ const StoreFinder = ({ setHeaderData }) => {
                   <h3>Find Olineo store near you</h3>
                 </div>
                 <div className="searchbarWrapper store_Finder_Search">
-                  <input type="text" placeholder='Enter Pincode/Store Name' className='searchbar' />
+                  <input type="text" placeholder='Enter Pincode/Store Name' onKeyDown={handleEnterClick} className='searchbar' />
                 </div>
-                <div className="store_Page_Separtor store_Finder_Separtor">
-                  <span className='hr_Line'></span>
-                  <p>OR</p>
-                </div>
-                <div className="submit_Button_2 store_Finder_Submit_Button">
-                  <button type='submit' className='submit-button' onClick={handleStoreSelectButton} ><p>Show stores near me</p></button>
-                </div>
+                {
+                  showLoader ? (
+                    <>
+                      <div className='store_Finder_Loader'>
+                        <Loader />
+                      </div>
+                    </>
+                  ) : (
+                    !showStore && (
+                      <>
+                        <div className="store_Page_Separtor store_Finder_Separtor">
+                          <span className='hr_Line'></span>
+                          <p>OR</p>
+                        </div>
+                        <div className="submit_Button_2 store_Finder_Submit_Button">
+                          <button type='submit' className='submit-button' onClick={handleStoreSelectButton} ><p>Show stores near me</p></button>
+                        </div>
+                      </>
+                    )
+                  )
+                }
               </div>
             )
           }
         </div>
         {
-          showStore && !location.error ? (
+          showStore && !location.error && !showLoader ? (
             <div className="store_Finder_Result">
               <div className="store_Result_Header">
-                <h4 className="store_Result_Heading">Found 2 stores near you</h4>
+                <h4 className="store_Result_Heading">Found {storeLocations.no_of_stores} stores near you</h4>
                 <div className="store_Finder_Options">
                   <div className={`store_Finder_List ${listOptionSelected ? 'selected' : ''}`} onClick={() => setListOptionSelected(true)} >
                     {listOptionSelected ? (<img src={categoryOutlineWhite} alt="" />) : (<img src={categoryOutlineBlue} alt="" />)}
@@ -181,7 +213,7 @@ const StoreFinder = ({ setHeaderData }) => {
                   </div>
                 )}
                 {
-                  storeBoxData.map((store, index) => (
+                  storeLocations.stores.map((store, index) => (
                     <StoreBox
                       key={index}
                       store={store}
