@@ -2,7 +2,7 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { addCupon } from "../../api/AdminApis/Cupon";
 import * as XLSX from "xlsx/xlsx.mjs";
 import { addStoreBulk } from "../../api/AdminApis/AdminStore";
@@ -12,6 +12,7 @@ import CommonModal from "../../components/ModalComponenr/CommonModal";
 
 toast.configure();
 function DashboardAddShop() {
+  const nav = useNavigate()
   const [imagesObject, setImagesObject] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState("");
@@ -41,6 +42,19 @@ function DashboardAddShop() {
         blankrows: false,
       });
       setFileToSend([]);
+      jsonData.forEach((store) => {
+        var pinArray_From_String = []
+        var trimmedPin_Array = []
+        if (store?.serviceablePincodes?.indexOf(',') > -1) {
+          pinArray_From_String = store.serviceablePincodes.split(',')
+          pinArray_From_String.forEach((pincode) => {
+            let trimmedPin = pincode.trim()
+            trimmedPin_Array.push(trimmedPin)
+          })
+        }
+        store.serviceablePincodes = [...trimmedPin_Array]
+      })
+      console.log(jsonData);
       setfileUploaded({
         loaded: true,
         fileData: columnData,
@@ -70,6 +84,7 @@ function DashboardAddShop() {
     addStoreBulk(fileJsonData.fileData)
       .then(res => {
         console.log(res)
+        nav('/admin-shops')
       })
   }
 
