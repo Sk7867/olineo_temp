@@ -73,9 +73,9 @@ const ModalComp = ({ modalShow, setModalShow, userLoggedIn }) => {
                   <div className='header_Pincode_Input'>
                     {
                       matches ? (
-                        <input type='tel' name="Phone" id="phone" maxLength={6} className='input-field' value={pincode} placeholder='Pincode' onChange={(e) => { validateNumber(e); handleLength(e.target.value.length) }} />
+                        <input type='tel' name="Phone" id="phone" maxLength={6} className='input-field' value={pincode} placeholder='Enter pincode...' onChange={(e) => { validateNumber(e); handleLength(e.target.value.length) }} />
                       ) : (
-                        <input type='number' name="Phone" id="phone" maxLength={6} className='input-field' value={pincode} placeholder='Pincode' onChange={(e) => { setPincode(e.target.value); handleLength(e.target.value.length) }} />
+                        <input type='number' name="Phone" id="phone" maxLength={6} className='input-field' value={pincode} placeholder='Enter pincode...' onChange={(e) => { setPincode(e.target.value); handleLength(e.target.value.length) }} />
                       )
                     }
                   </div>

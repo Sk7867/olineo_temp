@@ -13,6 +13,7 @@ import navigationArrowBlack from '../../assets/vector/navigation_arrow_black.svg
 const StoreBox = ({
   store,
   handleCategorySearch,
+  openStoreButton,
   classes
 }) => {
 
@@ -24,7 +25,7 @@ const StoreBox = ({
     store_Map_Link: '',
   })
 
-  const [storeStatusOen, setstoreStatusOpen] = useState(false)
+  const [storeStatusOpen, setstoreStatusOpen] = useState(false)
 
   useEffect(() => {
     if (store) {
@@ -86,10 +87,10 @@ const StoreBox = ({
               <p>Show on map</p>
             </Link>
           )}
-          {storeData && storeData.open_Store_Button && (
-            <div className="open_Store_button" onClick={() => handleCategorySearch('all')}>
+          {storeData && openStoreButton && (
+            <Link className="open_Store_button" to={`/store/${store.brand_store_id}`}>
               <p>Open store</p>
-            </div>
+            </Link>
           )}
         </div>
       </div>

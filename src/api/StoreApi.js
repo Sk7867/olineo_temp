@@ -22,3 +22,32 @@ export const getStoreLocation = async (params) => {
 
   return locationResponse
 }
+
+//Search store using Pincodes
+export const getStoreUsingPincode = async (zip) => {
+  let getStoreUsingPincodesRes
+
+  let serviceBody = {
+    location: zip,
+    items: []
+  }
+
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/order/checkServiceability/`, JSON.stringify(serviceBody), { headers })
+    .then(res => {
+      getStoreUsingPincodesRes = res.data
+    })
+
+  return getStoreUsingPincodesRes
+}
+
+//Get Store Inventory
+export const getStoreInventory = async (id) => {
+  let getStoreInventoryRes
+
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/store/getStoreInventory/HO`, { headers })
+    .then(res => {
+      getStoreInventoryRes = res.data
+    })
+
+  return getStoreInventoryRes
+}

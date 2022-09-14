@@ -21,6 +21,7 @@ import ProductListItem from "../../components/ProductListItem/ProductListItem";
 import FilterTag from "../../components/FilterTag/FilterTag";
 import { getSearchedProduct } from "../../api/Product";
 import SkeletonElement from "../../components/Skeletons/SkeletonElement";
+import Pagination from "../../components/Pagination/Pagination";
 
 const ProductCategory = ({ setHeaderData }) => {
   const { slug } = useParams()
@@ -31,6 +32,9 @@ const ProductCategory = ({ setHeaderData }) => {
   const [filterSelected, setFilterSelected] = useState([]);
   const [filterArray, setFilterArray] = useState([]);
   const { searchedProduct, setSearchedProduct } = useContext(UserDataContext);
+  const productsPerPage = 10
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalProducts, setTotalProducts] = useState(1)
 
   const handleAll = (resp) => {
     if (filterSelected?.some(res => res.type === resp.type)) {
@@ -78,6 +82,8 @@ const ProductCategory = ({ setHeaderData }) => {
 
   React.useEffect(() => {
     const params = new URLSearchParams();
+    params.append('limit', productsPerPage)
+    params.append('page', currentPage)
     filterSelected.forEach(value => {
       if (value.type === 'price') {
         params.append(`${value.searchQ}`, value.Qdata);
@@ -99,16 +105,23 @@ const ProductCategory = ({ setHeaderData }) => {
         setSearchedProduct(
           {
             loaded: true,
-            products: res,
-            no_of_products: res.length
+            products: res.products,
+            no_of_products: res.no_of_products
           }
         );
+        setTotalProducts(res.total_products)
         setLoading(false)
         // if (res.length === 0) {
         //   setFilterSelected([])
         // }
       })
-  }, [filterSelected, setSearchedProduct])
+  }, [filterSelected, setSearchedProduct, currentPage])
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber)
+    window.scrollTo(0, 0)
+  }
+
 
   useEffect(() => {
     setHeaderData({
@@ -342,6 +355,9 @@ const ProductCategory = ({ setHeaderData }) => {
                             : searchedProduct.products.map((product, index) => (
                               <ProductListItem key={index} product={product} />))
                         }
+                      </div>
+                      <div className="pagination_Container">
+                        <Pagination productsPerPage={productsPerPage} totalProducts={totalProducts} pageChange={handlePageChange} />
                       </div>
                     </>
                   ) : (<>

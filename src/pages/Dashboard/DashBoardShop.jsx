@@ -10,6 +10,7 @@ import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { deleteIndiStore, getAllStore } from '../../api/AdminApis/AdminStore';
 import EditStoreModal from '../../components/EditStoreModal/EditStoreModal';
+import Pagination from '../../components/Pagination/Pagination';
 
 const DashboardShop = () => {
   const [loader, setLoader] = useState(true);
@@ -18,14 +19,18 @@ const DashboardShop = () => {
   const [user, setUser] = useState([]);
   const [singleShopData, setSingleShopData] = useState({})
   const nav = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1)
+  const productsPerPage = 10
+  const [totalShops, setTotalShops] = useState(1)
 
   useEffect(() => {
     setLoader(true);
-    getAllStore().then((res) => {
+    getAllStore(`limit=${productsPerPage}&page=${currentPage}`).then((res) => {
       setData(res.stores)
+      setTotalShops(res.total_stores)
       setLoader(false);
     })
-  }, []);
+  }, [currentPage]);
 
   const handleStoreDelete = (id) => {
     deleteIndiStore(id)
@@ -43,6 +48,11 @@ const DashboardShop = () => {
     //   .then(res => {
     //     setUser(res)
     //   })
+  }
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber)
+    window.scrollTo(0, 0)
   }
 
   return loader ? (
@@ -70,36 +80,51 @@ const DashboardShop = () => {
           </Button>
         </div>
         <div className="table-responsive">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Store Id</th>
-                <th scope="col">Store Name</th>
-                <th scope="col">Store City</th>
-                <th scope="col">Store Pincode</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.length > 0 && data?.map((item, index) => (
-                <tr key={index}>
-                  <td> {item?.brand_store_id} </td>
-                  <td>{item?.fc_name}</td>
-                  <td>{item?.city}</td>
-                  <td>{item?.pincode}</td>
-                  <td>
-                    <button className='btn' onClick={() => editStore(item)}>
-                      <FontAwesomeIcon
-                        className={"table-icon"}
-                        icon={faPenToSquare}
-                      />
-                    </button>
-                    <button className='btn' onClick={() => handleStoreDelete(item._id)}><FontAwesomeIcon className={"table-icon"} icon={faTrashCan} /></button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {
+            data?.length === 0 ? (
+              <>
+                <div>
+                  <h5>No Shops in Database</h5>
+                </div>
+              </>
+            ) : (
+              <>
+                <table className="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">Store Id</th>
+                      <th scope="col">Store Name</th>
+                      <th scope="col">Store City</th>
+                      <th scope="col">Store Pincode</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data?.length > 0 && data?.map((item, index) => (
+                      <tr key={index}>
+                        <td> {item?.brand_store_id} </td>
+                        <td>{item?.fc_name}</td>
+                        <td>{item?.city}</td>
+                        <td>{item?.pincode}</td>
+                        <td>
+                          <button className='btn' onClick={() => editStore(item)}>
+                            <FontAwesomeIcon
+                              className={"table-icon"}
+                              icon={faPenToSquare}
+                            />
+                          </button>
+                          <button className='btn' onClick={() => handleStoreDelete(item._id)}><FontAwesomeIcon className={"table-icon"} icon={faTrashCan} /></button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </>
+            )
+          }
+        </div>
+        <div className="pagination_Container">
+          <Pagination productsPerPage={productsPerPage} totalProducts={totalShops} pageChange={handlePageChange} />
         </div>
       </div>
     </>

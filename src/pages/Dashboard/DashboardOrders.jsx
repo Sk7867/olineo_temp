@@ -5,19 +5,25 @@ import Moment from "react-moment";
 import { deletAdminIndOrder, getAdminAllOrder, getAdminIndOrder } from "../../api/AdminApis/AdminOrder";
 import DashboardLoader from "../../components/DashboardContent/DashboardLoader";
 import OrderProductModal from "../../components/OrderProductModal/OrderProductModal";
+import Pagination from "../../components/Pagination/Pagination";
 
 function DashboardOrders(props) {
   const [order, setOrder] = useState([]);
   const [loader, setLoader] = useState(true);
   const [show, setShow] = useState(false);
   const [orderItem, setOrderItem] = useState();
+  const [currentPage, setCurrentPage] = useState(1)
+  const productsPerPage = 10
+  const [totalOrders, setTotalOrders] = useState(1)
   useEffect(() => {
     setLoader(true);
-    getAdminAllOrder().then((res) => {
+    getAdminAllOrder(`limit=${productsPerPage}&page=${currentPage}`).then((res) => {
       setOrder(res.orders);
+      setTotalOrders(res.total_orders)
       setLoader(false);
     })
-  }, []);
+  }, [currentPage]);
+  console.log(currentPage);
 
   const seeProduct = (id) => {
     getAdminIndOrder(id)
@@ -30,6 +36,10 @@ function DashboardOrders(props) {
       .then((res) => {
         setOrder(order.filter(message => message._id !== id));
       })
+  }
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber)
+    window.scrollTo(0, 0)
   }
   return loader ? (
     <DashboardLoader />
@@ -94,6 +104,9 @@ function DashboardOrders(props) {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="pagination_Container">
+        <Pagination productsPerPage={productsPerPage} totalProducts={totalOrders} pageChange={handlePageChange} />
       </div>
     </div>
   );

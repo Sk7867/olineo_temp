@@ -155,8 +155,8 @@ const AddOffers = ({ setHeaderData }) => {
         let searchTerm = "ean=" + item
         getSearchedProduct(searchTerm)
           .then(res => {
-            if (res.length > 0) {
-              let prod = res[0]
+            if (res.no_of_products > 0) {
+              let prod = res.products[0]
               let ind = selectedProduct.findIndex((obj) => obj._id === prod._id);
               if (ind === -1) {
                 productSearched.push(prod)

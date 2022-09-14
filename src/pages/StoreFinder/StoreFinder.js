@@ -18,7 +18,7 @@ import locationWhite from '../../assets/vector/location_white.svg'
 import locationWarningYellowIcon from '../../assets/vector/location_warning_yellow.svg'
 import { getSearchedProduct } from '../../api/Product'
 import { useNavigate } from 'react-router-dom'
-import { getStoreLocation } from '../../api/StoreApi'
+import { getStoreLocation, getStoreUsingPincode } from '../../api/StoreApi'
 import Loader from '../../components/Loader/Loader'
 
 const StoreFinder = ({ setHeaderData }) => {
@@ -112,8 +112,8 @@ const StoreFinder = ({ setHeaderData }) => {
         if (res) {
           setSearchedProduct({
             loaded: true,
-            products: res,
-            no_of_products: res.length
+            products: res.products,
+            no_of_products: res.no_of_products
           })
           nav(`/${searchURL}`)
         }
@@ -124,17 +124,27 @@ const StoreFinder = ({ setHeaderData }) => {
     let value = e.target.value
     if (e.code === 'Enter') {
       setShowLoader(true)
-      let pinSearchTerm = 'pincode=' + value
-      getStoreLocation(pinSearchTerm)
+      getStoreUsingPincode(value)
         .then(res => res ? (
           setStoreLocations({
             loaded: true,
-            no_of_stores: res.no_of_stores,
+            no_of_stores: res.stores?.length,
             stores: res.stores
           }),
           setShowStore(true),
           setShowLoader(false)
         ) : (''))
+      // let pinSearchTerm = 'pincode=' + value
+      // getStoreLocation(pinSearchTerm)
+      //   .then(res => res ? (
+      //     setStoreLocations({
+      //       loaded: true,
+      //       no_of_stores: res.no_of_stores,
+      //       stores: res.stores
+      //     }),
+      //     setShowStore(true),
+      //     setShowLoader(false)
+      //   ) : (''))
     }
   }
 
@@ -218,6 +228,7 @@ const StoreFinder = ({ setHeaderData }) => {
                       key={index}
                       store={store}
                       handleCategorySearch={handleCategorySearch}
+                      openStoreButton={true}
                       classes={{
                         containerClasses: 'bg-white tab_Border'
                       }} />

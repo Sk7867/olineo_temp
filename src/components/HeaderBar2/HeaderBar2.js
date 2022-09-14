@@ -38,8 +38,8 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
   const [modalShow, setModalShow] = useState(false)
   const [sidebar, setSidebar] = useState(false)
   const [userDPPic, setUserDPPic] = useState({ locataion: '' })
-  const [filteredData, setFilteredData] = useState([])
-  const [searchedQuery, setSearchedQuery] = useState('')
+  const [filteredData, setFilteredData] = useState([]) // Holds product names to display in search dropdown 
+  const [searchedQuery, setSearchedQuery] = useState('') //Sets searched product name in search input box
   const [manualQuery, setManualQuery] = useState('')
   const [userZip, setUserZip] = useState('')
   const nav = useNavigate()
@@ -145,7 +145,6 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
         return value
       }
     })
-
     if (searchWord === '') {
       setFilteredData([])
       setSearchedQuery('')
@@ -165,8 +164,8 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
           if (res) {
             setSearchedProduct({
               loaded: true,
-              products: res,
-              no_of_products: res.length
+              products: res.products,
+              no_of_products: res.no_of_products
             })
             setFilteredData([])
             setSearchedQuery('')
@@ -187,8 +186,8 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
         if (res) {
           setSearchedProduct({
             loaded: true,
-            products: res,
-            no_of_products: res.length
+            products: res.products,
+            no_of_products: res.no_of_products
           })
           nav(`/${value.name}`)
         }
@@ -210,8 +209,8 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
         if (res) {
           setSearchedProduct({
             loaded: true,
-            products: res,
-            no_of_products: res.length
+            products: res.products,
+            no_of_products: res.no_of_products
           })
           nav(`/${searchURL}`)
         }

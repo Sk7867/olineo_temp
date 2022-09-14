@@ -111,7 +111,7 @@ const ProductPage = ({ setHeaderData }) => {
     setProductBankOffers([])
     getSearchedProduct(searchTerm)
       .then(res => {
-        let product = res[0]
+        let product = res.products[0]
         if (product) {
           let images = product.images;
           let splitDesc = product.description.split("~");
@@ -160,7 +160,7 @@ const ProductPage = ({ setHeaderData }) => {
         let searchTerm = 'ean=' + ean
         getSearchedProduct(searchTerm)
           .then(res => {
-            setColorAlternateProds([...colorAlternateProds, res[0]])
+            setColorAlternateProds([...colorAlternateProds, res.products[0]])
           })
       }
     })
@@ -170,7 +170,7 @@ const ProductPage = ({ setHeaderData }) => {
         let searchTerm = 'ean=' + ean
         getSearchedProduct(searchTerm)
           .then(res => {
-            setSpecAlternateProds([...specAlternateProds, res[0]])
+            setSpecAlternateProds([...specAlternateProds, res.products[0]])
           })
       }
     })
@@ -266,7 +266,7 @@ const ProductPage = ({ setHeaderData }) => {
       let searchTerm = 'ean=' + proId
       getSearchedProduct(searchTerm)
         .then(res => {
-          setComboProductData(...res)
+          setComboProductData(...res.products[0])
         })
     }
   }, [productData.product_loaded])

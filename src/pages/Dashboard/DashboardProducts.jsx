@@ -13,6 +13,7 @@ import DashboardLoader from "../../components/DashboardContent/DashboardLoader";
 import { getAllProducts, getIndiProduct } from "../../api/Product";
 import EditProductModal from "../../components/EditProductModal/EditProductModal";
 import axios from "axios";
+import Pagination from "../../components/Pagination/Pagination";
 
 function DashboardProducts(props) {
   const [loader, setLoader] = useState(true);
@@ -20,18 +21,22 @@ function DashboardProducts(props) {
   const [indProduct, setIndProduct] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
   const nav = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1)
+  const productsPerPage = 10
+  const [totalProducts, setTotalProducts] = useState(1)
 
   //set the loader and get products
   useEffect(() => {
     setLoader(true);
     //the function to get products
     (async () => {
-      getAllProducts().then((res) => {
+      getAllProducts(`limit=${productsPerPage}&page=${currentPage}`).then((res) => {
         setAllProducts(res.products);
+        setTotalProducts(res.total_products)
         setLoader(false);
       });
     })();
-  }, []);
+  }, [currentPage]);
   const handleEditProd = (id) => {
     setModalShow(true)
     //the function to get products
@@ -52,6 +57,12 @@ function DashboardProducts(props) {
       alert("User save!")
     }
   }
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber)
+    window.scrollTo(0, 0)
+  }
+
   return loader ? (
     <DashboardLoader />
   ) : (
@@ -121,6 +132,9 @@ function DashboardProducts(props) {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="pagination_Container">
+          <Pagination productsPerPage={productsPerPage} totalProducts={totalProducts} pageChange={handlePageChange} />
         </div>
       </div>
     </>

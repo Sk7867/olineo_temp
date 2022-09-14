@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { deleteProductCatalogue } from '../../api/CatalogueApi';
 import { getAllProducts, getSearchedProduct } from '../../api/Product';
 import MultiOfferModal from '../../components/ModalComponenr/MultiOfferModal';
+import Pagination from '../../components/Pagination/Pagination';
 import { UserDataContext } from '../../Contexts/UserContext'
 
 //CSS
@@ -20,6 +21,9 @@ const CataloguePage = ({ setHeaderData }) => {
   const { allProducts, setAllProducts } = useContext(UserDataContext)
   const [searchText, setSearchText] = useState('')
   const [productsToShow, setProductsToShow] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const productsPerPage = 10
+  const [totalProducts, setTotalProducts] = useState(1)
 
   useEffect(() => {
     let prods
@@ -41,15 +45,16 @@ const CataloguePage = ({ setHeaderData }) => {
   }, []);
 
   useEffect(() => {
-    getAllProducts()
+    getAllProducts(`limit=${productsPerPage}&page=${currentPage}`)
       .then(res => {
         setAllProducts({
           loaded: true,
           no_of_products: res.no_of_products,
           products: res.products
         })
+        setTotalProducts(res.total_products)
       })
-  }, [])
+  }, [currentPage])
 
   // console.log(allProducts);
 
@@ -64,13 +69,14 @@ const CataloguePage = ({ setHeaderData }) => {
     console.log('Delete Product Clicked of id:', product.product._id);
     deleteProductCatalogue(product.product._id)
       .then(res => res ? (
-        getAllProducts()
+        getAllProducts(`limit=${productsPerPage}&page=${currentPage}`)
           .then(res => {
             setAllProducts({
               loaded: true,
               no_of_products: res.no_of_products,
               products: res.products
             })
+            setTotalProducts(res.total_products)
           })
       ) : (''))
   }
@@ -83,22 +89,30 @@ const CataloguePage = ({ setHeaderData }) => {
         // console.log(searchTerm);
         getSearchedProduct(searchTerm)
           .then(res => {
-            setProductsToShow([...res])
+            setProductsToShow(res.products)
+            setTotalProducts(res.total_products)
           })
       } else {
         let searchTerm = 'ean=' + searchText
         // console.log(searchTerm);
         getSearchedProduct(searchTerm)
           .then(res => {
-            setProductsToShow([...res])
+            setProductsToShow(res.products)
+            setTotalProducts(res.total_products)
           })
       }
     } else {
-      getAllProducts()
+      getAllProducts(`limit=${productsPerPage}&page=${currentPage}`)
         .then(res => {
           setProductsToShow(res.products)
+          setTotalProducts(res.total_products)
         })
     }
+  }
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber)
+    window.scrollTo(0, 0)
   }
 
   return (
@@ -132,23 +146,30 @@ const CataloguePage = ({ setHeaderData }) => {
               allProducts.loaded ? (
                 (allProducts.no_of_products > 0) ? (
                   (productsToShow.length > 0) ? (
-                    productsToShow.map((item, index) => (
-                      <div className="catalogue_List_Item" key={index}>
-                        <div className='catalogue_List_Content'>
-                          {item.ean && (<p>{item.ean}</p>)}
-                          {item.name && (<p>{item.name}</p>)}
-                          {/* {product.price.mop && (<p>{product.price.mop}</p>)} */}
-                        </div>
-                        <div className='catalogue_List_Buttons'>
-                          <Link to={'/catelogue-page/add-product'} state={item = { item }} className='catalogue_Edit' >
-                            Edit
-                          </Link>
-                          <div className='catalogue_Delete' onClick={() => handleDeleteProduct(item)}>
-                            Delete
+                    <>
+                      {productsToShow.map((item, index) => (
+                        <>
+                          <div className="catalogue_List_Item" key={index}>
+                            <div className='catalogue_List_Content'>
+                              {item.ean && (<p>{item.ean}</p>)}
+                              {item.name && (<p>{item.name}</p>)}
+                              {/* {product.price.mop && (<p>{product.price.mop}</p>)} */}
+                            </div>
+                            <div className='catalogue_List_Buttons'>
+                              <Link to={'/catelogue-page/add-product'} state={item = { item }} className='catalogue_Edit' >
+                                Edit
+                              </Link>
+                              <div className='catalogue_Delete' onClick={() => handleDeleteProduct(item)}>
+                                Delete
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    ))
+                          <div className="pagination_Container">
+                          </div>
+                        </>
+                      ))}
+                      <Pagination productsPerPage={productsPerPage} totalProducts={totalProducts} pageChange={handlePageChange} />
+                    </>
                   ) : (<div>No Such Product Exists</div>)
                 ) : (<div>No Products in Database</div>)
               ) : (

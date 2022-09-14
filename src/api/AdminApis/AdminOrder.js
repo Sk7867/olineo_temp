@@ -1,7 +1,7 @@
 import axios from "axios"
 
 //GET ALL ADMIN ORDERS +++++++++++++++++++++++++++++++++++++++++++
-export const getAdminAllOrder = async () => {
+export const getAdminAllOrder = async (query) => {
   let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
 
   const headers = {
@@ -12,7 +12,7 @@ export const getAdminAllOrder = async () => {
 
   let allOrderResponse
 
-  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/admin/order`, { headers })
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/admin/order?${query}`, { headers })
     .then(res => {
       allOrderResponse = res.data.data
       // console.log(allOrderResponse);

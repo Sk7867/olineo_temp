@@ -271,8 +271,8 @@ function App() {
         let searchTerm = 'ean=' + product
         getSearchedProduct(searchTerm)
           .then(res => {
-            if (res.length > 0) {
-              let product = res[0]
+            if (res.no_of_products > 0) {
+              let product = res.products[0]
               let ind = userComboCart.findIndex((obj) => obj._id === product._id);
               if (ind === -1) {
                 setUserComboCart([...userComboCart, product]);
@@ -534,7 +534,7 @@ function App() {
             <Route path="/:category" exact element={<ProductCategory setHeaderData={setHeaderData} />} />
             <Route path="/:category/f/:slug" exact element={<ProductCategory setHeaderData={setHeaderData} />} />
             <Route path="/:category/filter" exact element={<Filter setHeaderData={setHeaderData} />} />
-            <Route path="/:store/:category" exact element={<OfflineProductCategory setHeaderData={setHeaderData} />} />
+            <Route path="/store/:id" exact element={<OfflineProductCategory setHeaderData={setHeaderData} />} />
             <Route path="/bank-offer" exact element={<BankOffer setHeaderData={setHeaderData} />} />
             <Route path="/store-finder" exact element={<StoreFinder setHeaderData={setHeaderData} />} />
             <Route

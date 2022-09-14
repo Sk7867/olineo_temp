@@ -7,10 +7,10 @@ const headers = {
 };
 
 //GET ALL PRODUCTS DATA
-export const getAllProducts = async () => {
+export const getAllProducts = async (query) => {
   let allProductsResponse;
 
-  await axios.get(`${process.env.REACT_APP_BASE_URL}/product`, { headers }).then((res) => {
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/product?${query}`, { headers }).then((res) => {
     allProductsResponse = res.data.data;
     // console.log(allProductsResponse);
   });
@@ -32,14 +32,14 @@ export const getIndiProduct = async (id) => {
 
 //GET SEARCHED PRODUCT
 export const getSearchedProduct = async (query) => {
-  let indiProductResponse;
+  let searchedProductRes;
   // console.log(query);
 
   await axios.get(`${process.env.REACT_APP_BASE_URL}/product?${query}`, { headers }).then((res) => {
-    indiProductResponse = res.data.data.products;
+    searchedProductRes = res.data.data;
   });
 
-  return indiProductResponse;
+  return searchedProductRes;
 };
 
 //Get Product Serviceability

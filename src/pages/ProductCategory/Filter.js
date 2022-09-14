@@ -79,12 +79,11 @@ const Filter = ({ setHeaderData }) => {
 
     getSearchedProduct(params)
       .then(res => {
-        console.log(res);
         setSearchedProduct(
           {
             loaded: true,
-            products: res,
-            no_of_products: res.length
+            products: res.products,
+            no_of_products: res.no_of_products
           }
         );
         if (res.length === 0) {

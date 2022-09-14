@@ -238,6 +238,7 @@
 
   .filter_Section_Header{
     max-width: 600px;
+    width: 100%;
     height: auto;
     display: flex;
     flex-wrap: wrap;

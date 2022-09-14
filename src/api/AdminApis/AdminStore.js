@@ -18,7 +18,7 @@ export const addStoreBulk = async (stores) => {
   return addStoreBulkRes
 }
 
-export const getAllStore = async () => {
+export const getAllStore = async (query) => {
   let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
 
   const headers = {
@@ -29,7 +29,7 @@ export const getAllStore = async () => {
 
   let getStore
 
-  await axios.get(`${process.env.REACT_APP_BASE_URL}/store/`, { headers })
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/store?${query}`, { headers })
     .then(res => {
       getStore = res.data.data
     })

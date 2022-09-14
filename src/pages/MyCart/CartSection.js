@@ -63,9 +63,9 @@ const CartSection = ({ featureProducts }) => {
         let searchTerm = 'hierarchyL2=' + category
         getSearchedProduct(searchTerm)
           .then(res => {
-            if (res.length > 0) {
+            if (res.no_of_products > 0) {
               let prod = {}
-              prod = res[0]
+              prod = res.products[0]
               if (prod && res) {
                 setSuggesProducts([...suggesProducts, prod])
               }
