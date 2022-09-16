@@ -35,6 +35,7 @@ const ProductCategory = ({ setHeaderData }) => {
   const productsPerPage = 10
   const [currentPage, setCurrentPage] = useState(1)
   const [totalProducts, setTotalProducts] = useState(1)
+  console.log(slug);
 
   const handleAll = (resp) => {
     if (filterSelected?.some(res => res.type === resp.type)) {

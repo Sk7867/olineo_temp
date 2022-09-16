@@ -338,7 +338,7 @@ textarea::placeholder {
 
   .page_Wrapper {
     margin: 0;
-    padding: 0 1.5rem 0.75rem;
+    padding: 0 0.8rem 0.75rem;
   }
 
   .section_Wrapper {
@@ -369,6 +369,12 @@ textarea::placeholder {
 
   .floating_Footer {
     display: none;
+  }
+}
+
+@media screen and (min-width: 850px) {
+  .page_Wrapper{
+    padding: 0 1.5rem 0.75rem;
   }
 }
 

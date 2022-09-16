@@ -8,7 +8,7 @@ import './ProductListItem.css'
 import product1 from '../../assets/png/product_1.png'
 import ProductOfferTag from '../ProductOfferTag/ProductOfferTag'
 
-const ProductListItem = ({ product }) => {
+const ProductListItem = ({ product, interestedButton = false }) => {
   return (
     <>
       <Link to={`/product/${product?.slug}`} className='productListItem_Contaier'>
@@ -31,6 +31,15 @@ const ProductListItem = ({ product }) => {
                 ₹{product?.price?.mrp}
               </p>
             </div>
+            {
+              interestedButton && (
+                <div className='productListItem_Int_Button'>
+                  <button type="submit" className="submit-button">
+                    <p>I'm interested</p>
+                  </button>
+                </div>
+              )
+            }
             {/* <p className='productListItem_Timer'>
               Ends in {product.product_Discount_End}
             </p> */}

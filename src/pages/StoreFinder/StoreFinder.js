@@ -35,6 +35,7 @@ const StoreFinder = ({ setHeaderData }) => {
   } = useContext(UserDataContext)
   // console.log(showStore);
   const [showLoader, setShowLoader] = useState(false)
+  const [userPincode, setUserPincode] = useState('')
 
   useEffect(() => {
     setHeaderData({
@@ -47,7 +48,7 @@ const StoreFinder = ({ setHeaderData }) => {
     })
   }, []);
 
-  // console.log(userLocation);
+  console.log(storeLocations);
 
   const markerPostions = [
     { lat: 17, lng: 73 },
@@ -120,6 +121,27 @@ const StoreFinder = ({ setHeaderData }) => {
       })
   }
 
+  useEffect(() => {
+    if (userPincode !== '') {
+      setShowLoader(true)
+      if (userPincode.length === 6) {
+        getStoreUsingPincode(userPincode)
+          .then(res => res ? (
+            setStoreLocations({
+              loaded: true,
+              no_of_stores: res.stores?.length,
+              stores: res.stores
+            }),
+            setShowStore(true),
+            setShowLoader(false)
+          ) : (''))
+      }
+    } else {
+      setShowLoader(false)
+    }
+  }, [userPincode])
+
+
   const handleEnterClick = (e) => {
     let value = e.target.value
     if (e.code === 'Enter') {
@@ -173,27 +195,19 @@ const StoreFinder = ({ setHeaderData }) => {
                   <h3>Find Olineo store near you</h3>
                 </div>
                 <div className="searchbarWrapper store_Finder_Search">
-                  <input type="text" placeholder='Enter Pincode/Store Name' onKeyDown={handleEnterClick} className='searchbar' />
+                  <input type="text" placeholder='Enter Pincode/Store Name' onChange={(e) => setUserPincode(e.target.value)} className='searchbar' />
                 </div>
                 {
-                  showLoader ? (
+                  !showLoader && !showStore && (
                     <>
-                      <div className='store_Finder_Loader'>
-                        <Loader />
+                      <div className="store_Page_Separtor store_Finder_Separtor">
+                        <span className='hr_Line'></span>
+                        <p>OR</p>
+                      </div>
+                      <div className="submit_Button_2 store_Finder_Submit_Button">
+                        <button type='submit' className='submit-button' onClick={handleStoreSelectButton} ><p>Show stores near me</p></button>
                       </div>
                     </>
-                  ) : (
-                    !showStore && (
-                      <>
-                        <div className="store_Page_Separtor store_Finder_Separtor">
-                          <span className='hr_Line'></span>
-                          <p>OR</p>
-                        </div>
-                        <div className="submit_Button_2 store_Finder_Submit_Button">
-                          <button type='submit' className='submit-button' onClick={handleStoreSelectButton} ><p>Show stores near me</p></button>
-                        </div>
-                      </>
-                    )
                   )
                 }
               </div>
@@ -201,40 +215,59 @@ const StoreFinder = ({ setHeaderData }) => {
           }
         </div>
         {
+          showLoader && (
+            <>
+              <div className='store_Finder_Loader'>
+                <Loader />
+              </div>
+            </>
+          )
+        }
+        {
           showStore && !location.error && !showLoader ? (
             <div className="store_Finder_Result">
-              <div className="store_Result_Header">
-                <h4 className="store_Result_Heading">Found {storeLocations.no_of_stores} stores near you</h4>
-                <div className="store_Finder_Options">
-                  <div className={`store_Finder_List ${listOptionSelected ? 'selected' : ''}`} onClick={() => setListOptionSelected(true)} >
-                    {listOptionSelected ? (<img src={categoryOutlineWhite} alt="" />) : (<img src={categoryOutlineBlue} alt="" />)}
-                    <p>List</p>
+              {
+                (storeLocations.no_of_stores > 0) ? (<>
+                  <div className="store_Result_Header">
+                    <h4 className="store_Result_Heading">Found {storeLocations.no_of_stores} stores near you</h4>
+                    <div className="store_Finder_Options">
+                      <div className={`store_Finder_List ${listOptionSelected ? 'selected' : ''}`} onClick={() => setListOptionSelected(true)} >
+                        {listOptionSelected ? (<img src={categoryOutlineWhite} alt="" />) : (<img src={categoryOutlineBlue} alt="" />)}
+                        <p>List</p>
+                      </div>
+                      <div className={`store_Finder_Map ${listOptionSelected ? '' : 'selected'}`} onClick={() => { setListOptionSelected(false) }} >
+                        {listOptionSelected ? (<img src={locationBlue} alt="" />) : (<img src={locationWhite} alt="" />)}
+                        <p>Map</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className={`store_Finder_Map ${listOptionSelected ? '' : 'selected'}`} onClick={() => { setListOptionSelected(false) }} >
-                    {listOptionSelected ? (<img src={locationBlue} alt="" />) : (<img src={locationWhite} alt="" />)}
-                    <p>Map</p>
+                  <div className='store_Result_List'>
+                    {!listOptionSelected && (
+                      <div className="store_Result_Map">
+                        <MapWrapper center={userLocation.coordinates} markerPostions={markerPostions} />
+                      </div>
+                    )}
+                    {
+                      storeLocations.stores.map((store, index) => (
+                        <StoreBox
+                          key={index}
+                          store={store}
+                          handleCategorySearch={handleCategorySearch}
+                          openStoreButton={true}
+                          classes={{
+                            containerClasses: 'bg-white tab_Border'
+                          }} />
+                      ))
+                    }
                   </div>
-                </div>
-              </div>
-              <div className='store_Result_List'>
-                {!listOptionSelected && (
-                  <div className="store_Result_Map">
-                    <MapWrapper center={userLocation.coordinates} markerPostions={markerPostions} />
-                  </div>
-                )}
-                {
-                  storeLocations.stores.map((store, index) => (
-                    <StoreBox
-                      key={index}
-                      store={store}
-                      handleCategorySearch={handleCategorySearch}
-                      openStoreButton={true}
-                      classes={{
-                        containerClasses: 'bg-white tab_Border'
-                      }} />
-                  ))
-                }
-              </div>
+                </>) : (
+                  <>
+                    <div className='nostore_Found_Text'>
+                      <p>No store was found for the search.</p>
+                    </div>
+                  </>
+                )
+              }
             </div>
           ) : ('')
         }

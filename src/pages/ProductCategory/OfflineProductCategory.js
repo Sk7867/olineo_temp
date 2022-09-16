@@ -42,6 +42,7 @@ const OfflineProductCategory = ({ setHeaderData }) => {
   const productsPerPage = 10
   const [currentPage, setCurrentPage] = useState(1)
   const [totalProducts, setTotalProducts] = useState(1)
+  const [interestedButton, setInterestedButton] = useState(true)
 
   useEffect(() => {
     setHeaderData({
@@ -457,7 +458,7 @@ const OfflineProductCategory = ({ setHeaderData }) => {
                           [1, 2, 3, 4].map((n) => (<SkeletonElement type={'productBox'} key={n} />))
                           : searchedProduct.products.map((product, index) => (
                             product.productDetail ? (
-                              < ProductListItem key={index} product={product.productDetail} />) : (<></>))
+                              < ProductListItem key={index} product={product.productDetail} interestedButton={interestedButton} />) : (<></>))
                           )
                       }
                     </div>
