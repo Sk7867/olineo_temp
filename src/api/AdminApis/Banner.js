@@ -31,10 +31,11 @@ export const addBannerImage = async (image) => {
 
   bannerFormData.append('bannerImage', image)
 
+  console.log(bannerFormData);
   await axios.post(`${process.env.REACT_APP_BASE_URL}/product/admin/addbannerimage`, bannerFormData, { headers })
     .then(res => {
       addBannerImageRes = res
     })
 
-  return addBannerImage
+  return addBannerImageRes
 }

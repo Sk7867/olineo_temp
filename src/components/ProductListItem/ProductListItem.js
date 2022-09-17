@@ -8,7 +8,7 @@ import './ProductListItem.css'
 import product1 from '../../assets/png/product_1.png'
 import ProductOfferTag from '../ProductOfferTag/ProductOfferTag'
 
-const ProductListItem = ({ product, interestedButton = false }) => {
+const ProductListItem = ({ product, interestedButton = false, handleAddInterestedProd }) => {
   return (
     <>
       <div className='productListItem_Contaier'>
@@ -34,7 +34,7 @@ const ProductListItem = ({ product, interestedButton = false }) => {
             {
               interestedButton && (
                 <div className='productListItem_Int_Button'>
-                  <button type="submit" className="submit-button">
+                  <button type="submit" className="submit-button" onClick={() => handleAddInterestedProd(product?._id)}>
                     <p>I'm interested</p>
                   </button>
                 </div>

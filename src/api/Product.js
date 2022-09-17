@@ -58,3 +58,69 @@ export const getProductServiceability = async (zip, prodArray) => {
 
   return productServiceabilityRes
 }
+
+//Get all interested product leads
+//Pass query with api call for store wise leads
+export const getAllInterestedProds = async (query) => {
+  let getAllInterestedProdsRes
+  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
+
+  const headers = {
+    "Access-Control-Allow-origin": "*",
+    'Content-Type': 'application/json',
+    "Authorization": `Bearer ${userToken}`
+  }
+
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/interested-product?${query}`, { headers })
+    .then(res => {
+      getAllInterestedProdsRes = res
+    })
+
+  return getAllInterestedProdsRes
+}
+
+//Add Product Interested
+export const addProductInterested = async (storeCode, prodId) => {
+  let addProdInterestedRes = true
+
+  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
+
+  const headers = {
+    "Access-Control-Allow-origin": "*",
+    'Content-Type': 'application/json',
+    "Authorization": `Bearer ${userToken}`
+  }
+
+  let interestedProdBody = {
+    storeId: storeCode,
+    productId: prodId
+  }
+
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/interested-product/`, JSON.stringify(interestedProdBody), { headers })
+    .then(res => {
+      addProdInterestedRes = res
+      console.log(addProdInterestedRes);
+    })
+
+  return addProdInterestedRes
+}
+
+//Remove interested Product lead
+export const removeInterestedProduct = async (id) => {
+  let removeInterestedProductRes
+
+  let userToken = JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).JWT : ''
+
+  const headers = {
+    "Access-Control-Allow-origin": "*",
+    'Content-Type': 'application/json',
+    "Authorization": `Bearer ${userToken}`
+  }
+
+  await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/interested-product/${id}`, { headers })
+    .then(res => {
+      removeInterestedProduct = res
+    })
+
+  return removeInterestedProductRes
+}

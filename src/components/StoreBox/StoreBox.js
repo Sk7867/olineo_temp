@@ -88,7 +88,7 @@ const StoreBox = ({
             </Link>
           )}
           {storeData && openStoreButton && (
-            <Link className="open_Store_button" to={`/store/${store.brand_store_id}`}>
+            <Link className="open_Store_button" to={`/store/${store.brand_store_id}`} state={store}>
               <p>Open store</p>
             </Link>
           )}

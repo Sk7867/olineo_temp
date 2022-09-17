@@ -75,6 +75,7 @@ import DashboardAddShop from "./pages/Dashboard/DashboardAddShop";
 import Cancellation from "./pages/Dashboard/Cancellation";
 import DashboardAddProductCsvFile from "./pages/Dashboard/DashboardAddProductCsvFile";
 import DashboardBannerImages from "./pages/Dashboard/DashboardBanner";
+import DashboardAddBannerImage from "./pages/Dashboard/DashboardAddBannerImage";
 
 function App() {
   const [loginRedirect, setLoginRedirect] = useState(false);
@@ -409,6 +410,7 @@ function App() {
               loc.pathname === '/admin-orders' ||
               loc.pathname === '/admin' ||
               loc.pathname === '/admin-products' ||
+              loc.pathname === '/admin-add-banner' ||
               loc.pathname === '/admin-banner' ||
               loc.pathname === '/admin-alluser' ||
               loc.pathname === '/admin-shops' ||
@@ -565,6 +567,7 @@ function App() {
               <Route exact path='/admin-home' element={<DashBoardHome />} />
               <Route exact path='/admin-products' element={<DashboardProducts />} />
               <Route exact path='/admin-banner' element={<DashboardBannerImages />} />
+              <Route exact path='/admin-add-banner' element={<DashboardAddBannerImage />} />
               <Route exact path='/admin-add-product' element={<DashboardAddProduct />} />
               <Route exact path='/admin-add-product-csv' element={<DashboardAddProductCsvFile />} />
               <Route exact path='/admin-add-shop' element={<DashboardAddShop />} />
@@ -589,6 +592,7 @@ function App() {
               loc.pathname === '/admin-orders' ||
               loc.pathname === '/admin-products' ||
               loc.pathname === '/admin-banner' ||
+              loc.pathname === '/admin-add-banner' ||
               loc.pathname === '/admin-alluser' ||
               loc.pathname === '/admin-shops' ||
               loc.pathname === '/admin-query' ||

@@ -74,15 +74,17 @@ const EditDetails = ({ profileDetails = true, setModalDataMobile, profilePicUpda
         user_Email: userContext.email,
       });
 
-      let bday = new Date(userContext.dob)
-      setDisplayInfo(prev => ({
-        ...prev,
-        user_Birth_Date: bday,
-      }))
-      setSecondaryData(prev => ({
-        ...prev,
-        user_Birth_Date: bday,
-      }))
+      if (useContext.dob) {
+        let bday = new Date(userContext.dob)
+        setDisplayInfo(prev => ({
+          ...prev,
+          user_Birth_Date: bday,
+        }))
+        setSecondaryData(prev => ({
+          ...prev,
+          user_Birth_Date: bday,
+        }))
+      }
       // if (userContext.dob) {
       //   if (typeof (userContext.dob) === 'string') {
       //     let bdayRecieved = userContext.dob

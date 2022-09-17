@@ -4,6 +4,7 @@ import { useNavigate, useLocation, Link, useParams } from 'react-router-dom'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { Accordion, Dropdown } from 'react-bootstrap'
 import { UserDataContext } from "../../Contexts/UserContext";
+import { toast } from "react-toastify";
 
 //CSS
 import './ProductCategory.css'
@@ -19,26 +20,28 @@ import sortOutlineGrey from '../../assets/vector/sort_outline_grey.svg'
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs';
 import ProductListItem from '../../components/ProductListItem/ProductListItem'
 import FilterTag from '../../components/FilterTag/FilterTag'
-import { getSearchedProduct } from '../../api/Product';
+import { addProductInterested, getSearchedProduct } from '../../api/Product';
 import SkeletonElement from "../../components/Skeletons/SkeletonElement";
 import Pagination from '../../components/Pagination/Pagination';
 import { getStoreInventory } from '../../api/StoreApi';
 
-
+toast.configure();
 const OfflineProductCategory = ({ setHeaderData }) => {
   const [bottomSheet, setBottomSheet] = useState(false)
   const matches = useMediaQuery("(min-width:768px)")
   const [offlineOffersSelected, setOfflineOffersSelected] = useState(true)
   const nav = useNavigate();
   const urlParams = useParams()
+  const loc = useLocation()
   // const [priceSortSelected, setPriceSortSelected] = useState(0)
   // const [radioFilterSelected, setRadioFilterSelected] = useState({})
   // const [priceFilter, setPriceFilter] = useState(-1)
   // const [checkboxFilter, setCheckboxFilter] = useState({})
   const [filterSelected, setFilterSelected] = useState([])
-  const { searchedProduct, setSearchedProduct } = useContext(UserDataContext);
+  const { searchedProduct, setSearchedProduct, userContext } = useContext(UserDataContext);
   const [loading, setLoading] = useState(false);
   const [storeCode, setStoreCode] = useState('')
+  const [storeDetails, setStoreDetails] = useState({})
   const productsPerPage = 10
   const [currentPage, setCurrentPage] = useState(1)
   const [totalProducts, setTotalProducts] = useState(1)
@@ -60,6 +63,13 @@ const OfflineProductCategory = ({ setHeaderData }) => {
       setStoreCode(urlParams.id)
     }
   }, [urlParams])
+
+  useEffect(() => {
+    if (loc && loc.state) {
+      setStoreDetails(loc.state)
+    }
+  }, [loc])
+
 
   useEffect(() => {
     getStoreInventory(storeCode)
@@ -343,6 +353,18 @@ const OfflineProductCategory = ({ setHeaderData }) => {
     window.scrollTo(0, 0)
   }
 
+  const handleAddInterestedProd = (prodId) => {
+    let userToken = userContext ? userContext.JWT : "";
+    if (userToken) {
+      addProductInterested(storeDetails._id, prodId)
+        .then(res => (
+          toast.success("Product Added")
+        ))
+    } else {
+      nav("/login");
+    }
+  }
+
   return (<>
 
     <div className="page_Wrapper page_Margin_Top">
@@ -458,7 +480,7 @@ const OfflineProductCategory = ({ setHeaderData }) => {
                           [1, 2, 3, 4].map((n) => (<SkeletonElement type={'productBox'} key={n} />))
                           : searchedProduct.products.map((product, index) => (
                             product.productDetail ? (
-                              < ProductListItem key={index} product={product.productDetail} interestedButton={interestedButton} />) : (<></>))
+                              < ProductListItem key={index} product={product.productDetail} interestedButton={interestedButton} handleAddInterestedProd={handleAddInterestedProd} />) : (<></>))
                           )
                       }
                     </div>

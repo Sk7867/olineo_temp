@@ -53,6 +53,11 @@
   margin: 0;
   text-decoration: none;
   text-transform: none;
+  height: 48px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .productListItem_Title:hover{
