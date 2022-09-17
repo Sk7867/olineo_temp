@@ -11,18 +11,18 @@ import ProductOfferTag from '../ProductOfferTag/ProductOfferTag'
 const ProductListItem = ({ product, interestedButton = false }) => {
   return (
     <>
-      <Link to={`/product/${product?.slug}`} className='productListItem_Contaier'>
+      <div className='productListItem_Contaier'>
         <div className="productListItem_Wrapper">
-          <div className="productListItem_Image_Wrapper">
+          <Link to={`/product/${product?.slug}`} className="productListItem_Image_Wrapper">
             {(product?.images) && (product?.images?.length > 0) && (
               <img src={product?.images[0]} alt="" />
             )}
             {/* <ProductOfferTag offer={product.discount.flatDiscount.value} /> */}
-          </div>
+          </Link>
           <div className='productListItem_Content_Wrapper'>
-            <p className='productListItem_Title'>
+            <Link to={`/product/${product?.slug}`} className='productListItem_Title'>
               {product?.name}
-            </p>
+            </Link>
             <div className="productListItem_Price_Details">
               <p className='productListItem_Discounted_Price'>
                 ₹{!isNaN(product?.price?.discountPrice) ? product?.price?.discountPrice : product?.price?.mop}
@@ -45,7 +45,7 @@ const ProductListItem = ({ product, interestedButton = false }) => {
             </p> */}
           </div>
         </div>
-      </Link>
+      </div>
     </>
   )
 }

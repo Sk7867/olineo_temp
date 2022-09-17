@@ -1,7 +1,6 @@
 .productListItem_Contaier{
   background: #fff;
   padding: 1rem;
-  cursor: pointer;
   text-decoration: none;
   width: 100%;
 }
@@ -22,7 +21,14 @@
   width: 100%;
   height: 100%;
   position: relative;
+  text-decoration: none;
+  text-transform: none;
 }
+
+.productListItem_Image_Wrapper:hover{
+  color: transparent;
+}
+
 .productListItem_Image_Wrapper img{
   width: 100%;
   height: 100%;
@@ -45,6 +51,12 @@
   font-size: 1rem;
   line-height: 1.5rem;
   margin: 0;
+  text-decoration: none;
+  text-transform: none;
+}
+
+.productListItem_Title:hover{
+  color: #08090A;
 }
 
 .productListItem_Price_Details{
