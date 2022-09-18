@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import Moment from "react-moment";
 import { deletAdminIndOrder, getAdminAllOrder, getAdminIndOrder } from "../../api/AdminApis/AdminOrder";
+import { singleUSer } from "../../api/AdminApis/Users";
 import DashboardLoader from "../../components/DashboardContent/DashboardLoader";
 import OrderProductModal from "../../components/OrderProductModal/OrderProductModal";
 import Pagination from "../../components/Pagination/Pagination";
@@ -12,32 +13,51 @@ function DashboardOrders(props) {
   const [loader, setLoader] = useState(true);
   const [show, setShow] = useState(false);
   const [orderItem, setOrderItem] = useState();
+  const [userDetails, setUserDetails] = useState()
   const [currentPage, setCurrentPage] = useState(1)
   const productsPerPage = 10
   const [totalOrders, setTotalOrders] = useState(1)
   useEffect(() => {
     setLoader(true);
     getAdminAllOrder(`limit=${productsPerPage}&page=${currentPage}`).then((res) => {
-      setOrder(res.orders);
-      setTotalOrders(res.total_orders)
-      setLoader(false);
+      if (res) {
+        setOrder(res.orders);
+        setTotalOrders(res.total_orders)
+        setLoader(false);
+      }
     })
   }, [currentPage]);
-  console.log(currentPage);
 
   const seeProduct = (id) => {
+    let seeProdBtn = document.querySelectorAll('#seeProducts')
+    seeProdBtn.forEach((btn) => {
+      btn.style.pointerEvents = "none"
+    })
     getAdminIndOrder(id)
-      .then(res => setOrderItem(res.order))
-    setShow(true);
-
+      .then(res1 => {
+        singleUSer(res1.order.userId)
+          .then(res => {
+            if (res) {
+              setUserDetails(res.user)
+              setOrderItem(res1.order)
+              setShow(true);
+              seeProdBtn.forEach((btn) => {
+                btn.style.pointerEvents = 'auto'
+              })
+            }
+          })
+      })
   }
   const deletOrder = (id) => {
     deletAdminIndOrder(id)
       .then((res) => {
-        setOrder(order.filter(message => message._id !== id));
+        if (res) {
+          setOrder(order.filter(message => message._id !== id));
+        }
       })
   }
-  const handlePageChange = (pageNumber) => {
+  const handlePageChange = (e, pageNumber) => {
+    e.preventDefault();
     setCurrentPage(pageNumber)
     window.scrollTo(0, 0)
   }
@@ -50,16 +70,10 @@ function DashboardOrders(props) {
         show={show}
         onHide={() => setShow(false)}
         orderItem={orderItem}
+        userDetails={userDetails}
       />
       <div className="d-flex justify-content-between">
         <h3>Orders</h3>
-        {/* <Button
-          className="btn-sm"
-          onClick={() => nav("/admin-add-product")}
-          style={{ marginBottom: 20 }}
-        >
-          Add product
-        </Button> */}
       </div>
       <div className="table-responsive">
         <table className="table table-hover">
@@ -77,7 +91,7 @@ function DashboardOrders(props) {
             {order?.length > 0 && order?.map((item, index) => (
               <tr key={index}>
                 {/* {setOrderItem(item.productId)} */}
-                <td className="text-primary" style={{ cursor: "pointer" }} onClick={() => seeProduct(item._id)}>See products</td>
+                <td className="text-primary" style={{ cursor: "pointer" }} onClick={() => seeProduct(item._id)} id='seeProducts'>See products</td>
                 <td> {(item?.isPaid) ? "Paid" : "Not Paid"} </td>
                 <td>{item?.totalPrice}</td>
                 <td>{(item?.isPlaced) ? "Placed" : "Not Placed"}</td>

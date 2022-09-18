@@ -44,7 +44,8 @@ const DashboardAlluser = () => {
     setModalShow(true)
   }
 
-  const handlePageChange = (pageNumber) => {
+  const handlePageChange = (e, pageNumber) => {
+    e.preventDefault();
     setCurrentPage(pageNumber)
     window.scrollTo(0, 0)
   }

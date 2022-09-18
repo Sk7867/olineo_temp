@@ -13,7 +13,7 @@ const Pagination = ({ productsPerPage, totalProducts, pageChange }) => {
         {
           pageNumbers.map((number) => (
             <li key={number} className='page-item'>
-              <a className='page-link' href='javascript:void(0);' onClick={() => pageChange(number)}>
+              <a className='page-link' href='#!' onClick={(e) => pageChange(e, number)}>
                 {number}
               </a>
             </li>

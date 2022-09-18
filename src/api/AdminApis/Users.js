@@ -30,14 +30,14 @@ export const singleUSer = async (id) => {
     "Authorization": `bearer ${userToken}`
   }
 
-  let allUsers;
+  let singleUserRes;
 
   await axios.get(`${process.env.REACT_APP_BASE_URL}/user/admin/${id}`, { headers })
     .then(res => {
-      allUsers = res.data.data
+      singleUserRes = res.data.data
     })
 
-  return allUsers;
+  return singleUserRes;
 }
 
 //   Update User Info
