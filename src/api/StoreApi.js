@@ -44,10 +44,12 @@ export const getStoreUsingPincode = async (zip) => {
 export const getStoreInventory = async (id) => {
   let getStoreInventoryRes
 
-  await axios.get(`${process.env.REACT_APP_BASE_URL}/store/getStoreInventory/HO`, { headers })
-    .then(res => {
-      getStoreInventoryRes = res.data
-    })
+  if (id) {
+    await axios.get(`${process.env.REACT_APP_BASE_URL}/store/getStoreInventory/${id}`, { headers })
+      .then(res => {
+        getStoreInventoryRes = res.data
+      })
+  }
 
   return getStoreInventoryRes
 }

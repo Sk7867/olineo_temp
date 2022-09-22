@@ -85,6 +85,7 @@ const StoreFinder = ({ setHeaderData }) => {
 
   const handleStoreSelectButton = () => {
     locationFetch();
+    setShowLoader(true)
   }
 
   useEffect(() => {
@@ -92,6 +93,8 @@ const StoreFinder = ({ setHeaderData }) => {
       setShowStore(false)
     } else if (location.loaded && location.coordinates) {
       setUserLocation(location)
+      setShowStore(true)
+      setShowLoader(false)
     }
   }, [location])
 
@@ -241,9 +244,11 @@ const StoreFinder = ({ setHeaderData }) => {
                   </div>
                   <div className='store_Result_List'>
                     {!listOptionSelected && (
-                      <div className="store_Result_Map">
-                        <MapWrapper center={userLocation.coordinates} markerPostions={markerPostions} />
-                      </div>
+                      <>
+                        <div className="store_Result_Map">
+                          <MapWrapper center={userLocation.coordinates} markerPostions={markerPostions} />
+                        </div>
+                      </>
                     )}
                     {
                       storeLocations.stores.map((store, index) => (
