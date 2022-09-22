@@ -366,7 +366,7 @@ const AddProductSection = () => {
             if (galleryImagesObject.imgs.length > 0) {
               addProductGalleryImages(prodPreviewData.id, galleryImagesObject.imgs)
             }
-            nav("/catelogue-page")
+            nav(-1)
           } else {
             (toast.error('Incomplete Data'))
           }
@@ -394,7 +394,7 @@ const AddProductSection = () => {
             addProductGalleryImages(res._id, galleryImagesObject.imgs),
             setTimeout(() => {
               // document.getElementById("submitCsvData").innerHTML = "<p>Submit</p>";
-              nav("/catelogue-page")
+              nav(-1)
             }, 2000)
           ) : (
             (toast.error('Incomplete Data'))

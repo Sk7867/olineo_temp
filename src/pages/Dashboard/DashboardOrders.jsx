@@ -35,17 +35,19 @@ function DashboardOrders(props) {
     })
     getAdminIndOrder(id)
       .then(res1 => {
-        singleUSer(res1.order.userId)
-          .then(res => {
-            if (res) {
-              setUserDetails(res.user)
-              setOrderItem(res1.order)
-              setShow(true);
-              seeProdBtn.forEach((btn) => {
-                btn.style.pointerEvents = 'auto'
-              })
-            }
-          })
+        if (res1) {
+          singleUSer(res1.order.userId)
+            .then(res => {
+              if (res) {
+                setUserDetails(res.user)
+                setOrderItem(res1.order)
+                setShow(true);
+                seeProdBtn.forEach((btn) => {
+                  btn.style.pointerEvents = 'auto'
+                })
+              }
+            })
+        }
       })
   }
   const deletOrder = (id) => {
@@ -80,6 +82,7 @@ function DashboardOrders(props) {
           <thead>
             <tr>
               <th scope="col">Product</th>
+              <th scope="col">Order Id</th>
               <th scope="col">Paid</th>
               <th scope="col">Price</th>
               <th scope="col">Placed</th>
@@ -90,8 +93,8 @@ function DashboardOrders(props) {
           <tbody>
             {order?.length > 0 && order?.map((item, index) => (
               <tr key={index}>
-                {/* {setOrderItem(item.productId)} */}
                 <td className="text-primary" style={{ cursor: "pointer" }} onClick={() => seeProduct(item._id)} id='seeProducts'>See products</td>
+                <td>{item?._id}</td>
                 <td> {(item?.isPaid) ? "Paid" : "Not Paid"} </td>
                 <td>{item?.totalPrice}</td>
                 <td>{(item?.isPlaced) ? "Placed" : "Not Placed"}</td>

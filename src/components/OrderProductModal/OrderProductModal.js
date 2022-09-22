@@ -51,6 +51,13 @@ const OrderProductModal = (props) => {
           <div className='row'>
             <p className='fw-bold fa-lg'>Product Details</p>
             <ListGroup as="ol" numbered>
+              <ListGroup.Item>
+                <div className="ms-2 me-auto d-flex align-items-center">
+                  <div className="fw-bold">Product Name</div>
+                  <div className="fw-bold mx-4">Consignment id</div>
+                  <div className="fw-bold">Delivery Status</div>
+                </div>
+              </ListGroup.Item>
               {
                 (orderItem?.productDetails?.length === 0) ||
                   (orderItem?.productId?.length === 0) ||
@@ -65,7 +72,8 @@ const OrderProductModal = (props) => {
                           className="d-flex justify-content-between align-items-start"
                         >
                           <div className="ms-2 me-auto d-flex align-items-center">
-                            <div className="fw-bold me-5">{orderItem?.productDetails[index]?.name}</div>
+                            <div className="fw-bold">{orderItem?.productDetails[index]?.name}</div>
+                            <div className="fw-bold mx-4">{item}</div>
                             <div className="fw-bold">{orderItem?.itemStatus[index]}</div>
                           </div>
                         </ListGroup.Item>

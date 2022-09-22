@@ -72,17 +72,19 @@ const OfflineProductCategory = ({ setHeaderData }) => {
 
 
   useEffect(() => {
-    getStoreInventory(storeCode)
-      .then(res => res ? (
-        setSearchedProduct(
-          {
-            loaded: true,
-            products: res.inventoryData,
-            no_of_products: res.no_of_products
-          }
-        ),
-        setTotalProducts(res.total_products)
-      ) : (''))
+    if (storeCode) {
+      getStoreInventory(storeCode)
+        .then(res => res ? (
+          setSearchedProduct(
+            {
+              loaded: true,
+              products: res.inventoryData,
+              no_of_products: res.no_of_products
+            }
+          ),
+          setTotalProducts(res.total_products)
+        ) : (''))
+    }
   }, [storeCode])
 
 
