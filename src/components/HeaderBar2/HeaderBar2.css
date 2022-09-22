@@ -189,13 +189,15 @@
 }
 
 .categories_Container::-webkit-scrollbar{
-  display: none;
-  width: 0;
+  display: block;
+  /* width: 2px; */
+  background: rgb(216, 214, 214);
+  height: 2px;
 }
 
 .categories_Wrapper{
   display: flex;
-  gap: 1rem;
+  gap: 32px;
   white-space: nowrap;
   /* padding: 0 0 10px; */
 }
@@ -388,13 +390,17 @@
   }
 
   .category img{
-    max-width: 38px;
-    max-height: 38px;
+    max-width: 40px;
+    max-height: 40px;
   }
 
   .category p{
-    font-size: 0.75rem;
-    line-height: 1.125rem;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1B325E;
   }
 
   .headerbar3_container{
@@ -449,7 +455,7 @@
   }
 
   .categories_Wrapper{
-    gap: 2rem;
+    gap: 32px;
   }
 
   .headerbarRight{

@@ -16,7 +16,7 @@ function DashBoardHome(props) {
   useEffect(() => {
     setLoader(true);
     getAdminAllOrder().then((res) => {
-      setOrder(res.total_orders);
+      setOrder(res?.total_orders);
       setLoader(false);
     });
   }, []);

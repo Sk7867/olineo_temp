@@ -57,7 +57,7 @@
 .submit-button {
   border-radius: 0 0 0 1rem;
   background: #1b325e;
-  padding: 16px 0;
+  padding: 12px 8px;
   display: flex;
   justify-content: center;
   align-items: center;

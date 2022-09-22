@@ -195,7 +195,7 @@ const ProductPage = ({ setHeaderData }) => {
   }, [productData])
 
   useEffect(() => {
-    if (userDefaultAddress.loaded && (userDefaultAddress.no_of_address > 0) && productData.product_loaded) {
+    if (userDefaultAddress?.loaded && (userDefaultAddress?.no_of_address > 0) && productData.product_loaded) {
       let prodArray = [
         {
           skuId: productData.product_Ean,
@@ -203,7 +203,7 @@ const ProductPage = ({ setHeaderData }) => {
         }
       ]
 
-      getProductServiceability(userDefaultAddress.address.zip, prodArray)
+      getProductServiceability(userDefaultAddress?.address?.zip, prodArray)
         .then(res => {
           if (res) {
             if (res[0].deliverymodes.length > 0) {

@@ -240,7 +240,7 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
                     userDefaultAddress.no_of_address === 0 ? (<>
                       <p>Enter Default Address</p>
                     </>) : (<>
-                      <p>{userDefaultAddress.address.city}, {userDefaultAddress.address.zip}</p>
+                      <p>{userDefaultAddress?.address?.city}, {userDefaultAddress?.address?.zip}</p>
                     </>)
                   }
                 </>) : (<>
@@ -273,8 +273,8 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
           <div className="headerbarRight">
 
             <div className='cartIcon' onClick={() => { userLoggedIn ? nav('/mycart') : nav('/login') }}>
-              <img src={cartWhite} alt="" />
               <p>Cart</p>
+              <img src={cartWhite} alt="" />
             </div>
             <Link to={`/store-finder`} className='storeIcon'>
               <p>{matches768 && matches910 && (<span>Find</span>)} <span>Store</span></p>

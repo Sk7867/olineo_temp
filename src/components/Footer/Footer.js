@@ -73,7 +73,19 @@ const Footer = () => {
             }
           </div>
         </div>
-        <div className="footer_terms_container">
+        <div className="footer_terms_container d-none d-md-block">
+          <p className="footer_last_heading-desk">Useful Links</p>
+          <div className="footer_terms_wrapper-desk">
+            <p className="footer_terms_desk mt-4">Deals of the day</p>
+            <p className="footer_terms_desk">O-Line-O Wallet</p>
+            <p className="footer_terms_desk">Wish List</p>
+            <p className="footer_terms_desk">Recently Viewed Products</p>
+            <p className="footer_terms_desk" onClick={() => nav('/customer-support')}>Customer Service</p>
+            <p className="footer_terms_desk">Terms & conditions</p>
+            <p className="footer_terms_desk">Privacy policy</p>
+          </div>
+        </div>
+        <div className="footer_terms_container d-block d-md-none">
           <p className="footer_last_heading">Useful Links</p>
           <div className="footer_terms_wrapper">
             <div className='footer_terms_column1'>
@@ -90,7 +102,8 @@ const Footer = () => {
           </div>
         </div>
         <div className="last_contact_details">
-          <p className="footer_last_heading">Contact Us</p>
+          <p className="footer_last_heading d-block d-md-none">Contact Us</p>
+          <p className="footer_last_heading_desk d-none d-md-block">Contact Us</p>
           <div className="contact_link_container">
             {
               contactDetails.map((item, index) => (

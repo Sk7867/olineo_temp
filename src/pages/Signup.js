@@ -150,7 +150,7 @@ const Signup = ({ setLoginRedirect }) => {
         </form>
         <div className="tc-Footer">
           <p className="footer-Text">
-            By Signing In, I agree to <span>terms & conditions</span>
+            By Signing Up, I agree to <span>terms & conditions</span>
           </p>
         </div>
       </div>

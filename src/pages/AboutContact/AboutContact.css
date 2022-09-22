@@ -20,7 +20,7 @@
   height: 100%;
   width: 100%;
   background: #C4C4C4;
-  border-radius: 0.5rem;
+  border-radius: 4px;
 }
 
 .aboutus_Scroller{
@@ -112,6 +112,7 @@
 
   .aboutus_BigBox{
     max-width: 100%;
+    border-radius: 8px;
   }
 
   .aboutus_Scroller{
@@ -155,6 +156,13 @@
     font-weight: 600;
     font-size: 1rem;
     line-height: 1.5rem;
+  }
+
+}
+@media screen and (max-width: 768px) {
+  .aboutus_BigBox{
+    max-width: 100%;
+    border-radius: 8px;
   }
 
 }
