@@ -1,3 +1,6 @@
+@import url("http://fonts.cdnfonts.com/css/neo-sans-pro");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+
 *,
 *::before,
 *::after {
@@ -12,6 +15,10 @@
   align-items: center;
   flex-direction: column;
   overflow-x: hidden;
+}
+
+.relative {
+  position: relative;
 }
 
 .signup-wrapper {
@@ -120,7 +127,7 @@
   text-decoration: none;
 }
 
-.extra-btn:hover{
+.extra-btn:hover {
   color: #1b325e;
 }
 
@@ -364,7 +371,7 @@ textarea::placeholder {
   }
 
   .page_Margin_Top_Secondary {
-    margin: 4rem 0 0;
+    margin: 4.2rem 0 0;
   }
 
   .floating_Footer {
@@ -373,7 +380,7 @@ textarea::placeholder {
 }
 
 @media screen and (min-width: 850px) {
-  .page_Wrapper{
+  .page_Wrapper {
     padding: 0 1.5rem 0.75rem;
   }
 }
@@ -498,4 +505,9 @@ textarea::placeholder {
 .checkbox-label input:checked ~ .custom-checkmark::after {
   /* display: block; */
   opacity: 1;
+}
+.react-parallax-bgimage {
+  height: 100% !important;
+  /* width: 100% !important; */
+  object-fit: contain !important;
 }
