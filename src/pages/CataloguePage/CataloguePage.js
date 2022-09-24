@@ -65,20 +65,25 @@ const CataloguePage = ({ setHeaderData }) => {
     // }
   }
 
-  const handleDeleteProduct = (product) => {
-    console.log('Delete Product Clicked of id:', product.product._id);
-    deleteProductCatalogue(product.product._id)
-      .then(res => res ? (
-        getAllProducts(`limit=${productsPerPage}&page=${currentPage}`)
-          .then(res => {
-            setAllProducts({
-              loaded: true,
-              no_of_products: res.no_of_products,
-              products: res.products
+  const handleDeleteProduct = async (product) => {
+    let text = `Are you sure you want to delete ${product?.item?.name}`;
+    if (window.confirm(text) === true) {
+      deleteProductCatalogue(product?.item?._id)
+        .then(res => res ? (
+          getAllProducts(`limit=${productsPerPage}&page=${currentPage}`)
+            .then(res => {
+              setAllProducts({
+                loaded: true,
+                no_of_products: res.no_of_products,
+                products: res.products
+              })
+              setTotalProducts(res.total_products)
             })
-            setTotalProducts(res.total_products)
-          })
-      ) : (''))
+        ) : (''))
+      alert(`${product?.item?.name} is Deleted`)
+    } else {
+      alert("Product Not Deleted")
+    }
   }
 
   const handleSearchProduct = (e) => {
