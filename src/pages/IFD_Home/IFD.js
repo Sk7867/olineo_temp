@@ -12,7 +12,11 @@ import { useState, useEffect } from "react";
 import { useRef } from "react";
 
 const IFD = ({ userLoggedIn, setIsHomePage }) => {
+<<<<<<< HEAD
   const { activeState, setActiveState, setCustomerDetails, setProductDetails, setCustomerExperience } = useContext(IFDContext);
+=======
+  const { activeState, setActiveState } = useContext(IFDContext);
+>>>>>>> cced48d (IFD UX improvement and bug fix)
 
   const [counterWidth, setCounterWidth] = useState(10);
 
