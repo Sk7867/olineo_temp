@@ -67,6 +67,7 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     const phonesData = await response.json();
     setProductDetails((prev) => ({ ...prev, phonesData }));
   };
+
   useEffect(() => {
     if (productDetails.selectedCategory === "phones") {
       getPhonesData();
