@@ -38,7 +38,7 @@ const DashboardAddBannerImage = () => {
   return (
     <>
       <div className='container'>
-        <Link to="/admin-products">
+        <Link to="/admin-banner">
           <FontAwesomeIcon icon={faChevronLeft} /> Products
         </Link>
         <form encType="multipart/form-data" className='p-3 my-4'>
