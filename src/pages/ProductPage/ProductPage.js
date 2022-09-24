@@ -71,8 +71,6 @@ const ProductPage = ({ setHeaderData }) => {
   });
   const [colorAlternateProds, setColorAlternateProds] = useState([]);
   const [specAlternateProds, setSpecAlternateProds] = useState([]);
-  const [modalShow, setModalShow] = useState(false);
-  const [scratchCardActive, setScratchCardActive] = useState(false)
   const [alternateColorean, setAlternateColorean] = useState([]);
   const [alternateSpecean, setAlternateSpecean] = useState([]);
   const [productBankOffers, setProductBankOffers] = useState([]);
@@ -266,7 +264,9 @@ const ProductPage = ({ setHeaderData }) => {
       let searchTerm = 'ean=' + proId
       getSearchedProduct(searchTerm)
         .then(res => {
-          setComboProductData(...res.products[0])
+          if (res && res.products) {
+            setComboProductData(res?.products[0])
+          }
         })
     }
   }, [productData.product_loaded])
@@ -594,7 +594,7 @@ const ProductPage = ({ setHeaderData }) => {
                     <>
                       {
                         deliveryEstDays.loaded ? (
-                          <p onClick={() => setScratchCardActive(true)}>
+                          <p>
                             Delivery In <span>{deliveryEstDays.value} Days</span>
                           </p>
                         ) : (
@@ -751,7 +751,6 @@ const ProductPage = ({ setHeaderData }) => {
           </div>
         )}
       </div>
-      <ScratchCardComp scratcCardActive={scratchCardActive} setScratchCardActive={setScratchCardActive} />
     </>
   );
 };
