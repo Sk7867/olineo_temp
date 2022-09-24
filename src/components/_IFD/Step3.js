@@ -5,7 +5,7 @@ import { useContext } from "react";
 import IFDContext from "../../Contexts/IFDContext";
 import gsap from "gsap";
 import { useEffect } from "react";
-import { toast } from "react-toastify";
+import { toast, Slide } from "react-toastify";
 
 const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateForward }) => {
   const { storeDetails, customerDetails, customerExperience, setCustomerExperience, productDetails, setProductDetails } = useContext(IFDContext);
@@ -22,6 +22,9 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     { value: "others", label: "Others" },
   ];
   const [phoneList, setPhoneList] = useState([]);
+
+  const [isButtonLoading, setIsButtonLoading] = useState(false);
+  const [isOtpButtonLoading, setIsOtpButtonLoading] = useState(false);
 
   const customStyles = {
     menu: (provided, state) => ({
@@ -48,10 +51,9 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
   const otpInputRefs = useRef([]);
 
   const [isOtpSent, setIsOtpSent] = useState(false);
-  const [isOtpInvalid, setIsOtpInvalid] = useState(false);
 
   const [otpValue, setOtpValue] = useState(["", "", "", ""]);
-  // console.log(otpValue.join(""));
+
   const handleOtpInputChange = (value, idx) => {
     setOtpValue((prev) => prev.map((v, i) => (i === idx ? value : v)));
     idx < 5 && value !== "" && otpInputRefs.current[idx + 1]?.focus();
@@ -65,6 +67,7 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     const phonesData = await response.json();
     setProductDetails((prev) => ({ ...prev, phonesData }));
   };
+
   useEffect(() => {
     if (productDetails.selectedCategory === "phones") {
       getPhonesData();
@@ -81,9 +84,8 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     setPhoneList(phoneList);
   }, [productDetails.phonesData]);
 
-  console.log(productDetails);
-  // console.log(customerExperience);
   const sendOTP = async () => {
+    console.log(productDetails);
     if (!productDetails.selectedCategory || productDetails.selectedCategory === null)
       return toast.error("Please Select Product Category!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
 
@@ -92,9 +94,10 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
       if (productDetails.imei?.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm))
         return toast.error("Please Enter IMEI Number!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
     } else {
-      if (productDetails.other_product_purchased?.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm))
+      if (productDetails.other_product_purchased === null || productDetails.other_product_purchased?.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm))
         return toast.error("Please Enter Product Name!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
     }
+    setIsOtpButtonLoading(true);
     const payload = {
       store_id: storeDetails.id,
       customer_email: customerDetails.email,
@@ -107,10 +110,12 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
       body: JSON.stringify(payload),
     });
     const data = await response.json();
-    // console.log(data);
+    setIsOtpButtonLoading(false);
     if (response.status === 200 && data.detail === "Email sent successfully!") {
       toast.success("OTP Sent Successfully!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
       setIsOtpSent(true);
+    } else {
+      toast.error("Something went wrong!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
     }
   };
 
@@ -119,7 +124,8 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     audio.volume = 0.1;
     setTimeout(() => {
       audio.play();
-    }, 1200);
+      setIsButtonLoading(false);
+    }, 1000);
 
     gsap.to(stepCounterSvgRef.current, { scaleX: 0.01, scaleY: 0.5, transformOrigin: "center", ease: "Expo.easeOut", duration: 0.8, delay: 1.3 });
     gsap.to("#steps-counter", { opacity: 0, duration: 0.6, delay: 1.8 });
@@ -134,13 +140,14 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     setCounterWidth(240);
 
     if (otpValue.join("").match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm)) return toast.error("Please Enter OTP!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
+
     if (customerExperience === null) {
       gsap.fromTo(".experience-emoji-group", { scale: 1 }, { scale: 1.27, stagger: { amount: 0.3, from: "end" }, duration: 0.6, transformOrigin: "top" });
       gsap.to(".experience-emoji-group", { scale: 1, stagger: { amount: 0.3, from: "end" }, duration: 1, transformOrigin: "top", delay: 0.7 });
-      toast("Your Feedback is Valuable for Us :)", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
+      toast("Your Feedback is Valuable for Us :)", { autoClose: 2000, hideProgressBar: false, position: "bottom-center", transition: Slide });
       return;
     }
-
+    setIsButtonLoading(true);
     const response = await fetch(`${process.env.REACT_APP_IFD_BASE_URL}/verify-otp`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -151,8 +158,10 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     });
     setCounterWidth(260);
     const data = await response.json();
+
     if (response.status !== 200 || data.detail === "OTP is Invalid or Expired!") {
       setCounterWidth(200);
+      setIsButtonLoading(false);
       toast.error("OTP is Invalid or Expired!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
       return;
     }
@@ -237,8 +246,123 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
           </>
         )}
 
-        <button disabled={isOtpSent} onClick={sendOTP} className={styles["btn-send-otp-manager"]}>
-          {isOtpSent ? "OTP Sent" : "Send OTP"}
+        <button disabled={isOtpSent || isOtpButtonLoading} onClick={sendOTP} className={styles["btn-send-otp-manager"]}>
+          {isOtpButtonLoading ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              style={{ margin: "auto", background: "rgba(241, 242, 243, 0)", display: "block" }}
+              width="60px"
+              height="40px"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="xMidYMid"
+            >
+              <circle cx={84} cy={33} r={10} fill="#4c4c4c">
+                <animate attributeName="r" repeatCount="indefinite" dur="0.5102040816326531s" calcMode="spline" keyTimes="0;1" values="9;0" keySplines="0 0.5 0.5 1" begin="0s" />
+                <animate
+                  attributeName="fill"
+                  repeatCount="indefinite"
+                  dur="2.0408163265306123s"
+                  calcMode="discrete"
+                  keyTimes="0;0.25;0.5;0.75;1"
+                  values="#4c4c4c;#808080;#919191;#595959;#4c4c4c"
+                  begin="0s"
+                />
+              </circle>
+              <circle cx={16} cy={33} r={10} fill="#4c4c4c">
+                <animate
+                  attributeName="r"
+                  repeatCount="indefinite"
+                  dur="2.0408163265306123s"
+                  calcMode="spline"
+                  keyTimes="0;0.25;0.5;0.75;1"
+                  values="0;0;9;9;9"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                  begin="0s"
+                />
+                <animate
+                  attributeName="cx"
+                  repeatCount="indefinite"
+                  dur="2.0408163265306123s"
+                  calcMode="spline"
+                  keyTimes="0;0.25;0.5;0.75;1"
+                  values="16;16;16;50;84"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                  begin="0s"
+                />
+              </circle>
+              <circle cx={50} cy={33} r={10} fill="#595959">
+                <animate
+                  attributeName="r"
+                  repeatCount="indefinite"
+                  dur="2.0408163265306123s"
+                  calcMode="spline"
+                  keyTimes="0;0.25;0.5;0.75;1"
+                  values="0;0;9;9;9"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                  begin="-0.5102040816326531s"
+                />
+                <animate
+                  attributeName="cx"
+                  repeatCount="indefinite"
+                  dur="2.0408163265306123s"
+                  calcMode="spline"
+                  keyTimes="0;0.25;0.5;0.75;1"
+                  values="16;16;16;50;84"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                  begin="-0.5102040816326531s"
+                />
+              </circle>
+              <circle cx={84} cy={33} r={10} fill="#919191">
+                <animate
+                  attributeName="r"
+                  repeatCount="indefinite"
+                  dur="2.0408163265306123s"
+                  calcMode="spline"
+                  keyTimes="0;0.25;0.5;0.75;1"
+                  values="0;0;9;9;9"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                  begin="-1.0204081632653061s"
+                />
+                <animate
+                  attributeName="cx"
+                  repeatCount="indefinite"
+                  dur="2.0408163265306123s"
+                  calcMode="spline"
+                  keyTimes="0;0.25;0.5;0.75;1"
+                  values="16;16;16;50;84"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                  begin="-1.0204081632653061s"
+                />
+              </circle>
+              <circle cx={16} cy={33} r={10} fill="#808080">
+                <animate
+                  attributeName="r"
+                  repeatCount="indefinite"
+                  dur="2.0408163265306123s"
+                  calcMode="spline"
+                  keyTimes="0;0.25;0.5;0.75;1"
+                  values="0;0;9;9;9"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                  begin="-1.530612244897959s"
+                />
+                <animate
+                  attributeName="cx"
+                  repeatCount="indefinite"
+                  dur="2.0408163265306123s"
+                  calcMode="spline"
+                  keyTimes="0;0.25;0.5;0.75;1"
+                  values="16;16;16;50;84"
+                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                  begin="-1.530612244897959s"
+                />
+              </circle>
+            </svg>
+          ) : isOtpSent ? (
+            "OTP Sent"
+          ) : (
+            "Send OTP"
+          )}
         </button>
         <div style={{ opacity: isOtpSent ? 1 : 0.5, pointerEvents: isOtpSent ? "all" : "none" }}>
           <p className={styles["ask-otp"]}>Ask the store manager for the OTP to proceed:</p>
@@ -397,8 +521,85 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
           </defs>
         </svg>
 
-        <button onClick={handleSubmit} disabled={!isOtpSent} className={styles["primary-button"]}>
-          <p>Continue</p>
+        <button onClick={handleSubmit} disabled={!isOtpSent || isButtonLoading} className={styles["primary-button"]}>
+          {isButtonLoading ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              style={{ margin: "auto", background: "rgba(241, 242, 243, 0)", display: "block" }}
+              width="30px"
+              height="30px"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="xMidYMid"
+            >
+              <g transform="translate(84,50)">
+                <g transform="rotate(0)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity={1}>
+                    <animateTransform attributeName="transform" type="scale" begin="-0.9831460674157303s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.9831460674157303s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(74.04163056034261,74.04163056034261)">
+                <g transform="rotate(45)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.875">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.8426966292134831s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.8426966292134831s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(50,84)">
+                <g transform="rotate(90)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.75">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.7022471910112359s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.7022471910112359s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(25.958369439657385,74.04163056034261)">
+                <g transform="rotate(135)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.625">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.5617977528089888s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.5617977528089888s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(16,50.00000000000001)">
+                <g transform="rotate(180)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.5">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.42134831460674155s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.42134831460674155s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(25.95836943965738,25.958369439657385)">
+                <g transform="rotate(225)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.375">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.2808988764044944s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.2808988764044944s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(49.99999999999999,16)">
+                <g transform="rotate(270)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.25">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.1404494382022472s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.1404494382022472s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(74.04163056034261,25.95836943965738)">
+                <g transform="rotate(315)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.125">
+                    <animateTransform attributeName="transform" type="scale" begin="0s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="0s" />
+                  </circle>
+                </g>
+              </g>
+            </svg>
+          ) : (
+            <p>Continue</p>
+          )}
         </button>
       </div>
       <span

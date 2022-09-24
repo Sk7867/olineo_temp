@@ -1,8 +1,9 @@
 import gsap from "gsap";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useContext } from "react";
 import IFDContext from "../../Contexts/IFDContext";
 import styles from "./_IFD.module.css";
+import ReactCanvasConfetti from "react-canvas-confetti";
 
 const SpinWheel = ({ navigateForward }) => {
   const [isSpinningStarted, setIsSpinningStarted] = useState(false);
@@ -61,14 +62,27 @@ const SpinWheel = ({ navigateForward }) => {
     if (product_redeemed_id === null) return;
     if (isSpinningStarted) return;
     setIsSpinningStarted(true);
-    gsap.fromTo("#spin-circle", { rotate: 30 }, { rotate: 6120 - 60 * product_redeemed_id, duration: 16, ease: "back.inOut(0.3)", transformOrigin: "center" });
-    timeout = setTimeout(() => {
-      navigateForward("spinWheelSection", "productRevealSection");
-      sendEmailToCustomer();
-    }, 18000);
-    setTimeout(() => {
-      sendCustomerDetails();
-    }, 10000);
+    gsap.fromTo(
+      "#spin-circle",
+      { rotate: 30 },
+      {
+        rotate: 6120 - 60 * product_redeemed_id,
+        duration: 16,
+        ease: "back.inOut(0.3)",
+        transformOrigin: "center",
+        onComplete: () => {
+          fire();
+          setTimeout(() => {
+            navigateForward("spinWheelSection", "productRevealSection");
+            let audio = new Audio("IFD/confetti.wav");
+            audio.volume = 0.5;
+            audio.play();
+          }, 1500);
+          sendEmailToCustomer();
+          sendCustomerDetails();
+        },
+      }
+    );
   };
 
   useEffect(() => {
@@ -104,6 +118,49 @@ const SpinWheel = ({ navigateForward }) => {
     redeemProduct();
   }, []);
 
+  // Confetti
+  const refAnimationInstance = useRef(null);
+
+  const canvasStyles = {
+    position: "fixed",
+    pointerEvents: "none",
+    width: "100%",
+    height: "100%",
+    top: 0,
+    left: 0,
+  };
+
+  const getInstance = useCallback((instance) => {
+    refAnimationInstance.current = instance;
+  }, []);
+
+  const makeShot = useCallback((particleRatio, opts) => {
+    refAnimationInstance.current &&
+      refAnimationInstance.current({
+        ...opts,
+        origin: { y: 1.1 },
+        particleCount: Math.floor(800 * particleRatio),
+      });
+  }, []);
+
+  const fire = useCallback(() => {
+    makeShot(0.6, {
+      spread: 40,
+      startVelocity: 100,
+      // gravity: 0.2,
+      ticks: 600,
+      decay: 0.9,
+    });
+
+    makeShot(0.35, {
+      startVelocity: 85,
+      spread: 50,
+      decay: 0.9,
+      ticks: 600,
+      scalar: 1.2,
+    });
+  }, [makeShot]);
+
   return (
     <div className={styles["spin-wheel-container"]}>
       <div className={styles["product-card-section"]}>
@@ -112,9 +169,14 @@ const SpinWheel = ({ navigateForward }) => {
           <div id="product-card-container" className={styles["product-card-container"]}>
             {rewardProducts.map((item, idx) => {
               return (
-                <div className={styles["product-card"]}>
+                <div key={idx} className={styles["product-card"]}>
                   <img width="120" height="120" src={item.dataUrl} alt="" />
-                  <div className={styles["product-card-inner"]}></div>
+                  <div className={styles["product-card-inner"]}>
+                    <span className={styles["mrp"]}>₹{item.mrp}</span>
+                    <span className={styles["mop"]}>₹{item.mop}</span>
+
+                    <p className={styles["name"]}>{item.name}</p>
+                  </div>
                 </div>
               );
             })}
@@ -904,6 +966,7 @@ const SpinWheel = ({ navigateForward }) => {
           </defs>
         </svg>
       </div>
+      <ReactCanvasConfetti refConfetti={getInstance} style={canvasStyles} />
     </div>
   );
 };

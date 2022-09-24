@@ -1,61 +1,50 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useRef } from "react";
 import styles from "./_IFD.module.css";
 import html2canvas from "html2canvas";
 import ReactCanvasConfetti from "react-canvas-confetti";
-import { RWebShare } from "react-web-share";
-import { EmailShareButton, FacebookShareButton, InstapaperShareButton, LinkedinShareButton, TelegramShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import { EmailShareButton, FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 import { useEffect } from "react";
 import { useContext } from "react";
 import IFDContext from "../../Contexts/IFDContext";
+// import blob from "../../assets/png/product_1.png";
 
 const ProductReveal = () => {
   const eleRef = useRef(null);
-
+  const [isDownloading, setIsDownloading] = useState(false);
   const { rewardProducts, storeDetails, productDetails } = useContext(IFDContext);
 
-  const share = () => {
-    (async () => {
-      if (!("share" in navigator)) return;
+  const share = async () => {
+    const blob = await fetch("poster-1.png").then((r) => r.blob());
+    let data = {
+      title: "Indian Festival Days at O-LINE-O ",
+      text: `I just won a ${productDetails.product_redeemed} at ${storeDetails.name} in O-LINE-O Indian Festival Days`,
+      files: [new File([blob], "image.png", { type: blob.type })],
+    };
 
-      const canvas = await html2canvas(eleRef.current);
-      canvas.toBlob(async (blob) => {
-        // Even if you want to share just one file you need to
-        // send them as an array of files.
-        console.log(blob);
-        const files = [new File([blob], "image.png", { type: blob.type })];
-        console.log(files);
-        const shareData = {
-          text: "Some text",
-          title: "Some title",
-          files,
-        };
-        if (navigator.canShare(shareData)) {
-          try {
-            await navigator.share(shareData);
-          } catch (err) {
-            if (err.name !== "AbortError") {
-              console.error(err.name, err.message);
-              alert(err.name, err.message);
-            }
-          }
-        } else {
-          console.warn("Sharing not supported", shareData);
-        }
-      });
-    })();
+    try {
+      if (!navigator.canShare(data)) {
+        throw new Error("Can't share data.", data);
+      }
+      await navigator.share(data);
+    } catch (err) {
+      alert(err.name, err.message);
+    }
   };
 
-  const download = () => {
-    html2canvas(eleRef.current).then(async (canvas) => {
+  const download = async () => {
+    setIsDownloading(true);
+    setTimeout(async () => {
+      const canvas = await html2canvas(eleRef.current);
       canvas.getContext("2d");
-      var imgData = canvas.toDataURL("image/jpeg", 10000000000);
-      var a = document.createElement("a");
+      let imgData = canvas.toDataURL("image/jpeg", 10000000000);
+      let a = document.createElement("a");
       a.href = imgData;
       a.download = `O-line-O Coupon.png`;
       a.click();
+      setIsDownloading(false);
       console.log("done");
-    });
+    }, 100);
   };
 
   // Confetti
@@ -133,43 +122,23 @@ const ProductReveal = () => {
         <div className={styles["coupon-card"]}>
           <div className={styles["coupon-card-code-heading"]}>Coupon Code</div>
           <p className={styles["coupon-card-code-number"]}>{productDetails.coupon_code}</p>
-          {/* <svg style={{ position: "absolute", left: 0, bottom: 0, zIndex: 0 }} width="300" height="129" viewBox="0 0 300 129" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M0 31.7429L4.2457 29.9682C98.9805 -9.62961 205.747 -8.98896 300 31.7429V119C300 124.523 295.523 129 290 129H10C4.47716 129 0 124.523 0 119V31.7429Z"
-                fill="url(#paint0_linear_4382_20953)"
-              />
-              <defs>
-                <linearGradient id="paint0_linear_4382_20953" x1="150" y1="-32" x2="150" y2="129" gradientUnits="userSpaceOnUse">
-                  <stop offset="0.503125" stopColor="#EFC255" />
-                  <stop offset="1" stopColor="#DD9E2C" />
-                </linearGradient>
-              </defs>
-            </svg> */}
           <div className={styles["terms-conditions-box"]}>
             <h4>Terms and conditions</h4>
             <p>
               Cash discounts, if any, will apply only on the net amount of invoices sent to Buyer after deducting transportation charges, taxes and duties, and will be allowed only if (a) the invoice
               is paid according to Seller's payment terms and
             </p>
-            <button onClick={download}>
-              <span>Download</span>
+            <button disabled={isDownloading} onClick={download}>
+              <span>{isDownloading ? "Downloading..." : "Download"}</span>
             </button>
           </div>
         </div>
         <ReactCanvasConfetti refConfetti={getInstance} style={canvasStyles} />
       </div>
 
-      <RWebShare
-        data={{
-          text: `I just won a ${productDetails.product_redeemed} at ${storeDetails.name} in O-LINE-O Indian Festival Days`,
-          url: "/",
-        }}
-        onClick={() => console.log("shared successfully!")}
-      >
-        <button onClick={share} className={styles["primary-button"]}>
-          <p>Share</p>
-        </button>
-      </RWebShare>
+      <button onClick={share} className={styles["primary-button"]}>
+        <p>Share</p>
+      </button>
 
       <div className={styles["social-share-buttons"]}>
         <WhatsappShareButton

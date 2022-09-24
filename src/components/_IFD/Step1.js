@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import IFDContext from "../../Contexts/IFDContext";
@@ -6,6 +6,7 @@ import styles from "./_IFD.module.css";
 
 const Step1 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
   const navigate = useNavigate();
+  const [isButtonLoading, setIsButtonLoading] = useState(false);
   const { setActiveState, storeDetails, setStoreDetails } = useContext(IFDContext);
   console.log(storeDetails);
   const handleInputChange = (e) => {
@@ -17,17 +18,20 @@ const Step1 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
       return toast.error("Please Enter Store ID!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
 
     try {
+      setIsButtonLoading(true);
       const response = await fetch(`${process.env.REACT_APP_IFD_BASE_URL}/store/${storeDetails.id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
       const storeData = await response.json();
+      setIsButtonLoading(false);
       if (response.status === 404 || storeData.detail === "Not found.") return toast.error("Store not found!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
       if (response.status === 200) {
         setStoreDetails(storeData);
         navigateForward("step1", "step2");
       }
     } catch (error) {
+      setIsButtonLoading(false);
       toast.error("Something went wrong!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
       return;
     }
@@ -48,8 +52,85 @@ const Step1 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
       <div className={styles["form-container"]}>
         <h3 className={styles["form-heading"]}>1. Enter the store ID</h3>
         <input onChange={handleInputChange} value={storeDetails?.id} className={styles["form-input"]} type="text" placeholder="Store ID" />
-        <button onClick={handleSubmit} className={styles["primary-button"]}>
-          <p>Continue</p>
+        <button disabled={isButtonLoading} onClick={handleSubmit} className={styles["primary-button"]}>
+          {isButtonLoading ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              style={{ margin: "auto", background: "rgba(241, 242, 243, 0)", display: "block" }}
+              width="30px"
+              height="30px"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="xMidYMid"
+            >
+              <g transform="translate(84,50)">
+                <g transform="rotate(0)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity={1}>
+                    <animateTransform attributeName="transform" type="scale" begin="-0.9831460674157303s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.9831460674157303s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(74.04163056034261,74.04163056034261)">
+                <g transform="rotate(45)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.875">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.8426966292134831s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.8426966292134831s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(50,84)">
+                <g transform="rotate(90)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.75">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.7022471910112359s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.7022471910112359s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(25.958369439657385,74.04163056034261)">
+                <g transform="rotate(135)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.625">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.5617977528089888s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.5617977528089888s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(16,50.00000000000001)">
+                <g transform="rotate(180)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.5">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.42134831460674155s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.42134831460674155s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(25.95836943965738,25.958369439657385)">
+                <g transform="rotate(225)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.375">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.2808988764044944s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.2808988764044944s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(49.99999999999999,16)">
+                <g transform="rotate(270)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.25">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.1404494382022472s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.1404494382022472s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(74.04163056034261,25.95836943965738)">
+                <g transform="rotate(315)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.125">
+                    <animateTransform attributeName="transform" type="scale" begin="0s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="0s" />
+                  </circle>
+                </g>
+              </g>
+            </svg>
+          ) : (
+            <p>Continue</p>
+          )}
         </button>
         <hr className={styles["form-divider"]} />
         <svg

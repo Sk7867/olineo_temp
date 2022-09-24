@@ -65,7 +65,7 @@ section {
 .primary-button {
   border-radius: 0 0 0 1rem;
   background: linear-gradient(180deg, #efc255 50.31%, #dd9e2c 100%);
-  padding: 16px 0;
+  /* padding: 16px 0; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -78,6 +78,7 @@ section {
   transform: skew(-20deg);
   box-shadow: 0px 4px 4px 0px #00000040;
   margin: 10px auto 0;
+  height: 50px;
 }
 
 .primary-button p {
@@ -91,6 +92,10 @@ section {
   font-family: "Neo Sans Pro";
   text-align: center;
   color: #ffffff;
+}
+
+.primary-button svg {
+  transform: skew(20deg);
 }
 
 .secondary-button {
@@ -277,6 +282,43 @@ section {
   background: #ffffff;
   box-shadow: 0px 1px 2px rgba(157, 154, 154, 0.59);
   border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 5px;
+}
+
+.product-card-inner .mrp {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 5px;
+  letter-spacing: 0.015em;
+  font-variant: small-caps;
+  text-decoration: line-through;
+  color: #6d747a;
+}
+.product-card-inner .mop {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  color: #08090a;
+}
+.product-card-inner .name {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: 0.004em;
+  text-transform: capitalize;
+  margin: 0;
+  text-align: center;
+
+  color: #6d747a;
 }
 
 .spin-wheel-spinner-heading {
@@ -426,8 +468,8 @@ section {
 }
 .terms-conditions-box button {
   margin: auto;
-  width: 112px;
-  height: 26px;
+  width: 115px;
+  height: 28px;
   outline: none;
   border: none;
   background: #ffffff;

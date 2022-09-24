@@ -22,7 +22,7 @@
 }
 .thumbnail-container {
   position: absolute;
-  bottom: 40px;
+  bottom: 35px;
   left: 15px;
   display: flex;
   flex-direction: column;
@@ -43,7 +43,7 @@
 }
 
 .primary-floating-button {
-  position: fixed;
+  position: absolute;
   bottom: 20px;
   left: 50%;
   border-radius: 0 0 0 1rem;
@@ -67,7 +67,7 @@
 }
 
 .primary-floating-button p {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 16px;
   font-weight: 600;
   letter-spacing: 0.1px;
@@ -77,6 +77,7 @@
   font-family: "Neo Sans Pro";
   text-align: center;
   color: #41197b;
+  cursor: pointer;
 }
 .primary-floating-button:hover {
   scale: 1.06;

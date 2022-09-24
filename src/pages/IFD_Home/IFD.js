@@ -11,7 +11,7 @@ import ProductReveal from "../../components/_IFD/ProductReveal";
 import { useState, useEffect } from "react";
 import { useRef } from "react";
 
-const IFD = ({ userLoggedIn, setHomePage }) => {
+const IFD = ({ userLoggedIn, setIsHomePage }) => {
   const { activeState, setActiveState } = useContext(IFDContext);
 
   const [counterWidth, setCounterWidth] = useState(10);
@@ -88,7 +88,7 @@ const IFD = ({ userLoggedIn, setHomePage }) => {
   };
   const navigateBackward = (from, to) => {
     if (from === "step1" && to === "home") {
-      gsap.fromTo("#step-1-section", { y: 0, opacity: 1 }, { y: -30, opacity: 0, duration: 0.4, onComplete: () => setHomePage(true) });
+      gsap.fromTo("#step-1-section", { y: 0, opacity: 1 }, { y: -30, opacity: 0, duration: 0.4, onComplete: () => setIsHomePage(true) });
     }
 
     if (from === "step2" && to === "step1") {
