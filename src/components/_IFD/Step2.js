@@ -21,6 +21,8 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
   console.log(selectedDay);
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isOtpInvalid, setIsOtpInvalid] = useState(false);
+  const [isButtonLoading, setIsButtonLoading] = useState(false);
+  const [isOtpButtonLoading, setIsOtpButtonLoading] = useState(false);
   const [isOtpVarified, setIsOtpVarified] = useState(false);
 
   console.log(customerDetails);
@@ -48,8 +50,8 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
   const sendOtp = async () => {
     if (customerDetails.fullName.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm)) return toast.error("Please enter name!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
     if (validatePhone(customerDetails.mobileNumber) === null) return toast.error("Please enter 10 digit number!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
+    setIsOtpButtonLoading(true);
     const payload = { mobileNumber: parseInt(customerDetails.mobileNumber), fullName: customerDetails.fullName };
-
     const responseSignUp = await fetch(`${process.env.REACT_APP_BASE_URL}/user/signup`, {
       method: "POST",
       headers: { "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with", "Content-Type": "application/json", "Access-Control-Allow-origin": "*" },
@@ -58,6 +60,7 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
     const dataSignUp = await responseSignUp.json();
     if (dataSignUp.success) {
       setIsOtpSent(true);
+      isOtpButtonLoading(false);
       alert(dataSignUp.otp);
       setCustomerDetails((prev) => ({ ...prev, userId: dataSignUp.userId }));
       toast.success("OTP sent to your mobile number!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
@@ -70,7 +73,7 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
         body: JSON.stringify(payload),
       });
       const dataLogin = await responseLogin.json();
-
+      setIsOtpButtonLoading(false);
       if (!dataLogin.success) return;
       setIsOtpSent(true);
       alert(dataLogin.otp);
@@ -91,13 +94,19 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
       navigateForward("step2", "step3");
       return;
     }
+    setIsButtonLoading(true);
     const responseVerifyOtp = await fetch(`${process.env.REACT_APP_BASE_URL}/user/verifyOtp/${customerDetails.userId}`, {
       method: "PUT",
       headers: { "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with", "Content-Type": "application/json", "Access-Control-Allow-origin": "*" },
       body: JSON.stringify({ otp: otpValue.join("") }),
     });
     const verifyOtpData = await responseVerifyOtp.json();
-    if (!verifyOtpData.success) return setIsOtpInvalid(true);
+
+    if (!verifyOtpData.success) {
+      setIsOtpInvalid(true);
+      setIsButtonLoading(false);
+      return;
+    }
 
     if (verifyOtpData.success) {
       await fetch(`${process.env.REACT_APP_BASE_URL}/user/updateProfile`, {
@@ -125,6 +134,7 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
       });
       const userDetails = await getUserDetail.json();
       const user = userDetails?.data?.user;
+      setIsButtonLoading(false);
       navigateForward("step2", "step3");
       setTimeout(() => {
         setUserContext((prev) => ({
@@ -146,9 +156,9 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
 
   useEffect(() => {
     window.addEventListener("beforeunload", handleUnLoad);
-    return () => {
-      window.removeEventListener("beforeunload", handleUnLoad);
-    };
+    // return () => {
+    //   window.removeEventListener("beforeunload", handleUnLoad);
+    // };
   }, []);
 
   useEffect(() => {
@@ -183,8 +193,123 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
         <div className="relative">
           <input disabled={isOtpSent} className={styles["form-input"]} onChange={onInputChange} name="mobileNumber" value={customerDetails.mobileNumber} type="text" placeholder="Contact Number" />
           {!userLoggedIn && (
-            <button disabled={isOtpSent} onClick={sendOtp} className={styles["btn-send-otp"]}>
-              {isOtpSent ? "OTP Sent" : "Send OTP"}
+            <button disabled={isOtpSent || isOtpButtonLoading} onClick={sendOtp} className={styles["btn-send-otp"]}>
+              {isOtpButtonLoading ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                  style={{ margin: "auto", background: "rgba(241, 242, 243, 0)", display: "block" }}
+                  width="60px"
+                  height="40px"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="xMidYMid"
+                >
+                  <circle cx={84} cy={33} r={10} fill="#4c4c4c">
+                    <animate attributeName="r" repeatCount="indefinite" dur="0.5102040816326531s" calcMode="spline" keyTimes="0;1" values="9;0" keySplines="0 0.5 0.5 1" begin="0s" />
+                    <animate
+                      attributeName="fill"
+                      repeatCount="indefinite"
+                      dur="2.0408163265306123s"
+                      calcMode="discrete"
+                      keyTimes="0;0.25;0.5;0.75;1"
+                      values="#4c4c4c;#808080;#919191;#595959;#4c4c4c"
+                      begin="0s"
+                    />
+                  </circle>
+                  <circle cx={16} cy={33} r={10} fill="#4c4c4c">
+                    <animate
+                      attributeName="r"
+                      repeatCount="indefinite"
+                      dur="2.0408163265306123s"
+                      calcMode="spline"
+                      keyTimes="0;0.25;0.5;0.75;1"
+                      values="0;0;9;9;9"
+                      keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                      begin="0s"
+                    />
+                    <animate
+                      attributeName="cx"
+                      repeatCount="indefinite"
+                      dur="2.0408163265306123s"
+                      calcMode="spline"
+                      keyTimes="0;0.25;0.5;0.75;1"
+                      values="16;16;16;50;84"
+                      keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                      begin="0s"
+                    />
+                  </circle>
+                  <circle cx={50} cy={33} r={10} fill="#595959">
+                    <animate
+                      attributeName="r"
+                      repeatCount="indefinite"
+                      dur="2.0408163265306123s"
+                      calcMode="spline"
+                      keyTimes="0;0.25;0.5;0.75;1"
+                      values="0;0;9;9;9"
+                      keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                      begin="-0.5102040816326531s"
+                    />
+                    <animate
+                      attributeName="cx"
+                      repeatCount="indefinite"
+                      dur="2.0408163265306123s"
+                      calcMode="spline"
+                      keyTimes="0;0.25;0.5;0.75;1"
+                      values="16;16;16;50;84"
+                      keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                      begin="-0.5102040816326531s"
+                    />
+                  </circle>
+                  <circle cx={84} cy={33} r={10} fill="#919191">
+                    <animate
+                      attributeName="r"
+                      repeatCount="indefinite"
+                      dur="2.0408163265306123s"
+                      calcMode="spline"
+                      keyTimes="0;0.25;0.5;0.75;1"
+                      values="0;0;9;9;9"
+                      keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                      begin="-1.0204081632653061s"
+                    />
+                    <animate
+                      attributeName="cx"
+                      repeatCount="indefinite"
+                      dur="2.0408163265306123s"
+                      calcMode="spline"
+                      keyTimes="0;0.25;0.5;0.75;1"
+                      values="16;16;16;50;84"
+                      keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                      begin="-1.0204081632653061s"
+                    />
+                  </circle>
+                  <circle cx={16} cy={33} r={10} fill="#808080">
+                    <animate
+                      attributeName="r"
+                      repeatCount="indefinite"
+                      dur="2.0408163265306123s"
+                      calcMode="spline"
+                      keyTimes="0;0.25;0.5;0.75;1"
+                      values="0;0;9;9;9"
+                      keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                      begin="-1.530612244897959s"
+                    />
+                    <animate
+                      attributeName="cx"
+                      repeatCount="indefinite"
+                      dur="2.0408163265306123s"
+                      calcMode="spline"
+                      keyTimes="0;0.25;0.5;0.75;1"
+                      values="16;16;16;50;84"
+                      keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                      begin="-1.530612244897959s"
+                    />
+                  </circle>
+                </svg>
+              ) : isOtpSent ? (
+                "OTP Sent"
+              ) : (
+                "Send OTP"
+              )}
             </button>
           )}
         </div>
@@ -231,8 +356,85 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
         <input className={styles["form-input"]} onChange={onInputChange} name="email" value={customerDetails.email} type="text" placeholder="Email" />
         <input className={styles["form-input"]} onChange={onInputChange} name="dob" value={customerDetails.dob} type="date" />
         {/* <DatePicker onChange={(e) => console.log(e)} computableFormat="YYYY-MM-DD" format="YYYY/MM/DD" /> */}
-        <button onClick={handleSubmit} disabled={!userLoggedIn && !isOtpSent} className={styles["primary-button"]}>
-          <p>Continue</p>
+        <button onClick={handleSubmit} disabled={isButtonLoading || (!userLoggedIn && !isOtpSent)} className={styles["primary-button"]}>
+          {isButtonLoading ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              style={{ margin: "auto", background: "rgba(241, 242, 243, 0)", display: "block" }}
+              width="30px"
+              height="30px"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="xMidYMid"
+            >
+              <g transform="translate(84,50)">
+                <g transform="rotate(0)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity={1}>
+                    <animateTransform attributeName="transform" type="scale" begin="-0.9831460674157303s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.9831460674157303s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(74.04163056034261,74.04163056034261)">
+                <g transform="rotate(45)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.875">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.8426966292134831s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.8426966292134831s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(50,84)">
+                <g transform="rotate(90)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.75">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.7022471910112359s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.7022471910112359s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(25.958369439657385,74.04163056034261)">
+                <g transform="rotate(135)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.625">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.5617977528089888s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.5617977528089888s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(16,50.00000000000001)">
+                <g transform="rotate(180)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.5">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.42134831460674155s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.42134831460674155s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(25.95836943965738,25.958369439657385)">
+                <g transform="rotate(225)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.375">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.2808988764044944s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.2808988764044944s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(49.99999999999999,16)">
+                <g transform="rotate(270)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.25">
+                    <animateTransform attributeName="transform" type="scale" begin="-0.1404494382022472s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="-0.1404494382022472s" />
+                  </circle>
+                </g>
+              </g>
+              <g transform="translate(74.04163056034261,25.95836943965738)">
+                <g transform="rotate(315)">
+                  <circle cx={0} cy={0} r={4} fill="#381867" fillOpacity="0.125">
+                    <animateTransform attributeName="transform" type="scale" begin="0s" values="2.73 2.73;1 1" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" />
+                    <animate attributeName="fill-opacity" keyTimes="0;1" dur="1.1235955056179776s" repeatCount="indefinite" values="1;0" begin="0s" />
+                  </circle>
+                </g>
+              </g>
+            </svg>
+          ) : (
+            <p>Continue</p>
+          )}
         </button>
       </div>
     </section>
