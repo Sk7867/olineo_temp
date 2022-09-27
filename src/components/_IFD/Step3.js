@@ -9,7 +9,7 @@ import { toast, Slide } from "react-toastify";
 
 const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateForward }) => {
   const { storeDetails, customerDetails, customerExperience, setCustomerExperience, productDetails, setProductDetails } = useContext(IFDContext);
-
+  let audio = new Audio("IFD/complete.mp3");
   const categoryList = [
     { value: "phones", label: "Phones" },
     { value: "accessories", label: "Accessories" },
@@ -26,18 +26,24 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [isOtpButtonLoading, setIsOtpButtonLoading] = useState(false);
 
-  const customStyles = {
+  const [categoryErr, setCategoryErr] = useState(false);
+  const [productPurchasedErr, setProductPurchasedErr] = useState(false);
+  const [imeiFieldErr, setImeiFieldErr] = useState(false);
+  const [otherProductErr, setOtherProductErr] = useState(false);
+  const [otpInvalidErr, setOtpInvalidErr] = useState(false);
+
+  const categoryListStyles = {
     menu: (provided, state) => ({
       ...provided,
       padding: 2,
       textAlign: "initial",
       cursor: "pointer",
+      fontFamily: "Montserrat",
     }),
 
     control: (_, { selectProps: { width } }) => ({
       width: width,
       background: "#ffffff",
-      border: "1px solid #efefef",
       borderRadius: "4px",
       cursor: "pointer",
       display: "flex",
@@ -45,7 +51,51 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
       fontFamily: "Montserrat",
       maxWidth: "326px",
       maxHeight: "48px",
+      border: categoryErr && "2px solid red",
+      color: categoryErr && "red",
     }),
+    option: (provided, state) => ({
+      ...provided,
+      fontFamily: "Montserrat",
+      fontSize: "0.875rem",
+    }),
+    singleValue: (provided, state) => {
+      const fontFamily = "Montserrat";
+
+      return { ...provided, fontFamily };
+    },
+  };
+  const productListStyles = {
+    menu: (provided, state) => ({
+      ...provided,
+      padding: 2,
+      textAlign: "initial",
+      cursor: "pointer",
+      fontFamily: "Montserrat",
+    }),
+
+    control: (_, { selectProps: { width } }) => ({
+      width: width,
+      background: "#ffffff",
+      borderRadius: "4px",
+      cursor: "pointer",
+      display: "flex",
+      height: "48px",
+      fontFamily: "Montserrat",
+      maxWidth: "326px",
+      maxHeight: "48px",
+      border: productPurchasedErr && "2px solid red",
+      color: productPurchasedErr && "red",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      fontFamily: "Montserrat",
+      fontSize: "0.875rem",
+    }),
+    singleValue: (provided, state) => {
+      const fontFamily = "Montserrat";
+      return { ...provided, fontFamily };
+    },
   };
 
   const otpInputRefs = useRef([]);
@@ -58,7 +108,7 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     setOtpValue((prev) => prev.map((v, i) => (i === idx ? value : v)));
     idx < 5 && value !== "" && otpInputRefs.current[idx + 1]?.focus();
   };
-
+  console.log(productDetails);
   const getPhonesData = async () => {
     const response = await fetch(`${process.env.REACT_APP_IFD_BASE_URL}/products`, {
       method: "GET",
@@ -86,16 +136,35 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
 
   const sendOTP = async () => {
     console.log(productDetails);
-    if (!productDetails.selectedCategory || productDetails.selectedCategory === null)
-      return toast.error("Please Select Product Category!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
+    if (!productDetails.selectedCategory || productDetails.selectedCategory === null) {
+      setCategoryErr(true);
+      toast.error("Please Select Product Category!", { toastId: "category-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
+      return;
+    }
 
     if (productDetails.selectedCategory === "phones") {
-      if (productDetails.product_purchased === null) return toast.error("Please Select Phone!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
-      if (productDetails.imei?.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm))
-        return toast.error("Please Enter IMEI Number!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
+      if (productDetails.product_purchased === null) {
+        setProductPurchasedErr(true);
+        toast.error("Please Select Phone!", { toastId: "no-phone-selected-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
+        return;
+      }
+      if (productDetails.imei?.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm)) {
+        setImeiFieldErr(true);
+        toast.error("Please Enter IMEI Number!", { toastId: "empty-imei-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
+
+        return;
+      }
+      if (productDetails.imei?.length !== 15) {
+        setImeiFieldErr(true);
+        toast.error("IMEI Number must contain 15 digits!", { toastId: "imei-15-digit-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
+        return;
+      }
     } else {
-      if (productDetails.other_product_purchased === null || productDetails.other_product_purchased?.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm))
-        return toast.error("Please Enter Product Name!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
+      if (productDetails.other_product_purchased === null || productDetails.other_product_purchased?.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm)) {
+        setOtherProductErr(true);
+        toast.error("Please Enter Product Name!", { toastId: "product-name-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
+        return;
+      }
     }
     setIsOtpButtonLoading(true);
     const payload = {
@@ -112,15 +181,15 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     const data = await response.json();
     setIsOtpButtonLoading(false);
     if (response.status === 200 && data.detail === "Email sent successfully!") {
-      toast.success("OTP Sent Successfully!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
+      toast.success("OTP Sent Successfully!", { autoClose: 3000, hideProgressBar: false, position: "top-center" });
       setIsOtpSent(true);
+      otpInputRefs.current[0].focus();
     } else {
-      toast.error("Something went wrong!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
+      toast.error("Something went wrong!", { toastId: "sent-otp-server-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
     }
   };
 
   const handleNavigate = () => {
-    let audio = new Audio("IFD/complete.mp3");
     audio.volume = 0.1;
     setTimeout(() => {
       audio.play();
@@ -139,12 +208,16 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
   const handleSubmit = async () => {
     setCounterWidth(240);
 
-    if (otpValue.join("").match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm)) return toast.error("Please Enter OTP!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
+    if (otpValue.join("").match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm)) {
+      setOtpInvalidErr(true);
+      toast.error("Please Enter OTP!", { autoClose: 3000, hideProgressBar: false, position: "top-center" });
+      return;
+    }
 
     if (customerExperience === null) {
       gsap.fromTo(".experience-emoji-group", { scale: 1 }, { scale: 1.27, stagger: { amount: 0.3, from: "end" }, duration: 0.6, transformOrigin: "top" });
       gsap.to(".experience-emoji-group", { scale: 1, stagger: { amount: 0.3, from: "end" }, duration: 1, transformOrigin: "top", delay: 0.7 });
-      toast("Your Feedback is Valuable for Us :)", { autoClose: 2000, hideProgressBar: false, position: "bottom-center", transition: Slide });
+      toast("Your Feedback is Valuable for Us :)", { toastId: "no-feedback-err", autoClose: 2000, hideProgressBar: false, position: "top-center", transition: Slide });
       return;
     }
     setIsButtonLoading(true);
@@ -162,7 +235,8 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     if (response.status !== 200 || data.detail === "OTP is Invalid or Expired!") {
       setCounterWidth(200);
       setIsButtonLoading(false);
-      toast.error("OTP is Invalid or Expired!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
+      setOtpInvalidErr(true);
+      toast.error("OTP is Invalid or Expired!", { toastId: "verify-otp-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
       return;
     }
     if (response.status === 200 && data.detail === "OTP verified successfully!") {
@@ -171,6 +245,7 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
       setProductDetails((prev) => ({ ...prev, otp: otpValue.join("") }));
     }
   };
+
   return (
     <section style={{ paddingBottom: "80px" }}>
       <header className={styles["header"]}>
@@ -189,53 +264,68 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
 
         <Select
           className={styles["react-select-container"]}
-          autoComplete="utcj"
+          autoComplete="off"
           defaultValue={productDetails.selectedCategory}
-          onChange={(e) => setProductDetails((prev) => ({ ...prev, selectedCategory: e.value }))}
+          onChange={(e) => {
+            setCategoryErr(false);
+            setProductDetails((prev) => ({ ...prev, selectedCategory: e.value }));
+          }}
           isLoading={false}
           isClearable={false}
           placeholder="Category"
           isSearchable={false}
           menuColor="#381867"
           options={categoryList}
-          styles={customStyles}
+          styles={categoryListStyles}
           isDisabled={isOtpSent}
         />
 
         {productDetails.selectedCategory && productDetails.selectedCategory !== "phones" && (
           <input
-            className={styles["form-input"]}
+            className={`${styles["form-input"]} ${otherProductErr && styles["invalid"]}`}
             type="text"
             placeholder="Product Name"
             disabled={isOtpSent}
             value={productDetails?.other_product_purchased}
-            onChange={(e) => setProductDetails((prev) => ({ ...prev, other_product_purchased: e.target.value }))}
+            onChange={(e) => {
+              setOtherProductErr(false);
+              setProductDetails((prev) => ({ ...prev, other_product_purchased: e.target.value }));
+            }}
           />
         )}
         {productDetails.selectedCategory && productDetails.selectedCategory === "phones" && (
           <>
             <Select
               className={styles["react-select-container"]}
-              autoComplete="fyhv"
+              autoComplete="off"
               defaultValue={productDetails.product_purchased}
-              onChange={(e) => setProductDetails((prev) => ({ ...prev, product_purchased: e.value }))}
+              onChange={(e) => {
+                setProductPurchasedErr(false);
+                setProductDetails((prev) => ({ ...prev, product_purchased: e.value }));
+              }}
               isLoading={productDetails.phonesData?.length === 0}
               isClearable={false}
               placeholder="Phone Purchased"
               isSearchable={true}
               menuColor="#381867"
               options={phoneList}
-              styles={customStyles}
+              styles={productListStyles}
               isDisabled={isOtpSent}
             />
             <input
-              className={styles["form-input"]}
+              className={`${styles["form-input"]} ${imeiFieldErr && styles["invalid"]}`}
               type="text"
-              autoComplete="fyhv"
+              autoComplete="off"
               disabled={isOtpSent}
+              inputMode="numeric"
               placeholder="Phone IMEI Number"
               value={productDetails?.imei}
-              onChange={(e) => setProductDetails((prev) => ({ ...prev, imei: e.target.value }))}
+              minLength={15}
+              maxLength={15}
+              onChange={(e) => {
+                setImeiFieldErr(false);
+                (e.target.value === "" || /^[0-9\b]+$/.test(e.target.value)) && setProductDetails((prev) => ({ ...prev, imei: e.target.value }));
+              }}
             />
             {productDetails.product_purchased !== null && (
               <p className={styles["product-price-info"]}>
@@ -370,6 +460,7 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
             {otpValue.map((value, index) => {
               return (
                 <div
+                  key={index}
                   style={{
                     width: "50px",
                     height: "50px",
@@ -378,8 +469,8 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    border: "1px solid #EFEFEF",
                     borderRadius: "4px",
+                    border: otpInvalidErr ? "2px solid rgb(255 31 31)" : "1px solid #EFEFEF",
                   }}
                 >
                   <input
@@ -387,9 +478,27 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
                     type="text"
                     maxLength={1}
                     value={value}
-                    style={{ width: "100%", background: "transparent", textAlign: "center", height: "26px", border: "none", outline: "none", fontSize: "18px" }}
-                    onChange={(e) => handleOtpInputChange(e.target.value, index)}
-                    onFocus={(e) => e.target.select()}
+                    inputMode="numeric"
+                    style={{
+                      width: "100%",
+                      color: otpInvalidErr ? "rgb(255 31 31)" : "#000",
+                      background: "transparent",
+                      textAlign: "center",
+                      height: "26px",
+                      border: "none",
+                      outline: "none",
+                      fontSize: "18px",
+                    }}
+                    onChange={(e) => {
+                      setOtpInvalidErr(false);
+                      handleOtpInputChange(e.target.value, index);
+                    }}
+                    onFocus={(e) => {
+                      e.target.select();
+                      setTimeout(() => {
+                        e.target.scrollIntoView({ behavior: "smooth" });
+                      }, 500);
+                    }}
                     onKeyDown={(e) =>
                       e.key === "Backspace" && e.target.value === "" && index > 0 ? (e.preventDefault(), otpInputRefs.current[index - 1].focus()) : e.target.value === " " && e.target.select()
                     }
