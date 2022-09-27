@@ -8,8 +8,9 @@ import IFDContext from "../../Contexts/IFDContext";
 import { UserDataContext } from "../../Contexts/UserContext";
 import styles from "./_IFD.module.css";
 
-const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
+const Step2 = ({ navigateBackward, navigateForward }) => {
   const otpInputRefs = useRef([]);
+  const userLoggedIn = true;
 
   const { setUserContext } = useContext(UserDataContext);
 
@@ -241,7 +242,7 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
             inputMode="numeric"
             onChange={(e) => {
               setMobileInvalidErr(false);
-              onInputChange(e);
+              (e.target.value === "" || /^[0-9\b]+$/.test(e.target.value)) && onInputChange(e);
             }}
             name="mobileNumber"
             maxLength={10}

@@ -18,8 +18,8 @@ const SpinWheel = ({ navigateForward }) => {
   const sendCustomerDetails = async () => {
     let is_gte15k;
     if (productDetails.selectedCategory === "phones") {
-      let mrp = productDetails.phonesData.find((phone) => phone.id === productDetails.product_purchased).mrp;
-      is_gte15k = mrp >= 15000;
+      let mop = productDetails.phonesData.find((phone) => phone.id === productDetails.product_purchased).mop;
+      is_gte15k = mop >= 15000;
     } else {
       is_gte15k = productDetails.selectedCategory === "tablet" || productDetails.selectedCategory === "laptop" || productDetails.selectedCategory === "tv";
     }
@@ -108,8 +108,8 @@ const SpinWheel = ({ navigateForward }) => {
   const redeemProduct = async () => {
     let is_gte15k;
     if (productDetails.selectedCategory === "phones") {
-      let mrp = productDetails.phonesData.find((phone) => phone.id === productDetails.product_purchased).mrp;
-      is_gte15k = mrp >= 15000;
+      let mop = productDetails.phonesData.find((phone) => phone.id === productDetails.product_purchased).mop;
+      is_gte15k = mop >= 15000;
     } else {
       is_gte15k = productDetails.selectedCategory === "tablet" || productDetails.selectedCategory === "laptop" || productDetails.selectedCategory === "tv";
     }
@@ -121,7 +121,7 @@ const SpinWheel = ({ navigateForward }) => {
       }
     );
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     if (response.status === 200) {
       setProductDetails((prev) => ({ ...prev, coupon_code: data.coupon_code, product_redeemed: data.product_redeemed, product_redeemed_id: data.id }));
       setProduct_redeemed_id(data.id);
@@ -129,6 +129,7 @@ const SpinWheel = ({ navigateForward }) => {
   };
 
   useEffect(() => {
+    console.log(productDetails);
     if (productDetails.product_redeemed !== null) return;
     redeemProduct();
   }, []);

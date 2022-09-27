@@ -220,6 +220,12 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
       toast("Your Feedback is Valuable for Us :)", { toastId: "no-feedback-err", autoClose: 2000, hideProgressBar: false, position: "top-center", transition: Slide });
       return;
     }
+
+    // setCounterWidth(300);
+    // handleNavigate();
+    // setProductDetails((prev) => ({ ...prev, otp: otpValue.join("") }));
+    // return;
+
     setIsButtonLoading(true);
     const response = await fetch(`${process.env.REACT_APP_IFD_BASE_URL}/verify-otp`, {
       method: "POST",
@@ -327,12 +333,12 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
                 (e.target.value === "" || /^[0-9\b]+$/.test(e.target.value)) && setProductDetails((prev) => ({ ...prev, imei: e.target.value }));
               }}
             />
-            {productDetails.product_purchased !== null && (
+            {/* {productDetails.product_purchased !== null && (
               <p className={styles["product-price-info"]}>
                 Product price : <span style={{ textDecoration: "line-through" }}>{phoneList.find((phone) => phone.value === productDetails.product_purchased)?.mrp}</span> /{" "}
                 <span>{phoneList.find((phone) => phone.value === productDetails.product_purchased)?.mop}</span>
               </p>
-            )}
+            )} */}
           </>
         )}
 

@@ -25,7 +25,7 @@ section {
   text-align: center;
 }
 .form-heading {
-  font-family: "Neo Sans Pro", Geneva, Verdana, sans-serif;
+  font-family: NeoSansPro, Geneva, Verdana, sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -95,7 +95,7 @@ section {
   display: inline-block;
   transform: skew(20deg);
   margin: 0;
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   text-align: center;
   color: #ffffff;
 }
@@ -127,7 +127,7 @@ section {
   background: #efc255;
   border-radius: 4px;
 
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
@@ -135,7 +135,7 @@ section {
   color: #ffffff;
 }
 .store-name-heading {
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   font-style: normal;
   font-weight: 500;
   font-size: 30px;
@@ -185,7 +185,7 @@ section {
   text-align: initial;
 }
 .ask-otp {
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -201,7 +201,7 @@ section {
   background: #efc255;
   border-radius: 4px;
 
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
@@ -211,7 +211,7 @@ section {
   margin-bottom: 20px;
 }
 .rate-experience-text {
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
@@ -247,7 +247,7 @@ section {
 }
 
 .product-card-top-heading {
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
@@ -277,6 +277,9 @@ section {
   justify-content: center;
   align-items: center;
   padding-bottom: 50px;
+}
+.product-card img {
+  object-fit: contain;
 }
 
 .product-card-inner {
@@ -329,7 +332,7 @@ section {
 }
 
 .spin-wheel-spinner-heading {
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   font-style: normal;
   font-weight: 700;
   font-size: 30px;
@@ -373,7 +376,7 @@ section {
   background-color: #41236d;
 }
 .product-reveal-heading {
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   font-style: normal;
   font-weight: 700;
   font-size: 25px;
@@ -395,7 +398,7 @@ section {
   max-height: 200px;
 }
 .product-reveal-thankyou-text {
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
@@ -405,7 +408,7 @@ section {
 
   text-shadow: 0px 2px 4px rgba(237, 162, 93, 0.8);
   width: 70%;
-  margin: 100px auto 20px;
+  margin: 70px auto 20px;
 }
 
 .coupon-card {
@@ -430,12 +433,12 @@ section {
   justify-content: center;
   align-items: center;
   color: #ffffff;
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   text-shadow: 0px 1px 9px rgba(255, 255, 255, 0.35);
 }
 .coupon-card-code-number {
   margin-top: 12px;
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   font-size: 25px;
   line-height: 28px;
   font-weight: 600;
@@ -486,7 +489,7 @@ section {
   justify-content: center;
 }
 .terms-conditions-box button span {
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   font-style: normal;
   font-weight: 500;
   font-size: 13px;

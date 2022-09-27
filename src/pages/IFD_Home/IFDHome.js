@@ -94,19 +94,16 @@ export const IFDHome = ({ setHeaderData, userLoggedIn }) => {
         {isHomePage ? (
           <>
             <div id="poster-container" className={styles["poster-container"]} ref={sliderRef} style={{ overflow: "auto", maxHeight: "100%" }}>
-              <Parallax renderLayer={(percentage) => setimg1Scale(Math.round(percentage * 10) / 10)} parent={sliderRef.current} bgImage={"/poster-2.png"} strength={100}>
+              <Parallax renderLayer={(percentage) => setimg1Scale(Math.round(percentage * 10) / 10)} parent={sliderRef.current} bgImage={"/IFD/banner-1.png"} strength={100}>
                 <div style={{ height: 580 }}></div>
               </Parallax>
-              <Parallax renderLayer={(percentage) => setimg2Scale(Math.round(percentage * 10) / 10)} parent={sliderRef.current} bgImage={"/poster-1.png"} strength={100}>
+              <Parallax renderLayer={(percentage) => setimg2Scale(Math.round(percentage * 10) / 10)} parent={sliderRef.current} bgImage={"/IFD/banner-2.png"} strength={80}>
                 <div style={{ height: 580 }}></div>
               </Parallax>
-              <Parallax renderLayer={(percentage) => setimg3Scale(Math.round(percentage * 10) / 10)} parent={sliderRef.current} bgImage={"/poster-2.png"} strength={100}>
+              <Parallax renderLayer={(percentage) => setimg3Scale(Math.round(percentage * 10) / 10)} parent={sliderRef.current} bgImage={"/IFD/banner-3.png"} strength={50}>
                 <div style={{ height: 580 }}></div>
               </Parallax>
-              <Parallax renderLayer={(percentage) => setimg4Scale(Math.round(percentage * 10) / 10)} parent={sliderRef.current} bgImage={"/poster-1.png"} strength={100}>
-                <div style={{ height: 580 }}></div>
-              </Parallax>
-              <Parallax renderLayer={(percentage) => setimg5Scale(Math.round(percentage * 10) / 10)} parent={sliderRef.current} bgImage={"/poster-3.png"} strength={-20}>
+              <Parallax renderLayer={(percentage) => setimg4Scale(Math.round(percentage * 10) / 10)} parent={sliderRef.current} bgImage={"/IFD/banner-4.png"} strength={-20}>
                 <div style={{ height: 580 }}></div>
               </Parallax>
             </div>
@@ -114,26 +111,23 @@ export const IFDHome = ({ setHeaderData, userLoggedIn }) => {
             <div style={{ width: "100%", zIndex: 1, position: "fixed", bottom: 0, left: 0, right: 0, margin: "auto", height: "max-content", maxWidth: "400px" }}>
               <div id="thumbnail-container" className={styles["thumbnail-container"]}>
                 <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img1Scale && img1Scale <= 1 ? 0.3 + img1Scale : 1})` }}>
-                  <img src="/poster-1.png" alt="" />
+                  <img src="/IFD/banner-1.png" alt="" />
                 </div>
-                <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img2Scale && img2Scale <= 1.1 ? 0.5 + img2Scale : 1})` }}>
-                  <img src="/poster-2.png" alt="" />
+                <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img2Scale && img2Scale <= 1.1 ? 0.4 + img2Scale : 1})` }}>
+                  <img src="/IFD/banner-2.png" alt="" />
                 </div>
                 <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img3Scale && img3Scale <= 1.1 ? 0.5 + img3Scale : 1})` }}>
-                  <img src="/poster-3.png" alt="" />
+                  <img src="/IFD/banner-3.png" alt="" />
                 </div>
                 <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img4Scale && img4Scale <= 1.1 ? 0.5 + img4Scale : 1})` }}>
-                  <img src="/poster-1.png" alt="" />
-                </div>
-                <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img5Scale && img5Scale <= 1.1 ? 0.5 + img5Scale : 1})` }}>
-                  <img src="/poster-3.png" alt="" />
+                  <img src="/IFD/banner-4.png" alt="" />
                 </div>
               </div>
               <button id="primary-floating-button" onClick={navigateToRewardPage} className={styles["primary-floating-button"]}>
                 <p>Participate in IFD</p>
               </button>
 
-              <svg
+              {/* <svg
                 id="secondary-floating-button"
                 style={{ position: "absolute", bottom: "30px", right: "20px" }}
                 width={45}
@@ -189,7 +183,7 @@ export const IFDHome = ({ setHeaderData, userLoggedIn }) => {
                     <rect width="21.6964" height="21.6964" fill="white" transform="translate(12.0532 11.25)" />
                   </clipPath>
                 </defs>
-              </svg>
+              </svg> */}
             </div>
             <span
               id="home-button-span"
