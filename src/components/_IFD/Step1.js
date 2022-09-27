@@ -135,7 +135,8 @@ const Step1 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
         </button>
         <hr className={styles["form-divider"]} />
         <svg
-          onClick={() => navigate(userLoggedIn ? "/" : "/signup")}
+          // onClick={() => navigate(userLoggedIn ? "/" : "/signup")}
+          onClick={() => navigateBackward("step1", "home")}
           className={styles["secondary-button"]}
           width="310"
           height="50"

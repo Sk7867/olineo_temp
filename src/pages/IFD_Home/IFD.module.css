@@ -1,5 +1,5 @@
 .ifd-wrapper {
-  background: #38186789;
+  background: #4804ae89;
   width: 100%;
 }
 .container {
@@ -7,7 +7,7 @@
   height: 100vh;
   width: 100%;
   max-width: 400px;
-  /* border: 0.5px dashed red; */
+  box-shadow: 0 0 15px 2px #381867c4;
   overflow: hidden;
   margin-left: auto;
   margin-right: auto;
@@ -74,7 +74,7 @@
   display: inline-block;
   transform: skew(20deg);
   margin: 0;
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   text-align: center;
   color: #41197b;
   cursor: pointer;
@@ -121,7 +121,7 @@
   margin-top: 5px;
 }
 .steps-counter-text p {
-  font-family: "Neo Sans Pro";
+  font-family: NeoSansPro;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -147,7 +147,7 @@
 }
 
 .form-screen {
-  background: radial-gradient(65.76% 65.76% at 52.92% 34.24%, #492e72 43.01%, #381867 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+  background: radial-gradient(65.76% 65.76% at 52.92% 34.24%, #553586 43.01%, #451a84 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
   /* transition: all 0.3s ease; */
   position: absolute;
   top: 0;

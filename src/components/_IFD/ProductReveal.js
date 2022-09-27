@@ -15,10 +15,10 @@ const ProductReveal = () => {
   const { rewardProducts, storeDetails, productDetails } = useContext(IFDContext);
 
   const share = async () => {
-    const blob = await fetch("poster-1.png").then((r) => r.blob());
+    const blob = await fetch("IFD/IFD-Share.jpg").then((r) => r.blob());
     let data = {
-      title: "Indian Festival Days at O-LINE-O ",
-      text: `I just won a ${productDetails.product_redeemed} at ${storeDetails.name} in O-LINE-O Indian Festival Days`,
+      title: `Amazing Gifts at O-LINE-O Indian Festival Days`,
+      text: `I just won a ${productDetails.product_redeemed} at ${storeDetails.name} in O-LINE-O Indian Festival Days. https://olineo-ifd.com/indian-festival-days`,
       files: [new File([blob], "image.png", { type: blob.type })],
     };
 
@@ -28,7 +28,7 @@ const ProductReveal = () => {
       }
       await navigator.share(data);
     } catch (err) {
-      alert(err.name, err.message);
+      console.log(err.name, err.message);
     }
   };
 
@@ -121,7 +121,7 @@ const ProductReveal = () => {
         <h3 className={styles["product-reveal-thankyou-text"]}>THANK YOU FOR SHOPPING AT O-LINE-O.</h3>
         <div className={styles["coupon-card"]}>
           <div className={styles["coupon-card-code-heading"]}>Coupon Code</div>
-          <p className={styles["coupon-card-code-number"]}>{productDetails.coupon_code}</p>
+          <p className={styles["coupon-card-code-number"]}>{productDetails.coupon_code || "."}</p>
           <div className={styles["terms-conditions-box"]}>
             <h4>Terms and conditions</h4>
             <p>
