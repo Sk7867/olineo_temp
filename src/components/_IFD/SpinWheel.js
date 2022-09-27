@@ -4,6 +4,7 @@ import { useContext } from "react";
 import IFDContext from "../../Contexts/IFDContext";
 import styles from "./_IFD.module.css";
 import ReactCanvasConfetti from "react-canvas-confetti";
+import { toast } from "react-toastify";
 
 const SpinWheel = ({ navigateForward }) => {
   const [isSpinningStarted, setIsSpinningStarted] = useState(false);
@@ -12,7 +13,16 @@ const SpinWheel = ({ navigateForward }) => {
 
   const { storeDetails, customerDetails, productDetails, rewardProducts, setProductDetails, customerExperience } = useContext(IFDContext);
 
+  const audio = new Audio("IFD/confetti.wav");
+  audio.volume = 0.2;
   const sendCustomerDetails = async () => {
+    let is_gte15k;
+    if (productDetails.selectedCategory === "phones") {
+      let mrp = productDetails.phonesData.find((phone) => phone.id === productDetails.product_purchased).mrp;
+      is_gte15k = mrp >= 15000;
+    } else {
+      is_gte15k = productDetails.selectedCategory === "tablet" || productDetails.selectedCategory === "laptop" || productDetails.selectedCategory === "tv";
+    }
     const payload = {
       store_id: storeDetails.id,
       otp: productDetails.otp,
@@ -23,6 +33,7 @@ const SpinWheel = ({ navigateForward }) => {
       feedback: customerExperience,
       coupon_code: productDetails.coupon_code,
       product_redeemed: productDetails.product_redeemed,
+      is_gte15k,
     };
     if (productDetails.selectedCategory === "phones") {
       payload["imei"] = productDetails.imei;
@@ -57,9 +68,16 @@ const SpinWheel = ({ navigateForward }) => {
   };
 
   const spinWheel = () => {
+    navigator.vibrate([30, 20, 40]);
     let timeout;
     clearTimeout(timeout);
-    if (product_redeemed_id === null) return;
+    if (product_redeemed_id === null)
+      return toast.error("Products unavailable at the store. Please check with the store salesperson.", {
+        toastId: "spin-wheel-error",
+        autoClose: 3000,
+        hideProgressBar: false,
+        position: "top-center",
+      });
     if (isSpinningStarted) return;
     setIsSpinningStarted(true);
     gsap.fromTo(
@@ -74,8 +92,6 @@ const SpinWheel = ({ navigateForward }) => {
           fire();
           setTimeout(() => {
             navigateForward("spinWheelSection", "productRevealSection");
-            let audio = new Audio("IFD/confetti.wav");
-            audio.volume = 0.5;
             audio.play();
           }, 1500);
           sendEmailToCustomer();
@@ -87,7 +103,6 @@ const SpinWheel = ({ navigateForward }) => {
 
   useEffect(() => {
     gsap.set("#spin-circle", { rotate: 30, transformOrigin: "center" });
-    gsap.fromTo("#product-card-container", { xPercent: 0 }, { xPercent: -62, yoyo: true, duration: 16, ease: "linear", repeat: -1 });
   }, []);
 
   const redeemProduct = async () => {
@@ -165,22 +180,21 @@ const SpinWheel = ({ navigateForward }) => {
     <div className={styles["spin-wheel-container"]}>
       <div className={styles["product-card-section"]}>
         <h2 className={styles["product-card-top-heading"]}>Spin Wheel For Amazing Surprise</h2>
-        <div style={{ padding: "0px 16px 40px 16px" }}>
-          <div id="product-card-container" className={styles["product-card-container"]}>
-            {rewardProducts.map((item, idx) => {
-              return (
-                <div key={idx} className={styles["product-card"]}>
-                  <img width="120" height="120" src={item.dataUrl} alt="" />
-                  <div className={styles["product-card-inner"]}>
-                    <span className={styles["mrp"]}>₹{item.mrp}</span>
-                    <span className={styles["mop"]}>₹{item.mop}</span>
 
-                    <p className={styles["name"]}>{item.name}</p>
-                  </div>
+        <div id="product-card-container" className={styles["product-card-container"]}>
+          {rewardProducts.map((item, idx) => {
+            return (
+              <div key={idx} className={styles["product-card"]}>
+                <img width="120" height="120" src={item.dataUrl} alt="" />
+                <div className={styles["product-card-inner"]}>
+                  <span className={styles["mrp"]}>₹{item.mrp}</span>
+                  <span className={styles["mop"]}>₹{item.mop}</span>
+
+                  <p className={styles["name"]}>{item.name}</p>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -369,7 +383,7 @@ const SpinWheel = ({ navigateForward }) => {
               <rect id="pngwing_3" x="82.3574" y="167.697" width={54} height={54} transform="rotate(-63.0836 82.3574 167.697)" fill="url(#product-img-6)" />
             </g>
             <g id="Top">
-              <g onClick={spinWheel} id="center_spin_btn" className={styles["center-spin-btn"]}>
+              <g onClick={spinWheel} style={{ cursor: product_redeemed_id === null && "help" }} id="center_spin_btn" className={styles["center-spin-btn"]}>
                 <g id="Ellipse 2_2" filter="url(#filter18_d_13_2)">
                   <circle cx="195.5" cy="202.753" r="45.5" fill="#4E3088" />
                   <circle cx="195.5" cy="202.753" r={44} stroke="url(#paint20_linear_13_2)" strokeWidth={3} />

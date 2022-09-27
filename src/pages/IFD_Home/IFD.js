@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import { useRef } from "react";
 
 const IFD = ({ userLoggedIn, setIsHomePage }) => {
-  const { activeState, setActiveState } = useContext(IFDContext);
+  const { activeState, setActiveState, setCustomerDetails, setProductDetails, setCustomerExperience } = useContext(IFDContext);
 
   const [counterWidth, setCounterWidth] = useState(10);
 
@@ -96,6 +96,13 @@ const IFD = ({ userLoggedIn, setIsHomePage }) => {
       gsap.fromTo("#step-1-section", { scale: 0.9 }, { scale: 1, transformOrigin: "left", duration: 0.4 });
       setTimeout(() => {
         setActiveState((prev) => ({ ...prev, step2: false, step3: false }));
+        setCustomerDetails({
+          userId: "",
+          fullName: "",
+          mobileNumber: "",
+          email: "",
+          dob: "",
+        });
       }, 500);
     }
     if (from === "step3" && to === "step2") {
@@ -103,6 +110,18 @@ const IFD = ({ userLoggedIn, setIsHomePage }) => {
       gsap.fromTo("#step-2-section", { scale: 0.9 }, { scale: 1, transformOrigin: "left", duration: 0.4 });
       setTimeout(() => {
         setActiveState((prev) => ({ ...prev, step3: false }));
+        setCustomerExperience(null);
+        setProductDetails({
+          selectedCategory: null,
+          phonesData: [],
+          other_product_purchased: null,
+          product_purchased: 0,
+          imei: null,
+          otp: null,
+          coupon_code: "",
+          product_redeemed: null,
+          product_redeemed_id: "",
+        });
       }, 500);
     }
   };
@@ -166,9 +185,9 @@ const IFD = ({ userLoggedIn, setIsHomePage }) => {
           </defs>
         </svg>
         <div className={styles["steps-counter-text"]}>
-          <p>Step 1</p>
-          <p>Step 2</p>
-          <p>Step 3</p>
+          <p style={{ color: counterWidth >= 10 && "#efc255", transition: "0.5s" }}>Step 1</p>
+          <p style={{ color: counterWidth > 100 && "#efc255", transition: "0.5s" }}>Step 2</p>
+          <p style={{ color: counterWidth > 200 && "#efc255", transition: "0.5s" }}>Step 3</p>
         </div>
       </div>
     </>

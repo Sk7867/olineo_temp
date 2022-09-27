@@ -129,7 +129,7 @@ const ProductReveal = () => {
               is paid according to Seller's payment terms and
             </p>
             <button disabled={isDownloading} onClick={download}>
-              <span>{isDownloading ? "Downloading..." : "Download"}</span>
+              <span>Download</span>
             </button>
           </div>
         </div>

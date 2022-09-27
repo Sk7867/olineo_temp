@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import IFDContext from "../../Contexts/IFDContext";
 import { UserDataContext } from "../../Contexts/UserContext";
 import styles from "./_IFD.module.css";
-import DatePicker from "react-date-picker";
 
 const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
   const otpInputRefs = useRef([]);
@@ -17,24 +16,26 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
   const { customerDetails, setCustomerDetails, storeDetails } = useContext(IFDContext);
   const [otpValue, setOtpValue] = useState(["", "", "", "", "", ""]);
 
-  const [selectedDay, setSelectedDay] = useState(null);
-  console.log(selectedDay);
   const [isOtpSent, setIsOtpSent] = useState(false);
-  const [isOtpInvalid, setIsOtpInvalid] = useState(false);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [isOtpButtonLoading, setIsOtpButtonLoading] = useState(false);
-  const [isOtpVarified, setIsOtpVarified] = useState(false);
+
+  const [nameInvalidErr, setNameInvalidErr] = useState(false);
+  const [mobileInvalidErr, setMobileInvalidErr] = useState(false);
+  const [emailInvalidErr, setEmailInvalidErr] = useState(false);
+  const [dobInvalidErr, setDobInvalidErr] = useState(false);
+  const [otpInvalidErr, setOtpInvalidErr] = useState(false);
 
   console.log(customerDetails);
+  const getTodayDate = () => {
+    let date = new Date();
 
-  const onInputChange = (e) => {
-    setCustomerDetails({ ...customerDetails, [e.target.name]: e.target.value });
-  };
-  const handleOtpInputChange = (value, idx) => {
-    // if (value === null) return setOtpValue((prev) => prev.map((v, i) => (i === idx ? "" : v)));
-    // if (isNaN(parseInt(value))) return;
-    setOtpValue((prev) => prev.map((v, i) => (i === idx ? value : v)));
-    idx < 5 && value !== "" && otpInputRefs.current[idx + 1]?.focus();
+    let year = date.toLocaleString("default", { year: "numeric" });
+    let month = date.toLocaleString("default", { month: "2-digit" });
+    let day = date.toLocaleString("default", { day: "2-digit" });
+
+    let formattedDate = year + "-" + month + "-" + day;
+    return formattedDate;
   };
 
   const validateEmail = (email) => {
@@ -47,9 +48,29 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
     return String(phone).match(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/);
   };
 
+  const onInputChange = (e) => {
+    setCustomerDetails({ ...customerDetails, [e.target.name]: e.target.value });
+  };
+  const handleOtpInputChange = (value, idx) => {
+    // if (value === null) return setOtpValue((prev) => prev.map((v, i) => (i === idx ? "" : v)));
+    // if (isNaN(parseInt(value))) return;
+    setOtpValue((prev) => prev.map((v, i) => (i === idx ? value : v)));
+    idx < 5 && value !== "" && otpInputRefs.current[idx + 1]?.focus();
+  };
+
   const sendOtp = async () => {
-    if (customerDetails.fullName.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm)) return toast.error("Please enter name!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
-    if (validatePhone(customerDetails.mobileNumber) === null) return toast.error("Please enter 10 digit number!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
+    if (customerDetails.fullName.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm)) {
+      setNameInvalidErr(true);
+      toast.error("Please enter name!", { toastId: "empty-name-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
+      return;
+    }
+
+    if (validatePhone(customerDetails.mobileNumber) === null) {
+      setMobileInvalidErr(true);
+      toast.error("Please enter 10 digit number!", { toastId: "phone-num-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
+      return;
+    }
+
     setIsOtpButtonLoading(true);
     const payload = { mobileNumber: parseInt(customerDetails.mobileNumber), fullName: customerDetails.fullName };
     const responseSignUp = await fetch(`${process.env.REACT_APP_BASE_URL}/user/signup`, {
@@ -60,10 +81,10 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
     const dataSignUp = await responseSignUp.json();
     if (dataSignUp.success) {
       setIsOtpSent(true);
-      isOtpButtonLoading(false);
+      setIsOtpButtonLoading(false);
       alert(dataSignUp.otp);
       setCustomerDetails((prev) => ({ ...prev, userId: dataSignUp.userId }));
-      toast.success("OTP sent to your mobile number!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
+      toast.success("OTP sent to your mobile number!", { autoClose: 3000, hideProgressBar: false, position: "top-center" });
       return;
     }
     if (!dataSignUp.success && dataSignUp.message === "User exist with this mobile number") {
@@ -78,22 +99,36 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
       setIsOtpSent(true);
       alert(dataLogin.otp);
       setCustomerDetails((prev) => ({ ...prev, userId: dataLogin.userId }));
-      toast.success("OTP sent to your mobile number!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
+      toast.success("OTP sent to your mobile number!", { autoClose: 3000, hideProgressBar: false, position: "top-center" });
       return;
     }
   };
 
   const handleSubmit = async () => {
-    if (validateEmail(customerDetails.email) === null) return toast.error("Please enter valid Email!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
-    if (customerDetails.dob.match(/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/gm) === null)
-      return toast.error("Please enter Date of Birth!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
-
-    if (userLoggedIn) {
-      if (customerDetails.fullName.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm)) return toast.error("Please enter name!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
-      if (validatePhone(customerDetails.mobileNumber) === null) return toast.error("Please enter 10 digit number!", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
-      navigateForward("step2", "step3");
+    if (customerDetails.fullName.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm)) {
+      setNameInvalidErr(true);
+      toast.error("Please enter name!", { toastId: "no-name-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
       return;
     }
+    if (validatePhone(customerDetails.mobileNumber) === null) {
+      setMobileInvalidErr(true);
+      toast.error("Please enter 10 digit number!", { toastId: "no-num-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
+      return;
+    }
+
+    if (validateEmail(customerDetails.email) === null) {
+      setEmailInvalidErr(true);
+      toast.error("Please enter valid Email!", { toastId: "invalid-email-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
+      return;
+    }
+    if (customerDetails.dob.match(/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/gm) === null) {
+      setDobInvalidErr(true);
+      toast.error("Please enter Date of Birth!", { toastId: "no-dob-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
+      return;
+    }
+
+    if (userLoggedIn) return navigateForward("step2", "step3");
+
     setIsButtonLoading(true);
     const responseVerifyOtp = await fetch(`${process.env.REACT_APP_BASE_URL}/user/verifyOtp/${customerDetails.userId}`, {
       method: "PUT",
@@ -103,7 +138,7 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
     const verifyOtpData = await responseVerifyOtp.json();
 
     if (!verifyOtpData.success) {
-      setIsOtpInvalid(true);
+      setOtpInvalidErr(true);
       setIsButtonLoading(false);
       return;
     }
@@ -156,17 +191,15 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
 
   useEffect(() => {
     window.addEventListener("beforeunload", handleUnLoad);
-    // return () => {
-    //   window.removeEventListener("beforeunload", handleUnLoad);
-    // };
+    // setCustomerDetails({ ...customerDetails, dob: getTodayDate() });
   }, []);
 
   useEffect(() => {
-    if (!isOtpInvalid) return;
-    toast.error("OTP is Invalid or Expired", { autoClose: 3000, hideProgressBar: false, position: "bottom-center" });
-    setOtpValue(["", "", "", "", "", ""]);
-    setIsOtpInvalid(false);
-  }, [isOtpInvalid]);
+    if (!otpInvalidErr) return;
+    toast.error("OTP is Invalid or Expired", { toastId: "wrong-otp-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
+    // setOtpValue(["", "", "", "", "", ""]);
+    // setOtpInvalidErr(false);
+  }, [otpInvalidErr]);
 
   return (
     <section style={{ paddingBottom: "80px" }}>
@@ -189,9 +222,39 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
       </h1>
       <div className={styles["form-container"]}>
         <h3 className={styles["form-heading"]}>2. Start with filling your information here:</h3>
-        <input disabled={isOtpSent} className={styles["form-input"]} onChange={onInputChange} name="fullName" value={customerDetails.fullName} type="text" placeholder="Your Name" />
+        <input
+          disabled={isOtpSent}
+          className={`${styles["form-input"]} ${nameInvalidErr && styles["invalid"]}`}
+          onChange={(e) => {
+            setNameInvalidErr(false);
+            onInputChange(e);
+          }}
+          name="fullName"
+          value={customerDetails.fullName}
+          type="text"
+          placeholder="Your Name"
+        />
         <div className="relative">
-          <input disabled={isOtpSent} className={styles["form-input"]} onChange={onInputChange} name="mobileNumber" value={customerDetails.mobileNumber} type="text" placeholder="Contact Number" />
+          <input
+            disabled={isOtpSent}
+            className={`${styles["form-input"]} ${mobileInvalidErr && styles["invalid"]}`}
+            inputMode="numeric"
+            onChange={(e) => {
+              setMobileInvalidErr(false);
+              onInputChange(e);
+            }}
+            name="mobileNumber"
+            maxLength={10}
+            minLength={10}
+            value={customerDetails.mobileNumber}
+            type="text"
+            placeholder="Contact Number"
+            onFocus={(e) =>
+              setTimeout(() => {
+                e.target.scrollIntoView();
+              }, 500)
+            }
+          />
           {!userLoggedIn && (
             <button disabled={isOtpSent || isOtpButtonLoading} onClick={sendOtp} className={styles["btn-send-otp"]}>
               {isOtpButtonLoading ? (
@@ -330,8 +393,9 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
                       flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "center",
-                      border: "1px solid #EFEFEF",
+                      border: otpInvalidErr ? "2px solid rgb(255 31 31)" : "1px solid #EFEFEF",
                       borderRadius: "4px",
+                      transition: "0.1s",
                     }}
                   >
                     <input
@@ -339,9 +403,27 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
                       type="text"
                       maxLength={1}
                       value={value}
-                      style={{ width: "100%", background: "transparent", textAlign: "center", height: "26px", border: "none", outline: "none", fontSize: "18px" }}
-                      onChange={(e) => handleOtpInputChange(e.target.value, index)}
-                      onFocus={(e) => e.target.select()}
+                      onFocus={(e) => {
+                        e.target.select();
+                        setTimeout(() => {
+                          e.target.scrollIntoView();
+                        }, 500);
+                      }}
+                      inputMode="numeric"
+                      style={{
+                        width: "100%",
+                        color: otpInvalidErr ? "rgb(255 31 31)" : "#000",
+                        background: "transparent",
+                        textAlign: "center",
+                        height: "26px",
+                        border: "none",
+                        outline: "none",
+                        fontSize: "18px",
+                      }}
+                      onChange={(e) => {
+                        setOtpInvalidErr(false);
+                        handleOtpInputChange(e.target.value, index);
+                      }}
                       onKeyDown={(e) =>
                         e.key === "Backspace" && e.target.value === "" && index > 0 ? (e.preventDefault(), otpInputRefs.current[index - 1].focus()) : e.target.value === " " && e.target.select()
                       }
@@ -353,9 +435,34 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
             </div>
           </div>
         )}
-        <input className={styles["form-input"]} onChange={onInputChange} name="email" value={customerDetails.email} type="text" placeholder="Email" />
-        <input className={styles["form-input"]} onChange={onInputChange} name="dob" value={customerDetails.dob} type="date" />
-        {/* <DatePicker onChange={(e) => console.log(e)} computableFormat="YYYY-MM-DD" format="YYYY/MM/DD" /> */}
+        <input
+          className={`${styles["form-input"]} ${emailInvalidErr && styles["invalid"]}`}
+          onChange={(e) => {
+            setEmailInvalidErr(false);
+            onInputChange(e);
+          }}
+          onFocus={(e) =>
+            setTimeout(() => {
+              e.target.scrollIntoView({ behavior: "smooth" });
+            }, 500)
+          }
+          name="email"
+          value={customerDetails.email}
+          type="text"
+          placeholder="Email"
+        />
+        <input
+          style={{ color: !customerDetails.dob && "#8b8b8b" }}
+          className={`${styles["form-input"]} ${dobInvalidErr && styles["invalid"]}`}
+          onChange={(e) => {
+            setDobInvalidErr(false);
+            onInputChange(e);
+          }}
+          name="dob"
+          value={customerDetails.dob || getTodayDate()}
+          max={getTodayDate()}
+          type="date"
+        />
         <button onClick={handleSubmit} disabled={isButtonLoading || (!userLoggedIn && !isOtpSent)} className={styles["primary-button"]}>
           {isButtonLoading ? (
             <svg

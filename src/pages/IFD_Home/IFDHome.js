@@ -33,6 +33,7 @@ export const IFDHome = ({ setHeaderData, userLoggedIn }) => {
   const tl = gsap.timeline({ id: "homePageTransition" });
 
   const navigateToRewardPage = () => {
+    navigator.vibrate([0, 30, 10]);
     tl.to("#home-button-span", { opacity: 1, duration: 0.2 });
     tl.to(
       "#home-button-span",
@@ -54,7 +55,6 @@ export const IFDHome = ({ setHeaderData, userLoggedIn }) => {
   useEffect(() => {
     if (!isHomePage) return;
     gsap.fromTo("#poster-container", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.3, delay: 0.2, ease: "back.out(1)" });
-    gsap.fromTo("#thumbnail-container", { left: -60 }, { left: 15, duration: 1.8, delay: 1.3, ease: "back.out(1)" });
     gsap.fromTo(
       ["#primary-floating-button", "#home-button-span"],
       { bottom: -70 },
@@ -68,17 +68,25 @@ export const IFDHome = ({ setHeaderData, userLoggedIn }) => {
         },
       }
     );
+    gsap.fromTo("#thumbnail-container", { opacity: 0 }, { opacity: 1, duration: 1.8, delay: 1.3, ease: "back.out(1)" });
     gsap.fromTo(
       ["#secondary-floating-button"],
       { opacity: 0 },
       {
         opacity: 1,
         duration: 1,
-        // ease: "back.out(1)",
         delay: 1,
       }
     );
   }, [isHomePage]);
+
+  useEffect(() => {
+    document.title = "Indian Festival Days | O-LINE-O";
+
+    return () => {
+      document.title = "Olineo Nexus";
+    };
+  }, []);
 
   return (
     <div className={`${styles["ifd-wrapper"]} `}>
@@ -103,24 +111,24 @@ export const IFDHome = ({ setHeaderData, userLoggedIn }) => {
               </Parallax>
             </div>
 
-            <div id="thumbnail-container" className={styles["thumbnail-container"]}>
-              <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img1Scale && img1Scale <= 1 ? 0.3 + img1Scale : 1})` }}>
-                <img src="/poster-1.png" alt="" />
+            <div style={{ width: "100%", zIndex: 1, position: "fixed", bottom: 0, left: 0, right: 0, margin: "auto", height: "max-content", maxWidth: "400px" }}>
+              <div id="thumbnail-container" className={styles["thumbnail-container"]}>
+                <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img1Scale && img1Scale <= 1 ? 0.3 + img1Scale : 1})` }}>
+                  <img src="/poster-1.png" alt="" />
+                </div>
+                <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img2Scale && img2Scale <= 1.1 ? 0.5 + img2Scale : 1})` }}>
+                  <img src="/poster-2.png" alt="" />
+                </div>
+                <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img3Scale && img3Scale <= 1.1 ? 0.5 + img3Scale : 1})` }}>
+                  <img src="/poster-3.png" alt="" />
+                </div>
+                <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img4Scale && img4Scale <= 1.1 ? 0.5 + img4Scale : 1})` }}>
+                  <img src="/poster-1.png" alt="" />
+                </div>
+                <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img5Scale && img5Scale <= 1.1 ? 0.5 + img5Scale : 1})` }}>
+                  <img src="/poster-3.png" alt="" />
+                </div>
               </div>
-              <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img2Scale && img2Scale <= 1.1 ? 0.5 + img2Scale : 1})` }}>
-                <img src="/poster-2.png" alt="" />
-              </div>
-              <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img3Scale && img3Scale <= 1.1 ? 0.5 + img3Scale : 1})` }}>
-                <img src="/poster-3.png" alt="" />
-              </div>
-              <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img4Scale && img4Scale <= 1.1 ? 0.5 + img4Scale : 1})` }}>
-                <img src="/poster-1.png" alt="" />
-              </div>
-              <div className={styles["thumbnail"]} style={{ transition: "0.5s", transform: `scale(${0.5 <= img5Scale && img5Scale <= 1.1 ? 0.5 + img5Scale : 1})` }}>
-                <img src="/poster-3.png" alt="" />
-              </div>
-            </div>
-            <div style={{ width: "100%", zIndex: 1, position: "fixed", bottom: 0, height: "max-content", maxWidth: "400px" }}>
               <button id="primary-floating-button" onClick={navigateToRewardPage} className={styles["primary-floating-button"]}>
                 <p>Participate in IFD</p>
               </button>
