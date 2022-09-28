@@ -28,7 +28,11 @@ const ProductReveal = () => {
       }
       await navigator.share(data);
     } catch (err) {
-      console.log(err.name, err.message);
+      await navigator.share({
+        title: `Amazing Gifts at O-LINE-O Indian Festival Days`,
+        text: `I just won a ${productDetails.product_redeemed} at ${storeDetails.name} in O-LINE-O Indian Festival Days.`,
+        url: "https://olineo-ifd.com/indian-festival-days",
+      });
     }
   };
 
@@ -143,7 +147,7 @@ const ProductReveal = () => {
       <div className={styles["social-share-buttons"]}>
         <WhatsappShareButton
           title={`I just won a ${productDetails.product_redeemed} at ${storeDetails.name} in O-LINE-O Indian Festival Days`}
-          url="https://olineo-temp-sid.netlify.app/"
+          url="https://olineo-ifd.com/indian-festival-days"
           children={
             <svg width={43} height={42} viewBox="0 0 43 42" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
               <circle cx="21.3874" cy="20.8732" r="20.8732" fill="#F9F9F9" />
@@ -163,7 +167,7 @@ const ProductReveal = () => {
           }
         />
         <FacebookShareButton
-          url="https://olineo-temp-sid.netlify.app/"
+          url="https://olineo-ifd.com/indian-festival-days"
           quote={`I just won a ${productDetails.product_redeemed} at ${storeDetails.name} in O-LINE-O Indian Festival Days`}
           children={
             <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
@@ -184,7 +188,7 @@ const ProductReveal = () => {
           }
         />
         <TwitterShareButton
-          url="https://olineo-temp-sid.netlify.app/"
+          url="https://olineo-ifd.com/indian-festival-days"
           title={`I just won a ${productDetails.product_redeemed} at ${storeDetails.name} in O-LINE-O Indian Festival Days`}
           hashtags={["olineo", "indianfestivaldays"]}
           children={
@@ -206,7 +210,7 @@ const ProductReveal = () => {
           }
         />
         <EmailShareButton
-          url="https://olineo-temp-sid.netlify.app/"
+          url="https://olineo-ifd.com/indian-festival-days"
           subject="Product won at O-LINE-O Store"
           body={`I just won a ${productDetails.product_redeemed} at ${storeDetails.name} in O-LINE-O Indian Festival Days`}
           children={
