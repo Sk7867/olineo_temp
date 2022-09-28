@@ -68,7 +68,7 @@ const SpinWheel = ({ navigateForward }) => {
   };
 
   const spinWheel = () => {
-    navigator.vibrate([30, 20, 40]);
+    // navigator.vibrate([30, 20, 40]);
     let timeout;
     clearTimeout(timeout);
     if (product_redeemed_id === null)

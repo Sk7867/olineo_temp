@@ -33,7 +33,7 @@ export const IFDHome = ({ setHeaderData, userLoggedIn }) => {
   const tl = gsap.timeline({ id: "homePageTransition" });
 
   const navigateToRewardPage = () => {
-    navigator.vibrate([0, 30, 10]);
+    // navigator.vibrate([0, 30, 10]);
     tl.to("#home-button-span", { opacity: 1, duration: 0.2 });
     tl.to(
       "#home-button-span",
@@ -43,7 +43,9 @@ export const IFDHome = ({ setHeaderData, userLoggedIn }) => {
         duration: 1.3,
         delay: 0.2,
         onComplete: () => {
-          return setIsHomePage(false), tl.kill();
+          setIsHomePage(false);
+          tl.kill();
+          return;
         },
       },
       "<"
