@@ -11,6 +11,17 @@
   border-bottom: 0.063rem solid #EBEDF0;
 }
 
+.product_Details.cart_product_card {
+  max-width: 230px;
+}
+
+.cart_Product_Left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin: 0 0 1rem;
+}
+
 .cart_Product_Name{
   line-height: 1.25rem;
   color: #08090A;
@@ -26,7 +37,7 @@
   font-weight: 500;
   font-size: 0.75rem;
   line-height: 1.125rem;
-  margin: 0;
+  margin: 0 0 0.625rem;
 }
 
 .cart_Product_Price_Section{
@@ -75,8 +86,9 @@
 .cart_Product_Delivery_Info{
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 0.375rem;
+  flex: 1;
 }
 
 .cart_Product_Delivery_Estimate{
@@ -110,13 +122,15 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  min-width: 140px;
 }
 
 .cart_Product_Image_Container{
   max-width: 122px;
-  max-height: 100%;
+  max-height: 122px;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .cart_Product_Image_Container img{
@@ -204,6 +218,11 @@ margin: 0;
   color: #C5292A;
 }
 
+.cart_Product_Details{
+  justify-content: flex-start;
+
+}
+
 @media screen and (min-width: 768px) {
   .cart_Product_Name{
     font-size: 1rem;
@@ -214,6 +233,7 @@ margin: 0;
 
   .cart_Product_Color{
     letter-spacing: 0.004em;
+    margin: 0;
   }
 
   .cart_Product_Price_Section{
@@ -230,10 +250,11 @@ margin: 0;
     margin: 0 0 1rem;
   }
 
-  .cart_product_card{
+  .product_Details.cart_product_card{
     /* justify-content: flex-start; */
     gap: 1.5rem;
     width: 75%;
+    max-width: 100%;
   }
 
   .combined_Button_Container img{
@@ -247,6 +268,11 @@ margin: 0;
     font-size: 0.875rem;
     line-height: 1.5rem;
     letter-spacing: -0.015em;
+  }
+
+  .cart_Product_Left{
+    flex: 1;
+    margin: 0;
   }
 }
 

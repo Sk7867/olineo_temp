@@ -10,7 +10,8 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [selected, setSelected] = useState(null);
   const [disable, setDisable] = useState(true);
-  const { userAddress, setUserContext, setUserAddress, orderInit, cartArray } = useContext(UserDataContext)
+  const [cartProdMoreThanOne, setCartProdMoreThanOne] = useState(false);
+  const { setUserAddress, cartArray } = useContext(UserDataContext)
   const nav = useNavigate()
 
   useEffect(() => {
@@ -39,7 +40,17 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
       })
   }, [])
 
-  // console.log(cartArray);
+  useEffect(() => {
+    if (cartArray && cartArray.loaded && cartArray.no_of_carts === 1) {
+      if (cartArray.cart[0].quantity === 1) {
+        setCartProdMoreThanOne(false)
+      } else {
+        setCartProdMoreThanOne(true)
+      }
+    } else {
+      setCartProdMoreThanOne(true)
+    }
+  }, [])
 
   const deliveryOptions = [
     {
@@ -61,8 +72,6 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
     nav(pageURL);
   }
 
-  // console.log(orderInit);
-
   const breadCrumbsData = [
     {
       text: 'Home',
@@ -78,8 +87,6 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
     },
   ]
 
-  // console.log(selected);
-
   return <>
     <div className='page_Wrapper page_Margin_Top_Secondary'>
       <BreadCrumbs data={breadCrumbsData} />
@@ -94,7 +101,7 @@ const DeliveryOptions = ({ setDeliveryOptionSelected, setHeaderData }) => {
               {
                 deliveryOptions.map((item, index) => (
                   <div key={index}>
-                    <label htmlFor={item.text} className={`radiobtn-label payment_Methods_Labels  ${selected === item.link ? ('payment_Methods_Selected') : ('')}`} onClick={() => { handleSelected(item.link); setDisable(false) }}>
+                    <label htmlFor={item.text} className={`radiobtn-label payment_Methods_Labels  ${selected === item.link ? ('payment_Methods_Selected') : ('')}  ${item.text === 'Pickup from store' ? (cartProdMoreThanOne ? 'option_Disabled' : '') : ('')}`} onClick={() => { handleSelected(item.link); setDisable(false) }}>
                       <input type="radio" name='delivery' id={item.text} value={item.text} />
                       <span className="radio-custom"></span>{item.text}
                     </label>
