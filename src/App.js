@@ -78,6 +78,7 @@ import StoreFinder from "./pages/StoreFinder/StoreFinder";
 import MyWishlist from "./pages/Wishlist/MyWishlist";
 import IFDHome from "./pages/IFD_Home";
 import IFD from "./pages/IFD_Home/IFD";
+import PreLoader from "./components/_IFD/PreLoader";
 
 function App() {
   const [loginRedirect, setLoginRedirect] = useState(false);
@@ -387,6 +388,7 @@ function App() {
   return (
     <>
       <ScrollToTop />
+      <PreLoader />
       <div className="App">
         <UserDataContext.Provider
           value={{
