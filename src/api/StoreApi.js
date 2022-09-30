@@ -16,7 +16,7 @@ export const getStoreLocation = async (ean, quantity, pin) => {
 
   const findStoreBody = {
     eancode: ean,
-    quantity: quantity,
+    qty: quantity,
     pincode: pin
   }
 
