@@ -8,9 +8,9 @@ import IFDContext from "../../Contexts/IFDContext";
 import { UserDataContext } from "../../Contexts/UserContext";
 import styles from "./_IFD.module.css";
 
-const Step2 = ({ navigateBackward, navigateForward }) => {
+const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
   const otpInputRefs = useRef([]);
-  const userLoggedIn = true;
+  // const userLoggedIn = true;
 
   const { setUserContext } = useContext(UserDataContext);
 
@@ -83,7 +83,7 @@ const Step2 = ({ navigateBackward, navigateForward }) => {
     if (dataSignUp.success) {
       setIsOtpSent(true);
       setIsOtpButtonLoading(false);
-      alert(dataSignUp.otp);
+      // alert(dataSignUp.otp);
       setCustomerDetails((prev) => ({ ...prev, userId: dataSignUp.userId }));
       toast.success("OTP sent to your mobile number!", { autoClose: 3000, hideProgressBar: false, position: "top-center" });
       return;
@@ -98,7 +98,7 @@ const Step2 = ({ navigateBackward, navigateForward }) => {
       setIsOtpButtonLoading(false);
       if (!dataLogin.success) return;
       setIsOtpSent(true);
-      alert(dataLogin.otp);
+      // alert(dataLogin.otp);
       setCustomerDetails((prev) => ({ ...prev, userId: dataLogin.userId }));
       toast.success("OTP sent to your mobile number!", { autoClose: 3000, hideProgressBar: false, position: "top-center" });
       return;
@@ -186,14 +186,6 @@ const Step2 = ({ navigateBackward, navigateForward }) => {
     }
   };
 
-  function handleUnLoad(event) {
-    event.returnValue = null;
-  }
-
-  useEffect(() => {
-    window.addEventListener("beforeunload", handleUnLoad);
-    // setCustomerDetails({ ...customerDetails, dob: getTodayDate() });
-  }, []);
 
   useEffect(() => {
     if (!otpInvalidErr) return;

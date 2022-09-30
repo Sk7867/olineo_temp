@@ -90,6 +90,15 @@ export const IFDHome = ({ setHeaderData, userLoggedIn }) => {
     };
   }, []);
 
+  function handleUnLoad(event) {
+    event.returnValue = null;
+  }
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleUnLoad);
+    // setCustomerDetails({ ...customerDetails, dob: getTodayDate() });
+  }, []);
+
   return (
     <div className={`${styles["ifd-wrapper"]} `}>
       <div className={`${styles["container"]} `}>

@@ -1,3 +1,16 @@
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #dac6f8;
+}
+
 section {
   padding: 15px;
   min-width: 100%;
