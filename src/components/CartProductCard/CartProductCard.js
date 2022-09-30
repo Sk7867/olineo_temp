@@ -115,26 +115,38 @@ const CartProductCard = ({
       <div className={`cart_Product_Wrapper ${comboProduct ? 'border-0' : ''}`}>
         <div className="product_Details cart_product_card">
           <div className="cart_Product_Left">
-            <h4 className='cart_Product_Name'>
-              {prodData.name}
-            </h4>
-            <p className="cart_Product_Color">
-              Color : {prodData.color}
-            </p>
+            {prodData.name && (
+              <h4 className='cart_Product_Name'>
+                {prodData.name}
+              </h4>
+            )}
+            {prodData.color && (
+              <p className="cart_Product_Color">
+                Color : {prodData.color}
+              </p>
+            )}
             <div className="cart_Product_Price_Section">
-              <p className="cart_Product_Discount_Price">
-                ₹{prodData.price.discountPrice ? prodData.price.discountPrice : prodData.price.mop}
-              </p>
-              <p className="cart_Product_Original_Price">
-                ₹{prodData.price.mrp}
-              </p>
-              <p className='cart_Product_Discount'>
-                {prodData.discount}% off
-              </p>
+              {prodData.price.discountPrice || prodData.price.mop && (
+                <p className="cart_Product_Discount_Price">
+                  ₹{prodData.price.discountPrice ? prodData.price.discountPrice : prodData.price.mop}
+                </p>
+              )}
+              {prodData.price.mrp && (
+                <p className="cart_Product_Original_Price">
+                  ₹{prodData.price.mrp}
+                </p>
+              )}
+              {prodData.discount && (
+                <p className='cart_Product_Discount'>
+                  {prodData.discount}% off
+                </p>
+              )}
             </div>
-            <p className="cart_Product_Offers">
-              {prodData.productOffersAvailable}
-            </p>
+            {prodData.productOffersAvailable && (
+              <p className="cart_Product_Offers">
+                {prodData.productOffersAvailable}
+              </p>
+            )}
             {
               matches && (
                 <p className={`cart_Product_Availability ${prodData.productQuantityAvailable <= 10 ? ('color_Red') : ('')} `}>{prodData.productAvailabilty}</p>

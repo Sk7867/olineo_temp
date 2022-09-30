@@ -85,7 +85,6 @@ function App() {
   const [deliveryOptionSelected, setDeliveryOptionSelected] = useState("");
   const [editID, setEditID] = useState(0);
   const [addressSelected, setAddressSelected] = useState(0);
-  const [storeSelected, setStoreSelected] = useState(0);
   const [allProducts, setAllProducts] = useState({
     loaded: false,
     no_of_products: 0,
@@ -139,6 +138,8 @@ function App() {
     quantity: [],
     shippingAddressId: "",
     coupon: "",
+    type: "",
+    storeId: ""
   });
   const [priceBoxDetails, setPriceBoxDetails] = useState({
     cartItemsNumber: 0,
@@ -395,26 +396,26 @@ function App() {
           }}
         >
           {loc.pathname === "/login" ||
-          loc.pathname === "/signup" ||
-          loc.pathname === "/otp" ||
-          loc.pathname === "/adduser" ||
-          loc.pathname === "/admin-home" ||
-          loc.pathname === "/admin-add-product" ||
-          loc.pathname === "/admin-add-product-csv" ||
-          loc.pathname === "/admin-add-shop" ||
-          loc.pathname === "/admin-discounts" ||
-          loc.pathname === "/admin-add-discount" ||
-          loc.pathname === "/admin-orders" ||
-          loc.pathname === "/admin" ||
-          loc.pathname === "/admin-products" ||
-          loc.pathname === "/admin-add-banner" ||
-          loc.pathname === "/admin-banner" ||
-          loc.pathname === "/admin-alluser" ||
-          loc.pathname === "/admin-shops" ||
-          loc.pathname === "/admin-query" ||
-          loc.pathname === "/admin-payments" ||
-          loc.pathname === "/admin-cancellation" ||
-          loc.pathname === "/indian-festival-days" ? (
+            loc.pathname === "/signup" ||
+            loc.pathname === "/otp" ||
+            loc.pathname === "/adduser" ||
+            loc.pathname === "/admin-home" ||
+            loc.pathname === "/admin-add-product" ||
+            loc.pathname === "/admin-add-product-csv" ||
+            loc.pathname === "/admin-add-shop" ||
+            loc.pathname === "/admin-discounts" ||
+            loc.pathname === "/admin-add-discount" ||
+            loc.pathname === "/admin-orders" ||
+            loc.pathname === "/admin" ||
+            loc.pathname === "/admin-products" ||
+            loc.pathname === "/admin-add-banner" ||
+            loc.pathname === "/admin-banner" ||
+            loc.pathname === "/admin-alluser" ||
+            loc.pathname === "/admin-shops" ||
+            loc.pathname === "/admin-query" ||
+            loc.pathname === "/admin-payments" ||
+            loc.pathname === "/admin-cancellation" ||
+            loc.pathname === "/indian-festival-days" ? (
             ""
           ) : (
             <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />
@@ -516,8 +517,8 @@ function App() {
               exact
               element={<HomeDelivery setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />}
             />
-            <Route path="/store-pickup" exact element={<StorePickUp setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
-            <Route path="/store-near-me" exact element={<StoreNear setHeaderData={setHeaderData} setStoreSelected={setStoreSelected} />} />
+            <Route path="/store-pickup" exact element={<StorePickUp setHeaderData={setHeaderData} />} />
+            <Route path="/store-near-me" exact element={<StoreNear setHeaderData={setHeaderData} />} />
             <Route path="/product/:slug" exact element={<ProductPage setHeaderData={setHeaderData} />} />
             <Route path="/:category" exact element={<ProductCategory setHeaderData={setHeaderData} />} />
             <Route path="/:category/f/:slug" exact element={<ProductCategory setHeaderData={setHeaderData} />} />
@@ -569,22 +570,22 @@ function App() {
             <Route path="/indian-festival-days" exact element={<IFDHome userLoggedIn={userLoggedIn} setHeaderData={setHeaderData} />} />
           </Routes>
           {loc.pathname === "/admin" ||
-          loc.pathname === "/admin-home" ||
-          loc.pathname === "/admin-add-product" ||
-          loc.pathname === "/admin-add-product-csv" ||
-          loc.pathname === "/admin-discounts" ||
-          loc.pathname === "/admin-add-discount" ||
-          loc.pathname === "/admin-add-shop" ||
-          loc.pathname === "/admin-orders" ||
-          loc.pathname === "/admin-products" ||
-          loc.pathname === "/admin-banner" ||
-          loc.pathname === "/admin-add-banner" ||
-          loc.pathname === "/admin-alluser" ||
-          loc.pathname === "/admin-shops" ||
-          loc.pathname === "/admin-query" ||
-          loc.pathname === "/admin-payments" ||
-          loc.pathname === "/admin-cancellation" ||
-          loc.pathname === "/indian-festival-days" ? null : (
+            loc.pathname === "/admin-home" ||
+            loc.pathname === "/admin-add-product" ||
+            loc.pathname === "/admin-add-product-csv" ||
+            loc.pathname === "/admin-discounts" ||
+            loc.pathname === "/admin-add-discount" ||
+            loc.pathname === "/admin-add-shop" ||
+            loc.pathname === "/admin-orders" ||
+            loc.pathname === "/admin-products" ||
+            loc.pathname === "/admin-banner" ||
+            loc.pathname === "/admin-add-banner" ||
+            loc.pathname === "/admin-alluser" ||
+            loc.pathname === "/admin-shops" ||
+            loc.pathname === "/admin-query" ||
+            loc.pathname === "/admin-payments" ||
+            loc.pathname === "/admin-cancellation" ||
+            loc.pathname === "/indian-festival-days" ? null : (
             <Footer />
           )}
         </UserDataContext.Provider>

@@ -18,7 +18,7 @@ import locationWhite from '../../assets/vector/location_white.svg'
 import locationWarningYellowIcon from '../../assets/vector/location_warning_yellow.svg'
 import { getSearchedProduct } from '../../api/Product'
 import { useNavigate } from 'react-router-dom'
-import { getStoreLocation, getStoreUsingPincode } from '../../api/StoreApi'
+import { getStoreUsingPincode } from '../../api/StoreApi'
 import Loader from '../../components/Loader/Loader'
 
 const StoreFinder = ({ setHeaderData }) => {
@@ -141,35 +141,6 @@ const StoreFinder = ({ setHeaderData }) => {
       setShowLoader(false)
     }
   }, [userPincode])
-
-
-  const handleEnterClick = (e) => {
-    let value = e.target.value
-    if (e.code === 'Enter') {
-      setShowLoader(true)
-      getStoreUsingPincode(value)
-        .then(res => res ? (
-          setStoreLocations({
-            loaded: true,
-            no_of_stores: res.stores?.length,
-            stores: res.stores
-          }),
-          setShowStore(true),
-          setShowLoader(false)
-        ) : (''))
-      // let pinSearchTerm = 'pincode=' + value
-      // getStoreLocation(pinSearchTerm)
-      //   .then(res => res ? (
-      //     setStoreLocations({
-      //       loaded: true,
-      //       no_of_stores: res.no_of_stores,
-      //       stores: res.stores
-      //     }),
-      //     setShowStore(true),
-      //     setShowLoader(false)
-      //   ) : (''))
-    }
-  }
 
   return (
     <>

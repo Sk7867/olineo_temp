@@ -17,22 +17,29 @@ import useGeolocation from '../../hooks/useGeolocation'
 import { UserDataContext } from '../../Contexts/UserContext'
 import { getStoreLocation } from '../../api/StoreApi'
 import Loader from '../../components/Loader/Loader'
+import { initOrder, paymentInit } from '../../api/OrdersApi'
 
-const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
+const StorePickUp = ({ setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)")
   const [disable, setDisable] = useState(true);
-  const [nearStore, setNearStore] = useState(false)
   const [showStore, setShowStore] = useState(false)
   const nav = useNavigate()
   const { location, locationFetch } = useGeolocation()
+  const [storeSelectedId, setStoreSelectedId] = useState('')
   const {
-    userLocation,
     setUserLocation,
     storeLocations,
     setStoreLocations,
-    setSearchedProduct
+    cartArray,
+    orderInit,
+    setOrderInit,
+    userDefaultAddress
   } = useContext(UserDataContext)
   const [showLoader, setShowLoader] = useState(false)
+  const [userPincode, setUserPincode] = useState('')
+  const [initProcessing, setInitProcessing] = useState(false);
+
+  console.log(userDefaultAddress)
 
   useEffect(() => {
     setHeaderData({
@@ -45,8 +52,6 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
   const handleStoreSelectButton = () => {
     locationFetch();
   }
-
-  console.log(location);
 
   const breadCrumbsData = [
     {
@@ -77,52 +82,80 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
     }
   }, [location])
 
-  const storeBoxData = [
-    {
-      id: 1,
-      store_Name: 'Store Name',
-      store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
-      store_Timing: 'Mon - Sun 10 AM - 10 PM',
-      store_Contact: [
-        '3098098767',
-        '3764735623',
-      ],
-      store_Map_Link: '#',
-      open_Store_Button: false,
-      open_Store_Menu: '/store1/category1'
-    },
-    {
-      id: 2,
-      store_Name: 'Store Name',
-      store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
-      store_Timing: 'Mon - Sun 10 AM - 10 PM',
-      store_Contact: [
-        '3098098767',
-        '3764735623',
-      ],
-      store_Map_Link: '#',
-      open_Store_Button: false,
-      open_Store_Menu: '/store1/category1'
-    },
-  ]
-
-  const handleEnterClick = (e) => {
-    let value = e.target.value
-    if (e.code === 'Enter') {
-      setShowLoader(true)
-      let pinSearchTerm = 'pincode=' + value
-      getStoreLocation(pinSearchTerm)
-        .then(res => res ? (
-          setStoreLocations({
-            loaded: true,
-            no_of_stores: res.no_of_stores,
-            stores: res.stores
-          }),
-          setShowStore(true),
-          setShowLoader(false)
-        ) : (''))
+  useEffect(() => {
+    if (storeSelectedId !== '' && userDefaultAddress.loaded && userDefaultAddress.no_of_address === 1) {
+      setOrderInit((prev) => ({
+        ...prev,
+        quantity: 1,
+        shippingAddressId: userDefaultAddress?.address?._id,
+        type: 'Manual',
+        storeId: storeSelectedId
+      }));
     }
-  }
+  }, [storeSelectedId]);
+
+  // const storeBoxData = [
+  //   {
+  //     id: 1,
+  //     store_Name: 'Store Name',
+  //     store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
+  //     store_Timing: 'Mon - Sun 10 AM - 10 PM',
+  //     store_Contact: [
+  //       '3098098767',
+  //       '3764735623',
+  //     ],
+  //     store_Map_Link: '#',
+  //     open_Store_Button: false,
+  //     open_Store_Menu: '/store1/category1'
+  //   },
+  //   {
+  //     id: 2,
+  //     store_Name: 'Store Name',
+  //     store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
+  //     store_Timing: 'Mon - Sun 10 AM - 10 PM',
+  //     store_Contact: [
+  //       '3098098767',
+  //       '3764735623',
+  //     ],
+  //     store_Map_Link: '#',
+  //     open_Store_Button: false,
+  //     open_Store_Menu: '/store1/category1'
+  //   },
+  // ]
+
+  useEffect(() => {
+    if (userPincode !== '') {
+      setShowLoader(true)
+      if (userPincode.length === 6) {
+        let prodEan = cartArray?.cart[0]?.ean
+        getStoreLocation(prodEan, 1, userPincode)
+          .then(res => {
+            if (res) {
+              console.log(res)
+              setShowLoader(false)
+            }
+          })
+      }
+    } else {
+      setShowLoader(false)
+    }
+  }, [userPincode])
+
+  const handleOrderInit = async (e) => {
+    e.preventDefault();
+    setInitProcessing(true);
+
+    const OrderinitRes = await initOrder(orderInit);
+    if (!OrderinitRes) return setInitProcessing(false);
+
+    let orderId = OrderinitRes._id;
+    // console.log(orderId);
+
+    const payInitRes = await paymentInit(orderId);
+    window.open(payInitRes, "_parent");
+    setInitProcessing(false);
+  };
+
 
   return (
     <>
@@ -153,11 +186,12 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
                   showStore && !location.error && !showLoader ? (
                     <>
                       <p className="cart_Text section_Wrapper">Stores near me</p>
+                      <p>For Testing All Orders are placed to Store with HO code/id</p>
                       <div className="store_Search_List">
                         {
                           storeLocations.stores.map((store, index) => (
                             <div className='store_Seach_Option' key={index}>
-                              <label htmlFor={store._id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setStoreSelected(store.id); setDisable(false) }}>
+                              <label htmlFor={store._id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setStoreSelectedId("HO"); setDisable(false) }}>
                                 <input type="radio" name='Store Option' id={store._id} value={store._id} />
                                 <span className="radio-custom"></span>
                                 <StoreBox store={store} />
@@ -169,14 +203,18 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
                       {
                         matches && (
                           <div className='delivery_Option_Submit_Button'>
-                            <button type='submit' className='submit-button ' disabled={disable}><p>Continue</p></button>
+                            <button type='submit' className='submit-button ' onClick={handleOrderInit} disabled={disable}>
+                              <p>{initProcessing ? "Processing..." : "Continue"}</p>
+                            </button>
                           </div>
                         )
                       }
                       {
                         !matches && (
                           <div className="address_Footer">
-                            <button type='submit' className='submit-button' disabled={disable} ><p>Continue</p></button>
+                            <button type='submit' className='submit-button' onClick={handleOrderInit} disabled={disable} >
+                              <p>{initProcessing ? "Processing..." : "Continue"}</p>
+                            </button>
                           </div>
                         )
                       }
@@ -185,7 +223,7 @@ const StorePickUp = ({ setHeaderData, setStoreSelected }) => {
                     <>
                       <div className="pickup_Search_Bar_Container section_Wrapper">
                         <div className='pickup_Search_Bar'>
-                          <input type="text" name="Store Search" id="" className='searchbar store_Search_Bar' onKeyDown={handleEnterClick} placeholder={`Enter PIN code/Store name`} />
+                          <input type="text" name="Store Search" id="" className='searchbar store_Search_Bar' onChange={(e) => setUserPincode(e.target.value)} placeholder={`Enter PIN code/Store name`} />
                           <img src={searchBlueIcon} alt="" />
                         </div>
                       </div>
