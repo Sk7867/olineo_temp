@@ -41,6 +41,7 @@ const CartSection = ({ featureProducts }) => {
     userDefaultAddress,
     setDeliveryEstDays,
     deliveryCharges,
+    allProducts
   } = useContext(UserDataContext)
 
   useEffect(() => {
@@ -147,10 +148,12 @@ const CartSection = ({ featureProducts }) => {
           .then(res => {
             if (res) {
               let prod = []
-              prod = res.cart
-              prod.forEach((product) => {
-                product["quantity"] = 1;
-              })
+              prod = res?.cart
+              if (prod?.length > 0) {
+                prod?.forEach((product) => {
+                  product["quantity"] = 1;
+                })
+              }
               setCartArray({
                 loaded: true,
                 no_of_carts: res.no_of_carts,
@@ -326,7 +329,8 @@ const CartSection = ({ featureProducts }) => {
               <Section2
                 id={'Top-sellers-sec'}
                 heading='Top Sellers'
-                productData={featureProducts}
+                productData={allProducts}
+                productArray={featureProducts}
               />
             </div>
           </>
@@ -407,7 +411,8 @@ const CartSection = ({ featureProducts }) => {
             <Section2
               id={'Top-sellers-sec'}
               heading='Top Sellers'
-              productData={cartSuggestProducts}
+              productData={allProducts}
+              productArray={featureProducts}
             />
 
             {/* cart saved for later */}
@@ -457,7 +462,8 @@ const CartSection = ({ featureProducts }) => {
             <Section2
               id={'Top-sellers-sec'}
               heading='Top Sellers'
-              productData={featureProducts}
+              productData={allProducts}
+              productArray={featureProducts}
             />
           </div>
         )

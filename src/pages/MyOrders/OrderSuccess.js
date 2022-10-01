@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { getAllOrder } from "../../api/OrdersApi";
 import checked_circle from "../../assets/vector/check_circle_FILL0_wght400_GRAD200_opsz48.svg";
@@ -6,8 +6,11 @@ import processing_gif from "../../assets/gif/processing.gif";
 
 import "./OrderSuccess.css";
 import ScratchCardComp from "../../components/ScratchCard/ScratchCardComp";
+import { UserDataContext } from "../../Contexts/UserContext";
+import { getCartData, removeFromCart } from "../../api/Cart";
 const OrderSuccess = ({ setHeaderData }) => {
   const [scratchCardActive, setScratchCardActive] = useState(false)
+  const { setCartArray } = useContext(UserDataContext);
   useEffect(() => {
     setHeaderData({
       header3Cond: true,
@@ -17,6 +20,12 @@ const OrderSuccess = ({ setHeaderData }) => {
       header3Cart: true,
       header3Profile: true,
     });
+    setCartArray({
+      loaded: false,
+      cart: [],
+      combo: [],
+      no_of_carts: 0,
+    })
   }, []);
 
   const navigate = useNavigate();
@@ -56,8 +65,34 @@ const OrderSuccess = ({ setHeaderData }) => {
     setLoading(false);
   }, [allOrders]);
 
-  console.log({ allOrders });
-  console.log({ currentOrder });
+  useEffect(() => {
+    if (Object.keys(currentOrder).length > 0) {
+      currentOrder?.productId?.forEach(prod => {
+        removeFromCart(prod)
+      });
+      getCartData()
+        .then(res => {
+          if (res) {
+            let prod = []
+            prod = res?.cart
+            if (prod?.length > 0) {
+              prod?.forEach((product) => {
+                product["quantity"] = 1;
+              })
+            }
+            setCartArray({
+              loaded: true,
+              no_of_carts: res.no_of_carts,
+              cart: prod,
+              combo: res.combo
+            })
+          }
+        })
+    }
+  }, [currentOrder])
+
+
+  console.log(currentOrder);
 
   return (
     <>

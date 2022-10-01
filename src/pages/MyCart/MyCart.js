@@ -78,6 +78,13 @@ const MyCart = ({ setHeaderData }) => {
     nav('/')
   }
 
+  const getRandomProductArr = (arr, num) => {
+    const shuffledArr = [...arr].sort(() => 0.5 - Math.random())
+    return shuffledArr.slice(0, num)
+  }
+
+  const featureProducts = getRandomProductArr(allProducts.products, 10)
+
   const breadCrumbsData = [
     {
       text: 'Home',
@@ -104,6 +111,7 @@ const MyCart = ({ setHeaderData }) => {
                 id={'Top-sellers-sec'}
                 heading='Top Sellers'
                 productData={allProducts}
+                productArray={featureProducts}
               />
             </>
           ) : (
@@ -120,7 +128,7 @@ const MyCart = ({ setHeaderData }) => {
                     </div>
                   </div>
                 </aside>
-                <CartSection featureProducts={allProducts} />
+                <CartSection featureProducts={featureProducts} />
                 {/* <Section2
                   id={'Top-sellers-sec'}
                   heading='Top Sellers'

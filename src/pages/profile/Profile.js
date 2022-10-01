@@ -230,6 +230,13 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
     },
   ];
 
+  const getRandomProductArr = (arr, num) => {
+    const shuffledArr = [...arr].sort(() => 0.5 - Math.random())
+    return shuffledArr.slice(0, num)
+  }
+
+  const featureProducts = getRandomProductArr(allProducts.products, 10)
+
   // console.log(userContext.profilePic);
 
   const profileStateSwitch = (profileState) => {
@@ -237,11 +244,11 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
       case 1:
         return <EditDetails profileDetails={false} profilePicUpdate={true} />;
       case 2:
-        return <OrderSection featureProducts={allProducts} placed={true} delivered={true} cancelled={true} />;
+        return <OrderSection featureProducts={featureProducts} placed={true} delivered={true} cancelled={true} />;
       case 3:
         return <WishlistSection />;
       case 4:
-        return <CartSection featureProducts={allProducts} />;
+        return <CartSection featureProducts={featureProducts} />;
       case 5:
         return <MyAddress setEditID={setEditID} setProfileState={setProfileState} border={true} />;
       // case 5: return (<EditDetails profileDetails={false} profilePicUpdate={true} />)

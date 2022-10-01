@@ -10,7 +10,7 @@ import { UserDataContext } from "../../Contexts/UserContext";
 const OrderSection = ({ featureProducts, placed, delivered, cancelled }) => {
   const nav = useNavigate();
   const [demo, setDemo] = useState([]);
-  const { userOrderData } = useContext(UserDataContext);
+  const { userOrderData, allProducts } = useContext(UserDataContext);
 
   let ordersNumber = userOrderData.no_of_orders;
 
@@ -34,7 +34,8 @@ const OrderSection = ({ featureProducts, placed, delivered, cancelled }) => {
             <Section2
               id={"Top-sellers-sec"}
               heading="Suggested products"
-              productData={featureProducts}
+              productData={allProducts}
+              productArray={featureProducts}
               classes={{
                 containerClass: "section_Wrapper",
                 boxClass: "section_Wrapper",
@@ -76,7 +77,8 @@ const OrderSection = ({ featureProducts, placed, delivered, cancelled }) => {
               <Section2
                 id={"Top-sellers-sec"}
                 heading="Suggested products"
-                productData={featureProducts}
+                productData={allProducts}
+                productArray={featureProducts}
                 classes={{
                   containerClass: "section_Wrapper",
                   boxClass: "section_Wrapper",
@@ -114,7 +116,8 @@ const OrderSection = ({ featureProducts, placed, delivered, cancelled }) => {
               <Section2
                 id={"Top-sellers-sec"}
                 heading="Suggested products"
-                productData={featureProducts}
+                productData={allProducts}
+                productArray={featureProducts}
                 classes={{
                   containerClass: "section_Wrapper",
                 }}
@@ -151,7 +154,8 @@ const OrderSection = ({ featureProducts, placed, delivered, cancelled }) => {
               <Section2
                 id={"Top-sellers-sec"}
                 heading="Suggested products"
-                productData={featureProducts}
+                productData={allProducts}
+                productArray={featureProducts}
                 classes={{
                   containerClass: "section_Wrapper",
                 }}

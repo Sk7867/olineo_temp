@@ -86,7 +86,7 @@ const StorePickUp = ({ setHeaderData }) => {
     if (storeSelectedId !== '' && userDefaultAddress.loaded && userDefaultAddress.no_of_address === 1) {
       setOrderInit((prev) => ({
         ...prev,
-        quantity: 1,
+        quantity: [1],
         shippingAddressId: userDefaultAddress?.address?._id,
         type: 'Manual',
         storeId: storeSelectedId
@@ -132,6 +132,12 @@ const StorePickUp = ({ setHeaderData }) => {
           .then(res => {
             if (res) {
               console.log(res)
+              setStoreLocations({
+                loaded: true,
+                no_of_stores: res.stores?.length,
+                stores: res.stores
+              })
+              setShowStore(true)
               setShowLoader(false)
             }
           })
@@ -186,22 +192,32 @@ const StorePickUp = ({ setHeaderData }) => {
                   showStore && !location.error && !showLoader ? (
                     <>
                       <p className="cart_Text section_Wrapper">Stores near me</p>
-                      <p>For Testing All Orders are placed to Store with HO code/id</p>
                       <div className="store_Search_List">
                         {
-                          storeLocations.stores.map((store, index) => (
-                            <div className='store_Seach_Option' key={index}>
-                              <label htmlFor={store._id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setStoreSelectedId("HO"); setDisable(false) }}>
-                                <input type="radio" name='Store Option' id={store._id} value={store._id} />
-                                <span className="radio-custom"></span>
-                                <StoreBox store={store} />
-                              </label>
-                            </div>
-                          ))
+                          (storeLocations?.loaded && storeLocations?.no_of_stores > 0) ? (
+                            storeLocations.stores.map((store, index) => (
+                              <div className='store_Seach_Option' key={index}>
+                                <label htmlFor={store._id} className={`radiobtn-label home_Delivery_Label`} onClick={() => { setStoreSelectedId("HO"); setDisable(false) }}>
+                                  <input type="radio" name='Store Option' id={store._id} value={store._id} />
+                                  <span className="radio-custom"></span>
+                                  <StoreBox store={store} />
+                                </label>
+                              </div>
+                            ))
+                          ) : (
+                            <>
+                              <div className='nostore_Found_Text'>
+                                <p>No store was found for the search.</p>
+                              </div>
+                            </>
+                          )
+                        }
+                        {
+
                         }
                       </div>
                       {
-                        matches && (
+                        matches && storeLocations?.loaded && (storeLocations.no_of_stores > 0) && (
                           <div className='delivery_Option_Submit_Button'>
                             <button type='submit' className='submit-button ' onClick={handleOrderInit} disabled={disable}>
                               <p>{initProcessing ? "Processing..." : "Continue"}</p>
@@ -210,7 +226,7 @@ const StorePickUp = ({ setHeaderData }) => {
                         )
                       }
                       {
-                        !matches && (
+                        !matches && storeLocations?.loaded && (storeLocations.no_of_stores > 0) && (
                           <div className="address_Footer">
                             <button type='submit' className='submit-button' onClick={handleOrderInit} disabled={disable} >
                               <p>{initProcessing ? "Processing..." : "Continue"}</p>

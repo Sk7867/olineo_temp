@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
-import { Accordion, Dropdown, Carousel } from "react-bootstrap";
+import { Accordion, Carousel } from "react-bootstrap";
 import { addToCart, getCartData } from "../../api/Cart";
 import { UserDataContext } from "../../Contexts/UserContext";
 import { toast } from "react-toastify";
@@ -9,8 +9,6 @@ import { toast } from "react-toastify";
 //CSS
 import "./ProductPage.css";
 //Images
-import defaultImage from "../../assets/png/product_1.png";
-import defaultImage2 from "../../assets/png/product_3.png";
 import offerIconYellow from "../../assets/vector/offers_icon_yellow.svg";
 
 //Components
@@ -18,9 +16,8 @@ import Section2 from "../../components/Section2/Section2";
 import ProductInfoTable from "../../components/ProductInfoTable/ProductInfoTable";
 import OfferCard from "../../components/OfferCard/OfferCard";
 import AlternateProductBox from "../../components/AlternateProductCard/AlternateProductBox";
-import { getIndiProduct, getProductServiceability, getSearchedProduct } from "../../api/Product";
+import { getProductServiceability, getSearchedProduct } from "../../api/Product";
 import SkeletonElement from "../../components/Skeletons/SkeletonElement";
-import ScratchCardComp from "../../components/ScratchCard/ScratchCardComp";
 import { addToWishlist } from "../../api/wishlistApi";
 
 

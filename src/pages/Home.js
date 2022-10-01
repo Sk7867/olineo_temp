@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import Section2 from '../components/Section2/Section2'
 import Sidebar from '../components/Sidebar/Sidebar'
@@ -11,9 +11,10 @@ import product1 from '../assets/png/product_1.png'
 import product2 from '../assets/png/product_2.png'
 import bannerImage from '../assets/png/hero_banner.png'
 import Section5 from '../components/Section5/Section5'
+import { UserDataContext } from '../Contexts/UserContext'
 
 
-const Home = ({ setHeaderData, allProducts }) => {
+const Home = ({ setHeaderData }) => {
   const [demoElement, setDemoElement] = useState({
     product_id: '',
     product_image: '',
@@ -21,6 +22,7 @@ const Home = ({ setHeaderData, allProducts }) => {
     product_price: '',
   })
   const [modalShow, setModalShow] = useState(false)
+  const { allProducts } = useContext(UserDataContext);
   // const [sec2Data, setSec2Data] = useState([])
 
   useEffect(() => {
@@ -29,7 +31,16 @@ const Home = ({ setHeaderData, allProducts }) => {
       categoriesCond: true
     })
   }, []);
-  // console.log(allProducts);
+
+  const getRandomProductArr = (arr, num) => {
+    const shuffledArr = [...arr].sort(() => 0.5 - Math.random())
+    return shuffledArr.slice(0, num)
+  }
+
+  var sec2ProdArray1 = getRandomProductArr(allProducts.products, 10)
+  var sec4ProdArray1 = getRandomProductArr(allProducts.products, 10)
+  var sec2ProdArray2 = getRandomProductArr(allProducts.products, 10)
+  var sec4ProdArray2 = getRandomProductArr(allProducts.products, 10)
 
   // useEffect(() => {
   //   for (let index = 0; index < 9; index++) {
@@ -268,6 +279,8 @@ const Home = ({ setHeaderData, allProducts }) => {
           id={'section2'}
           heading='Normal products'
           productData={allProducts}
+          type={'np1'}
+          productArray={sec2ProdArray1}
           classes={{
             boxClass: 'bg_pink carousel_card',
           }}
@@ -283,6 +296,8 @@ const Home = ({ setHeaderData, allProducts }) => {
           id={'section4'}
           heading={'Upto 40% off'}
           productData={allProducts}
+          productArray={sec4ProdArray1}
+          type={'cd1'}
           link={{
             text: 'See more',
             link: '/category1'
@@ -295,6 +310,8 @@ const Home = ({ setHeaderData, allProducts }) => {
           id={'section5'}
           heading='Items for you'
           productData={allProducts}
+          productArray={sec2ProdArray2}
+          type={'np2'}
           classes={{
             boxClass: 'bg_blue carousel_card',
           }}
@@ -307,7 +324,9 @@ const Home = ({ setHeaderData, allProducts }) => {
         />
         <Section4
           id={'section7'}
+          type={'cd2'}
           heading={'Deals of the day'}
+          productArray={sec4ProdArray2}
           productData={allProducts}
           link={{
             text: 'See more',

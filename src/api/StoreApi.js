@@ -24,7 +24,7 @@ export const getStoreLocation = async (ean, quantity, pin) => {
 
   await axios.post(`${process.env.REACT_APP_BASE_URL}/store/findstore`, JSON.stringify(findStoreBody), { headers })
     .then(res => {
-      locationResponse = res
+      locationResponse = res.data.data
     })
     .catch(err => { console.log('Error:', err) })
 

@@ -89,6 +89,10 @@ function App() {
     loaded: false,
     no_of_products: 0,
     products: [],
+    cd1: [],
+    np1: [],
+    cd2: [],
+    np2: []
   });
   const [seachedProduct, setSeachedProduct] = useState({
     loaded: false,
@@ -245,13 +249,40 @@ function App() {
 
   useEffect(() => {
     getAllProducts().then((res) => {
-      setAllProducts({
+      setAllProducts(prev => ({
+        ...prev,
         loaded: true,
         no_of_products: res.no_of_products,
         products: res.products,
-      });
+      }));
+      getAllProducts('type=cd&page=1').then((res) => {
+        setAllProducts(prev => ({
+          ...prev,
+          cd1: res.products
+        }))
+      })
+      getAllProducts('type=cd&page=2').then((res) => {
+        setAllProducts(prev => ({
+          ...prev,
+          cd2: res.products
+        }))
+      })
+      getAllProducts('type=np&page=1').then((res) => {
+        setAllProducts(prev => ({
+          ...prev,
+          np1: res.products
+        }))
+      })
+      getAllProducts('type=np&page=2').then((res) => {
+        setAllProducts(prev => ({
+          ...prev,
+          np2: res.products
+        }))
+      })
     });
   }, []);
+
+  console.log(allProducts);
 
   useEffect(() => {
     if (userContext && userContext.JWT) {
@@ -425,9 +456,9 @@ function App() {
             <Route path="/login" exact element={<Login setLoginRedirect={setLoginRedirect} />} />
             <Route path="/otp" exact element={<OtpValid loginRedirect={loginRedirect} />} />
             <Route path="/adduser" exact element={<AddUser />} />
-            <Route path="/" exact element={<Home setHeaderData={setHeaderData} allProducts={allProducts} />} />
-            <Route path="/orders" exact element={<MyOrders setHeaderData={setHeaderData} featureProducts={allProducts} />} />
-            <Route path="/orders/success" exact element={<OrderSuccess setHeaderData={setHeaderData} featureProducts={allProducts} />} />
+            <Route path="/" exact element={<Home setHeaderData={setHeaderData} />} />
+            <Route path="/orders" exact element={<MyOrders setHeaderData={setHeaderData} />} />
+            <Route path="/orders/success" exact element={<OrderSuccess setHeaderData={setHeaderData} />} />
             <Route
               path="/mycart"
               exact

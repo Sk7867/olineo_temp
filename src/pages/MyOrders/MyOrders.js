@@ -15,11 +15,11 @@ import OrderSection from "./OrderSection";
 import { UserDataContext } from "../../Contexts/UserContext";
 import { getAllOrder } from "../../api/OrdersApi";
 
-const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
+const MyOrders = ({ ordersList, setHeaderData }) => {
   const [placed, setPlaced] = useState(true);
   const [delivered, setDelivered] = useState(true);
   const [cancelled, setCancelled] = useState(true);
-  const { userOrderData, setUserOrderData } = useContext(UserDataContext);
+  const { userOrderData, setUserOrderData, allProducts } = useContext(UserDataContext);
 
   const nav = useNavigate();
 
@@ -51,6 +51,13 @@ const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
   }, []);
 
   // console.log(ordersList);
+
+  const getRandomProductArr = (arr, num) => {
+    const shuffledArr = [...arr].sort(() => 0.5 - Math.random())
+    return shuffledArr.slice(0, num)
+  }
+
+  const featureProducts = getRandomProductArr(allProducts.products, 10)
 
   const sec5Data = [
     {
@@ -158,7 +165,7 @@ const MyOrders = ({ ordersList, setHeaderData, featureProducts }) => {
                 <p>Start Shopping</p>
               </button>
             </div>
-            <Section2 id={"Top-sellers-sec"} heading="Suggested products" productData={featureProducts} />
+            <Section2 id={"Top-sellers-sec"} heading="Suggested products" productData={allProducts} productArray={featureProducts} />
           </>
         ) : (
           <>
