@@ -1,6 +1,6 @@
 //Dependencies
 import { useEffect, useState } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { Bounce, ToastContainer } from "react-toastify";
 import { getUser, getUserPic } from "./api/Auth";
 import { getCartData } from "./api/Cart";
@@ -140,6 +140,18 @@ function App() {
     header3Profile: false,
   });
   const loc = useLocation();
+
+  // --------------Temporary Chanegs for IFD --------------
+
+  // const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (loc.pathname !== "/indian-festival-days") {
+  //     navigate("/indian-festival-days");
+  //   }
+  // }, [loc.pathname]);
+
+  // --------------Temporary Chanegs for IFD --------------
+
   const [orderInit, setOrderInit] = useState({
     productId: [],
     quantity: [],
