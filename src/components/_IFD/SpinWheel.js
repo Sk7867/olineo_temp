@@ -33,6 +33,7 @@ const SpinWheel = ({ navigateForward }) => {
       feedback: customerExperience,
       coupon_code: productDetails.coupon_code,
       product_redeemed: productDetails.product_redeemed,
+      reservation_id: productDetails.reservation_id,
       is_gte15k,
     };
     if (productDetails.selectedCategory === "phones") {
@@ -123,7 +124,7 @@ const SpinWheel = ({ navigateForward }) => {
     const data = await response.json();
     // console.log(data);
     if (response.status === 200) {
-      setProductDetails((prev) => ({ ...prev, coupon_code: data.coupon_code, product_redeemed: data.product_redeemed, product_redeemed_id: data.id }));
+      setProductDetails((prev) => ({ ...prev, coupon_code: data.coupon_code, product_redeemed: data.product_redeemed, product_redeemed_id: data.id, reservation_id: data.reservation_id }));
       setProduct_redeemed_id(data.id);
     }
   };
