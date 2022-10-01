@@ -16,9 +16,12 @@ export const initOrder = async (data) => {
   let initBody = {
     productId: data.productId,
     quantity: data.quantity,
-    shippingAddressId: data.shippingAddressId
+    shippingAddressId: data.shippingAddressId,
+    coupon: data.coupon,
+    type: data.type,
+    storeId: data.storeId
   }
-  // console.log(initBody);
+  console.log(initBody);
   await axios.post(`${process.env.REACT_APP_BASE_URL}/product/order/init`, JSON.stringify(initBody), { headers })
     .then(res => {
       initResponse = res.data.data.order

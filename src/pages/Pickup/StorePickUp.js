@@ -212,9 +212,6 @@ const StorePickUp = ({ setHeaderData }) => {
                             </>
                           )
                         }
-                        {
-
-                        }
                       </div>
                       {
                         matches && storeLocations?.loaded && (storeLocations.no_of_stores > 0) && (

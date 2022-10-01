@@ -600,7 +600,7 @@ function App() {
               <Route exact path="/admin-payments" element={<Payments />} />
               <Route exact path="/admin-cancellation" element={<Cancellation />} />
             </Route>
-            <Route path="/indian-festival-days" exact element={<IFDHome userLoggedIn={userLoggedIn} setHeaderData={setHeaderData} />} />
+            {/* <Route path="/indian-festival-days" exact element={<IFDHome userLoggedIn={userLoggedIn} setHeaderData={setHeaderData} />} /> */}
           </Routes>
           {loc.pathname === "/admin" ||
             loc.pathname === "/admin-home" ||
