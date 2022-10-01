@@ -161,6 +161,7 @@ const StorePickUp = ({ setHeaderData }) => {
     window.open(payInitRes, "_parent");
     setInitProcessing(false);
   };
+  //Test comment to include file in commit - 01/10/2022
 
 
   return (

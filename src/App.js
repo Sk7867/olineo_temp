@@ -111,6 +111,8 @@ function App() {
     pincode: "",
   });
 
+  //Test comment to include file in commit - 01/10/2022
+
   const [userAddress, setUserAddress] = useState({
     loaded: false,
     no_of_address: 0,
@@ -283,7 +285,8 @@ function App() {
     });
   }, []);
 
-  console.log(allProducts);
+  // console.log(allProducts);
+  //Test comment to include file in commit - 01/10/2022
 
   useEffect(() => {
     if (userContext && userContext.JWT) {
@@ -319,14 +322,14 @@ function App() {
   // Price Box Details Calculation===========================
   useEffect(() => {
     if (cartArray.no_of_carts > 0) {
-      let productNumbers = cartArray.cart.reduce((accumulator, current) => accumulator + current.quantity, 0);
-      let productPrice = cartArray.cart.reduce((accumulator, current) => accumulator + current.price.mrp * current.quantity, 0);
-      let totalDiscount = cartArray.cart.reduce(
+      let productNumbers = Math.ceil(cartArray.cart.reduce((accumulator, current) => accumulator + current.quantity, 0))
+      let productPrice = Math.ceil(cartArray.cart.reduce((accumulator, current) => accumulator + current.price.mrp * current.quantity, 0));
+      let totalDiscount = Math.ceil(cartArray.cart.reduce(
         (accumulator, current) => accumulator + (current.price.mrp - (current.price.discountPrice ? current.price.discountPrice : current.price.mop)) * current.quantity,
         0
-      );
+      ));
       let totalDeliveryCharge = deliveryCharges;
-      let totalAmount = productPrice - totalDiscount + totalDeliveryCharge;
+      let totalAmount = Math.ceil(productPrice - totalDiscount + totalDeliveryCharge);
       setPriceBoxDetails((prev) => ({
         ...prev,
         cartItemsNumber: productNumbers,
@@ -352,8 +355,8 @@ function App() {
     if (deliveryEstDays && deliveryEstDays.loaded && deliveryEstDays.value.length > 0) {
       deliveryEstDays.value.forEach((order) => {
         if (order.deliverymodes.length > 0) {
-          let delPrice = parseInt(order.deliverymodes[0].deliveryCost.value) + 40;
-          totalDelPrice = totalDelPrice + delPrice;
+          let delPrice = parseInt(order.deliverymodes[0].deliveryCost.value);
+          totalDelPrice = Math.ceil(totalDelPrice + delPrice);
         }
       });
     }

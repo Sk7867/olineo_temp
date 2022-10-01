@@ -31,6 +31,7 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
   const [imeiFieldErr, setImeiFieldErr] = useState(false);
   const [otherProductErr, setOtherProductErr] = useState(false);
   const [otpInvalidErr, setOtpInvalidErr] = useState(false);
+  //Test comment to include file in commit - 01/10/2022
 
   const categoryListStyles = {
     menu: (provided, state) => ({

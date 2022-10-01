@@ -6,6 +6,7 @@ import './Section2.css'
 
 const Section2 = ({ id, heading, productData, classes, type, productArray }) => {
   // console.log(productData);
+  //Test comment to include file in commit - 01/10/2022
   return (
     <div className={'section2_container section_Wrapper ' + (classes ? classes.containerClass : '')} id={id}>
       <h3 className="section2_heading">{heading}</h3>

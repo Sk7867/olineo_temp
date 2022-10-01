@@ -238,6 +238,7 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
   const featureProducts = getRandomProductArr(allProducts.products, 10)
 
   // console.log(userContext.profilePic);
+  //Test comment to include file in commit - 01/10/2022
 
   const profileStateSwitch = (profileState) => {
     switch (profileState) {

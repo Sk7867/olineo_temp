@@ -31,6 +31,7 @@ const Home = ({ setHeaderData }) => {
       categoriesCond: true
     })
   }, []);
+  //Test comment to include file in commit - 01/10/2022
 
   const getRandomProductArr = (arr, num) => {
     const shuffledArr = [...arr].sort(() => 0.5 - Math.random())

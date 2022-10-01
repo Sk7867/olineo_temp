@@ -21,7 +21,7 @@ export const initOrder = async (data) => {
     type: data.type,
     storeId: data.storeId
   }
-  console.log(initBody);
+  // console.log(initBody);
   await axios.post(`${process.env.REACT_APP_BASE_URL}/product/order/init`, JSON.stringify(initBody), { headers })
     .then(res => {
       initResponse = res.data.data.order
@@ -30,6 +30,7 @@ export const initOrder = async (data) => {
   return initResponse
 }
 
+//Test comment to include file in commit - 01/10/2022
 
 // ORDER PLACED +++++++++++++++++++++++++++++++++++++++++++++++++++
 export const completeOrder = async (id) => {

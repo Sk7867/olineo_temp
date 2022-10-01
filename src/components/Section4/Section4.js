@@ -6,6 +6,7 @@ import SkeletonElement from '../Skeletons/SkeletonElement'
 import './Section4.css'
 
 const Section4 = ({ id, heading, productData, link, classes, type, productArray }) => {
+  //Test comment to include file in commit - 01/10/2022
   return (
     <div className='section4_container' id={id}>
       <div className="section4_header">
