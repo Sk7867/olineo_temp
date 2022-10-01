@@ -7,70 +7,68 @@ const headers = {
 };
 
 export const addProductCatalogue = async (
-  product,
-  technicalDetailsTable,
-  dynamicHeader,
-  url,
   L1Selected,
   L2Selected,
   L3Selected,
-  discountedPrice,
   classificationSelected,
-  flatDiscountDetails,
-  comboOfferDetails,
-  containerDetails,
-  alternateProds,
-  bankOffers
+  prodPreviewData,
+  dynamicHeaderDemo,
+  technicalDetailsTable,
+  alternateColorArray,
+  alternateSpecArray,
+  slug,
+  immediateComplimentaryArray,
+  laterComplimentaryArray,
 ) => {
   let addProductResponse;
 
   let addProductBody = {
-    dynamicHeader: dynamicHeader,
-    name: product.name,
-    ean: product.EAN,
-    slug: url,
-    description: product.description,
+    dynamicHeader: dynamicHeaderDemo,
+    name: prodPreviewData.name,
+    ean: prodPreviewData.ean,
+    slug: slug,
+    description: prodPreviewData.description,
     type: L2Selected,
-    stock: product.stock,
-    qty: product.stock,
+    qty: prodPreviewData.stock,
     hierarchyL1: L1Selected,
     hierarchyL2: L2Selected,
     hierarchyL3: L3Selected,
     classification: classificationSelected,
-    modelNo: technicalDetailsTable.modelNumber,
-    brand: technicalDetailsTable.brand,
-    color: technicalDetailsTable.color,
-    HSN: product.HSN,
-    inwardDate: product.inwardDate,
     productInfo: technicalDetailsTable,
+    modelNo: technicalDetailsTable.modelNo,
+    brand: prodPreviewData.brand,
+    color: prodPreviewData.color,
+    HSN: prodPreviewData.HSN,
+    // inwardDate: prodPreviewData.inwardDate,
     price: {
-      mrp: product.MRP,
-      mop: product.MOP,
-      discountPrice: discountedPrice,
+      mrp: prodPreviewData.price.mrp,
+      mop: prodPreviewData.price.mop,
     },
-    discount: {
-      flatDiscount: flatDiscountDetails,
-      combo: comboOfferDetails,
-      conetainer: containerDetails,
+    altProduct: {
+      color: alternateColorArray,
+      spec: alternateSpecArray
     },
-    altProduct: alternateProds,
-    offers: bankOffers,
+    complimentoryCatgories: {
+      immediate: immediateComplimentaryArray,
+      later: laterComplimentaryArray
+    }
   };
-  // console.log(addProductBody);
+  console.log(addProductBody);
 
-  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(addProductBody), { headers }).then((res) => {
-    addProductResponse = res.data.product;
-  });
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(addProductBody), { headers })
+    .then((res) => {
+      addProductResponse = res.data.data.product
+    });
 
   return addProductResponse;
 };
 
 export const addBulkOrder = async (order) => {
   let addBulkProductResponse;
+  console.log(order)
   await axios
     .post(`${process.env.REACT_APP_BASE_URL}/product/`, JSON.stringify(order), { headers })
     .then((res) => {
-      console.log(res);
       if (res.data.status === "success") addBulkProductResponse = res.data?.data?.product;
     })
     .catch((err) => {
@@ -92,55 +90,53 @@ export const deleteProductCatalogue = async (id) => {
 
 //Update Product From Catalogue
 export const updateProductCatalogue = async (
-  product,
-  technicalDetailsTable,
-  dynamicHeader,
-  url,
   L1Selected,
   L2Selected,
   L3Selected,
-  discountedPrice,
   classificationSelected,
-  flatDiscountDetails,
-  comboOfferDetails,
-  containerDetails,
-  alternateProds,
-  bankOffers
+  prodPreviewData,
+  dynamicHeaderDemo,
+  technicalDetailsTable,
+  alternateColorArray,
+  alternateSpecArray,
+  slug,
+  immediateComplimentaryArray,
+  laterComplimentaryArray,
 ) => {
   let updateProductResponse;
   let updateProductBody = {
-    dynamicHeader: dynamicHeader,
-    name: product.name,
-    ean: product.EAN,
-    slug: url,
-    description: product.description,
+    dynamicHeader: dynamicHeaderDemo,
+    name: prodPreviewData.name,
+    ean: prodPreviewData.ean,
+    slug: slug,
+    description: prodPreviewData.description,
     type: L2Selected,
-    stock: product.stock,
-    qty: product.stock,
+    qty: prodPreviewData.stock,
     hierarchyL1: L1Selected,
     hierarchyL2: L2Selected,
     hierarchyL3: L3Selected,
     classification: classificationSelected,
-    modelNo: technicalDetailsTable.modelNumber,
-    brand: technicalDetailsTable.brand,
-    color: technicalDetailsTable.color,
-    HSN: product.HSN,
-    inwardDate: product.inwardDate,
     productInfo: technicalDetailsTable,
+    modelNo: technicalDetailsTable.modelNo,
+    brand: prodPreviewData.brand,
+    color: prodPreviewData.color,
+    HSN: prodPreviewData.HSN,
+    // inwardDate: prodPreviewData.inwardDate,
     price: {
-      mrp: product.MRP,
-      mop: product.MOP,
-      discountPrice: discountedPrice,
+      mrp: prodPreviewData.price.mrp,
+      mop: prodPreviewData.price.mop,
     },
-    discount: {
-      flatDiscount: flatDiscountDetails,
-      combo: comboOfferDetails,
-      conetainer: containerDetails,
+    altProduct: {
+      color: alternateColorArray,
+      spec: alternateSpecArray
     },
-    altProduct: alternateProds,
-    offers: bankOffers,
+    complimentoryCatgories: {
+      immediate: immediateComplimentaryArray,
+      later: laterComplimentaryArray
+    }
   };
-  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${product.ID}`, JSON.stringify(updateProductBody), { headers }).then((res) => {
+  console.log(prodPreviewData.id);
+  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${prodPreviewData.id}`, JSON.stringify(updateProductBody), { headers }).then((res) => {
     updateProductResponse = res;
   });
 
@@ -183,7 +179,7 @@ export const addProductGalleryImages = async (id, images) => {
 export const updateProductOffers = async (product) => {
   let updateOffersResponse;
   let productID = product._id;
-  // console.log(product, productID);
+  console.log(product, productID);
   await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/${productID}`, JSON.stringify(product), { headers }).then((res) => {
     updateOffersResponse = res;
   });

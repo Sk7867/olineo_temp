@@ -4,7 +4,7 @@ import SkeletonElement from '../Skeletons/SkeletonElement'
 //CSS
 import './Section2.css'
 
-const Section2 = ({ id, heading, productData, classes }) => {
+const Section2 = ({ id, heading, productData, classes, type, productArray }) => {
   // console.log(productData);
   return (
     <div className={'section2_container section_Wrapper ' + (classes ? classes.containerClass : '')} id={id}>
@@ -13,7 +13,8 @@ const Section2 = ({ id, heading, productData, classes }) => {
         <div className="section2_card_wrapper">
           {
             productData.loaded ? (
-              productData.products.map((item, index) => (
+              // productData[type]?.map((item, index) => ( keep commented do not delete
+              productArray?.map((item, index) => (
                 <ProductBox
                   key={index}
                   card_heading={'STARTING AT'}

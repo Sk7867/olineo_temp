@@ -30,6 +30,11 @@
   animation: bounce 2s ease 0s 10 normal forwards;
 }
 
+.order_success__Scratchcard_trigger{
+  margin: 2rem 0;
+  text-align: center;
+}
+
 @keyframes bounce {
   0.0% {
     transform: scale(1);

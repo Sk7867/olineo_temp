@@ -29,10 +29,11 @@ import AddressForm from "../../components/AddressForm/AddressForm";
 import CartSection from "../MyCart/CartSection";
 import OrderSection from "../MyOrders/OrderSection";
 import { getCartData } from "../../api/Cart";
-import { getIndiProduct } from "../../api/Product";
+import { getIndiProduct, getProductServiceability } from "../../api/Product";
 import { getAllOrder } from "../../api/OrdersApi";
 import { getAllWishlistItems } from "../../api/wishlistApi";
 import WishlistSection from "../Wishlist/WishlistSection";
+import { getSaveForLater } from "../../api/SaveForLaterApi";
 
 const Profile = ({ setEditID, editID, setHeaderData }) => {
   const [profileState, setProfileState] = useState(1);
@@ -43,7 +44,17 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
   const [editAddress, setEditAddress] = useState({});
   const loc = useLocation();
   const nav = useNavigate();
-  const { userContext, setUserContext, setUserAddress, setUserCart, allProducts, setCartArray, setUserOrderData, setPriceBoxDetails, setUserWishlist } = useContext(UserDataContext);
+  const {
+    userContext,
+    setUserContext,
+    setUserAddress,
+    allProducts,
+    setCartArray,
+    setUserOrderData,
+    setPriceBoxDetails,
+    setUserWishlist,
+    setUserSaveForLater
+  } = useContext(UserDataContext);
 
   useEffect(() => {
     setHeaderData({
@@ -81,30 +92,34 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
   }, []);
 
   useEffect(() => {
-    getCartData().then((res) => {
-      if (res) {
-        setCartArray({
-          loaded: true,
-          no_of_carts: res.no_of_carts,
-          cart: res.cart,
-        });
-        // console.log(res);
-      }
-    });
-  }, []);
+    getCartData()
+      .then(res => {
+        if (res) {
+          let prod = []
+          prod = res.cart
+          prod.forEach((product) => {
+            product["quantity"] = 1;
+          })
+          setCartArray({
+            loaded: true,
+            no_of_carts: res.no_of_carts,
+            cart: prod,
+            combo: res.combo
+          })
+        }
+      })
+  }, [])
 
   useEffect(() => {
-    getCartData().then((res) => {
-      if (res) {
-        setCartArray({
+    getSaveForLater()
+      .then(res => {
+        setUserSaveForLater({
           loaded: true,
-          no_of_carts: res.no_of_carts,
-          cart: res.cart,
-        });
-        // console.log(res);
-      }
-    });
-  }, []);
+          no_of_save_for_later_items: res.no_of_save_for_later_items,
+          save_for_later_items: res.save_for_later_items
+        })
+      })
+  }, [])
 
   useEffect(() => {
     getAllOrder().then((res) => {
@@ -150,10 +165,10 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
         no_of_address: 0,
         address: [],
       });
-      setUserCart([]);
       setCartArray({
         loaded: false,
         cart: [],
+        combo: [],
         no_of_carts: 0,
       });
       setUserOrderData({
@@ -215,6 +230,13 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
     },
   ];
 
+  const getRandomProductArr = (arr, num) => {
+    const shuffledArr = [...arr].sort(() => 0.5 - Math.random())
+    return shuffledArr.slice(0, num)
+  }
+
+  const featureProducts = getRandomProductArr(allProducts.products, 10)
+
   // console.log(userContext.profilePic);
 
   const profileStateSwitch = (profileState) => {
@@ -222,11 +244,11 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
       case 1:
         return <EditDetails profileDetails={false} profilePicUpdate={true} />;
       case 2:
-        return <OrderSection featureProducts={allProducts} onTheWay={true} delivered={true} cancelled={true} />;
+        return <OrderSection featureProducts={featureProducts} placed={true} delivered={true} cancelled={true} />;
       case 3:
         return <WishlistSection />;
       case 4:
-        return <CartSection featureProducts={allProducts} />;
+        return <CartSection featureProducts={featureProducts} />;
       case 5:
         return <MyAddress setEditID={setEditID} setProfileState={setProfileState} border={true} />;
       // case 5: return (<EditDetails profileDetails={false} profilePicUpdate={true} />)
@@ -329,7 +351,7 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
                 {profileOptions.map((option, index) =>
                   option.logout ? (
                     <div
-                      className={`profile_Option ${option.title === "Logout" ? "logout_Styles" : ""}`}
+                      className={`profile_Option ${option.title === "Logout" ? "logout_Styles --selected" : ""}`}
                       key={index}
                       onClick={() => {
                         logOut();
@@ -343,7 +365,7 @@ const Profile = ({ setEditID, editID, setHeaderData }) => {
                       <img src={arrowRightBlue} alt="" className="profile_arrow" />
                     </div>
                   ) : (
-                    <div className={`profile_Option `} key={index} onClick={() => setProfileState(index + 1)}>
+                    <div className={`profile_Option ${(profileState - 1) === index ? '--selected' : ''}`} key={index} onClick={() => setProfileState(index + 1)}>
                       <div>
                         <img src={option.image} alt="" />
                         <p>{option.title}</p>

@@ -14,7 +14,7 @@ import StoreBox from '../../components/StoreBox/StoreBox';
 
 const StoreNear = ({ setHeaderData, setStoreSelected }) => {
   const [disable, setDisable] = useState(true);
-  const [userLocation, setUserLocation] = useState(false)
+  const [userLocation, setUserLocation] = useState(true)
   const matches = useMediaQuery("(min-width:768px)")
   useEffect(() => {
     setHeaderData({

@@ -15,7 +15,7 @@
   letter-spacing: -0.01em;
   color: #08090A;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.125rem;
   line-height: 1.5rem;
 }
 
@@ -37,8 +37,8 @@
 .cart_Details_Price p, .cart_Details_Discount p, .cart_Details_Delivery p {
   color: #08090A;
   font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
   margin: 0;
 }
 
@@ -58,7 +58,7 @@
   letter-spacing: -0.01em;
   color: #08090A;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.875rem;
   line-height: 1.5rem;
   margin: 0;
 }
@@ -88,4 +88,19 @@
     border-radius: 0.25rem;
     margin: 0;
   }
+}
+
+@media screen and (min-width: 1024px) {
+  .cart_Details_Header p {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+    .cart_Details_Price p,
+    .cart_Details_Discount p,
+    .cart_Details_Delivery p,
+    .cart_Details_Footer p {
+      font-size: 1rem;
+      line-height: 1.5rem;
+    } 
 }

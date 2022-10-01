@@ -13,10 +13,11 @@ import userIcon from '../../assets/vector/user_group_blue.svg'
 import callIcon from '../../assets/vector/call_blue.svg'
 import supportIcon from '../../assets/vector/support_blue.svg'
 import profileIconBlue from '../../assets/vector/account_circle_blue.svg'
-import storeBlue from '../../assets/vector/store_outline_bue.svg'
+import storeBlue from '../../assets/vector/store_outline_blue.svg'
 import arrowRightBlue from '../../assets/vector/arrow_right_blue.svg'
 import arrowLeftBlack from '../../assets/vector/arrow_left_black.svg'
 import cameraBlue from '../../assets/vector/camera_outline_blue.svg'
+import bookmarkIconBlue from "../../assets/vector/bookmark_outline_blue.svg";
 
 const Sidebar = ({ sidebar, setSidebar, userLoggedIn, handleCategorySearch }) => {
 
@@ -44,9 +45,9 @@ const Sidebar = ({ sidebar, setSidebar, userLoggedIn, handleCategorySearch }) =>
       link: '/mycart',
     },
     {
-      image: walletIcon,
-      text: 'My wallet',
-      link: '/orders',
+      image: bookmarkIconBlue,
+      text: 'My wishlist',
+      link: '/wishlist',
     },
     {
       image: globeIcon,

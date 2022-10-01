@@ -112,8 +112,8 @@
 }
 
 .categories_toggle div img{
-  max-width: 24px;
-  max-height: 24px;
+  max-width: 24px!important;
+  max-height: 24px!important;
   width: 100%;
   height: 100%;
 }
@@ -256,6 +256,7 @@
 
   .category_Menu{
     gap: 2rem;
+    padding: 0 0 6rem;
   }
 }
 

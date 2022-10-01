@@ -4,36 +4,10 @@ import { UserDataContext } from '../../Contexts/UserContext'
 
 const PriceDetailsBox = ({ HideDetails, classes }) => {
   const [showDetails, setShowDetails] = useState(true);
-  const { userCart, setUserCart, cartArray, priceBoxDetails } = useContext(UserDataContext)
+  const { cartArray, priceBoxDetails } = useContext(UserDataContext)
 
   let cartItemsNumber = cartArray.no_of_carts
 
-  // useEffect(() => {
-  //   if (cartArray.no_of_carts !== 0) {
-  //     //Get Price from cart Items
-  //     userCart.forEach(item => {
-  //       cartItemsPrice += parseInt(item.price) + 2000
-  //     });
-
-  //     //Get Discounted Price
-  //     userCart.forEach(item => {
-  //       var itemDiscount
-  //       itemDiscount = parseInt(item.price)
-  //       totalDiscount += itemDiscount
-  //     });
-
-  //     //Get Delivery Charges
-  //     userCart.forEach((item, index) => {
-  //       totalDeliveryCharge += (index + 1) * 80
-  //     });
-
-  //     //Get Total Amount
-  //     totalAmount = cartItemsPrice - totalDiscount + totalDeliveryCharge
-  //   }
-  // }, [cartArray])
-
-
-  // console.log(cartItemsPrice);
   return (
     <div className={"cart_Price_details section_Wrapper " + (classes ? classes.containerClass : '')}>
       <div className="cart_Details_Header">

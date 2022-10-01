@@ -85,7 +85,9 @@
 .footer_last_heading{
   display: none;
 }
-
+.footer_last_heading-desk{
+  display: none;
+}
 .social_links_wrapper{
   display: flex;
   align-items: center;
@@ -106,7 +108,9 @@
   align-items: flex-start;
   justify-content: space-between;
 }
-
+/* .footer_terms_wrapper-desk{
+  
+} */
 .footer_terms_column1, .footer_terms_column2{
   display: flex;
   flex-direction: column;
@@ -122,7 +126,15 @@
   cursor: pointer;
   margin: 0;
 }
-
+.footer_terms_desk{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  cursor: pointer;
+  color: #EBEDF0;
+}
 .last_contact_details{
   display: none;
 }
@@ -210,6 +222,25 @@
     font-size: 20px;
     line-height: 28px;
     text-align: center;
+    margin: 0 0 18px 0;
+  }
+  .footer_last_heading_desk{
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    text-align: center;
+    margin: 0 0 18px -125px;
+  }
+  .footer_last_heading-desk{
+    display: block;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    text-align: left;
     margin: 0 0 18px 0;
   }
 

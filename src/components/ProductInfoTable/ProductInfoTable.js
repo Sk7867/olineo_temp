@@ -2,6 +2,7 @@ import React from 'react'
 import './ProductInfoTable.css'
 
 const ProductInfoTable = ({ product_Information }) => {
+  // console.log(product_Information)
 
   const handleTableKeys = (elem) => {
     switch (elem) {
@@ -68,6 +69,10 @@ const ProductInfoTable = ({ product_Information }) => {
       case 'mountingType': return 'Mounting Type'
       case 'speakerSurroundSoundChannelConfiguration': return 'Speaker Surround Sound Channel Configuration'
       case 'importedBy': return 'Imported By'
+      case 'powerSource': return 'Power Source'
+      case 'batterCapacity': return 'Battery Capacity'
+      case 'batteryCellComposition': return 'Battery Cell Composition'
+      case 'processorBrand': return 'Processor Brand'
       default: return 'miscellaneous Info'
     }
   }
@@ -77,7 +82,7 @@ const ProductInfoTable = ({ product_Information }) => {
         <tbody>
           {
             product_Information.map((elem, index) => (
-              elem[1] && (elem[0] !== 'specText') ? (
+              elem[1] && (elem[0] !== 'specText') && (elem[0] !== 'dynamicValues') ? (
                 <tr className='product_Table_Row' key={index}>
                   <td className='product_Table_Key'>{handleTableKeys(elem[0])}</td>
                   <td className='product_Table_Value'>{elem[1]}{elem[0] === 'weight' ? '' : ''}</td>

@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
-import { Accordion, Dropdown, Carousel } from "react-bootstrap";
+import { Accordion, Carousel } from "react-bootstrap";
 import { addToCart, getCartData } from "../../api/Cart";
 import { UserDataContext } from "../../Contexts/UserContext";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 //CSS
 import "./ProductPage.css";
 //Images
-import defaultImage from "../../assets/png/product_1.png";
-import defaultImage2 from "../../assets/png/product_3.png";
 import offerIconYellow from "../../assets/vector/offers_icon_yellow.svg";
 
 //Components
@@ -18,11 +16,9 @@ import Section2 from "../../components/Section2/Section2";
 import ProductInfoTable from "../../components/ProductInfoTable/ProductInfoTable";
 import OfferCard from "../../components/OfferCard/OfferCard";
 import AlternateProductBox from "../../components/AlternateProductCard/AlternateProductBox";
-import { getIndiProduct, getSearchedProduct } from "../../api/Product";
+import { getProductServiceability, getSearchedProduct } from "../../api/Product";
 import SkeletonElement from "../../components/Skeletons/SkeletonElement";
-import ScratchCardComp from "../../components/ScratchCard/ScratchCardComp";
 import { addToWishlist } from "../../api/wishlistApi";
-// import ScartchCardComp from "../../components/ScratchCard/ScartchCard";
 
 
 toast.configure();
@@ -32,11 +28,12 @@ const ProductPage = ({ setHeaderData }) => {
     setUserContext,
     userAddress,
     setUserAddress,
-    userCart,
-    setUserCart,
     allProducts,
     setCartArray,
-    setOrderInit } = useContext(UserDataContext);
+    setOrderInit,
+    userDefaultAddress,
+    setUserDefaultAddress
+  } = useContext(UserDataContext);
   const matches = useMediaQuery("(min-width:768px)");
   const nav = useNavigate();
   const { slug } = useParams()
@@ -44,6 +41,7 @@ const ProductPage = ({ setHeaderData }) => {
   const [preOrder, setPreOrder] = useState(false);
   const [previewImageSelected, setPreviewImageSelected] = useState(null);
   const [productInfo, setProductInfo] = useState([]);
+  const [productSecondData, setProductSecondData] = useState({})
   const [productData, setProductData] = useState({
     product_loaded: false,
     product_L1: '',
@@ -51,6 +49,7 @@ const ProductPage = ({ setHeaderData }) => {
     product_L3: '',
     product_Classification: '',
     product_Id: "",
+    product_Ean: "",
     product_Heading: "",
     product_name: "",
     product_color: "",
@@ -62,15 +61,13 @@ const ProductPage = ({ setHeaderData }) => {
     },
     product_Discount: {},
     offer_Deadline: "Deal ends in 14h 17m 04s",
-    product_Instock: 255,
+    product_Instock: 0,
     product_image_List: [],
     product_Gallery_Image: [],
     product_Description: [],
   });
   const [colorAlternateProds, setColorAlternateProds] = useState([]);
   const [specAlternateProds, setSpecAlternateProds] = useState([]);
-  const [modalShow, setModalShow] = useState(false);
-  const [scratchCardActive, setScratchCardActive] = useState(false)
   const [alternateColorean, setAlternateColorean] = useState([]);
   const [alternateSpecean, setAlternateSpecean] = useState([]);
   const [productBankOffers, setProductBankOffers] = useState([]);
@@ -78,11 +75,16 @@ const ProductPage = ({ setHeaderData }) => {
   const [discountPercent, setDiscountPercent] = useState('')
   const [comboProductData, setComboProductData] = useState({})
   const [allOffersData, setAllOffersData] = useState([])
-  const [discountTillDate, setDiscountTillDate] = useState(new Date())
+  const [discountTillDate, setDiscountTillDate] = useState(null)
   const [days, setDays] = useState('')
   const [hours, setHours] = useState('')
   const [minutes, setMinutes] = useState('')
   const [seconds, setSeconds] = useState('')
+  const [userZipcode, setUserZipcode] = useState('')
+  const [deliveryEstDays, setDeliveryEstDays] = useState({
+    loaded: false,
+    value: ''
+  })
 
   useEffect(() => {
     setHeaderData({
@@ -104,10 +106,12 @@ const ProductPage = ({ setHeaderData }) => {
     setProductBankOffers([])
     getSearchedProduct(searchTerm)
       .then(res => {
-        let product = res[0]
+        let product = res.products[0]
         if (product) {
           let images = product.images;
           let splitDesc = product.description.split("~");
+          product["quantity"] = 1
+          setProductSecondData(product)
           setProductData((prev) => ({
             ...prev,
             product_loaded: true,
@@ -116,6 +120,7 @@ const ProductPage = ({ setHeaderData }) => {
             product_L3: product.hierarchyL3,
             product_Classification: product.classification,
             product_Id: product._id,
+            product_Ean: product.ean,
             product_Heading: product.dynamicHeader,
             product_name: product.name,
             product_color: product.color,
@@ -124,7 +129,8 @@ const ProductPage = ({ setHeaderData }) => {
             product_image_List: images,
             product_Gallery_Image: product.gallery,
             product_Discount: product.discount,
-            product_Slug: product.slug
+            product_Slug: product.slug,
+            product_Instock: product.qty
           }));
           setPreviewImageSelected(images[0]);
           setProductInfo(Object.entries(product.productInfo));
@@ -141,42 +147,35 @@ const ProductPage = ({ setHeaderData }) => {
         }
       })
   }, [slug])
-  // console.log(alternateColorean);
 
   useEffect(() => {
     alternateColorean.forEach(ean => {
       let ind = colorAlternateProds.findIndex(obj => obj.ean === ean)
       if (ind === -1) {
-        // console.log(ind)
         let searchTerm = 'ean=' + ean
         getSearchedProduct(searchTerm)
           .then(res => {
-            setColorAlternateProds([...colorAlternateProds, res[0]])
+            setColorAlternateProds([...colorAlternateProds, res.products[0]])
           })
       }
     })
     alternateSpecean.map(ean => {
       let ind = specAlternateProds.findIndex(obj => obj.ean === ean)
       if (ind === -1) {
-        // console.log(ind)
         let searchTerm = 'ean=' + ean
         getSearchedProduct(searchTerm)
           .then(res => {
-            setSpecAlternateProds([...specAlternateProds, res[0]])
+            setSpecAlternateProds([...specAlternateProds, res.products[0]])
           })
       }
     })
   }, [alternateColorean, alternateSpecean]);
-  // console.log(specAlternateProds);
-
-  // console.log(productData);
 
   let interval
   useEffect(() => {
     if (productData && productData.product_Discount.flatDiscount && productData.product_Discount.flatDiscount.value) {
       setDiscountPercent(productData.product_Discount.flatDiscount.value)
       let discountToDate = new Date(productData.product_Discount.flatDiscount.to)
-      setDiscountTillDate(discountToDate)
       interval = setInterval(() => {
         startTimer(discountToDate)
       }, 1000);
@@ -189,11 +188,32 @@ const ProductPage = ({ setHeaderData }) => {
     }
     return () => { clearInterval(interval) }
   }, [productData])
-  // console.log(discountTillDate);
 
-  // useEffect(() => {
-  //   startTimer()
-  // }, [])
+  useEffect(() => {
+    if (userDefaultAddress?.loaded && (userDefaultAddress?.no_of_address > 0) && productData.product_loaded) {
+      let prodArray = [
+        {
+          skuId: productData.product_Ean,
+          quantity: 1
+        }
+      ]
+
+      getProductServiceability(userDefaultAddress?.address?.zip, prodArray)
+        .then(res => {
+          if (res) {
+            if (res[0].deliverymodes.length > 0) {
+              let del = res[0].deliverymodes[1]
+              let delTime = del.deliveryTime
+              let delTimeInDays = Math.floor(delTime / 24)
+              setDeliveryEstDays({
+                loaded: true,
+                value: delTimeInDays
+              })
+            }
+          }
+        })
+    }
+  }, [userZipcode, productData])
 
   const startTimer = (date) => {
     const countDownDate = date.getTime()
@@ -220,15 +240,16 @@ const ProductPage = ({ setHeaderData }) => {
     if (dist < 0) {
       //stop timer
       clearInterval(interval.current)
+      setDiscountTillDate(null)
     } else {
       // Update Timer
       setDays(days)
       setHours(hours)
       setMinutes(minutes)
       setSeconds(seconds)
+      setDiscountTillDate(date)
     }
   }
-  // console.log(countDownTimer);
 
   useEffect(() => {
     if (productData.product_loaded &&
@@ -240,11 +261,12 @@ const ProductPage = ({ setHeaderData }) => {
       let searchTerm = 'ean=' + proId
       getSearchedProduct(searchTerm)
         .then(res => {
-          setComboProductData(...res)
+          if (res && res.products) {
+            setComboProductData(res?.products[0])
+          }
         })
     }
   }, [productData.product_loaded])
-  // console.log(comboProductData);
 
   useEffect(() => {
     if (comboProductData) {
@@ -269,23 +291,15 @@ const ProductPage = ({ setHeaderData }) => {
       }
     }
   }, [comboProductData])
-  // console.log(allOffersData);
 
   const handleAddToCart = (id) => {
     let userToken = userContext ? userContext.JWT : "";
     if (userToken) {
       addToCart(id).then((res) =>
         res
-          ? (toast.success("Product Added to Cart"),
-            getCartData().then((res) =>
-              res
-                ? setCartArray({
-                  loaded: true,
-                  no_of_carts: res.no_of_carts,
-                  cart: res.cart,
-                })
-                : ""
-            ))
+          ? (
+            toast.success("Product Added to Cart")
+          )
           : ""
       );
     } else {
@@ -305,6 +319,7 @@ const ProductPage = ({ setHeaderData }) => {
                   loaded: true,
                   no_of_carts: res.no_of_carts,
                   cart: res.cart,
+                  combo: res.combo
                 })
                 : ""
             ))
@@ -317,20 +332,26 @@ const ProductPage = ({ setHeaderData }) => {
 
   const handleOrderInit = (e) => {
     e.preventDefault();
-    let productId = [productData.product_Id, comboProductData._id]
-    let quantity = [1, 1]
-    setOrderInit(prev => ({
-      ...prev,
-      productId: productId,
-      quantity: quantity
-    }))
-    setCartArray({
-      loaded: true,
-      no_of_carts: 2,
-      cart: [productData.product_Id, comboProductData._id]
-    })
-    nav('/delivery-option')
-    // console.log(data);
+    let userToken = userContext ? userContext.JWT : "";
+    if (userToken) {
+      let productId = [productData.product_Id]
+      let quantity = [1]
+      setOrderInit(prev => ({
+        ...prev,
+        productId: productId,
+        quantity: quantity
+      }))
+      setCartArray(prev => ({
+        ...prev,
+        loaded: true,
+        no_of_carts: 1,
+        cart: [productSecondData],
+        combo: [],
+      }))
+      nav('/delivery-option')
+    } else {
+      nav("/login");
+    }
   }
 
   useEffect(() => {
@@ -342,15 +363,6 @@ const ProductPage = ({ setHeaderData }) => {
       })
     }
   }, [productInfo])
-
-  // useEffect(() => {
-  //   if (scratchCardActive) {
-  //     document.body.style.overflow = 'hidden';
-  //   } else {
-  //     document.body.style.overflow = 'unset';
-  //   }
-  // }, [scratchCardActive])
-
 
   return (
     <>
@@ -575,14 +587,23 @@ const ProductPage = ({ setHeaderData }) => {
             <div className="product_Delivery_Section section_Wrapper">
               <div className="product_Delivery_Details">
                 {
-                  productData.product_loaded ? (
-                    <p onClick={() => setScratchCardActive(true)}>
-                      <span>Free delivery: Thursday, Feb 24 </span>
-                      on orders over ₹499
+                  userContext && userContext.JWT ? (
+                    <>
+                      {
+                        deliveryEstDays.loaded ? (
+                          <p>
+                            Delivery In <span>{deliveryEstDays.value} Days</span>
+                          </p>
+                        ) : (
+                          <SkeletonElement type={"productTitle"} />
+                        )
+                      }
+                    </>
+                  ) : (<>
+                    <p>
+                      Enter Pincode
                     </p>
-                  ) : (
-                    <SkeletonElement type={"productTitle"} />
-                  )
+                  </>)
                 }
 
               </div>
@@ -659,10 +680,11 @@ const ProductPage = ({ setHeaderData }) => {
             </div>
 
             {/* Product Information Table */}
-            <div className="productPage_Table section_Wrapper">
-              <h5 className="product_Section_Heading">Product Information</h5>
-              <ProductInfoTable product_Information={productInfo} />
-            </div>
+            {productInfo.length > 0 && (
+              <div className="productPage_Table section_Wrapper">
+                <h5 className="product_Section_Heading">Product Information</h5>
+                <ProductInfoTable product_Information={productInfo} />
+              </div>)}
           </div>
         </div>
 
@@ -726,9 +748,6 @@ const ProductPage = ({ setHeaderData }) => {
           </div>
         )}
       </div>
-      <ToastContainer position="top-center" autoClose={2000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
-      {/* <ScartchCardComp modalShow={modalShow} setModalShow={setModalShow} /> */}
-      <ScratchCardComp scratcCardActive={scratchCardActive} setScratchCardActive={setScratchCardActive} />
     </>
   );
 };

@@ -16,14 +16,26 @@ import categoryOutlineBlue from '../../assets/vector/category_outline_blue.svg'
 import locationBlue from '../../assets/vector/location_blue.svg'
 import locationWhite from '../../assets/vector/location_white.svg'
 import locationWarningYellowIcon from '../../assets/vector/location_warning_yellow.svg'
-import { storeLocation } from '../../api/StoreApi'
+import { getSearchedProduct } from '../../api/Product'
+import { useNavigate } from 'react-router-dom'
+import { getStoreUsingPincode } from '../../api/StoreApi'
+import Loader from '../../components/Loader/Loader'
 
 const StoreFinder = ({ setHeaderData }) => {
   const [showStore, setShowStore] = useState(false)
+  const nav = useNavigate()
   const [listOptionSelected, setListOptionSelected] = useState(true)
   const { location, locationFetch } = useGeolocation()
-  const { userLocation, setUserLocation, storeLocations, setStoreLocations } = useContext(UserDataContext)
+  const {
+    userLocation,
+    setUserLocation,
+    storeLocations,
+    setStoreLocations,
+    setSearchedProduct
+  } = useContext(UserDataContext)
   // console.log(showStore);
+  const [showLoader, setShowLoader] = useState(false)
+  const [userPincode, setUserPincode] = useState('')
 
   useEffect(() => {
     setHeaderData({
@@ -36,54 +48,53 @@ const StoreFinder = ({ setHeaderData }) => {
     })
   }, []);
 
-  // console.log(userLocation);
-
   const markerPostions = [
     { lat: 17, lng: 73 },
     { lat: 18, lng: 72 },
     { lat: 19, lng: 73 },
   ]
 
-  const storeBoxData = [
-    {
-      id: 1,
-      store_Name: 'Store Name',
-      store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
-      store_Timing: 'Mon - Sun 10 AM - 10 PM',
-      store_Contact: [
-        '3098098767',
-        '3764735623',
-      ],
-      store_Map_Link: '#',
-      open_Store_Button: true,
-      open_Store_Menu: '/store1/category1'
-    },
-    {
-      id: 2,
-      store_Name: 'Store Name',
-      store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
-      store_Timing: 'Mon - Sun 10 AM - 10 PM',
-      store_Contact: [
-        '3098098767',
-        '3764735623',
-      ],
-      store_Map_Link: '#',
-      open_Store_Button: true,
-      open_Store_Menu: '/store1/category1'
-    },
-  ]
+  // const storeBoxData = [
+  //   {
+  //     id: 1,
+  //     store_Name: 'Store Name',
+  //     store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
+  //     store_Timing: 'Mon - Sun 10 AM - 10 PM',
+  //     store_Contact: [
+  //       '3098098767',
+  //       '3764735623',
+  //     ],
+  //     store_Map_Link: '#',
+  //     open_Store_Button: true,
+  //     open_Store_Menu: '/store1/category1'
+  //   },
+  //   {
+  //     id: 2,
+  //     store_Name: 'Store Name',
+  //     store_Address: 'Olineo store plot - 174/832, city tower, next to hotel mayfair, bandra east, 400051, mumbai, maharashtra',
+  //     store_Timing: 'Mon - Sun 10 AM - 10 PM',
+  //     store_Contact: [
+  //       '3098098767',
+  //       '3764735623',
+  //     ],
+  //     store_Map_Link: '#',
+  //     open_Store_Button: true,
+  //     open_Store_Menu: '/store1/category1'
+  //   },
+  // ]
 
   const handleStoreSelectButton = () => {
     locationFetch();
+    setShowLoader(true)
   }
 
   useEffect(() => {
     if (location.loaded && location.error) {
       setShowStore(false)
     } else if (location.loaded && location.coordinates) {
-      setShowStore(true)
       setUserLocation(location)
-
+      setShowStore(true)
+      setShowLoader(false)
     }
   }, [location])
 
@@ -91,6 +102,45 @@ const StoreFinder = ({ setHeaderData }) => {
     window.location.reload(false)
   }
 
+  const handleCategorySearch = (value) => {
+    let searchTerm
+    let searchURL
+    searchTerm = ''
+    searchURL = 'Store=' + value
+
+    // console.log(searchTerm);
+    getSearchedProduct(searchTerm)
+      .then(res => {
+        if (res) {
+          setSearchedProduct({
+            loaded: true,
+            products: res.products,
+            no_of_products: res.no_of_products
+          })
+          nav(`/${searchURL}`)
+        }
+      })
+  }
+
+  useEffect(() => {
+    if (userPincode !== '') {
+      setShowLoader(true)
+      if (userPincode.length === 6) {
+        getStoreUsingPincode(userPincode)
+          .then(res => res ? (
+            setStoreLocations({
+              loaded: true,
+              no_of_stores: res.stores?.length,
+              stores: res.stores
+            }),
+            setShowStore(true),
+            setShowLoader(false)
+          ) : (''))
+      }
+    } else {
+      setShowLoader(false)
+    }
+  }, [userPincode])
 
   return (
     <>
@@ -117,49 +167,81 @@ const StoreFinder = ({ setHeaderData }) => {
                   <h3>Find Olineo store near you</h3>
                 </div>
                 <div className="searchbarWrapper store_Finder_Search">
-                  <input type="text" placeholder='Enter Pincode/Store Name' className='searchbar' />
+                  <input type="text" placeholder='Enter Pincode/Store Name' onChange={(e) => setUserPincode(e.target.value)} className='searchbar' />
                 </div>
-                <div className="store_Page_Separtor store_Finder_Separtor">
-                  <span className='hr_Line'></span>
-                  <p>OR</p>
-                </div>
-                <div className="submit_Button_2 store_Finder_Submit_Button">
-                  <button type='submit' className='submit-button' onClick={handleStoreSelectButton} ><p>Show stores near me</p></button>
-                </div>
+                {
+                  !showLoader && !showStore && (
+                    <>
+                      <div className="store_Page_Separtor store_Finder_Separtor">
+                        <span className='hr_Line'></span>
+                        <p>OR</p>
+                      </div>
+                      <div className="submit_Button_2 store_Finder_Submit_Button">
+                        <button type='submit' className='submit-button' onClick={handleStoreSelectButton} ><p>Show stores near me</p></button>
+                      </div>
+                    </>
+                  )
+                }
               </div>
             )
           }
         </div>
         {
-          showStore && !location.error ? (
+          showLoader && (
+            <>
+              <div className='store_Finder_Loader'>
+                <Loader />
+              </div>
+            </>
+          )
+        }
+        {
+          showStore && !location.error && !showLoader ? (
             <div className="store_Finder_Result">
-              <div className="store_Result_Header">
-                <h4 className="store_Result_Heading">Found 2 stores near you</h4>
-                <div className="store_Finder_Options">
-                  <div className={`store_Finder_List ${listOptionSelected ? 'selected' : ''}`} onClick={() => setListOptionSelected(true)} >
-                    {listOptionSelected ? (<img src={categoryOutlineWhite} alt="" />) : (<img src={categoryOutlineBlue} alt="" />)}
-                    <p>List</p>
+              {
+                (storeLocations.no_of_stores > 0) ? (<>
+                  <div className="store_Result_Header">
+                    <h4 className="store_Result_Heading">Found {storeLocations.no_of_stores} stores near you</h4>
+                    <div className="store_Finder_Options">
+                      <div className={`store_Finder_List ${listOptionSelected ? 'selected' : ''}`} onClick={() => setListOptionSelected(true)} >
+                        {listOptionSelected ? (<img src={categoryOutlineWhite} alt="" />) : (<img src={categoryOutlineBlue} alt="" />)}
+                        <p>List</p>
+                      </div>
+                      <div className={`store_Finder_Map ${listOptionSelected ? '' : 'selected'}`} onClick={() => { setListOptionSelected(false) }} >
+                        {listOptionSelected ? (<img src={locationBlue} alt="" />) : (<img src={locationWhite} alt="" />)}
+                        <p>Map</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className={`store_Finder_Map ${listOptionSelected ? '' : 'selected'}`} onClick={() => { setListOptionSelected(false) }} >
-                    {listOptionSelected ? (<img src={locationBlue} alt="" />) : (<img src={locationWhite} alt="" />)}
-                    <p>Map</p>
+                  <div className='store_Result_List'>
+                    {!listOptionSelected && (
+                      <>
+                        <div className="store_Result_Map">
+                          <MapWrapper center={userLocation.coordinates} markerPostions={markerPostions} />
+                        </div>
+                      </>
+                    )}
+                    {
+                      storeLocations.stores.map((store, index) => (
+                        <StoreBox
+                          key={index}
+                          store={store}
+                          handleCategorySearch={handleCategorySearch}
+                          openStoreButton={true}
+                          classes={{
+                            containerClasses: 'bg-white tab_Border'
+                          }} />
+                      ))
+                    }
                   </div>
-                </div>
-              </div>
-              <div className='store_Result_List'>
-                {!listOptionSelected && (
-                  <div className="store_Result_Map">
-                    <MapWrapper center={userLocation.coordinates} markerPostions={markerPostions} />
-                  </div>
-                )}
-                {
-                  storeBoxData.map((store, index) => (
-                    <StoreBox key={index} store={store} classes={{
-                      containerClasses: 'bg-white tab_Border'
-                    }} />
-                  ))
-                }
-              </div>
+                </>) : (
+                  <>
+                    <div className='nostore_Found_Text'>
+                      <p>No store was found for the search.</p>
+                    </div>
+                  </>
+                )
+              }
             </div>
           ) : ('')
         }

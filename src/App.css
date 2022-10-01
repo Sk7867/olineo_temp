@@ -1,3 +1,9 @@
+/* @import url("http://fonts.cdnfonts.com/css/neo-sans-pro"); */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+@font-face {
+  font-family: NeoSansPro;
+  src: url(/src/assets/fonts/NeoSansProRegular.ttf);
+}
 *,
 *::before,
 *::after {
@@ -12,6 +18,10 @@
   align-items: center;
   flex-direction: column;
   overflow-x: hidden;
+}
+
+.relative {
+  position: relative;
 }
 
 .signup-wrapper {
@@ -57,7 +67,7 @@
 .submit-button {
   border-radius: 0 0 0 1rem;
   background: #1b325e;
-  padding: 16px 0;
+  padding: 12px 8px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -118,6 +128,10 @@
   color: #1b325e;
   cursor: pointer;
   text-decoration: none;
+}
+
+.extra-btn:hover {
+  color: #1b325e;
 }
 
 button:disabled {
@@ -334,7 +348,7 @@ textarea::placeholder {
 
   .page_Wrapper {
     margin: 0;
-    padding: 0 1.5rem 0.75rem;
+    padding: 0 0.8rem 0.75rem;
   }
 
   .section_Wrapper {
@@ -356,15 +370,21 @@ textarea::placeholder {
   }
 
   .page_Margin_Top {
-    margin: 8.125rem 0 0;
+    margin: 8.75rem 0 0;
   }
 
   .page_Margin_Top_Secondary {
-    margin: 4rem 0 0;
+    margin: 4.2rem 0 0;
   }
 
   .floating_Footer {
     display: none;
+  }
+}
+
+@media screen and (min-width: 850px) {
+  .page_Wrapper {
+    padding: 0 1.5rem 0.75rem;
   }
 }
 
@@ -488,4 +508,9 @@ textarea::placeholder {
 .checkbox-label input:checked ~ .custom-checkmark::after {
   /* display: block; */
   opacity: 1;
+}
+.react-parallax-bgimage {
+  height: 100% !important;
+  /* width: 100% !important; */
+  object-fit: contain !important;
 }

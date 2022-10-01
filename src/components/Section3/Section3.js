@@ -14,8 +14,8 @@ const Section3 = ({ id, heading, cardButton, productData }) => {
       <div className="section3_content">
         {(productData.no_of_products > 0) && (
           <>
-            <img src={productCard} alt="" className='section3_card_img logo_mob' />
-            <img src={productBanner} alt="" className='section3_banner logo_tab logo_desk' />
+            <img src={productCard} alt="" className='section3_card_img tab_None' />
+            <img src={productBanner} alt="" className='section3_banner tab_Display_Block' />
           </>
         )}
         {

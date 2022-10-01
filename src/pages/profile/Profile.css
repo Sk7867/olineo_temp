@@ -146,6 +146,14 @@
     border: 1px solid #dde0e7;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.02);
   }
+
+  .profile_Option {
+    opacity: 0.6;
+  }
+
+  .profile_Option.--selected{
+    opacity: 1;
+  }
 }
 
 @media screen and (min-width: 1024px) {

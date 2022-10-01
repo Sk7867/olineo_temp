@@ -96,9 +96,9 @@ const OrderCancel = ({ setHeaderData }) => {
     e.preventDefault()
     let query = cancelSelected.data
     cancelOrder(productData.order_Id, productData.itemId, query)
-      .then(res => {
-        console.log(res)
-      })
+      .then(res => res ? (
+        nav('/orders')
+      ) : (''))
   }
 
   return (

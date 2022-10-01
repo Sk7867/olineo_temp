@@ -1,0 +1,165 @@
+.ifd-wrapper {
+  background: #4804ae89;
+  width: 100%;
+}
+.container {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 0 15px 2px #381867c4;
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
+  background: radial-gradient(65.76% 65.76% at 52.92% 34.24%, #492e72 43.01%, #381867 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+}
+.poster-container {
+  opacity: 0;
+}
+.poster-container::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+.thumbnail-container {
+  position: absolute;
+  bottom: 30px;
+  left: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.thumbnail {
+  width: 45px;
+  height: 45px;
+  border: 2px solid #ffffff;
+  background-color: #381867;
+  box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.primary-floating-button {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  border-radius: 0 0 0 1rem;
+  background: linear-gradient(180deg, #efc255 50.31%, #dd9e2c 100%);
+  padding: 16px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  max-width: 178px;
+  width: 100%;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  transform: skew(-20deg) translateX(-50%);
+  box-shadow: 0px 4px 4px 0px #00000040;
+  margin: 10px auto 0;
+  z-index: 1;
+  scale: 1;
+  transform-origin: left;
+}
+
+.primary-floating-button p {
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  display: inline-block;
+  transform: skew(20deg);
+  margin: 0;
+  font-family: NeoSansPro;
+  text-align: center;
+  color: #41197b;
+  cursor: pointer;
+}
+.primary-floating-button:hover {
+  scale: 1.06;
+}
+.primary-floating-button:active {
+  scale: 0.92;
+}
+/* ---------------------------------------------- */
+
+.steps-counter {
+  /* width: 100%; */
+  /* position: absolute; */
+  /* bottom: 0; */
+  padding-top: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: #381867d6;
+  backdrop-filter: blur(20px);
+  opacity: 0;
+  height: 75px;
+  min-width: 350px;
+  width: 100%;
+  max-width: 400px;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.steps-counter.absolute {
+  position: absolute;
+}
+
+.steps-counter-text {
+  display: flex;
+  width: 100%;
+  max-width: 300px;
+  justify-content: space-around;
+  margin-top: 5px;
+}
+.steps-counter-text p {
+  font-family: NeoSansPro;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+
+  text-align: center;
+  letter-spacing: 1px;
+
+  color: #ffffff;
+}
+
+.ifd-from-wrapper {
+  max-height: 100%;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  padding-bottom: 75px;
+}
+.ifd-from-wrapper::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.form-screen {
+  background: radial-gradient(65.76% 65.76% at 52.92% 34.24%, #553586 43.01%, #451a84 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+  /* transition: all 0.3s ease; */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  height: max-content;
+  min-height: 100%;
+}
+
+/* @media screen and (min-width: 768px) {
+  .container {
+    height: calc(100vh - 68px);
+  }
+} */

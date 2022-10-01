@@ -8,36 +8,44 @@ import './ProductListItem.css'
 import product1 from '../../assets/png/product_1.png'
 import ProductOfferTag from '../ProductOfferTag/ProductOfferTag'
 
-const ProductListItem = ({ product }) => {
-
+const ProductListItem = ({ product, interestedButton = false, handleAddInterestedProd }) => {
   return (
     <>
-      <Link to={`/product/${product.slug}`} className='productListItem_Contaier'>
+      <div className='productListItem_Contaier'>
         <div className="productListItem_Wrapper">
-          <div className="productListItem_Image_Wrapper">
-            {(product.images) && (product.images.length > 0) && (
-              <img src={product.images[0]} alt="" />
+          <Link to={`/product/${product?.slug}`} className="productListItem_Image_Wrapper">
+            {(product?.images) && (product?.images?.length > 0) && (
+              <img src={product?.images[0]} alt="" />
             )}
             {/* <ProductOfferTag offer={product.discount.flatDiscount.value} /> */}
-          </div>
+          </Link>
           <div className='productListItem_Content_Wrapper'>
-            <p className='productListItem_Title'>
-              {product.name}
-            </p>
+            <Link to={`/product/${product?.slug}`} className='productListItem_Title'>
+              {product?.name}
+            </Link>
             <div className="productListItem_Price_Details">
               <p className='productListItem_Discounted_Price'>
-                ₹{!isNaN(product.price.discountPrice) ? product.price.discountPrice : product.price.mop}
+                ₹{!isNaN(product?.price?.discountPrice) ? product?.price?.discountPrice : product?.price?.mop}
               </p>
               <p className='productListItem_Original_Price'>
-                ₹{product.price.mrp}
+                ₹{product?.price?.mrp}
               </p>
             </div>
+            {
+              interestedButton && (
+                <div className='productListItem_Int_Button'>
+                  <button type="submit" className="submit-button" onClick={() => handleAddInterestedProd(product?._id)}>
+                    <p>I'm interested</p>
+                  </button>
+                </div>
+              )
+            }
             {/* <p className='productListItem_Timer'>
               Ends in {product.product_Discount_End}
             </p> */}
           </div>
         </div>
-      </Link>
+      </div>
     </>
   )
 }

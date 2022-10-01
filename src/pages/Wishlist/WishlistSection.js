@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import Section2 from '../../components/Section2/Section2'
 import WishlistProductCard from '../../components/WishlistProductCard/WishlistProductCard'
 import { UserDataContext } from '../../Contexts/UserContext'
-import { Slide, toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { deleteFromWishlist, getAllWishlistItems } from '../../api/wishlistApi'
 import { useNavigate } from 'react-router-dom'
 import { addToCart, getCartData } from '../../api/Cart'
@@ -22,29 +22,21 @@ const WishlistSection = () => {
       .then(res => res ? (
         toast.success("Product Added to Cart"),
         getCartData()
-          .then((res) => {
+          .then(res => {
             if (res) {
+              let prod = []
+              prod = res.cart
+              prod.forEach((product) => {
+                product["quantity"] = 1;
+              })
               setCartArray({
                 loaded: true,
                 no_of_carts: res.no_of_carts,
-                cart: res.cart,
+                cart: prod,
+                combo: res.combo
               })
             }
-          }),
-        deleteFromWishlist(id)
-          .then(res => res ? (
-            toast.error('Product Removed from Wishlist'),
-            getAllWishlistItems()
-              .then(res => {
-                if (res) {
-                  setUserWishlist({
-                    loaded: true,
-                    no_of_wishlist_items: res.no_of_wishlist_items,
-                    wishlist_items: [...res.wishlist_items]
-                  })
-                }
-              })
-          ) : (''))
+          })
       ) : (''))
   }
 
@@ -140,8 +132,8 @@ const WishlistSection = () => {
                 </div>
                 <div className="cards_Container">
                   {
-                    (userCart.length > 0) && userCart ? (
-                      userCart.map((item, index) => (
+                    (cartArray.no_of_carts > 0) ? (
+                      cartArray.cart.map((item, index) => (
                         <CartProductCard
                           key={index}
                           product={item}
@@ -174,18 +166,6 @@ const WishlistSection = () => {
           </div>
         )
       }
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        transition={Slide}
-      />
     </>
   )
 }

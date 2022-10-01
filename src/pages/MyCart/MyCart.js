@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { UserDataContext } from '../../Contexts/UserContext'
-import { getIndiProduct } from '../../api/Product'
 
 //CSS
 import './MyCart.css'
@@ -18,9 +17,16 @@ import PriceDetailsBox from '../../components/PriceDetailsBox/PriceDetailsBox'
 import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 import CartSection from './CartSection'
 import { getCartData } from '../../api/Cart'
+import { getSaveForLater } from '../../api/SaveForLaterApi'
 
 const MyCart = ({ setHeaderData }) => {
-  const { setUserCart, userCart, allProducts, cartArray, setCartArray, } = useContext(UserDataContext)
+  const {
+    allProducts,
+    cartArray,
+    setCartArray,
+    userSaveForLater,
+    setUserSaveForLater,
+  } = useContext(UserDataContext)
   const nav = useNavigate()
 
 
@@ -39,24 +45,45 @@ const MyCart = ({ setHeaderData }) => {
     getCartData()
       .then(res => {
         if (res) {
+          let prod = []
+          prod = res.cart
+          prod.forEach((product) => {
+            product["quantity"] = 1;
+          })
           setCartArray({
             loaded: true,
             no_of_carts: res.no_of_carts,
-            cart: res.cart
+            cart: prod,
+            combo: res.combo
           })
-          // console.log(res);
         }
       })
   }, [])
 
-
-
+  useEffect(() => {
+    getSaveForLater()
+      .then(res => {
+        if (res) {
+          setUserSaveForLater({
+            loaded: true,
+            no_of_save_for_later_items: res.no_of_save_for_later_items,
+            save_for_later_items: res.save_for_later_items
+          })
+        }
+      })
+  }, [])
 
   const pageSwitch = (e) => {
     e.preventDefault();
-    // console.log(e);
     nav('/')
   }
+
+  const getRandomProductArr = (arr, num) => {
+    const shuffledArr = [...arr].sort(() => 0.5 - Math.random())
+    return shuffledArr.slice(0, num)
+  }
+
+  const featureProducts = getRandomProductArr(allProducts.products, 10)
 
   const breadCrumbsData = [
     {
@@ -68,14 +95,13 @@ const MyCart = ({ setHeaderData }) => {
       url: ''
     },
   ]
-  // console.log(cartData);
 
   return (
     <>
       <div className='page_Wrapper page_Margin_Top'>
         <BreadCrumbs data={breadCrumbsData} />
         {
-          cartArray.no_of_carts === 0 ? (
+          (cartArray.no_of_carts === 0) && (userSaveForLater.no_of_save_for_later_items === 0) ? (
             <>
               <div className="empty_order_sec">
                 <p className='empty_order_text'>Your cart is empty</p>
@@ -85,6 +111,7 @@ const MyCart = ({ setHeaderData }) => {
                 id={'Top-sellers-sec'}
                 heading='Top Sellers'
                 productData={allProducts}
+                productArray={featureProducts}
               />
             </>
           ) : (
@@ -101,7 +128,7 @@ const MyCart = ({ setHeaderData }) => {
                     </div>
                   </div>
                 </aside>
-                <CartSection featureProducts={allProducts} />
+                <CartSection featureProducts={featureProducts} />
                 {/* <Section2
                   id={'Top-sellers-sec'}
                   heading='Top Sellers'

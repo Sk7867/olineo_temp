@@ -5,7 +5,7 @@ import CircleLoading from "../components/CircleLoading";
 import { userLogin, userLoginEmail } from "../api/Auth";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { UserDataContext } from "../Contexts/UserContext";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 toast.configure();
 const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
@@ -15,14 +15,14 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
   const [btnDisable, setBtnDisable] = useState(true);
   const matches = useMediaQuery("(min-width:768px)");
   const [emailLogin, setEmailLogin] = useState(false);
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart } = useContext(UserDataContext);
+  const { setUserContext } = useContext(UserDataContext);
   const loc = useLocation();
   // console.log(loc);
 
   const [loading, setLoading] = useState(false);
 
   const nav = useNavigate();
-  console.log(phone);
+  // console.log(phone);
   useEffect(() => {
     if (loc.state) {
       if (loc.state.emailLogin) {
@@ -163,7 +163,6 @@ const Login = ({ setUserLoggedIn, setLoginRedirect }) => {
           </p>
         </div>
       </div>
-      <ToastContainer position="top-center" autoClose={5000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
     </>
   );
 };

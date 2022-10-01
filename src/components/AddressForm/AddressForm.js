@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { deleteAddress, getAddress, saveAddress } from '../../api/Address';
+import { deleteAddress, editAddress, getAddress, saveAddress } from '../../api/Address';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserDataContext } from '../../Contexts/UserContext'
 
@@ -9,6 +9,7 @@ import './AddressForm.css'
 const AddressForm = ({ addressProp, setProfileState, fromProfile = false }) => {
   const nav = useNavigate()
   const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext)
+  const [defaultAdd, setDefaultAdd] = useState(false)
   const [address, setAddress] = useState({
     user_Full_Name: '',
     user_ph_Number: '',
@@ -23,12 +24,12 @@ const AddressForm = ({ addressProp, setProfileState, fromProfile = false }) => {
   useEffect(() => {
     if (addressProp) {
       setAddress({
-        user_Full_Name: addressProp.fullName,
-        user_ph_Number: addressProp.mobileNumber,
-        user_Pincode: addressProp.pincode,
+        user_Full_Name: addressProp.customerName,
+        user_ph_Number: addressProp.phone,
+        user_Pincode: addressProp.zip,
         user_State: addressProp.state,
         user_City: addressProp.city,
-        user_Address: addressProp.address,
+        user_Address: addressProp.address_line1,
         user_Landmark: addressProp.landMark,
       })
     }
@@ -50,30 +51,27 @@ const AddressForm = ({ addressProp, setProfileState, fromProfile = false }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (addressProp) {
-      deleteAddress(addressProp._id)
+      editAddress(addressProp._id, address, defaultAdd)
         .then(res => {
-          saveAddress(address)
+          setProfileState(5)
+
+          getAddress()
             .then(res => {
-              setProfileState(4)
-
-              getAddress()
-                .then(res => {
-                  // console.log(res);
-                  if (res) {
-                    setUserAddress({
-                      loaded: true,
-                      no_of_address: res.no_of_address,
-                      address: res.address
-                    })
-                  }
+              // console.log(res);
+              if (res) {
+                setUserAddress({
+                  loaded: true,
+                  no_of_address: res.no_of_address,
+                  address: res.address
                 })
-
-              //get address call
-              //set address props
+              }
             })
+
+          //get address call
+          //set address props
         })
     } else {
-      saveAddress(address)
+      saveAddress(address, defaultAdd)
         .then(res => {
           getAddress()
             .then(res => {
@@ -87,7 +85,7 @@ const AddressForm = ({ addressProp, setProfileState, fromProfile = false }) => {
               }
             })
           if (fromProfile) {
-            setProfileState(4)
+            setProfileState(5)
           } else {
             nav(-1)
           }
@@ -104,7 +102,7 @@ const AddressForm = ({ addressProp, setProfileState, fromProfile = false }) => {
       ? setAddress({ ...address, [prop]: e.target.value })
       : setAddress({ ...address, [prop]: e.label })
   }
-  console.log(fromProfile);
+
   return (
     <>
       <form className="address_Form_Container" onChange={validateForm} onSubmit={handleSubmit} >
@@ -120,6 +118,16 @@ const AddressForm = ({ addressProp, setProfileState, fromProfile = false }) => {
         </div>
         <input type="text" name='Address' placeholder='Address (Area/Street)*' value={address.user_Address} onChange={(value) => handleInput("user_Address", value)} required />
         <input type="text" name='Landmark' placeholder='Landmark (optional)' value={address.user_Landmark} onChange={(value) => handleInput("user_Landmark", value)} />
+        <label htmlFor={`set_as_default`} className="checkbox-label checkbox-item d-flex align-items-center address_Form_Checkbox">
+          <input
+            type="checkbox"
+            name="set_as_default"
+            id={`set_as_default`}
+            onClick={() => { setDefaultAdd(true) }}
+          />
+          <span className="custom-checkmark"></span>
+          Set Address As Default
+        </label>
         <button type='submit' className='submit-button address_Form_Submit' disabled={disabled}><p>SAVE DETAILS</p></button>
         <div className="address_Footer tab_None">
           {

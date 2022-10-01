@@ -125,6 +125,11 @@
   margin: 1rem 0 23.5rem;
 }
 
+.option_Disabled{
+  pointer-events: none;
+  opacity: 0.6;
+}
+
 @media screen and (min-width: 768px) {
 
   .delivery_Options{

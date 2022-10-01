@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar/HeaderBar";
 import { userSignUp } from "../api/Auth";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { UserDataContext } from "../Contexts/UserContext";
 import CircleLoading from "../components/CircleLoading";
 
@@ -18,7 +18,7 @@ const Signup = ({ setLoginRedirect }) => {
   const [btnDisable, setBtnDisable] = useState(true);
   const matches = useMediaQuery("(min-width:768px)");
   const nav = useNavigate();
-  const { userContext, setUserContext, userAddress, setUserAddress, setUserCart, userCart } = useContext(UserDataContext);
+  const { userContext, setUserContext, userAddress, setUserAddress } = useContext(UserDataContext);
 
   const [loading, setLoading] = useState(false);
 
@@ -150,11 +150,10 @@ const Signup = ({ setLoginRedirect }) => {
         </form>
         <div className="tc-Footer">
           <p className="footer-Text">
-            By Signing In, I agree to <span>terms & conditions</span>
+            By Signing Up, I agree to <span>terms & conditions</span>
           </p>
         </div>
       </div>
-      <ToastContainer position="top-center" autoClose={5000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
     </>
   );
 };

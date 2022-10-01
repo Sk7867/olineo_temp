@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { deleteProductCatalogue } from '../../api/CatalogueApi';
 import { getAllProducts, getSearchedProduct } from '../../api/Product';
 import MultiOfferModal from '../../components/ModalComponenr/MultiOfferModal';
+import Pagination from '../../components/Pagination/Pagination';
 import { UserDataContext } from '../../Contexts/UserContext'
 
 //CSS
@@ -20,6 +21,9 @@ const CataloguePage = ({ setHeaderData }) => {
   const { allProducts, setAllProducts } = useContext(UserDataContext)
   const [searchText, setSearchText] = useState('')
   const [productsToShow, setProductsToShow] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const productsPerPage = 10
+  const [totalProducts, setTotalProducts] = useState(1)
 
   useEffect(() => {
     let prods
@@ -41,15 +45,16 @@ const CataloguePage = ({ setHeaderData }) => {
   }, []);
 
   useEffect(() => {
-    getAllProducts()
+    getAllProducts(`limit=${productsPerPage}&page=${currentPage}`)
       .then(res => {
         setAllProducts({
           loaded: true,
           no_of_products: res.no_of_products,
           products: res.products
         })
+        setTotalProducts(res.total_products)
       })
-  }, [])
+  }, [currentPage])
 
   // console.log(allProducts);
 
@@ -60,19 +65,25 @@ const CataloguePage = ({ setHeaderData }) => {
     // }
   }
 
-  const handleDeleteProduct = (product) => {
-    console.log('Delete Product Clicked of id:', product.product._id);
-    deleteProductCatalogue(product.product._id)
-      .then(res => res ? (
-        getAllProducts()
-          .then(res => {
-            setAllProducts({
-              loaded: true,
-              no_of_products: res.no_of_products,
-              products: res.products
+  const handleDeleteProduct = async (product) => {
+    let text = `Are you sure you want to delete ${product?.item?.name}`;
+    if (window.confirm(text) === true) {
+      deleteProductCatalogue(product?.item?._id)
+        .then(res => res ? (
+          getAllProducts(`limit=${productsPerPage}&page=${currentPage}`)
+            .then(res => {
+              setAllProducts({
+                loaded: true,
+                no_of_products: res.no_of_products,
+                products: res.products
+              })
+              setTotalProducts(res.total_products)
             })
-          })
-      ) : (''))
+        ) : (''))
+      alert(`${product?.item?.name} is Deleted`)
+    } else {
+      alert("Product Not Deleted")
+    }
   }
 
   const handleSearchProduct = (e) => {
@@ -83,22 +94,31 @@ const CataloguePage = ({ setHeaderData }) => {
         // console.log(searchTerm);
         getSearchedProduct(searchTerm)
           .then(res => {
-            setProductsToShow([...res])
+            setProductsToShow(res.products)
+            setTotalProducts(res.total_products)
           })
       } else {
         let searchTerm = 'ean=' + searchText
         // console.log(searchTerm);
         getSearchedProduct(searchTerm)
           .then(res => {
-            setProductsToShow([...res])
+            setProductsToShow(res.products)
+            setTotalProducts(res.total_products)
           })
       }
     } else {
-      getAllProducts()
+      getAllProducts(`limit=${productsPerPage}&page=${currentPage}`)
         .then(res => {
           setProductsToShow(res.products)
+          setTotalProducts(res.total_products)
         })
     }
+  }
+
+  const handlePageChange = (e, pageNumber) => {
+    e.preventDefault();
+    setCurrentPage(pageNumber)
+    window.scrollTo(0, 0)
   }
 
   return (
@@ -132,23 +152,30 @@ const CataloguePage = ({ setHeaderData }) => {
               allProducts.loaded ? (
                 (allProducts.no_of_products > 0) ? (
                   (productsToShow.length > 0) ? (
-                    productsToShow.map((product, index) => (
-                      <div className="catalogue_List_Item" key={index}>
-                        <div className='catalogue_List_Content'>
-                          {product.ean && (<p>{product.ean}</p>)}
-                          {product.name && (<p>{product.name}</p>)}
-                          {/* {product.price.mop && (<p>{product.price.mop}</p>)} */}
-                        </div>
-                        <div className='catalogue_List_Buttons'>
-                          <Link to={'/catelogue-page/add-product'} state={product = { product }} className='catalogue_Edit' >
-                            Edit
-                          </Link>
-                          <div className='catalogue_Delete' onClick={() => handleDeleteProduct(product)}>
-                            Delete
+                    <>
+                      {productsToShow.map((item, index) => (
+                        <>
+                          <div className="catalogue_List_Item" key={index}>
+                            <div className='catalogue_List_Content'>
+                              {item.ean && (<p>{item.ean}</p>)}
+                              {item.name && (<p>{item.name}</p>)}
+                              {/* {product.price.mop && (<p>{product.price.mop}</p>)} */}
+                            </div>
+                            <div className='catalogue_List_Buttons'>
+                              <Link to={'/catelogue-page/add-product'} state={item = { item }} className='catalogue_Edit' >
+                                Edit
+                              </Link>
+                              <div className='catalogue_Delete' onClick={() => handleDeleteProduct(item)}>
+                                Delete
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    ))
+                          <div className="pagination_Container">
+                          </div>
+                        </>
+                      ))}
+                      <Pagination productsPerPage={productsPerPage} totalProducts={totalProducts} pageChange={handlePageChange} />
+                    </>
                   ) : (<div>No Such Product Exists</div>)
                 ) : (<div>No Products in Database</div>)
               ) : (

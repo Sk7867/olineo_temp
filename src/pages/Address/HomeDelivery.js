@@ -12,7 +12,7 @@ import PriceDetailsBox from "../../components/PriceDetailsBox/PriceDetailsBox";
 import BreadCrumbs from "../../components/BreadCrumbs/BreadCrumbs";
 import { getAddress } from "../../api/Address";
 import { completeOrder, initOrder, paymentInit } from "../../api/OrdersApi";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { getCartData, removeFromCart } from "../../api/Cart";
 
 toast.configure();
@@ -20,7 +20,7 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
   const matches = useMediaQuery("(min-width:768px)");
   const [disable, setDisable] = useState(true);
   const [addressSelected, setAddressSelected] = useState("");
-  const { userAddress, setUserContext, setUserAddress, orderInit, setOrderInit, setCartArray, userCart, setUserCart } = useContext(UserDataContext);
+  const { userAddress, setUserContext, setUserAddress, orderInit, setOrderInit, setCartArray } = useContext(UserDataContext);
 
   const [initProcessing, setInitProcessing] = useState(false);
 
@@ -102,22 +102,32 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
             <div className="home_Delivery_Options">
               {userAddress.no_of_address !== 0
                 ? userAddress.no_of_address !== 0 &&
-                  userAddress.address.map((address, index) => (
-                    <div className="home_Delivery_Option section_Wrapper" key={index}>
-                      <label
-                        htmlFor={address.id}
-                        className={`radiobtn-label home_Delivery_Label`}
-                        onClick={() => {
-                          setAddressSelected(address._id);
-                          setDisable(false);
+                userAddress.address.map((address, index) => (
+                  <div className="home_Delivery_Option section_Wrapper" key={index}>
+                    <label
+                      htmlFor={address.id}
+                      className={`radiobtn-label home_Delivery_Label`}
+                      onClick={() => {
+                        setAddressSelected(address._id);
+                        setDisable(false);
+                      }}
+                    >
+                      <input type="radio" name="Delivery Address" id={address.id} value={address.id} />
+                      <span className="radio-custom"></span>
+                      <AddressBox
+                        setEditID={setEditID}
+                        address={address}
+                        deleteOption={false}
+                        defaultOption={false}
+                        border={false}
+                        fullWidth={true}
+                        classes={{
+                          boxWrapperClass: 'ms-1'
                         }}
-                      >
-                        <input type="radio" name="Delivery Address" id={address.id} value={address.id} />
-                        <span className="radio-custom"></span>
-                        <AddressBox setEditID={setEditID} address={address} deleteOption={false} border={false} fullWidth={true} />
-                      </label>
-                    </div>
-                  ))
+                      />
+                    </label>
+                  </div>
+                ))
                 : ""}
             </div>
             <Link to={"/newaddress"} className="add_New_Address home_Delivery_New_Address section_Wrapper">
@@ -143,7 +153,6 @@ const HomeDelivery = ({ setEditID, setHeaderData }) => {
           </div>
         </div>
       </div>
-      <ToastContainer position="top-center" autoClose={5000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover transition={Slide} />
     </>
   );
 };

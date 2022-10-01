@@ -1,0 +1,536 @@
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #dac6f8;
+}
+
+section {
+  padding: 15px;
+  min-width: 100%;
+}
+
+.header {
+  display: flex;
+  gap: 10px;
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
+.header svg {
+  margin-top: 7px;
+}
+.header-msg {
+  font-family: "Montserrat";
+  font-size: 22px;
+  line-height: 30px;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.form-container {
+  margin: 0 auto;
+  text-align: center;
+}
+.form-heading {
+  font-family: NeoSansPro, Geneva, Verdana, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: #ffffff;
+  margin-bottom: 20px;
+  text-align: left;
+  padding: 0 15px;
+}
+
+.form-input {
+  background: #ffffff;
+  border: 1px solid #efefef;
+  border-radius: 4px;
+  padding: 10px 10px;
+  height: 48px;
+  max-width: 328px;
+  font-family: "Montserrat";
+  margin-bottom: 20px;
+  transition: 0.1s;
+}
+.form-input.invalid {
+  border: #ff1200f5 2px solid;
+  color: #cc1507f5;
+}
+.form-input.invalid::placeholder {
+  color: #cc14078f !important;
+}
+.form-input:focus-within {
+  outline: none;
+}
+
+.form-input::placeholder {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+
+  color: #8d9091;
+}
+
+.primary-button {
+  border-radius: 0 0 0 1rem;
+  background: linear-gradient(180deg, #efc255 50.31%, #dd9e2c 100%);
+  /* padding: 16px 0; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  max-width: 308px;
+  width: 100%;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  transform: skew(-20deg);
+  box-shadow: 0px 4px 4px 0px #00000040;
+  margin: 10px auto 0;
+  height: 50px;
+}
+
+.primary-button p {
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  display: inline-block;
+  transform: skew(20deg);
+  margin: 0;
+  font-family: NeoSansPro;
+  text-align: center;
+  color: #ffffff;
+}
+
+.primary-button svg {
+  transform: skew(20deg);
+}
+
+.secondary-button {
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.form-divider {
+  border: 1px solid rgba(255, 255, 255, 0.386);
+  filter: blur(0.5px);
+  margin: 50px 20px;
+}
+
+/* -----> Step 2 <------  */
+.btn-send-otp {
+  position: absolute;
+  right: 30px;
+  top: 16%;
+  /* transform: translateY(-50%); */
+  width: 79px;
+  height: 27px;
+  border: none;
+  background: #efc255;
+  border-radius: 4px;
+
+  font-family: NeoSansPro;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 20px;
+  color: #ffffff;
+}
+.store-name-heading {
+  font-family: NeoSansPro;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  /* line-height: 20px; */
+  text-align: center;
+  color: #ffffff;
+  position: relative;
+  margin: 10px auto 20px;
+  color: #b27e00;
+}
+
+.store-name-heading::before {
+  content: attr(data-after);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  color: white;
+  margin: 0 auto;
+  transform: translateY(-2px);
+}
+
+.otp-input-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 328px;
+  margin: 10px auto 20px;
+}
+
+/* -----> Step 3 <------  */
+.product-price-info {
+  font-family: "Montserrat";
+  font-size: 12px;
+  line-height: 16px;
+  /* identical to box height, or 133% */
+  padding: 0 20px;
+  text-align: left;
+  letter-spacing: -0.01em;
+
+  color: #ffffff;
+}
+.react-select-container {
+  max-width: 326px;
+  max-height: 48px;
+  margin: 0 auto 20px;
+  text-align: initial;
+}
+.ask-otp {
+  font-family: NeoSansPro;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  width: 70%;
+  margin: 0px auto 15px;
+  color: #ffffff;
+}
+.btn-send-otp-manager {
+  width: 79px;
+  height: 27px;
+  border: none;
+  background: #efc255;
+  border-radius: 4px;
+
+  font-family: NeoSansPro;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 20px;
+  color: #ffffff;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+.rate-experience-text {
+  font-family: NeoSansPro;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 25px;
+  color: #ffffff;
+  margin: 50px auto 10px;
+  width: 85%;
+}
+
+.rate-experience-svg path {
+  cursor: pointer;
+}
+
+.emoji-group:hover .emoji-circle {
+  fill: #e3d1fe;
+}
+/* -----> Spin Wheel Page <------  */
+
+.spin-wheel-container {
+  max-width: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.spin-wheel-container #spin-wheel {
+  width: 100%;
+  scale: 1.1;
+}
+
+.product-card-section {
+  background-color: white;
+  margin: 30px 0 10px;
+}
+
+.product-card-top-heading {
+  font-family: NeoSansPro;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+  padding: 15px 0;
+  margin: 0;
+  color: #41236d;
+}
+
+.product-card-container {
+  /* width: max-content; */
+  padding: 0px 16px 35px 16px;
+
+  display: flex;
+  gap: 15px;
+  flex-wrap: nowrap;
+  overflow: auto;
+}
+
+.product-card {
+  min-width: 150px;
+  height: 193px;
+  position: relative;
+  background: #b5b5b5;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 50px;
+}
+.product-card img {
+  object-fit: contain;
+}
+
+.product-card-inner {
+  position: absolute;
+  width: 118px;
+  height: 66px;
+  left: 16px;
+  top: 150px;
+
+  background: #ffffff;
+  box-shadow: 0px 1px 2px rgba(157, 154, 154, 0.59);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 5px;
+}
+
+.product-card-inner .mrp {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 5px;
+  letter-spacing: 0.015em;
+  font-variant: small-caps;
+  text-decoration: line-through;
+  color: #6d747a;
+}
+.product-card-inner .mop {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  color: #08090a;
+}
+.product-card-inner .name {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: 0.004em;
+  text-transform: capitalize;
+  margin: 0;
+  text-align: center;
+
+  color: #6d747a;
+}
+
+.spin-wheel-spinner-heading {
+  font-family: NeoSansPro;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 40px;
+  text-align: center;
+  color: #ffffff;
+  position: relative;
+  margin: 35px auto 0px auto;
+  color: #fff;
+  width: 80%;
+
+  text-shadow: 0px 2px 4px rgba(237, 162, 93, 0.8);
+}
+.center-spin-btn {
+  cursor: pointer;
+}
+
+.spin-circle {
+  transform-origin: center;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(6000deg);
+  }
+}
+
+.product-card-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* ---------- */
+
+.product-reveal-container {
+  max-width: 100%;
+  width: 100%;
+  background-color: #41236d;
+}
+.product-reveal-heading {
+  font-family: NeoSansPro;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 25px;
+  line-height: 35px;
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 40px;
+
+  text-shadow: 0px 2px 4px rgba(237, 162, 93, 0.8);
+}
+
+.product-img-box {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+.product-img-box img {
+  width: auto;
+  max-height: 200px;
+}
+.product-reveal-thankyou-text {
+  font-family: NeoSansPro;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 25px;
+  text-align: center;
+  color: #ffffff;
+
+  text-shadow: 0px 2px 4px rgba(237, 162, 93, 0.8);
+  width: 70%;
+  margin: 70px auto 20px;
+}
+
+.coupon-card {
+  margin: auto;
+  width: 300px;
+  height: 240px;
+  position: relative;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 10px 0;
+  background-image: url("/src/assets/png/coupon-code-bg.png");
+  background-repeat: no-repeat;
+  background-position: bottom;
+}
+.coupon-card-code-heading {
+  margin: auto;
+  width: 153px;
+  height: 30px;
+  background: #ffd36d;
+  border-radius: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  font-family: NeoSansPro;
+  text-shadow: 0px 1px 9px rgba(255, 255, 255, 0.35);
+}
+.coupon-card-code-number {
+  margin-top: 12px;
+  font-family: NeoSansPro;
+  font-size: 25px;
+  line-height: 28px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: -0.01em;
+  color: #dd9e2c;
+  /* background: linear-gradient(180deg, #efc255 50.31%, #dd9e2c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent; */
+
+  text-shadow: 0px 1px 9px rgba(255, 255, 255, 0.35);
+}
+.terms-conditions-box {
+  padding: 17px 15px;
+}
+.terms-conditions-box h4 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  color: #ffffff;
+  margin: 0;
+}
+.terms-conditions-box p {
+  font-family: "Montserrat";
+  font-style: normal;
+  /* font-weight: 600; */
+  font-size: 10px;
+  line-height: 13px;
+  margin-bottom: 7px;
+  text-align: center;
+  letter-spacing: -0.015em;
+  color: #ffffff;
+}
+.terms-conditions-box button {
+  margin: auto;
+  width: 115px;
+  height: 28px;
+  outline: none;
+  border: none;
+  background: #ffffff;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.terms-conditions-box button span {
+  font-family: NeoSansPro;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  letter-spacing: 1px;
+  color: #dd9e2c;
+  /* background: linear-gradient(180deg, #efc255 50.31%, #dd9e2c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent; */
+
+  text-shadow: 0px 0.2px 0px rgba(0, 0, 0, 0.41);
+}
+
+.social-share-buttons {
+  display: flex;
+  justify-content: space-between;
+  max-width: 250px;
+  margin: 20px auto;
+}
+
+@media screen and (max-width: 400px) {
+  .store-name-heading {
+    font-size: 25px;
+  }
+  .btn-send-otp {
+    right: 25px;
+  }
+}

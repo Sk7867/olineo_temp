@@ -5,6 +5,7 @@
 .address_Box{
   padding: 1rem 0.75rem 0.125rem;
   background-color: #FFFFFF;
+  position: relative;
 }
 
 .address_Box_Wrapper{
@@ -25,6 +26,19 @@
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+
+.address_Default_Button{
+  max-width: 145px;
+  width: 100%;
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+}
+
+.address_Default_Button.disable{
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 .address_Box_Name{

@@ -106,7 +106,7 @@ const CustomerSupport = ({ setHeaderData }) => {
         <div className={`profile_Options support_Options ${option !== 0 ? 'option_Slide' : ''}`}>
           {
             supportOptions.map((option, index) => (
-              <div className={`profile_Option `} key={index} onClick={() => optionSelected(index + 1)} >
+              <div className={`profile_Option faq_Option`} key={index} onClick={() => optionSelected(index + 1)} >
                 <div>
                   <img src={option.image} alt="" />
                   <p>{option.title}</p>

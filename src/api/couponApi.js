@@ -1,21 +1,32 @@
 import axios from "axios";
 
-const headers = {
-  "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, x-requested-with",
-  "Content-Type": "application/json",
-  "Access-Control-Allow-origin": "*",
-};
-
 //GET COUPON
 export const getCoupon = async () => {
   let getCouponResponse
 
-  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/coupon`, { headers })
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/coupon`)
     .then(res => {
-      getCouponResponse = res
+      getCouponResponse = res.data
     })
 
   return getCouponResponse
+}
+
+export const checkCoupon = async (code) => {
+  let checkCouponRes
+
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/coupon/${code}`)
+    .then(res => {
+      checkCouponRes = res
+    })
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+      }
+    })
+
+  return checkCouponRes
 }
 
 //Add coupon to product
@@ -27,10 +38,10 @@ export const addCoupon = async (couponOffersHold, products) => {
     expire: couponOffersHold.to,
     products: [...products]
   }
-  console.log(addCouponBody);
+  // console.log(addCouponBody);
 
   let addCouponResponse
-  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/coupon`, JSON.stringify(addCouponBody), { headers })
+  await axios.post(`${process.env.REACT_APP_BASE_URL}/product/coupon`, JSON.stringify(addCouponBody))
     .then(res => {
       addCouponResponse = res
     })
@@ -45,7 +56,7 @@ export const updateCoupon = async (id) => {
   }
   let updateCouponResponse
 
-  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/coupon/${id}`, JSON.stringify(updateCouponBody), { headers })
+  await axios.patch(`${process.env.REACT_APP_BASE_URL}/product/coupon/${id}`, JSON.stringify(updateCouponBody))
     .then(res => {
       updateCouponResponse = res
     })
@@ -57,7 +68,7 @@ export const updateCoupon = async (id) => {
 export const deleteCoupon = async (id) => {
   let deleteCouponResponse
 
-  await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/coupon/${id}`, { headers })
+  await axios.delete(`${process.env.REACT_APP_BASE_URL}/product/coupon/${id}`)
     .then(res => {
       deleteCouponResponse = res
     })

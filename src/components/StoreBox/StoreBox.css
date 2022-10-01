@@ -13,9 +13,14 @@
   text-decoration: none;
 }
 
-.store_Name, .store_Address, .store_Timing p, .store_Contact p, .store_Distance p, .store_Status p, .store_Map_Link p, .open_Store_button p{
+.store_Name, .store_Address, .store_Timing p, .store_Contact a, .store_Distance p, .store_Status p, .store_Map_Link p, .open_Store_button p{
   margin: 0;
   color: #08090A;
+}
+
+.store_Contact a{
+  text-transform: none;
+  text-decoration: none;
 }
 
 .store_Name{
@@ -25,14 +30,23 @@
   line-height: 1.5rem;
 }
 
-.store_Address, .store_Timing p, .store_Contact p, .store_Distance p, .store_Map_Link p, .open_Store_button p{
+.store_Address, .store_Timing p, .store_Contact a, .store_Distance p, .store_Map_Link p, .open_Store_button p{
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: #08090A;
 }
 
-.store_Contact > p{
+.store_Address{
+  max-width: 585px;
+}
+
+.store_Contact > a{
+  color: #3D5176;
+  border-bottom: 1px solid #1B325E;
+}
+
+.store_Contact > a:hover{
   color: #3D5176;
   border-bottom: 1px solid #1B325E;
 }
@@ -83,5 +97,20 @@
     border-radius: 0.25rem;
     border: 1px solid #DDE0E7;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.02);
+  }
+
+  .store_Name{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .store_Address, 
+  .store_Timing p 
+  .store_Contact a,
+  .store_Distance p,
+  .store_Map_Link p,
+  .open_Store_button p{
+    font-size: 1rem;
+    line-height: 1.5rem;
   }
 }
