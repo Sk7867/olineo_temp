@@ -8,9 +8,9 @@ import IFDContext from "../../Contexts/IFDContext";
 import { UserDataContext } from "../../Contexts/UserContext";
 import styles from "./_IFD.module.css";
 
-const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
+const Step2 = ({ navigateBackward, navigateForward }) => {
   const otpInputRefs = useRef([]);
-  // const userLoggedIn = true;
+  const userLoggedIn = true;
 
   const { setUserContext } = useContext(UserDataContext);
 
@@ -185,7 +185,6 @@ const Step2 = ({ userLoggedIn, navigateBackward, navigateForward }) => {
       }, 500);
     }
   };
-
 
   useEffect(() => {
     if (!otpInvalidErr) return;

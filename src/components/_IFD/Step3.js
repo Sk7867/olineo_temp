@@ -328,12 +328,12 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
                 (e.target.value === "" || /^[0-9\b]+$/.test(e.target.value)) && setProductDetails((prev) => ({ ...prev, imei: e.target.value }));
               }}
             />
-            {productDetails.product_purchased !== null && (
+            {/* {productDetails.product_purchased !== null && (
               <p className={styles["product-price-info"]}>
                 Product price : <span style={{ textDecoration: "line-through" }}>{phoneList.find((phone) => phone.value === productDetails.product_purchased)?.mrp}</span> /{" "}
                 <span>{phoneList.find((phone) => phone.value === productDetails.product_purchased)?.mop}</span>
               </p>
-            )}
+            )} */}
           </>
         )}
 
