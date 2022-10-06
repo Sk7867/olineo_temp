@@ -1,3 +1,7 @@
 .mapComponent{
   height: 100%;
 }
+
+.hand{
+  cursor: pointer;
+}

@@ -35,7 +35,8 @@ const ProductCategory = ({ setHeaderData }) => {
   const productsPerPage = 10
   const [currentPage, setCurrentPage] = useState(1)
   const [totalProducts, setTotalProducts] = useState(1)
-  console.log(slug);
+  const [toggleFilter, setToggleFilter] = useState(false)
+  const [filterHeadingSelected, setFilterHeadingSelected] = useState(0)
 
   const handleAll = (resp) => {
     if (filterSelected?.some(res => res.type === resp.type)) {
@@ -251,138 +252,212 @@ const ProductCategory = ({ setHeaderData }) => {
 
   return (
     <>
-      <div className="page_Wrapper page_Margin_Top">
+      <div className={`page_Wrapper page_Margin_Top`}>
         <BreadCrumbs data={breadCrumbsData} />
-        <>
-          <div className="filter_Sort_Header mobile_None">
-            <div className="filter_Section_Header">
-              {filterSelected?.map(res => (
-                <FilterTag
-                  filter={res}
-                  handleDeletFilter={handleDeletFilter}
-                />
-              ))}
-            </div>
-            <div className="sort_Section_Header">
-              <Dropdown>
-                <Dropdown.Toggle id="dropdown-basic">
-                  <div className="sort_Container">
-                    <span>Sort by:</span>
-                    <p>Price Low to High</p>
-                    <img src={sortOutlineGrey} alt="" />
-                  </div>
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Price Low to High</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Price High to Low</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Remove</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-          </div>
+        {/*  */}
+        <div className={`main_Content_Show ${toggleFilter && !matches ? 'main_Content_Hide' : ''}`}>
           <>
-            <div className="tab_None header_Sort_Container combined_Button_Container">
-              <div className="header_Sort_Button combined_Button_One" onClick={() => setBottomSheet(true)}>
-                <img src={sortOutlineBlue} alt="" />
-                <p>Sort</p>
+            <div className="filter_Sort_Header mobile_None">
+              <div className="filter_Section_Header">
+                {filterSelected?.map(res => (
+                  <FilterTag
+                    filter={res}
+                    key={res}
+                    handleDeletFilter={handleDeletFilter}
+                  />
+                ))}
               </div>
-              <Link to={"/category1/filter"} state={filterListData} className="header_Filter_Button combined_Button_Two">
-                <img src={filterOutlineBlue} alt="" />
-                <p>Filter</p>
-              </Link>
+              <div className="sort_Section_Header">
+                <Dropdown>
+                  <Dropdown.Toggle id="dropdown-basic">
+                    <div className="sort_Container">
+                      <span>Sort by:</span>
+                      <p>Price Low to High</p>
+                      <img src={sortOutlineGrey} alt="" />
+                    </div>
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Price Low to High</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">Price High to Low</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">Remove</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
             </div>
-          </>
-          <>
-            <div className="desk_Page_Wrapper">
-              <aside className="side_Section section_Wrapper pb-0">
-                <p className="side_Section_Heading m-0">Filters</p>
-                <div className="side_Section_Body">
-                  <Accordion defaultActiveKey={["0"]}>
-                    {filterListData.map((filter, index) => (
-                      <Accordion.Item eventKey={`${index}`} key={index}>
-                        <Accordion.Header>{filter.filter_heading}</Accordion.Header>
-                        <Accordion.Body>
-                          {filter.filter_type === "Radio" ? (
-                            <>
-                              {filter.filter_data.map((element, index) => (
-                                <label
-                                  htmlFor={element.data}
-                                  key={index}
-                                  className={`radiobtn-label payment_Methods_Labels`}
-                                  onClick={() => {
-                                    handleAll(element)
-                                  }}
-                                >
-                                  <input type="radio" name={`filter-${filter.filter_heading}`} checked={filterSelected?.some(res => res.type === element.type && res.data === element.data)} id={element.data} value={element.data} readOnly />
-                                  <span className="radio-custom"></span>
-                                  {element.data}
-                                </label>
-                              ))}
-                            </>
-                          ) : filter.filter_type === "Checkbox" ? (
-                            <>
-                              {filter.filter_data.map((element, index) => (
-                                <label
-                                  htmlFor={element.data}
-                                  key={index}
-                                  className="checkbox-label checkbox-item d-flex align-items-center"
-                                  onClick={() => {
-                                    handleAll2(element)
-                                  }}
-                                >
-                                  <input type="checkbox" name={`filter-${filter.filter_heading}`} checked={filterSelected?.some(res => res.data === element.data)} id={element.data} value={element.data} readOnly />
-                                  <span className="custom-checkmark"></span>
-                                  {element.data}
-                                </label>
-                              ))}
-                            </>
-                          ) : (
-                            ""
-                          )}
-                        </Accordion.Body>
-                      </Accordion.Item>
-                    ))}
-                  </Accordion>
+            <>
+              <div className="tab_None header_Sort_Container combined_Button_Container">
+                <div className="header_Sort_Button combined_Button_One" onClick={() => setBottomSheet(true)}>
+                  <img src={sortOutlineBlue} alt="" />
+                  <p>Sort</p>
                 </div>
-              </aside>
-              <div className="order_Page_Right">
-                {
-                  (searchedProduct.no_of_products > 0) ? (
-                    <>
-                      <div className="Product_Category_Container">
-                        {
-                          loading ?
-                            [1, 2, 3, 4].map((n) => (<SkeletonElement type={'productBox'} key={n} />))
-                            : searchedProduct.products.map((product, index) => (
-                              <ProductListItem key={index} product={product} />))
-                        }
-                      </div>
-                      <div className="pagination_Container">
-                        <Pagination productsPerPage={productsPerPage} totalProducts={totalProducts} pageChange={handlePageChange} />
-                      </div>
-                    </>
-                  ) : (<>
-                    <>
-                      <div className="empty_order_sec">
-                        <p className="empty_order_text">No Product Found</p>
-                        <button type="submit" className="submit-button" onClick={() => nav("/")}>
-                          <p>Back To Home</p>
-                        </button>
-                      </div>
-                      {/* <Section2
+                <div onClick={() => setToggleFilter(true)} className="header_Filter_Button combined_Button_Two">
+                  <img src={filterOutlineBlue} alt="" />
+                  <p>Filter</p>
+                </div>
+              </div>
+            </>
+            <>
+              <div className="desk_Page_Wrapper">
+                <aside className="side_Section section_Wrapper pb-0">
+                  <p className="side_Section_Heading m-0">Filters</p>
+                  <div className="side_Section_Body">
+                    <Accordion defaultActiveKey={["0"]}>
+                      {filterListData.map((filter, index) => (
+                        <Accordion.Item eventKey={`${index}`} key={index}>
+                          <Accordion.Header>{filter.filter_heading}</Accordion.Header>
+                          <Accordion.Body>
+                            {filter.filter_type === "Radio" ? (
+                              <>
+                                {filter.filter_data.map((element, index) => (
+                                  <label
+                                    htmlFor={element.data}
+                                    key={index}
+                                    className={`radiobtn-label payment_Methods_Labels`}
+                                    onClick={() => {
+                                      handleAll(element)
+                                    }}
+                                  >
+                                    <input type="radio" name={`filter-${filter.filter_heading}`} checked={filterSelected?.some(res => res.type === element.type && res.data === element.data)} id={element.data} value={element.data} readOnly />
+                                    <span className="radio-custom"></span>
+                                    {element.data}
+                                  </label>
+                                ))}
+                              </>
+                            ) : filter.filter_type === "Checkbox" ? (
+                              <>
+                                {filter.filter_data.map((element, index) => (
+                                  <label
+                                    htmlFor={element.data}
+                                    key={index}
+                                    className="checkbox-label checkbox-item d-flex align-items-center"
+                                    onClick={() => {
+                                      handleAll2(element)
+                                    }}
+                                  >
+                                    <input type="checkbox" name={`filter-${filter.filter_heading}`} checked={filterSelected?.some(res => res.data === element.data)} id={element.data} value={element.data} readOnly />
+                                    <span className="custom-checkmark"></span>
+                                    {element.data}
+                                  </label>
+                                ))}
+                              </>
+                            ) : (
+                              ""
+                            )}
+                          </Accordion.Body>
+                        </Accordion.Item>
+                      ))}
+                    </Accordion>
+                  </div>
+                </aside>
+                <div className="order_Page_Right">
+                  {
+                    (searchedProduct.no_of_products > 0) ? (
+                      <>
+                        <div className="Product_Category_Container">
+                          {
+                            loading ?
+                              [1, 2, 3, 4].map((n) => (<SkeletonElement type={'productBox'} key={n} />))
+                              : searchedProduct.products.map((product, index) => (
+                                <ProductListItem key={index} product={product} />))
+                          }
+                        </div>
+                        <div className="pagination_Container">
+                          <Pagination productsPerPage={productsPerPage} totalProducts={totalProducts} pageChange={handlePageChange} />
+                        </div>
+                      </>
+                    ) : (<>
+                      <>
+                        <div className="empty_order_sec">
+                          <p className="empty_order_text">No Product Found</p>
+                          <button type="submit" className="submit-button" onClick={() => nav("/")}>
+                            <p>Back To Home</p>
+                          </button>
+                        </div>
+                        {/* <Section2
               id={'Top-sellers-sec'}
               heading='Top Sellers'
               productData={featureProducts}
             /> */}
-                    </>
-                  </>)
-                }
+                      </>
+                    </>)
+                  }
+                </div>
               </div>
+            </>
+          </>
+        </div>
+        {!matches && (
+          <>
+            <div className={`new_Filter_Container ${toggleFilter ? 'new_Filter_Show' : ''}`}>
+              <div className="filter_Container">
+                <div className="filter_Left">
+                  {filterListData.map((item, index) => (
+                    <div className={`filter_Left_Item ${filterHeadingSelected === index ? 'filter_Heading_Selected' : ''}`} key={index} onClick={() => setFilterHeadingSelected(index)} >
+                      <p>{item.filter_heading}</p>
+                    </div>
+                  ))
+                  }
+                </div>
+                <div className="filter_Right">
+                  {filterListData && (
+                    filterListData.map((item, index) => (
+                      (index === filterHeadingSelected) && (
+                        item.filter_data.map((filter, index) => (
+                          <div className="filter_Right_Item" key={index} >
+                            {item.filter_type === 'Radio' ? (
+                              <>
+                                <label
+                                  htmlFor={filter.data}
+                                  key={index}
+                                  className={`radiobtn-label payment_Methods_Labels`}
+                                  onClick={() => {
+                                    handleAll(filter)
+                                  }}
+                                >
+                                  <input type="radio" name={`filter-${filter.filter_heading}`} checked={filterSelected?.some(res => res.type === filter.type && res.data === filter.data)} id={filter.data} value={filter.data} readOnly />
+                                  <span className="radio-custom"></span>
+                                  {filter.data}
+                                </label>
+                              </>
+                            ) : (
+                              item.filter_type === 'Checkbox' ? (
+                                <>
+                                  <label
+                                    htmlFor={filter.data}
+                                    key={index}
+                                    className="checkbox-label checkbox-item d-flex align-items-center"
+                                    onClick={() => {
+                                      handleAll2(filter)
+                                    }}
+                                  >
+                                    <input type="checkbox" name={`filter-${filter.filter_heading}`} checked={filterSelected?.some(res => res.data === filter.data)} id={filter.data} value={filter.data} readOnly />
+                                    <span className="custom-checkmark"></span>
+                                    {filter.data}
+                                  </label>
+                                </>
+                              ) : (''))}
+                          </div>
+                        ))
+                      ))))}
+                </div>
+              </div>
+              {/* Floating Footer */}
+              {!matches && (
+                <div className="floating_Footer">
+                  <div className="floating_Footer_Wrapper">
+                    <div className="floating_Footer_Center">
+                      <button type='submit' className='submit-button' onClick={() => setToggleFilter(false)} ><p>Show {`${searchedProduct.no_of_products}`} result{searchedProduct.no_of_products > 1 ? (<span>s</span>) : <></>}</p></button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </>
-        </>
+        )}
+        {/*  */}
       </div>
+
 
       {!matches ? (
         <>

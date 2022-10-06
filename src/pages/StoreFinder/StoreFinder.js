@@ -90,11 +90,20 @@ const StoreFinder = ({ setHeaderData }) => {
 
   useEffect(() => {
     if (location.loaded && location.error) {
-      setShowStore(false)
+      setShowStore(false);
     } else if (location.loaded && location.coordinates) {
       setUserLocation(location)
-      setShowStore(true)
-      setShowLoader(false)
+      getStoreUsingPincode(location.address.zip)
+        .then(res => res ? (
+          setStoreLocations({
+            loaded: true,
+            no_of_stores: res.stores?.length,
+            stores: res.stores
+          }),
+          setShowStore(true),
+          setShowLoader(false)
+        ) : (''))
+      console.log(location);
     }
   }, [location])
 
