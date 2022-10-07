@@ -270,7 +270,7 @@ function App() {
         no_of_products: res.no_of_products,
         products: res.products,
       }));
-      getAllProducts('type=cd&page=1').then((res) => {
+      getAllProducts('type=cd&page=1').then((res) => { // cd = closing discount
         setAllProducts(prev => ({
           ...prev,
           cd1: res.products
@@ -282,7 +282,7 @@ function App() {
           cd2: res.products
         }))
       })
-      getAllProducts('type=np&page=1').then((res) => {
+      getAllProducts('type=np&page=1').then((res) => {  //np = new products
         setAllProducts(prev => ({
           ...prev,
           np1: res.products

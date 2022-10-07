@@ -250,6 +250,17 @@ const ProductCategory = ({ setHeaderData }) => {
     },
   ];
 
+  const handleBottomSheetToggle = (toggle) => {
+    let body = document.querySelector('body')
+    if (toggle === 'true') {
+      body.style.overflow = 'hidden'
+      setBottomSheet(true)
+    } else if (toggle === 'false') {
+      body.removeAttribute('style')
+      setBottomSheet(false)
+    }
+  }
+
   return (
     <>
       <div className={`page_Wrapper page_Margin_Top`}>
@@ -287,7 +298,7 @@ const ProductCategory = ({ setHeaderData }) => {
             </div>
             <>
               <div className="tab_None header_Sort_Container combined_Button_Container">
-                <div className="header_Sort_Button combined_Button_One" onClick={() => setBottomSheet(true)}>
+                <div className="header_Sort_Button combined_Button_One" onClick={() => handleBottomSheetToggle('true')}>
                   <img src={sortOutlineBlue} alt="" />
                   <p>Sort</p>
                 </div>
@@ -461,13 +472,13 @@ const ProductCategory = ({ setHeaderData }) => {
 
       {!matches ? (
         <>
-          <div className={`bottom_Sheet_Backdrop ${bottomSheet ? "active" : ""}`} onClick={() => setBottomSheet(false)}>
+          <div className={`bottom_Sheet_Backdrop ${bottomSheet ? "active" : ""}`} onClick={() => handleBottomSheetToggle('false')}>
             {" "}
           </div>
           <div className={`bottom_Sheet ${bottomSheet ? "active" : ""}`}>
             <div className="bottom_Sheet_Header">
               <p className="bottom_Sheet_Heading">Sort by</p>
-              <img src={closeOutlineGrey} className="bottom_Sheet_Close_Btn" alt="" onClick={() => setBottomSheet(false)} />
+              <img src={closeOutlineGrey} className="bottom_Sheet_Close_Btn" alt="" onClick={() => handleBottomSheetToggle('false')} />
             </div>
             <div className="bottom_Sheet_Body">
               <label htmlFor={`price-low-high`} className={`radiobtn-label price_Sort_Labels `}>

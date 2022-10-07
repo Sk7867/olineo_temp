@@ -30,9 +30,10 @@
   letter-spacing: -0.015em;
   color: #1B325E;
   font-weight: 600;
-  font-size: 20px;
-  line-height: 28px;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
   text-decoration: none;
+  margin: 1rem 0 0 0;
 }
 
 .section4_link:hover{
@@ -56,6 +57,11 @@
     grid-row-gap: 0px;
     margin: 18px 0;
   }
+
+  .section4_link{
+    font-size: 1rem;
+    line-height: 1.65rem;
+  }
 }
 
 @media screen and (min-width: 1024px) {
@@ -67,6 +73,11 @@
   grid-template-rows: repeat(2, 175px);
   grid-column-gap: 24px;
   grid-row-gap: 0px;
+  }
+
+  .section4_link{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 }
 

@@ -11,7 +11,7 @@ const Section4 = ({ id, heading, productData, link, classes, type, productArray 
     <div className='section4_container' id={id}>
       <div className="section4_header">
         <h3 className="section4_heading">{heading}</h3>
-        <Link to={link.link} className="section4_link">{link.text}</Link>
+        <Link to={link.link} className="section4_link tab_Display_Block">{link.text}</Link>
       </div>
       <div className="section4_card_container">
         {
@@ -32,7 +32,7 @@ const Section4 = ({ id, heading, productData, link, classes, type, productArray 
           )
         }
       </div>
-      <a href={link.link} className="section4_link mob_link logo_mob">{link.text}</a>
+      <a href={link.link} className="section4_link mob_link tab_None">{link.text}</a>
     </div>
   )
 }

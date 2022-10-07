@@ -53,12 +53,12 @@ const AddressBox = ({
           }
           {
             matches ? (
-              <Link to={'/profile'} state={address} className="address_Footer_Edit" onClick={() => { setEditID(address.id); setProfileState(11) }}>
+              <Link to={'/editaddress'} state={address} className="address_Footer_Edit" onClick={() => { setEditID(address.id) }}>
                 <img src={editIcon} alt="" />
                 <p>Edit address</p>
               </Link>
             ) : (
-              <Link to={'/editaddress'} state={address} className="address_Footer_Edit" onClick={() => setEditID(address.id)}>
+              <Link to={'/profile'} state={address} className="address_Footer_Edit" onClick={() => { setEditID(address.id); setProfileState(11) }}>
                 <img src={editIcon} alt="" />
                 <p>Edit address</p>
               </Link>

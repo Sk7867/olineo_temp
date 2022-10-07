@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
+
 const useGeolocation = () => {
   const [location, setLocation] = useState({
     loaded: false,
@@ -17,7 +18,7 @@ const useGeolocation = () => {
           lng: location.coords.longitude
         }
       }))
-      getAddress(location.coords.latitude, location.coords.longitude, 'AIzaSyAJ5hj Awd6gWA5-of4v0AqEOZ_90c_Zq-o')
+      getAddress(location.coords.latitude, location.coords.longitude, process.env.REACT_APP_GOOGLE_KEY)
     }
 
     const onError = error => {

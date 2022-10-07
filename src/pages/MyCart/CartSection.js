@@ -58,6 +58,7 @@ const CartSection = ({ featureProducts }) => {
     }
   }, [cartArray])
 
+  //suggestions
   useEffect(() => {
     if (cartSuggestions && (cartSuggestions.length > 0)) {
       cartSuggestions.map((category) => {
