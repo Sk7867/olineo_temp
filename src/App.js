@@ -79,6 +79,7 @@ import MyWishlist from "./pages/Wishlist/MyWishlist";
 import IFDHome from "./pages/IFD_Home";
 import IFD from "./pages/IFD_Home/IFD";
 import PreLoader from "./components/_IFD/PreLoader";
+import DashboardIFD from "./pages/Dashboard/DashboardIFD";
 
 function App() {
   const [loginRedirect, setLoginRedirect] = useState(false);
@@ -93,7 +94,7 @@ function App() {
     cd1: [],
     np1: [],
     cd2: [],
-    np2: []
+    np2: [],
   });
   const [seachedProduct, setSeachedProduct] = useState({
     loaded: false,
@@ -158,7 +159,7 @@ function App() {
     shippingAddressId: "",
     coupon: "",
     type: "",
-    storeId: ""
+    storeId: "",
   });
   const [priceBoxDetails, setPriceBoxDetails] = useState({
     cartItemsNumber: 0,
@@ -264,36 +265,38 @@ function App() {
 
   useEffect(() => {
     getAllProducts().then((res) => {
-      setAllProducts(prev => ({
+      setAllProducts((prev) => ({
         ...prev,
         loaded: true,
         no_of_products: res.no_of_products,
         products: res.products,
       }));
-      getAllProducts('type=cd&page=1').then((res) => { // cd = closing discount
-        setAllProducts(prev => ({
+      getAllProducts("type=cd&page=1").then((res) => {
+        // cd = closing discount
+        setAllProducts((prev) => ({
           ...prev,
-          cd1: res.products
-        }))
-      })
-      getAllProducts('type=cd&page=2').then((res) => {
-        setAllProducts(prev => ({
+          cd1: res.products,
+        }));
+      });
+      getAllProducts("type=cd&page=2").then((res) => {
+        setAllProducts((prev) => ({
           ...prev,
-          cd2: res.products
-        }))
-      })
-      getAllProducts('type=np&page=1').then((res) => {  //np = new products
-        setAllProducts(prev => ({
+          cd2: res.products,
+        }));
+      });
+      getAllProducts("type=np&page=1").then((res) => {
+        //np = new products
+        setAllProducts((prev) => ({
           ...prev,
-          np1: res.products
-        }))
-      })
-      getAllProducts('type=np&page=2').then((res) => {
-        setAllProducts(prev => ({
+          np1: res.products,
+        }));
+      });
+      getAllProducts("type=np&page=2").then((res) => {
+        setAllProducts((prev) => ({
           ...prev,
-          np2: res.products
-        }))
-      })
+          np2: res.products,
+        }));
+      });
     });
   }, []);
 
@@ -334,12 +337,11 @@ function App() {
   // Price Box Details Calculation===========================
   useEffect(() => {
     if (cartArray.no_of_carts > 0) {
-      let productNumbers = Math.ceil(cartArray.cart.reduce((accumulator, current) => accumulator + current.quantity, 0))
+      let productNumbers = Math.ceil(cartArray.cart.reduce((accumulator, current) => accumulator + current.quantity, 0));
       let productPrice = Math.ceil(cartArray.cart.reduce((accumulator, current) => accumulator + current.price.mrp * current.quantity, 0));
-      let totalDiscount = Math.ceil(cartArray.cart.reduce(
-        (accumulator, current) => accumulator + (current.price.mrp - (current.price.discountPrice ? current.price.discountPrice : current.price.mop)) * current.quantity,
-        0
-      ));
+      let totalDiscount = Math.ceil(
+        cartArray.cart.reduce((accumulator, current) => accumulator + (current.price.mrp - (current.price.discountPrice ? current.price.discountPrice : current.price.mop)) * current.quantity, 0)
+      );
       let totalDeliveryCharge = deliveryCharges;
       let totalAmount = Math.ceil(productPrice - totalDiscount + totalDeliveryCharge);
       setPriceBoxDetails((prev) => ({
@@ -444,26 +446,27 @@ function App() {
           }}
         >
           {loc.pathname === "/login" ||
-            loc.pathname === "/signup" ||
-            loc.pathname === "/otp" ||
-            loc.pathname === "/adduser" ||
-            loc.pathname === "/admin-home" ||
-            loc.pathname === "/admin-add-product" ||
-            loc.pathname === "/admin-add-product-csv" ||
-            loc.pathname === "/admin-add-shop" ||
-            loc.pathname === "/admin-discounts" ||
-            loc.pathname === "/admin-add-discount" ||
-            loc.pathname === "/admin-orders" ||
-            loc.pathname === "/admin" ||
-            loc.pathname === "/admin-products" ||
-            loc.pathname === "/admin-add-banner" ||
-            loc.pathname === "/admin-banner" ||
-            loc.pathname === "/admin-alluser" ||
-            loc.pathname === "/admin-shops" ||
-            loc.pathname === "/admin-query" ||
-            loc.pathname === "/admin-payments" ||
-            loc.pathname === "/admin-cancellation" ||
-            loc.pathname === "/indian-festival-days" ? (
+          loc.pathname === "/signup" ||
+          loc.pathname === "/otp" ||
+          loc.pathname === "/adduser" ||
+          loc.pathname === "/admin-home" ||
+          loc.pathname === "/admin-add-product" ||
+          loc.pathname === "/admin-add-product-csv" ||
+          loc.pathname === "/admin-add-shop" ||
+          loc.pathname === "/admin-discounts" ||
+          loc.pathname === "/admin-add-discount" ||
+          loc.pathname === "/admin-orders" ||
+          loc.pathname === "/admin" ||
+          loc.pathname === "/admin-products" ||
+          loc.pathname === "/admin-add-banner" ||
+          loc.pathname === "/admin-banner" ||
+          loc.pathname === "/admin-alluser" ||
+          loc.pathname === "/admin-shops" ||
+          loc.pathname === "/admin-query" ||
+          loc.pathname === "/admin-payments" ||
+          loc.pathname === "/admin-cancellation" ||
+          loc.pathname === "/admin-ifd" ||
+          loc.pathname === "/indian-festival-days" ? (
             ""
           ) : (
             <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />
@@ -614,26 +617,28 @@ function App() {
               <Route exact path="/admin-query" element={<Quirys />} />
               <Route exact path="/admin-payments" element={<Payments />} />
               <Route exact path="/admin-cancellation" element={<Cancellation />} />
+              <Route exact path="/admin-ifd" element={<DashboardIFD />} />
             </Route>
             <Route path="/indian-festival-days" exact element={<IFDHome userLoggedIn={userLoggedIn} setHeaderData={setHeaderData} />} />
           </Routes>
           {loc.pathname === "/admin" ||
-            loc.pathname === "/admin-home" ||
-            loc.pathname === "/admin-add-product" ||
-            loc.pathname === "/admin-add-product-csv" ||
-            loc.pathname === "/admin-discounts" ||
-            loc.pathname === "/admin-add-discount" ||
-            loc.pathname === "/admin-add-shop" ||
-            loc.pathname === "/admin-orders" ||
-            loc.pathname === "/admin-products" ||
-            loc.pathname === "/admin-banner" ||
-            loc.pathname === "/admin-add-banner" ||
-            loc.pathname === "/admin-alluser" ||
-            loc.pathname === "/admin-shops" ||
-            loc.pathname === "/admin-query" ||
-            loc.pathname === "/admin-payments" ||
-            loc.pathname === "/admin-cancellation" ||
-            loc.pathname === "/indian-festival-days" ? null : (
+          loc.pathname === "/admin-home" ||
+          loc.pathname === "/admin-add-product" ||
+          loc.pathname === "/admin-add-product-csv" ||
+          loc.pathname === "/admin-discounts" ||
+          loc.pathname === "/admin-add-discount" ||
+          loc.pathname === "/admin-add-shop" ||
+          loc.pathname === "/admin-orders" ||
+          loc.pathname === "/admin-products" ||
+          loc.pathname === "/admin-banner" ||
+          loc.pathname === "/admin-add-banner" ||
+          loc.pathname === "/admin-alluser" ||
+          loc.pathname === "/admin-shops" ||
+          loc.pathname === "/admin-query" ||
+          loc.pathname === "/admin-payments" ||
+          loc.pathname === "/admin-cancellation" ||
+          loc.pathname === "/admin-ifd" ||
+          loc.pathname === "/indian-festival-days" ? null : (
             <Footer />
           )}
         </UserDataContext.Provider>

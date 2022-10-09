@@ -15,27 +15,25 @@ import {
   faMoneyBill,
   faShop,
   faCancel,
-  faImages
+  faImages,
+  faGift,
+  faCheck,
+  faCheckDouble,
 } from "@fortawesome/free-solid-svg-icons";
 import SubMenu from "./SubMenu";
 import { Nav, Button } from "react-bootstrap";
 import classNames from "classnames";
 import { Link } from "react-router-dom";
 
-import logo_mob from '../../assets/vector/navbar_logo_mob.svg'
-import logo_desk from '../../assets/vector/navbar_logo_desk.svg'
-import logo_tab from '../../assets/vector/navbar_logo_tab.svg'
+import logo_mob from "../../assets/vector/navbar_logo_mob.svg";
+import logo_desk from "../../assets/vector/navbar_logo_desk.svg";
+import logo_tab from "../../assets/vector/navbar_logo_tab.svg";
 
 const SideBar = ({ isOpen, toggle }) => {
   return (
     <div className={classNames("sidebar", { "is-open": isOpen })}>
       <div className="sidebar-header">
-        <Button
-          variant="link"
-          onClick={toggle}
-          style={{ color: "#fff" }}
-          className="mt-4"
-        >
+        <Button variant="link" onClick={toggle} style={{ color: "#fff" }} className="mt-4">
           <FontAwesomeIcon icon={faTimes} pull="right" size="xs" />
         </Button>
         <h3>
@@ -52,10 +50,8 @@ const SideBar = ({ isOpen, toggle }) => {
         {/* <p className="ml-3">Dashboard</p> */}
 
         <Nav.Item
-          className={(isActive) =>
-            "nav-link" + (!isActive ? " active" : "active")
-          }
-        // className="active"
+          className={(isActive) => "nav-link" + (!isActive ? " active" : "active")}
+          // className="active"
         >
           <Link className="dash_sidebar_a nav-link" to="/admin-home">
             <FontAwesomeIcon icon={faHome} className="mr-2" />
@@ -140,6 +136,12 @@ const SideBar = ({ isOpen, toggle }) => {
           <Link className="dash_sidebar_a nav-link" to="/">
             <FontAwesomeIcon icon={faPaperPlane} className="mr-2" />
             Contact
+          </Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Link className="dash_sidebar_a nav-link" to="/admin-ifd">
+            <FontAwesomeIcon icon={faCheckDouble} className="mr-2" />
+            Indian Festival Days
           </Link>
         </Nav.Item>
       </Nav>

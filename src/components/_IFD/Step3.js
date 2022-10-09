@@ -102,6 +102,9 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
   const otpInputRefs = useRef([]);
 
   const [isOtpSent, setIsOtpSent] = useState(false);
+  const [resendOtpTimer, setResendOtpTimer] = useState(60);
+  const [resendOtpActive, setResendOtpActive] = useState(false);
+  const [isOtpResent, setIsOtpResent] = useState(false);
 
   const [otpValue, setOtpValue] = useState(["", "", "", ""]);
 
@@ -109,7 +112,6 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     setOtpValue((prev) => prev.map((v, i) => (i === idx ? value : v)));
     idx < 5 && value !== "" && otpInputRefs.current[idx + 1]?.focus();
   };
-  console.log(productDetails);
   const getPhonesData = async () => {
     const response = await fetch(`${process.env.REACT_APP_IFD_BASE_URL}/products`, {
       method: "GET",
@@ -119,24 +121,7 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     setProductDetails((prev) => ({ ...prev, phonesData }));
   };
 
-  useEffect(() => {
-    if (productDetails.selectedCategory === "phones") {
-      getPhonesData();
-      setProductDetails((prev) => ({ ...prev, other_product_purchased: "" }));
-    } else {
-      setProductDetails((prev) => ({ ...prev, imei: "", product_purchased: null }));
-    }
-  }, [productDetails.selectedCategory]);
-
-  useEffect(() => {
-    const phoneList = productDetails.phonesData.map((phone) => {
-      return { value: phone.id, label: phone.name, mrp: phone.mrp, mop: phone.mop };
-    });
-    setPhoneList(phoneList);
-  }, [productDetails.phonesData]);
-
   const sendOTP = async () => {
-    console.log(productDetails);
     if (!productDetails.selectedCategory || productDetails.selectedCategory === null) {
       setCategoryErr(true);
       toast.error("Please Select Product Category!", { toastId: "category-err", autoClose: 3000, hideProgressBar: false, position: "top-center" });
@@ -167,6 +152,7 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
         return;
       }
     }
+
     setIsOtpButtonLoading(true);
     const payload = {
       store_id: storeDetails.id,
@@ -183,6 +169,8 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     setIsOtpButtonLoading(false);
     if (response.status === 200 && data.detail === "Email sent successfully!") {
       toast.success("OTP Sent Successfully!", { autoClose: 3000, hideProgressBar: false, position: "top-center" });
+      isOtpSent && setIsOtpResent(true);
+      isOtpSent && setResendOtpActive(false);
       setIsOtpSent(true);
       otpInputRefs.current[0].focus();
     } else {
@@ -247,6 +235,37 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
     }
   };
 
+  useEffect(() => {
+    if (productDetails.selectedCategory === "phones") {
+      getPhonesData();
+      setProductDetails((prev) => ({ ...prev, other_product_purchased: "" }));
+    } else {
+      setProductDetails((prev) => ({ ...prev, imei: "", product_purchased: null }));
+    }
+  }, [productDetails.selectedCategory]);
+
+  useEffect(() => {
+    const phoneList = productDetails.phonesData.map((phone) => {
+      return { value: phone.id, label: phone.name, mrp: phone.mrp, mop: phone.mop };
+    });
+    setPhoneList(phoneList);
+  }, [productDetails.phonesData]);
+
+  useEffect(() => {
+    if (!isOtpSent) return;
+    let timerInterval;
+    timerInterval = setInterval(() => {
+      setResendOtpTimer((prev) => {
+        if (prev === 0) {
+          clearInterval(timerInterval);
+          setResendOtpActive(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, [isOtpSent]);
+  console.log(isOtpResent);
   return (
     <section style={{ paddingBottom: "80px" }}>
       <header className={styles["header"]}>
@@ -337,124 +356,150 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
           </>
         )}
 
-        <button disabled={isOtpSent || isOtpButtonLoading} onClick={sendOTP} className={styles["btn-send-otp-manager"]}>
-          {isOtpButtonLoading ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              xmlnsXlink="http://www.w3.org/1999/xlink"
-              style={{ margin: "auto", background: "rgba(241, 242, 243, 0)", display: "block" }}
-              width="60px"
-              height="40px"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="xMidYMid"
+        <div
+          style={{
+            marginBop: "30px",
+            marginBottom: "20px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <button disabled={!resendOtpActive && (isOtpSent || isOtpButtonLoading || isOtpResent)} onClick={sendOTP} className={styles["btn-send-otp-manager"]}>
+            {isOtpButtonLoading ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+                style={{ margin: "auto", background: "rgba(241, 242, 243, 0)", display: "block" }}
+                width="60px"
+                height="40px"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="xMidYMid"
+              >
+                <circle cx={84} cy={33} r={10} fill="#4c4c4c">
+                  <animate attributeName="r" repeatCount="indefinite" dur="0.5102040816326531s" calcMode="spline" keyTimes="0;1" values="9;0" keySplines="0 0.5 0.5 1" begin="0s" />
+                  <animate
+                    attributeName="fill"
+                    repeatCount="indefinite"
+                    dur="2.0408163265306123s"
+                    calcMode="discrete"
+                    keyTimes="0;0.25;0.5;0.75;1"
+                    values="#4c4c4c;#808080;#919191;#595959;#4c4c4c"
+                    begin="0s"
+                  />
+                </circle>
+                <circle cx={16} cy={33} r={10} fill="#4c4c4c">
+                  <animate
+                    attributeName="r"
+                    repeatCount="indefinite"
+                    dur="2.0408163265306123s"
+                    calcMode="spline"
+                    keyTimes="0;0.25;0.5;0.75;1"
+                    values="0;0;9;9;9"
+                    keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                    begin="0s"
+                  />
+                  <animate
+                    attributeName="cx"
+                    repeatCount="indefinite"
+                    dur="2.0408163265306123s"
+                    calcMode="spline"
+                    keyTimes="0;0.25;0.5;0.75;1"
+                    values="16;16;16;50;84"
+                    keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                    begin="0s"
+                  />
+                </circle>
+                <circle cx={50} cy={33} r={10} fill="#595959">
+                  <animate
+                    attributeName="r"
+                    repeatCount="indefinite"
+                    dur="2.0408163265306123s"
+                    calcMode="spline"
+                    keyTimes="0;0.25;0.5;0.75;1"
+                    values="0;0;9;9;9"
+                    keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                    begin="-0.5102040816326531s"
+                  />
+                  <animate
+                    attributeName="cx"
+                    repeatCount="indefinite"
+                    dur="2.0408163265306123s"
+                    calcMode="spline"
+                    keyTimes="0;0.25;0.5;0.75;1"
+                    values="16;16;16;50;84"
+                    keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                    begin="-0.5102040816326531s"
+                  />
+                </circle>
+                <circle cx={84} cy={33} r={10} fill="#919191">
+                  <animate
+                    attributeName="r"
+                    repeatCount="indefinite"
+                    dur="2.0408163265306123s"
+                    calcMode="spline"
+                    keyTimes="0;0.25;0.5;0.75;1"
+                    values="0;0;9;9;9"
+                    keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                    begin="-1.0204081632653061s"
+                  />
+                  <animate
+                    attributeName="cx"
+                    repeatCount="indefinite"
+                    dur="2.0408163265306123s"
+                    calcMode="spline"
+                    keyTimes="0;0.25;0.5;0.75;1"
+                    values="16;16;16;50;84"
+                    keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                    begin="-1.0204081632653061s"
+                  />
+                </circle>
+                <circle cx={16} cy={33} r={10} fill="#808080">
+                  <animate
+                    attributeName="r"
+                    repeatCount="indefinite"
+                    dur="2.0408163265306123s"
+                    calcMode="spline"
+                    keyTimes="0;0.25;0.5;0.75;1"
+                    values="0;0;9;9;9"
+                    keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                    begin="-1.530612244897959s"
+                  />
+                  <animate
+                    attributeName="cx"
+                    repeatCount="indefinite"
+                    dur="2.0408163265306123s"
+                    calcMode="spline"
+                    keyTimes="0;0.25;0.5;0.75;1"
+                    values="16;16;16;50;84"
+                    keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
+                    begin="-1.530612244897959s"
+                  />
+                </circle>
+              </svg>
+            ) : resendOtpActive ? (
+              "Resend OTP"
+            ) : isOtpResent ? (
+              "OTP Resent"
+            ) : isOtpSent ? (
+              "OTP Sent"
+            ) : (
+              "Send OTP"
+            )}
+          </button>
+          {isOtpSent && !isOtpResent && (
+            <span
+              style={{
+                color: "white",
+                marginLeft: "10px",
+                fontFamily: "NeoSansPro",
+              }}
             >
-              <circle cx={84} cy={33} r={10} fill="#4c4c4c">
-                <animate attributeName="r" repeatCount="indefinite" dur="0.5102040816326531s" calcMode="spline" keyTimes="0;1" values="9;0" keySplines="0 0.5 0.5 1" begin="0s" />
-                <animate
-                  attributeName="fill"
-                  repeatCount="indefinite"
-                  dur="2.0408163265306123s"
-                  calcMode="discrete"
-                  keyTimes="0;0.25;0.5;0.75;1"
-                  values="#4c4c4c;#808080;#919191;#595959;#4c4c4c"
-                  begin="0s"
-                />
-              </circle>
-              <circle cx={16} cy={33} r={10} fill="#4c4c4c">
-                <animate
-                  attributeName="r"
-                  repeatCount="indefinite"
-                  dur="2.0408163265306123s"
-                  calcMode="spline"
-                  keyTimes="0;0.25;0.5;0.75;1"
-                  values="0;0;9;9;9"
-                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
-                  begin="0s"
-                />
-                <animate
-                  attributeName="cx"
-                  repeatCount="indefinite"
-                  dur="2.0408163265306123s"
-                  calcMode="spline"
-                  keyTimes="0;0.25;0.5;0.75;1"
-                  values="16;16;16;50;84"
-                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
-                  begin="0s"
-                />
-              </circle>
-              <circle cx={50} cy={33} r={10} fill="#595959">
-                <animate
-                  attributeName="r"
-                  repeatCount="indefinite"
-                  dur="2.0408163265306123s"
-                  calcMode="spline"
-                  keyTimes="0;0.25;0.5;0.75;1"
-                  values="0;0;9;9;9"
-                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
-                  begin="-0.5102040816326531s"
-                />
-                <animate
-                  attributeName="cx"
-                  repeatCount="indefinite"
-                  dur="2.0408163265306123s"
-                  calcMode="spline"
-                  keyTimes="0;0.25;0.5;0.75;1"
-                  values="16;16;16;50;84"
-                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
-                  begin="-0.5102040816326531s"
-                />
-              </circle>
-              <circle cx={84} cy={33} r={10} fill="#919191">
-                <animate
-                  attributeName="r"
-                  repeatCount="indefinite"
-                  dur="2.0408163265306123s"
-                  calcMode="spline"
-                  keyTimes="0;0.25;0.5;0.75;1"
-                  values="0;0;9;9;9"
-                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
-                  begin="-1.0204081632653061s"
-                />
-                <animate
-                  attributeName="cx"
-                  repeatCount="indefinite"
-                  dur="2.0408163265306123s"
-                  calcMode="spline"
-                  keyTimes="0;0.25;0.5;0.75;1"
-                  values="16;16;16;50;84"
-                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
-                  begin="-1.0204081632653061s"
-                />
-              </circle>
-              <circle cx={16} cy={33} r={10} fill="#808080">
-                <animate
-                  attributeName="r"
-                  repeatCount="indefinite"
-                  dur="2.0408163265306123s"
-                  calcMode="spline"
-                  keyTimes="0;0.25;0.5;0.75;1"
-                  values="0;0;9;9;9"
-                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
-                  begin="-1.530612244897959s"
-                />
-                <animate
-                  attributeName="cx"
-                  repeatCount="indefinite"
-                  dur="2.0408163265306123s"
-                  calcMode="spline"
-                  keyTimes="0;0.25;0.5;0.75;1"
-                  values="16;16;16;50;84"
-                  keySplines="0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1;0 0.5 0.5 1"
-                  begin="-1.530612244897959s"
-                />
-              </circle>
-            </svg>
-          ) : isOtpSent ? (
-            "OTP Sent"
-          ) : (
-            "Send OTP"
+              {resendOtpTimer}
+            </span>
           )}
-        </button>
+        </div>
+
         <div style={{ opacity: isOtpSent ? 1 : 0.5, pointerEvents: isOtpSent ? "all" : "none" }}>
           <p className={styles["ask-otp"]}>Ask the store manager for the OTP to proceed:</p>
           <div className={styles["otp-input-container"]} style={{ maxWidth: "250px" }}>
