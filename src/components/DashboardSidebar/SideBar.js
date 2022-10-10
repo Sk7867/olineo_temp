@@ -17,8 +17,6 @@ import {
   faCancel,
   faImages,
   faGift,
-  faCheck,
-  faCheckDouble,
 } from "@fortawesome/free-solid-svg-icons";
 import SubMenu from "./SubMenu";
 import { Nav, Button } from "react-bootstrap";
@@ -140,7 +138,7 @@ const SideBar = ({ isOpen, toggle }) => {
         </Nav.Item>
         <Nav.Item>
           <Link className="dash_sidebar_a nav-link" to="/admin-ifd">
-            <FontAwesomeIcon icon={faCheckDouble} className="mr-2" />
+            <FontAwesomeIcon icon={faGift} className="mr-2" />
             Indian Festival Days
           </Link>
         </Nav.Item>
