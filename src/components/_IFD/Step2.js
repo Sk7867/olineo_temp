@@ -8,7 +8,7 @@ import IFDContext from "../../Contexts/IFDContext";
 import { UserDataContext } from "../../Contexts/UserContext";
 import styles from "./_IFD.module.css";
 
-const Step2 = ({ navigateBackward, navigateForward }) => {
+const Step2 = ({ userLoggedIn0, navigateBackward, navigateForward }) => {
   const otpInputRefs = useRef([]);
   const userLoggedIn = true;
 
@@ -18,7 +18,10 @@ const Step2 = ({ navigateBackward, navigateForward }) => {
   const [otpValue, setOtpValue] = useState(["", "", "", "", "", ""]);
 
   const [isOtpSent, setIsOtpSent] = useState(false);
+  const [resendOtpTimer, setResendOtpTimer] = useState(60);
+  const [resendOtpActive, setResendOtpActive] = useState(false);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
+  const [isOtpResent, setIsOtpResent] = useState(false);
   const [isOtpButtonLoading, setIsOtpButtonLoading] = useState(false);
 
   const [nameInvalidErr, setNameInvalidErr] = useState(false);
@@ -27,7 +30,6 @@ const Step2 = ({ navigateBackward, navigateForward }) => {
   const [dobInvalidErr, setDobInvalidErr] = useState(false);
   const [otpInvalidErr, setOtpInvalidErr] = useState(false);
 
-  console.log(customerDetails);
   const getTodayDate = () => {
     let date = new Date();
 
@@ -38,6 +40,21 @@ const Step2 = ({ navigateBackward, navigateForward }) => {
     let formattedDate = year + "-" + month + "-" + day;
     return formattedDate;
   };
+
+  useEffect(() => {
+    if (!isOtpSent) return;
+    let timerInterval;
+    timerInterval = setInterval(() => {
+      setResendOtpTimer((prev) => {
+        if (prev === 0) {
+          clearInterval(timerInterval);
+          setResendOtpActive(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, [isOtpSent]);
 
   const validateEmail = (email) => {
     return String(email)
@@ -72,6 +89,7 @@ const Step2 = ({ navigateBackward, navigateForward }) => {
       return;
     }
 
+    isOtpSent && setResendOtpActive(false);
     setIsOtpButtonLoading(true);
     const payload = { mobileNumber: parseInt(customerDetails.mobileNumber), fullName: customerDetails.fullName };
     const responseSignUp = await fetch(`${process.env.REACT_APP_BASE_URL}/user/signup`, {
@@ -81,6 +99,8 @@ const Step2 = ({ navigateBackward, navigateForward }) => {
     });
     const dataSignUp = await responseSignUp.json();
     if (dataSignUp.success) {
+      isOtpSent && setIsOtpResent(true);
+      isOtpSent && setResendOtpActive(false);
       setIsOtpSent(true);
       setIsOtpButtonLoading(false);
       // alert(dataSignUp.otp);
@@ -97,6 +117,7 @@ const Step2 = ({ navigateBackward, navigateForward }) => {
       const dataLogin = await responseLogin.json();
       setIsOtpButtonLoading(false);
       if (!dataLogin.success) return;
+      isOtpSent && setIsOtpResent(true);
       setIsOtpSent(true);
       // alert(dataLogin.otp);
       setCustomerDetails((prev) => ({ ...prev, userId: dataLogin.userId }));
@@ -248,7 +269,7 @@ const Step2 = ({ navigateBackward, navigateForward }) => {
             }
           />
           {!userLoggedIn && (
-            <button disabled={isOtpSent || isOtpButtonLoading} onClick={sendOtp} className={styles["btn-send-otp"]}>
+            <button disabled={!resendOtpActive && (isOtpSent || isOtpButtonLoading)} onClick={sendOtp} className={styles["btn-send-otp"]}>
               {isOtpButtonLoading ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -360,8 +381,12 @@ const Step2 = ({ navigateBackward, navigateForward }) => {
                     />
                   </circle>
                 </svg>
+              ) : resendOtpActive ? (
+                "Resend OTP"
+              ) : isOtpResent ? (
+                "OTP Resent"
               ) : isOtpSent ? (
-                "OTP Sent"
+                resendOtpTimer
               ) : (
                 "Send OTP"
               )}

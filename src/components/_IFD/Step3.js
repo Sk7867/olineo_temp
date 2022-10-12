@@ -265,7 +265,7 @@ const Step3 = ({ setCounterWidth, stepCounterSvgRef, navigateBackward, navigateF
       });
     }, 1000);
   }, [isOtpSent]);
-  console.log(isOtpResent);
+
   return (
     <section style={{ paddingBottom: "80px" }}>
       <header className={styles["header"]}>

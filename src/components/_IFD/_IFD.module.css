@@ -220,8 +220,8 @@ section {
   font-size: 12px;
   line-height: 20px;
   color: #ffffff;
-  margin-top: 30px;
-  margin-bottom: 20px;
+  /* margin-top: 30px;
+  margin-bottom: 20px; */
 }
 .rate-experience-text {
   font-family: NeoSansPro;
