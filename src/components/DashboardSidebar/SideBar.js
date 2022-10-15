@@ -70,12 +70,12 @@ const SideBar = ({ isOpen, toggle }) => {
           </Link>
         </Nav.Item>
 
-        <Nav.Item>
+        {/* <Nav.Item>
           <Link className="dash_sidebar_a nav-link" to="/admin-banner">
             <FontAwesomeIcon icon={faImages} className="mr-2" />
             Banner Images
           </Link>
-        </Nav.Item>
+        </Nav.Item> */}
 
         <Nav.Item>
           <Link className="dash_sidebar_a nav-link" to="/admin-orders">

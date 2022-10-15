@@ -458,8 +458,8 @@ function App() {
           loc.pathname === "/admin-orders" ||
           loc.pathname === "/admin" ||
           loc.pathname === "/admin-products" ||
-          loc.pathname === "/admin-add-banner" ||
-          loc.pathname === "/admin-banner" ||
+          // loc.pathname === "/admin-add-banner" ||
+          // loc.pathname === "/admin-banner" ||
           loc.pathname === "/admin-alluser" ||
           loc.pathname === "/admin-shops" ||
           loc.pathname === "/admin-query" ||
@@ -604,8 +604,8 @@ function App() {
             <Route element={<Dashboard />}>
               <Route exact path="/admin-home" element={<DashBoardHome />} />
               <Route exact path="/admin-products" element={<DashboardProducts />} />
-              <Route exact path="/admin-banner" element={<DashboardBannerImages />} />
-              <Route exact path="/admin-add-banner" element={<DashboardAddBannerImage />} />
+              {/* <Route exact path="/admin-banner" element={<DashboardBannerImages />} />
+              <Route exact path="/admin-add-banner" element={<DashboardAddBannerImage />} /> */}
               <Route exact path="/admin-add-product" element={<DashboardAddProduct />} />
               <Route exact path="/admin-add-product-csv" element={<DashboardAddProductCsvFile />} />
               <Route exact path="/admin-add-shop" element={<DashboardAddShop />} />
@@ -630,8 +630,8 @@ function App() {
           loc.pathname === "/admin-add-shop" ||
           loc.pathname === "/admin-orders" ||
           loc.pathname === "/admin-products" ||
-          loc.pathname === "/admin-banner" ||
-          loc.pathname === "/admin-add-banner" ||
+          // loc.pathname === "/admin-banner" ||
+          // loc.pathname === "/admin-add-banner" ||
           loc.pathname === "/admin-alluser" ||
           loc.pathname === "/admin-shops" ||
           loc.pathname === "/admin-query" ||

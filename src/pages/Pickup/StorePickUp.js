@@ -250,7 +250,7 @@ const StorePickUp = ({ setHeaderData }) => {
                     <>
                       <div className="pickup_Search_Bar_Container section_Wrapper">
                         <div className='pickup_Search_Bar'>
-                          <input type="text" name="Store Search" id="" className='searchbar store_Search_Bar' onChange={(e) => setUserPincode(e.target.value)} placeholder={`Enter PIN code/Store name`} />
+                          <input type="text" name="Store Search" id="" className='searchbar store_Search_Bar' onChange={(e) => setUserPincode(e.target.value)} placeholder={`Enter PIN Code`} />
                           <img src={searchBlueIcon} alt="" />
                         </div>
                       </div>

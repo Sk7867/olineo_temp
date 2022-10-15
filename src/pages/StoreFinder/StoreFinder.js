@@ -176,7 +176,7 @@ const StoreFinder = ({ setHeaderData }) => {
                   <h3>Find Olineo store near you</h3>
                 </div>
                 <div className="searchbarWrapper store_Finder_Search">
-                  <input type="text" placeholder='Enter Pincode/Store Name' onChange={(e) => setUserPincode(e.target.value)} className='searchbar' />
+                  <input type="text" placeholder='Enter Pincode' onChange={(e) => setUserPincode(e.target.value)} className='searchbar' />
                 </div>
                 {
                   !showLoader && !showStore && (
