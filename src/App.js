@@ -99,7 +99,13 @@ function App() {
   const [seachedProduct, setSeachedProduct] = useState({
     loaded: false,
   });
-  const [userLocation, setUserLocation] = useState("");
+  const [userLocation, setUserLocation] = useState({
+    loaded: false,
+    useThis: false,
+    coordinates: { lat: '', lng: '' },
+    address: { city: '', state: '', zip: '' }
+  });
+
 
   const [userContext, setUserContext] = useState({
     profilePic: defaultUserImage,
@@ -195,6 +201,7 @@ function App() {
   });
   const [userDefaultAddress, setUserDefaultAddress] = useState({
     loaded: false,
+    useThis: false,
     address: {},
     no_of_address: 0,
   });
@@ -203,6 +210,10 @@ function App() {
     value: [],
   });
   const [deliveryCharges, setDeliveryCharges] = useState("");
+  const [userZip, setUserZip] = useState({
+    loaded: false,
+    value: 0
+  })
 
   useEffect(() => {
     let user = JSON.parse(sessionStorage.getItem("user"));
@@ -246,6 +257,7 @@ function App() {
     }
   }, [userToken]);
 
+  console.log(userLocation, userDefaultAddress);
   useEffect(() => {
     let userToken = userContext ? userContext.JWT : "";
     if (userToken) {
@@ -377,6 +389,7 @@ function App() {
     setDeliveryCharges(totalDelPrice);
   }, [deliveryEstDays]);
 
+  //Set default Address========================================
   useEffect(() => {
     if (userAddress && userAddress.loaded) {
       if (userAddress.no_of_address === 0) {
@@ -388,6 +401,7 @@ function App() {
       } else if (userAddress.no_of_address === 1) {
         setUserDefaultAddress({
           loaded: true,
+          useThis: true,
           address: userAddress.address[0],
           no_of_address: 1,
         });
@@ -395,12 +409,65 @@ function App() {
         let useAdd = userAddress.address.filter((add) => add.isDefault === true);
         setUserDefaultAddress({
           loaded: true,
+          useThis: true,
           address: useAdd[0],
           no_of_address: 1,
         });
       }
     }
   }, [userAddress]);
+
+  //Set Zip from Default Address or from input=============================
+  useEffect(() => {
+    // if (userDefaultAddress.loaded) {
+    //   if (userDefaultAddress.no_of_address > 0) {
+    //     if (userLocation.loaded) {
+    //       setUserZip({
+    //         loaded: true,
+    //         value: userLocation?.address?.zip
+    //       })
+    //     } else {
+    //       setUserZip({
+    //         loaded: true,
+    //         value: userDefaultAddress?.address?.zip
+    //       })
+    //     }
+    //   } else {
+    //     setUserZip({
+    //       loaded: false,
+    //       value: ''
+    //     })
+    //   }
+    // } else if (userLocation.loaded) {
+    //   setUserZip({
+    //     loaded: true,
+    //     value: userLocation?.address?.zip
+    //   })
+    // }
+    if (userDefaultAddress.useThis) {
+      if (userDefaultAddress.no_of_address > 0) {
+        setUserZip({
+          loaded: true,
+          value: userDefaultAddress?.address?.zip
+        })
+      } else {
+        setUserZip({
+          loaded: false,
+          value: ''
+        })
+      }
+    } else if (userLocation.useThis) {
+      setUserZip({
+        loaded: true,
+        value: userLocation?.address?.zip
+      })
+    } else {
+      setUserZip({
+        loaded: false,
+        value: ''
+      })
+    }
+  }, [userDefaultAddress, userLocation])
 
   return (
     <>
@@ -443,30 +510,32 @@ function App() {
             setDeliveryEstDays,
             deliveryCharges,
             setDeliveryCharges,
+            userZip,
+            setUserZip
           }}
         >
           {loc.pathname === "/login" ||
-          loc.pathname === "/signup" ||
-          loc.pathname === "/otp" ||
-          loc.pathname === "/adduser" ||
-          loc.pathname === "/admin-home" ||
-          loc.pathname === "/admin-add-product" ||
-          loc.pathname === "/admin-add-product-csv" ||
-          loc.pathname === "/admin-add-shop" ||
-          loc.pathname === "/admin-discounts" ||
-          loc.pathname === "/admin-add-discount" ||
-          loc.pathname === "/admin-orders" ||
-          loc.pathname === "/admin" ||
-          loc.pathname === "/admin-products" ||
-          // loc.pathname === "/admin-add-banner" ||
-          // loc.pathname === "/admin-banner" ||
-          loc.pathname === "/admin-alluser" ||
-          loc.pathname === "/admin-shops" ||
-          loc.pathname === "/admin-query" ||
-          loc.pathname === "/admin-payments" ||
-          loc.pathname === "/admin-cancellation" ||
-          loc.pathname === "/admin-ifd" ||
-          loc.pathname === "/indian-festival-days" ? (
+            loc.pathname === "/signup" ||
+            loc.pathname === "/otp" ||
+            loc.pathname === "/adduser" ||
+            loc.pathname === "/admin-home" ||
+            loc.pathname === "/admin-add-product" ||
+            loc.pathname === "/admin-add-product-csv" ||
+            loc.pathname === "/admin-add-shop" ||
+            loc.pathname === "/admin-discounts" ||
+            loc.pathname === "/admin-add-discount" ||
+            loc.pathname === "/admin-orders" ||
+            loc.pathname === "/admin" ||
+            loc.pathname === "/admin-products" ||
+            loc.pathname === "/admin-add-banner" ||
+            loc.pathname === "/admin-banner" ||
+            loc.pathname === "/admin-alluser" ||
+            loc.pathname === "/admin-shops" ||
+            loc.pathname === "/admin-query" ||
+            loc.pathname === "/admin-payments" ||
+            loc.pathname === "/admin-cancellation" ||
+            loc.pathname === "/admin-ifd" ||
+            loc.pathname === "/indian-festival-days" ? (
             ""
           ) : (
             <HeaderBar2 userLoggedIn={userLoggedIn} headerData={headerData} />
@@ -569,7 +638,7 @@ function App() {
               element={<HomeDelivery setEditID={setEditID} addressSelected={addressSelected} setAddressSelected={setAddressSelected} setHeaderData={setHeaderData} />}
             />
             <Route path="/store-pickup" exact element={<StorePickUp setHeaderData={setHeaderData} />} />
-            <Route path="/store-near-me" exact element={<StoreNear setHeaderData={setHeaderData} />} />
+            {/* <Route path="/store-near-me" exact element={<StoreNear setHeaderData={setHeaderData} />} /> */}
             <Route path="/product/:slug" exact element={<ProductPage setHeaderData={setHeaderData} />} />
             <Route path="/:category" exact element={<ProductCategory setHeaderData={setHeaderData} />} />
             <Route path="/:category/f/:slug" exact element={<ProductCategory setHeaderData={setHeaderData} />} />
@@ -622,23 +691,23 @@ function App() {
             <Route path="/indian-festival-days" exact element={<IFDHome userLoggedIn={userLoggedIn} setHeaderData={setHeaderData} />} />
           </Routes>
           {loc.pathname === "/admin" ||
-          loc.pathname === "/admin-home" ||
-          loc.pathname === "/admin-add-product" ||
-          loc.pathname === "/admin-add-product-csv" ||
-          loc.pathname === "/admin-discounts" ||
-          loc.pathname === "/admin-add-discount" ||
-          loc.pathname === "/admin-add-shop" ||
-          loc.pathname === "/admin-orders" ||
-          loc.pathname === "/admin-products" ||
-          // loc.pathname === "/admin-banner" ||
-          // loc.pathname === "/admin-add-banner" ||
-          loc.pathname === "/admin-alluser" ||
-          loc.pathname === "/admin-shops" ||
-          loc.pathname === "/admin-query" ||
-          loc.pathname === "/admin-payments" ||
-          loc.pathname === "/admin-cancellation" ||
-          loc.pathname === "/admin-ifd" ||
-          loc.pathname === "/indian-festival-days" ? null : (
+            loc.pathname === "/admin-home" ||
+            loc.pathname === "/admin-add-product" ||
+            loc.pathname === "/admin-add-product-csv" ||
+            loc.pathname === "/admin-discounts" ||
+            loc.pathname === "/admin-add-discount" ||
+            loc.pathname === "/admin-add-shop" ||
+            loc.pathname === "/admin-orders" ||
+            loc.pathname === "/admin-products" ||
+            loc.pathname === "/admin-banner" ||
+            loc.pathname === "/admin-add-banner" ||
+            loc.pathname === "/admin-alluser" ||
+            loc.pathname === "/admin-shops" ||
+            loc.pathname === "/admin-query" ||
+            loc.pathname === "/admin-payments" ||
+            loc.pathname === "/admin-cancellation" ||
+            loc.pathname === "/admin-ifd" ||
+            loc.pathname === "/indian-festival-days" ? null : (
             <Footer />
           )}
         </UserDataContext.Provider>

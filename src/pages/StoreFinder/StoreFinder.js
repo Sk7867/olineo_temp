@@ -92,7 +92,12 @@ const StoreFinder = ({ setHeaderData }) => {
     if (location.loaded && location.error) {
       setShowStore(false);
     } else if (location.loaded && location.coordinates) {
-      setUserLocation(location)
+      setUserLocation({
+        loaded: true,
+        useThis: false,
+        coordinates: location.coordinates,
+        address: location.address
+      })
       getStoreUsingPincode(location.address.zip)
         .then(res => res ? (
           setStoreLocations({

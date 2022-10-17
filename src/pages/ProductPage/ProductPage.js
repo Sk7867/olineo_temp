@@ -19,6 +19,8 @@ import AlternateProductBox from "../../components/AlternateProductCard/Alternate
 import { getProductServiceability, getSearchedProduct } from "../../api/Product";
 import SkeletonElement from "../../components/Skeletons/SkeletonElement";
 import { addToWishlist } from "../../api/wishlistApi";
+import getMixedProducts from "../../hooks/getMixedProducts";
+
 
 
 toast.configure();
@@ -32,7 +34,9 @@ const ProductPage = ({ setHeaderData }) => {
     setCartArray,
     setOrderInit,
     userDefaultAddress,
-    setUserDefaultAddress
+    setUserDefaultAddress,
+    setUserLocation,
+    userZip
   } = useContext(UserDataContext);
   const matches = useMediaQuery("(min-width:768px)");
   const nav = useNavigate();
@@ -80,11 +84,16 @@ const ProductPage = ({ setHeaderData }) => {
   const [hours, setHours] = useState('')
   const [minutes, setMinutes] = useState('')
   const [seconds, setSeconds] = useState('')
-  const [userZipcode, setUserZipcode] = useState('')
   const [deliveryEstDays, setDeliveryEstDays] = useState({
     loaded: false,
     value: ''
   })
+  const [productPageSuggestProd, setProductPageSuggestProd] = useState([])
+  const [enterPinClicked, setEnterPinClicked] = useState(false)
+  const [pincode, setPincode] = useState('')
+  const [validLength, setValidLength] = useState(false)
+  const [btnDisable, setBtnDisable] = useState(true)
+
 
   useEffect(() => {
     setHeaderData({
@@ -149,6 +158,10 @@ const ProductPage = ({ setHeaderData }) => {
   }, [slug])
 
   useEffect(() => {
+    setProductPageSuggestProd(getMixedProducts(allProducts.products, allProducts.np1, 10))
+  }, [allProducts])
+
+  useEffect(() => {
     alternateColorean.forEach(ean => {
       let ind = colorAlternateProds.findIndex(obj => obj.ean === ean)
       if (ind === -1) {
@@ -190,7 +203,7 @@ const ProductPage = ({ setHeaderData }) => {
   }, [productData])
 
   useEffect(() => {
-    if (userDefaultAddress?.loaded && (userDefaultAddress?.no_of_address > 0) && productData.product_loaded) {
+    if (userZip?.loaded && productData.product_loaded) {
       let prodArray = [
         {
           skuId: productData.product_Ean,
@@ -198,7 +211,7 @@ const ProductPage = ({ setHeaderData }) => {
         }
       ]
 
-      getProductServiceability(userDefaultAddress?.address?.zip, prodArray)
+      getProductServiceability(userZip.value, prodArray)
         .then(res => {
           if (res) {
             if (res[0].deliverymodes.length > 0) {
@@ -213,7 +226,7 @@ const ProductPage = ({ setHeaderData }) => {
           }
         })
     }
-  }, [userZipcode, productData])
+  }, [productData, userZip])
 
   const startTimer = (date) => {
     const countDownDate = date.getTime()
@@ -291,6 +304,42 @@ const ProductPage = ({ setHeaderData }) => {
       }
     }
   }, [comboProductData])
+
+  const handleLength = (length) => {
+    if (length === 5) {
+      setValidLength(true)
+    } else {
+      setValidLength(false)
+    }
+  }
+
+  const validateNumber = (e) => {
+    const re = /^[0-9\b]+$/;
+    if (e.target.value === '' || re.test(e.target.value)) {
+      setPincode(e.target.value)
+    }
+  }
+
+  const formSubmit = (e) => {
+    e.preventDefault();
+    if (pincode !== '') {
+      setUserLocation(prev => ({
+        ...prev,
+        loaded: true,
+        useThis: true,
+        address: { city: '', state: '', zip: pincode }
+      }))
+      setUserDefaultAddress(prev => ({
+        ...prev,
+        loaded: false,
+        useThis: false
+      }))
+    }
+  }
+
+  const validateForm = () => (
+    (pincode !== '') && validLength ? setBtnDisable(false) : setBtnDisable(true)
+  )
 
   const handleAddToCart = (id) => {
     let userToken = userContext ? userContext.JWT : "";
@@ -600,9 +649,38 @@ const ProductPage = ({ setHeaderData }) => {
                       }
                     </>
                   ) : (<>
-                    <p>
-                      Enter Pincode
-                    </p>
+                    {
+                      enterPinClicked ? (<>
+                        {
+                          deliveryEstDays.loaded ? (
+                            <p>
+                              Delivery In <span>{deliveryEstDays.value} Days</span>
+                            </p>
+                          ) : (
+                            <form className="product_Delivery_Pin-form" onChange={validateForm} onSubmit={formSubmit}>
+                              <div className='product_Delivery_Pincode_Input'>
+                                {
+                                  matches ? (
+                                    <input type='tel' name="Phone" id="phone" maxLength={6} className='input-field' value={pincode} placeholder='Enter pincode...' onChange={(e) => { validateNumber(e); handleLength(e.target.value.length) }} />
+                                  ) : (
+                                    <input type='number' name="Phone" id="phone" maxLength={6} className='input-field' value={pincode} placeholder='Enter pincode...' onChange={(e) => { setPincode(e.target.value); handleLength(e.target.value.length) }} />
+                                  )
+                                }
+                              </div>
+                              <div className='product_Delivery_Submit_Btn'>
+                                <button className='submit-button' type='submit' disabled={btnDisable}><p>Apply</p></button>
+                              </div>
+                            </form>
+                          )
+                        }
+                      </>) : (
+                        <>
+                          <p onClick={() => setEnterPinClicked(true)}>
+                            Enter Pincode
+                          </p>
+                        </>
+                      )
+                    }
                   </>)
                 }
 
@@ -697,7 +775,7 @@ const ProductPage = ({ setHeaderData }) => {
               : [1, 2, 3, 4, 5].map((n) => <SkeletonElement type={"productBanner"} key={n} />)}
           </div>
         </div>
-        <Section2 id={"Top-sellers-sec"} heading="Suggested products" productData={allProducts} />
+        <Section2 id={"Top-sellers-sec"} heading="Suggested products" productData={allProducts} productArray={productPageSuggestProd} />
         {/* Floating Footer */}
         {!matches && (
           <div className="floating_Footer">

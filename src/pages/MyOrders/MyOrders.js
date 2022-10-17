@@ -14,12 +14,14 @@ import BreadCrumbs from "../../components/BreadCrumbs/BreadCrumbs";
 import OrderSection from "./OrderSection";
 import { UserDataContext } from "../../Contexts/UserContext";
 import { getAllOrder } from "../../api/OrdersApi";
+import getMixedProducts from '../../hooks/getMixedProducts'
 
 const MyOrders = ({ ordersList, setHeaderData }) => {
   const [placed, setPlaced] = useState(true);
   const [delivered, setDelivered] = useState(true);
   const [cancelled, setCancelled] = useState(true);
   const { userOrderData, setUserOrderData, allProducts } = useContext(UserDataContext);
+  const [emptyOrdersProductArray, setEmptyOrdersProductArray] = useState([])
 
   const nav = useNavigate();
 
@@ -49,6 +51,10 @@ const MyOrders = ({ ordersList, setHeaderData }) => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    setEmptyOrdersProductArray(getMixedProducts(allProducts.products, allProducts.np1, 10))
+  }, [allProducts])
 
   // console.log(ordersList);
   //Test comment to include file in commit - 01/10/2022
@@ -166,7 +172,7 @@ const MyOrders = ({ ordersList, setHeaderData }) => {
                 <p>Start Shopping</p>
               </button>
             </div>
-            <Section2 id={"Top-sellers-sec"} heading="Suggested products" productData={allProducts} productArray={featureProducts} />
+            <Section2 id={"Top-sellers-sec"} heading="Suggested products" productData={allProducts} productArray={emptyOrdersProductArray} />
           </>
         ) : (
           <>

@@ -19,9 +19,12 @@ const ModalComp = ({ modalShow, setModalShow, userLoggedIn }) => {
   const [validLength, setValidLength] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
   const { location, locationFetch } = useGeolocation()
-  const { userLocation, setUserLocation } = useContext(UserDataContext)
+  const [enterPinClicked, setEnterPinClicked] = useState(false)
+  const { userLocation, setUserLocation, setUserDefaultAddress } = useContext(UserDataContext)
+
   const getLocation = () => {
     locationFetch()
+    handleClose()
   }
 
   const handleLength = (length) => {
@@ -45,14 +48,54 @@ const ModalComp = ({ modalShow, setModalShow, userLoggedIn }) => {
 
   const formSubmit = (e) => {
     e.preventDefault();
+    if (pincode !== '') {
+      setUserLocation(prev => ({
+        ...prev,
+        loaded: true,
+        useThis: true,
+        address: { city: '', state: '', zip: pincode }
+      }))
+      setUserDefaultAddress(prev => ({
+        ...prev,
+        useThis: false
+      }))
+    }
+    handleClose()
   }
 
   useEffect(() => {
-    setUserLocation(location)
+    if (location.loaded && location.coordinates.lat !== '') {
+      setUserLocation({
+        loaded: true,
+        useThis: true,
+        coordinates: location.coordinates,
+        address: location.address
+      })
+      setUserDefaultAddress(prev => ({
+        ...prev,
+        useThis: false
+      }))
+    }
   }, [location])
 
+  const handleUseAddress = () => {
+    setUserDefaultAddress(prev => ({
+      ...prev,
+      useThis: true
+    }))
+    setUserLocation(prev => ({
+      ...prev,
+      useThis: false
+    }))
+    handleClose()
+  }
 
-  const handleClose = () => setModalShow(false);
+  const handleClose = () => {
+    setModalShow(false)
+    setPincode('')
+    setBtnDisable(true)
+    setEnterPinClicked(false)
+  };
   return (
     <>
       <Modal
@@ -80,7 +123,7 @@ const ModalComp = ({ modalShow, setModalShow, userLoggedIn }) => {
                     }
                   </div>
                   <div className='header_Submit_Btn'>
-                    <button className='submit-button' type='submit' disabled={btnDisable} onClick={() => { handleClose(); setPincode(''); setBtnDisable(true) }} ><p>Apply</p></button>
+                    <button className='submit-button' type='submit' disabled={btnDisable}><p>Apply</p></button>
                   </div>
                 </form>
               </div>
@@ -101,10 +144,34 @@ const ModalComp = ({ modalShow, setModalShow, userLoggedIn }) => {
         }
         <Modal.Footer>
           {
-            userLoggedIn ? ('') : (
-              <div className="modal_footer_link">
+            userLoggedIn ? (<>
+              <div className='modal_footer_link' onClick={() => handleUseAddress()}>
                 <img src={locationBlue} alt="" />
-                <p>Enter pincode</p>
+                <p>Use Default Address</p>
+              </div>
+            </>) : (
+              <div className="modal_footer_link">
+                {
+                  enterPinClicked ? (
+                    <form onChange={validateForm} onSubmit={formSubmit}>
+                      <div className='header_Pincode_Input'>
+                        {
+                          matches ? (
+                            <input type='tel' name="Phone" id="phone" maxLength={6} className='input-field' value={pincode} placeholder='Enter pincode...' onChange={(e) => { validateNumber(e); handleLength(e.target.value.length) }} />
+                          ) : (
+                            <input type='number' name="Phone" id="phone" maxLength={6} className='input-field' value={pincode} placeholder='Enter pincode...' onChange={(e) => { setPincode(e.target.value); handleLength(e.target.value.length) }} />
+                          )
+                        }
+                      </div>
+                      <div className='header_Submit_Btn'>
+                        <button className='submit-button' type='submit' disabled={btnDisable}><p>Apply</p></button>
+                      </div>
+                    </form>
+                  ) : (<div className='modal_footer_link' onClick={() => setEnterPinClicked(true)}>
+                    <img src={locationBlue} alt="" />
+                    <p>Enter pincode</p>
+                  </div>)
+                }
               </div>
             )
           }

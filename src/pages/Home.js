@@ -5,6 +5,7 @@ import Sidebar from '../components/Sidebar/Sidebar'
 import Section3 from '../components/Section3/Section3'
 import Section4 from '../components/Section4/Section4'
 import Section1 from '../components/Section1/Section1'
+import getMixedProducts from '../hooks/getMixedProducts'
 
 //Images 
 import product1 from '../assets/png/product_1.png'
@@ -15,15 +16,11 @@ import { UserDataContext } from '../Contexts/UserContext'
 
 
 const Home = ({ setHeaderData }) => {
-  const [demoElement, setDemoElement] = useState({
-    product_id: '',
-    product_image: '',
-    product_name: '',
-    product_price: '',
-  })
-  const [modalShow, setModalShow] = useState(false)
   const { allProducts } = useContext(UserDataContext);
-  // const [sec2Data, setSec2Data] = useState([])
+  const [sec2ProdArray1, setSec2ProdArray1] = useState()
+  const [sec2ProdArray2, setSec2ProdArray2] = useState()
+  const [sec4ProdArray1, setSec4ProdArray1] = useState()
+  const [sec4ProdArray2, setSec4ProdArray2] = useState()
 
   useEffect(() => {
     setHeaderData({
@@ -31,45 +28,13 @@ const Home = ({ setHeaderData }) => {
       categoriesCond: true
     })
   }, []);
-  //Test comment to include file in commit - 01/10/2022
 
-  const getRandomProductArr = (arr, num) => {
-    const shuffledArr = [...arr].sort(() => 0.5 - Math.random())
-    return shuffledArr.slice(0, num)
-  }
-
-  var sec2ProdArray1 = getRandomProductArr(allProducts.products, 10)
-  var sec4ProdArray1 = getRandomProductArr(allProducts.products, 10)
-  var sec2ProdArray2 = getRandomProductArr(allProducts.products, 10)
-  var sec4ProdArray2 = getRandomProductArr(allProducts.products, 10)
-
-  // useEffect(() => {
-  //   for (let index = 0; index < 9; index++) {
-  //     let newElem = allProducts[index]
-  //     setSec2Data(oldElem => [...oldElem, newElem])
-  //   }
-  // }, [allProducts])
-  // console.log(sec2Data);
-
-  // let sec2Data = []
-  // for (let index = 0; index < 9; index++) {
-  //   sec2Data.push(allProducts[index])
-  // }
-
-  // let gridCardProducts = []
-  // for (let index = 0; index < 4; index++) {
-  //   gridCardProducts.push(allProducts[index + 9])
-  // }
-
-  // let sec5Data = []
-  // for (let index = 0; index < 9; index++) {
-  //   sec5Data.push(allProducts[index + 13])
-  // }
-
-  // let gridCardProducts2 = []
-  // for (let index = 0; index < 4; index++) {
-  //   gridCardProducts2.push(allProducts[index + 20])
-  // }
+  useEffect(() => {
+    setSec2ProdArray1(getMixedProducts(allProducts.products, allProducts.np1, 10))
+    setSec2ProdArray2(getMixedProducts(allProducts.products, allProducts.np2, 10))
+    setSec4ProdArray1(getMixedProducts(allProducts.products, allProducts.cd1, 10))
+    setSec4ProdArray2(getMixedProducts(allProducts.products, allProducts.cd2, 10))
+  }, [allProducts])
 
   const sec1Data = [
     {
@@ -96,175 +61,6 @@ const Home = ({ setHeaderData }) => {
       carousel_image: bannerImage,
       carousel_name: 'Fifth Product',
       carousel_link: 'Fifth Product Link',
-    },
-  ]
-
-  // const sec2Data = [
-  //   {
-  //     product_id: 1,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 2,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-
-  //   },
-  //   {
-  //     product_id: 3,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 4,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 5,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 6,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 7,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 8,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 9,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  // ]
-
-  const sec4Data = [
-    {
-      product_id: 1,
-      product_image: product1,
-      product_name: 'Item name',
-      product_price: '40% OFF',
-    },
-    {
-      product_id: 2,
-      product_image: product1,
-      product_name: 'Item name',
-      product_price: '40% OFF',
-    },
-    {
-      product_id: 3,
-      product_image: product1,
-      product_name: 'Item name',
-      product_price: '40% OFF',
-    },
-    {
-      product_id: 4,
-      product_image: product1,
-      product_name: 'Item name',
-      product_price: '40% OFF',
-    },
-  ]
-
-  // const sec5Data = [
-  //   {
-  //     product_id: 1,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 2,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 3,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 4,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 5,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 6,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 7,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 8,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  //   {
-  //     product_id: 9,
-  //     product_image: product2,
-  //     product_name: 'Item name',
-  //     product_price: '₹1000',
-  //   },
-  // ]
-
-  const sec7Data = [
-    {
-      product_id: 1,
-      product_image: product1,
-      product_name: 'Item name',
-      product_price: '50% OFF',
-    },
-    {
-      product_id: 2,
-      product_image: product1,
-      product_name: 'Item name',
-      product_price: '50% OFF',
-    },
-    {
-      product_id: 3,
-      product_image: product1,
-      product_name: 'Item name',
-      product_price: '50% OFF',
-    },
-    {
-      product_id: 4,
-      product_image: product1,
-      product_name: 'Item name',
-      product_price: '50% OFF',
     },
   ]
 

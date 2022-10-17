@@ -464,6 +464,27 @@
     margin: 0;
   }
 
+  .product_Delivery_Details .product_Delivery_Pin-form{
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .product_Delivery_Details .product_Delivery_Pin-form .product_Delivery_Pincode_Input{
+    width: 65%;
+    margin: 0 30px 0 0;
+  }
+
+  .product_Delivery_Details .product_Delivery_Pin-form .product_Delivery_Submit_Btn{
+    width: 100%;
+    max-width: 160px;
+  }
+
+    .product_Delivery_Details .product_Delivery_Pin-form .product_Delivery_Submit_Btn p{
+      color: #FFFFFF;
+    }
+
   .product_Alternate_Section{
     padding: 1rem;
     border-radius: 0.25rem;

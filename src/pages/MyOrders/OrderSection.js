@@ -6,11 +6,16 @@ import BankOfferModal from "../../components/ModalComponenr/BankOfferModal";
 import OrderProductCard from "../../components/OrderProductCard/OrderProductCard";
 import Section2 from "../../components/Section2/Section2";
 import { UserDataContext } from "../../Contexts/UserContext";
+import getMixedProducts from '../../hooks/getMixedProducts'
 
 const OrderSection = ({ featureProducts, placed, delivered, cancelled }) => {
   const nav = useNavigate();
   const [demo, setDemo] = useState([]);
   const { userOrderData, allProducts } = useContext(UserDataContext);
+  const [orderPlacedSuggestion, setOrderPlacedSuggestion] = useState([])
+  const [orderDeliverSuggestion, setOrderDeliverSuggestion] = useState([])
+  const [orderCancelSuggestion, setOrderCancelSuggestion] = useState([])
+  const [emptyOrdersProductArray, setEmptyOrdersProductArray] = useState([])
 
   let ordersNumber = userOrderData.no_of_orders;
 
@@ -18,6 +23,13 @@ const OrderSection = ({ featureProducts, placed, delivered, cancelled }) => {
     e.preventDefault();
     nav("/");
   };
+
+  useEffect(() => {
+    setEmptyOrdersProductArray(getMixedProducts(allProducts.products, allProducts.products, 10))
+    setOrderPlacedSuggestion(getMixedProducts(allProducts.products, allProducts.np1, 10))
+    setOrderDeliverSuggestion(getMixedProducts(allProducts.products, allProducts.np2, 10))
+    setOrderCancelSuggestion(getMixedProducts(allProducts.products, allProducts.cd1, 10))
+  }, [allProducts])
 
   // console.log(userOrderData);
   return (
@@ -35,7 +47,7 @@ const OrderSection = ({ featureProducts, placed, delivered, cancelled }) => {
               id={"Top-sellers-sec"}
               heading="Suggested products"
               productData={allProducts}
-              productArray={featureProducts}
+              productArray={emptyOrdersProductArray}
               classes={{
                 containerClass: "section_Wrapper",
                 boxClass: "section_Wrapper",
@@ -78,7 +90,7 @@ const OrderSection = ({ featureProducts, placed, delivered, cancelled }) => {
                 id={"Top-sellers-sec"}
                 heading="Suggested products"
                 productData={allProducts}
-                productArray={featureProducts}
+                productArray={orderPlacedSuggestion}
                 classes={{
                   containerClass: "section_Wrapper",
                   boxClass: "section_Wrapper",
@@ -117,7 +129,7 @@ const OrderSection = ({ featureProducts, placed, delivered, cancelled }) => {
                 id={"Top-sellers-sec"}
                 heading="Suggested products"
                 productData={allProducts}
-                productArray={featureProducts}
+                productArray={orderDeliverSuggestion}
                 classes={{
                   containerClass: "section_Wrapper",
                 }}
@@ -155,7 +167,7 @@ const OrderSection = ({ featureProducts, placed, delivered, cancelled }) => {
                 id={"Top-sellers-sec"}
                 heading="Suggested products"
                 productData={allProducts}
-                productArray={featureProducts}
+                productArray={orderCancelSuggestion}
                 classes={{
                   containerClass: "section_Wrapper",
                 }}

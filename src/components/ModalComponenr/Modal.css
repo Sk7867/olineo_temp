@@ -58,6 +58,23 @@
   cursor: pointer;
 }
 
+.modal_footer_link form{
+  display: flex;
+    gap: 6px;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+}
+
+.modal_footer_link .header_Pincode_Input{
+  width: 65%;
+  margin: 0 30px 0 0;
+}
+
+.modal_footer_link .header_Submit_Btn p {
+  color: #FFFFFF;
+}
+
 .modal_footer_link img{
   max-width: 18px;
   max-height: 18px;

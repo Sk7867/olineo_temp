@@ -76,7 +76,12 @@ const StorePickUp = ({ setHeaderData }) => {
     if (location.loaded && location.error) {
       setShowStore(false)
     } else if (location.loaded && location.coordinates) {
-      setUserLocation(location)
+      setUserLocation({
+        loaded: true,
+        useThis: false,
+        coordinates: location.coordinates,
+        address: location.address
+      })
       let prodEan = cartArray?.cart[0]?.ean
       getStoreLocation(prodEan, 1, location.address.zip)
         .then(res => {

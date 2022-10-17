@@ -18,6 +18,7 @@ import BreadCrumbs from '../../components/BreadCrumbs/BreadCrumbs'
 import CartSection from './CartSection'
 import { getCartData } from '../../api/Cart'
 import { getSaveForLater } from '../../api/SaveForLaterApi'
+import getMixedProducts from '../../hooks/getMixedProducts'
 
 const MyCart = ({ setHeaderData }) => {
   const {
@@ -27,6 +28,7 @@ const MyCart = ({ setHeaderData }) => {
     userSaveForLater,
     setUserSaveForLater,
   } = useContext(UserDataContext)
+  const [emptyCartFeaturedProducts, setEmptyCartFeaturedProducts] = useState([])
   const nav = useNavigate()
 
 
@@ -40,6 +42,11 @@ const MyCart = ({ setHeaderData }) => {
       header3Profile: true,
     })
   }, []);
+
+  useEffect(() => {
+    setEmptyCartFeaturedProducts(getMixedProducts(allProducts.products, allProducts.np1, 10))
+  }, [allProducts])
+
 
   useEffect(() => {
     getCartData()
@@ -112,7 +119,7 @@ const MyCart = ({ setHeaderData }) => {
                 id={'Top-sellers-sec'}
                 heading='Top Sellers'
                 productData={allProducts}
-                productArray={featureProducts}
+                productArray={emptyCartFeaturedProducts}
               />
             </>
           ) : (
@@ -129,7 +136,7 @@ const MyCart = ({ setHeaderData }) => {
                     </div>
                   </div>
                 </aside>
-                <CartSection featureProducts={featureProducts} />
+                <CartSection />
                 {/* <Section2
                   id={'Top-sellers-sec'}
                   heading='Top Sellers'

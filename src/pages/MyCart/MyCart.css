@@ -130,6 +130,21 @@
   opacity: 0.6;
 }
 
+.cart_Coupon_Section{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem 0;
+  background: #FFFFFF;
+  padding: 0.5rem 0 ;
+}
+
+.cart_Coupon_Input{
+  background: #1B325E;
+  padding: 0.5rem 0;
+}
+
+
 @media screen and (min-width: 768px) {
 
   .delivery_Options{
@@ -199,11 +214,17 @@
   }
 
   .cart_Coupon_Section {
-    display: flex;
     gap: 1.5rem;
+    flex-direction: row;
     align-items: center;
     margin: 0 0 0.75rem;
     padding: 1rem 1.5rem;
+  }
+
+  .cart_Coupon_Input {
+    background: #FFFFFF;
+    padding: 0;
+    width: 73%;
   }
 
   .cart_Coupon_Section .cart_Coupon_Button{

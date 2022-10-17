@@ -41,10 +41,9 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
   const [filteredData, setFilteredData] = useState([]) // Holds product names to display in search dropdown 
   const [searchedQuery, setSearchedQuery] = useState('') //Sets searched product name in search input box
   const [manualQuery, setManualQuery] = useState('')
-  const [userZip, setUserZip] = useState('')
   const nav = useNavigate()
   const { header3Cond, headerText, categoriesCond, header3Store, header3Cart, header3Profile } = headerData
-  const { userContext, allProducts, searchedProduct, setSearchedProduct, userDefaultAddress, setUserDefaultAddress } = useContext(UserDataContext)
+  const { userContext, allProducts, searchedProduct, setSearchedProduct, userDefaultAddress, setUserDefaultAddress, userLocation, userZip } = useContext(UserDataContext)
 
   const handleModalShow = () => {
     setModalShow(true)
@@ -235,17 +234,21 @@ const HeaderBar2 = ({ userLoggedIn, headerData }) => {
             <div className="left_location" onClick={() => handleModalShow()}>
               <img src={locationWhite} alt="" />
               {
-                userDefaultAddress.loaded ? (<>
-                  {
-                    userDefaultAddress.no_of_address === 0 ? (<>
-                      <p>Enter Default Address</p>
-                    </>) : (<>
-                      <p>{userDefaultAddress?.address?.city}, {userDefaultAddress?.address?.zip}</p>
-                    </>)
-                  }
-                </>) : (<>
-                  <p>{matches768 && matches910 && (<span>Select</span>)} <span>location</span></p>
-                </>)
+                userContext?.JWT ? (
+                  userZip.loaded ? (
+                    <p>{userZip.value}</p>
+                  ) : (<>
+                    <p>Enter Default Address</p>
+                  </>)
+                ) : (
+                  userZip.loaded ? (
+                    <p>{userZip.value}</p>
+                  ) : (
+                    <>
+                      <p>{matches768 && matches910 && (<span>Select</span>)} <span>location</span></p>
+                    </>
+                  )
+                )
               }
             </div>
           </div>

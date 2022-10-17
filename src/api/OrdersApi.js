@@ -92,7 +92,7 @@ export const getIndiOrder = async (id) => {
 
   let indiOrderResponse
 
-  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/order/details/${id}`, {}, { headers })
+  await axios.get(`${process.env.REACT_APP_BASE_URL}/product/order/details/${id}`, { headers })
     .then(res => {
       indiOrderResponse = res
       // console.log(indiOrderResponse);

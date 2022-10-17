@@ -11,9 +11,10 @@ import { addToCart, getCartData, removeFromCart } from '../../api/Cart'
 import { checkCoupon } from '../../api/couponApi'
 import { getProductServiceability, getSearchedProduct } from '../../api/Product'
 import { addSaveForLaterItem, deleteSaveForLaterItem, getSaveForLater } from '../../api/SaveForLaterApi'
+import getMixedProducts from '../../hooks/getMixedProducts'
 
 toast.configure()
-const CartSection = ({ featureProducts }) => {
+const CartSection = () => {
   const nav = useNavigate()
   const mounted = useRef(false)
   const [couponApplicable, setCouponApplicable] = useState({
@@ -28,6 +29,8 @@ const CartSection = ({ featureProducts }) => {
     products: []
   })
   const [suggesProducts, setSuggesProducts] = useState([])
+  const [emptyCartFeaturedProducts, setEmptyCartFeaturedProducts] = useState([])
+  const [cartSuggestionArray, setCartSuggestionArray] = useState([])
 
   const {
     cartArray,
@@ -57,6 +60,11 @@ const CartSection = ({ featureProducts }) => {
       })
     }
   }, [cartArray])
+
+  useEffect(() => {
+    setEmptyCartFeaturedProducts(getMixedProducts(allProducts.products, allProducts.np1, 10))
+    setCartSuggestionArray(getMixedProducts(allProducts.products, cartSuggestProducts.products, 10))
+  }, [allProducts])
 
   //suggestions
   useEffect(() => {
@@ -331,7 +339,7 @@ const CartSection = ({ featureProducts }) => {
                 id={'Top-sellers-sec'}
                 heading='Top Sellers'
                 productData={allProducts}
-                productArray={featureProducts}
+                productArray={emptyCartFeaturedProducts}
               />
             </div>
           </>
@@ -387,7 +395,9 @@ const CartSection = ({ featureProducts }) => {
               </div>
             </div>
             <div className="cart_Coupon_Section section_Wrapper">
-              <input type="text" placeholder='Add Coupon Code' className='input-field' value={couponInput} onChange={(e) => setCouponInput(e.target.value)} />
+              <div className='cart_Coupon_Input'>
+                <input type="text" placeholder='Add Coupon Code' className='input-field' value={couponInput} onChange={(e) => setCouponInput(e.target.value)} />
+              </div>
               <div className="cart_Coupon_Button">
                 <button type='submit' className='submit-button' onClick={handleCoupon}><p>Apply Coupon</p></button>
               </div>
@@ -413,7 +423,7 @@ const CartSection = ({ featureProducts }) => {
               id={'Top-sellers-sec'}
               heading='Top Sellers'
               productData={allProducts}
-              productArray={featureProducts}
+              productArray={cartSuggestionArray}
             />
 
             {/* cart saved for later */}
@@ -464,7 +474,7 @@ const CartSection = ({ featureProducts }) => {
               id={'Top-sellers-sec'}
               heading='Top Sellers'
               productData={allProducts}
-              productArray={featureProducts}
+              productArray={cartSuggestionArray}
             />
           </div>
         )

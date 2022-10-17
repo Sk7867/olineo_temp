@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { getAllOrder } from "../../api/OrdersApi";
+import { getAllOrder, getIndiOrder } from "../../api/OrdersApi";
 import checked_circle from "../../assets/vector/check_circle_FILL0_wght400_GRAD200_opsz48.svg";
 import processing_gif from "../../assets/gif/processing.gif";
 
@@ -57,13 +57,21 @@ const OrderSuccess = ({ setHeaderData }) => {
   }, []);
 
   useEffect(() => {
+    getIndiOrder(orderId)
+      .then(res => {
+        if (res) {
+          console.log(res)
+        } else {
+          // navigate("/orders")
+        }
+      })
     if (!allOrders.loaded) return;
     if (allOrders.orders.length === 0) return navigate("/orders");
     let order = allOrders.orders.find((order) => order._id === orderId);
     if (!order) return alert("Something went wrong!"), navigate("/orders");
     setCurrentOrder(order);
     setLoading(false);
-  }, [allOrders]);
+  }, []);
 
   useEffect(() => {
     if (Object.keys(currentOrder).length > 0) {

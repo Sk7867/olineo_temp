@@ -9,7 +9,7 @@ const Pagination = ({ productsPerPage, totalProducts, pageChange }) => {
 
   return (
     <nav>
-      <ul className='pagination'>
+      <ul className='pagination flex-wrap'>
         {
           pageNumbers.map((number) => (
             <li key={number} className='page-item'>
